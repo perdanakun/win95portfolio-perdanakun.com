@@ -66,6 +66,8 @@ import {
   Drvspace7,
   Intl101,
   Install,
+  Sndrec3210,
+  Sndvol32303,
 } from '@react95/icons';
 import { useState, useEffect, useRef } from 'react';
 import { Rnd } from 'react-rnd';
@@ -688,6 +690,12 @@ useEffect(() => {
   };
 }, [isInstalling]);
 
+// Muted Desktop Feature
+const [isMuted, setIsMuted] = useState(false);
+
+const toggleMute = () => {
+  setIsMuted(prev => !prev);
+};
 
 
 // AI Assistant v2
@@ -1574,7 +1582,7 @@ INI ENDING KODE INACTIVE*/}
         isMobile={isMobile}
         isTablet={isTablet}
 
-        width="75%"
+        width="60%"
         height="80%"
         
        
@@ -1766,8 +1774,8 @@ INI ENDING KODE INACTIVE*/}
     // DESKTOP
     // CENTER SCREEN
     // =========================
-    desktopWidth="50%"
-    desktopHeight="60%"
+    desktopWidth="40%"
+    desktopHeight="50%"
     desktopTop="50%"
     desktopLeft="50%"
     desktopRight="auto"
@@ -2320,7 +2328,6 @@ INI ENDING KODE INACTIVE*/}
     </List>
   }
 />
-
   </main>
 ) : null}
 

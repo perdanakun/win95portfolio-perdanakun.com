@@ -360,7 +360,7 @@ const handleSend = async () => {
         style={{
           flex: 1,
           margin: 2,
-          padding: 10,
+          padding: 4,
           display: 'flex',
           flexDirection: 'column',
           gap: 10,
@@ -385,7 +385,7 @@ const handleSend = async () => {
           placeholder={
             fromFocused
               ? ''
-              : 'Your Email adress'
+              : 'your.email@mail.com'
           }
           style={inputStyle}
         />
@@ -594,7 +594,7 @@ const handleSend = async () => {
     color: '#000',
     caretColor: '#000',
     boxShadow:
-      'inset 2px 2px 0 #808080, inset -2px -2px 0 #ffffff'
+      'inset 1px 1px 0 #808080, inset -2px -2px 0 #ffffff'
   }}
 />
 

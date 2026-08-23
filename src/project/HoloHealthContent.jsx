@@ -2,7 +2,6 @@ import React from 'react';
 
 import holohealthGif from '../assets/images/case-study/holohealth.gif';
 import holohealthGif4 from '../assets/images/case-study/holohealth4.gif';
-import holohealthGif5 from '../assets/images/case-study/holohealth5.gif';
 
 import holohealthTest1 from '../assets/images/case-study/holohealth-test1.jpg';
 import holohealthTest2 from '../assets/images/case-study/holohealth-test2.jpg';
@@ -14,52 +13,330 @@ const NOTION_URL =
 export default function HoloHealthCaseStudyRetro() {
   return (
     <div className="casestudy-window">
-
       <main className="casestudy">
+        <div className="casestudy-container">
 
-        {/* =====================================================
-            HERO
-        ===================================================== */}
+          {/* =====================================================
+              HERO
+          ===================================================== */}
 
-        <section className="casestudy-hero">
+          <section className="cs-hero">
 
-          <div className="casestudy-container">
-
-            <div className="casestudy-eyebrow">
-              <span className="casestudy-dot" />
-
-              <span className="casestudy-mono-muted">
-                HoloHealth — Iconography &amp; Visual System
-              </span>
-            </div>
-
-            <h1 className="casestudy-hero-title">
-              Building a Scalable Iconography System
-            </h1>
-
-            <p className="casestudy-hero-lead">
-              Building a visual language for veterinary health that could
-              remain consistent while scaling to thousands of assets.
+            <p className="cs-eyebrow">
+              HoloHealth — Visual Language
             </p>
 
-            <div className="casestudy-media casestudy-hero-media">
+            <h1 className="cs-title">
+              Translating Veterinary complexity into Visual Language
+            </h1>
 
+            <p className="cs-lead">
+              A 2,500+ icon system that turns highly specific veterinary
+              health content into something anyone can read at a glance.
+            </p>
+
+            <figure className="cs-hero-figure">
               <img
                 src={holohealthGif}
-                alt="HoloHealth product and iconography"
-                className="casestudy-media-image"
+                alt="HoloHealth website and visual language"
+                className="cs-hero-image"
+              />
+            </figure>
+{/*
+<dl className="cs-meta">
+  <Meta label="Role">
+    Visual Design Lead
+  </Meta>
+
+  <Meta label="Timeline">
+    Apr 2025 – Jun 2026
+  </Meta>
+
+  <Meta label="Scope">
+    2,500+ icons
+  </Meta>
+
+  <Meta label="Focus">
+    Visual Language
+  </Meta>
+</dl>
+*/}
+
+          </section>
+
+
+          {/* =====================================================
+              01 — THE PROBLEM
+          ===================================================== */}
+
+          <section className="cs-section">
+
+            <SectionHeading
+              number="01"
+              title="The Problem"
+            />
+
+            <div className="cs-term-row">
+
+              <span className="cs-term">
+                Paroxysmal Dyskinesia
+              </span>
+
+              <span className="cs-term">
+                Vestibular Ataxia
+              </span>
+
+              <span className="cs-term">
+                Leptospirosis
+              </span>
+
+            </div>
+
+            <div className="cs-copy-stack">
+
+              <p className="cs-body">
+                What do you picture? Probably nothing. Now imagine
+                thousands of veterinary terms like these — each with its
+                own meaning, condition, behavior, medication, or health
+                state.
+              </p>
+
+              <p className="cs-body">
+                How do you turn something this complex into a visual that
+                anyone can understand? That was the core challenge behind
+                HoloHealth: translating highly specific veterinary content
+                into a clear, consistent visual language that could scale
+                across the whole product.
+              </p>
+
+            </div>
+
+            <Figure
+              src={holohealthTest1}
+              alt="HoloHealth product interface and visual language"
+              caption="The actual HoloHealth product, where the visual language and iconography live."
+            />
+
+          </section>
+
+
+          {/* =====================================================
+              02 — MY ROLE
+          ===================================================== */}
+
+          <section className="cs-section">
+
+            <SectionHeading
+              number="02"
+              title="My role"
+            />
+
+            <div className="cs-copy-stack">
+
+              <p className="cs-body">
+                I worked directly with the founder to turn complex
+                veterinary content into visual concepts that were
+                understandable to users while staying aligned with the
+                brand. I also supervised a second designer — reviewing
+                execution and maintaining consistency as the system grew —
+                and produced reference assets for cross-functional teams,
+                including material later developed into motion.
+              </p>
+
+            </div>
+
+            <ul className="cs-list">
+
+              <li>
+                Visual direction
+              </li>
+
+              <li>
+                Complex concept translation
+              </li>
+
+              <li>
+                Production supervision
+              </li>
+
+              <li>
+                Visual QA
+              </li>
+
+              <li>
+                Cross-functional visual assets
+              </li>
+
+            </ul>
+
+            <Figure
+              src={holohealthTest3}
+              alt="HoloHealth visual design explorations"
+              caption="Early explorations showing how veterinary concepts were translated into a clear visual language."
+            />
+
+          </section>
+
+
+          {/* =====================================================
+              03 — KEY DECISIONS
+          ===================================================== */}
+
+          <section className="cs-section">
+
+            <SectionHeading
+              number="03"
+              title="Make complex feel familiar"
+              subtitle="Reduce cognitive load without reducing meaning."
+            />
+
+            <div className="cs-copy-stack">
+
+              <p className="cs-body">
+                Rather than invent unfamiliar visual metaphors, I used
+                human medical references as a starting point and adapted
+                them to veterinary contexts, so complex concepts felt
+                intuitive to non-specialists.
+              </p>
+
+              <p className="cs-body-strong">
+                Color became an additional layer of meaning across the
+                system.
+              </p>
+
+            </div>
+
+            <div className="cs-states">
+
+              <State
+                color="blue"
+                label="Low"
+                text="Lower or less severe health state."
+              />
+
+              <State
+                color="green"
+                label="Normal"
+                text="Healthy or expected health state."
+              />
+
+              <State
+                color="red"
+                label="High / critical"
+                text="Elevated, severe, or critical state."
               />
 
             </div>
 
-            <div className="casestudy-meta-grid">
+            <p className="cs-body">
+              Alongside color, we set consistent rules for shape,
+              proportion, detail, and visual logic — so very different
+              veterinary subjects still read as one system.
+            </p>
+
+            <blockquote className="cs-quote">
+              The goal wasn't to make every concept look the same. It
+              was to make every concept feel like it belongs to the same
+              visual language.
+            </blockquote>
+
+            <Figure
+              src={holohealthTest2}
+              alt="HoloHealth visual system and icon details"
+              caption="A selection of icons across different veterinary subjects, following the same underlying visual logic."
+            />
+
+          </section>
+
+
+          {/* =====================================================
+              04 — OUTCOME
+          ===================================================== */}
+
+          <section className="cs-section">
+
+            <SectionHeading
+              number="04"
+              title="Outcome"
+            />
+
+            <div className="cs-outcome">
+
+              <div className="cs-outcome-stat">
+
+                <span className="cs-outcome-number">
+                  2,500+
+                </span>
+
+                <span className="cs-outcome-label">
+                  Icons
+                </span>
+
+              </div>
+
+              <p className="cs-body cs-outcome-copy">
+                <strong>
+                  2,500+ icons
+                </strong>{' '}
+                became the foundation for a scalable product visual
+                system, covering multiple species, conditions,
+                behaviors, medications, devices, services, and health
+                states. The master icons became production references,
+                illustration foundations, and part of the broader
+                HoloHealth design system. I reviewed production output,
+                resolved inconsistencies, and introduced new solutions
+                when existing rules weren't enough — helping the
+                language scale across the design team and
+                cross-functional product work.
+              </p>
+
+            </div>
+
+            <Figure
+              src={holohealthGif4}
+              alt="HoloHealth iconography in product context"
+              caption="The visual language applied in its actual product context."
+            />
+
+          </section>
+
+
+          {/* =====================================================
+              REFLECTION
+          ===================================================== */}
+
+          <section className="cs-section cs-section-last">
+
+            <SectionHeading
+              title="From visual assets to visual systems"
+            />
+
+            <div className="cs-copy-stack">
+
+              <p className="cs-body-strong">
+                This project shifted my focus from creating individual
+                assets toward understanding the systems behind them:
+                patterns, constraints, reusable decisions, and ways of
+                working that another designer can pick up and continue.
+              </p>
+
+              <p className="cs-body">
+                It reinforced how visual design can make complex
+                information more approachable — not by removing
+                complexity, but by giving it a structure people can
+                understand.
+              </p>
+
+            </div>
+
+            <dl className="cs-snapshot">
 
               <Meta label="Role">
-                Creative / Design Lead
+                Visual Design Lead
               </Meta>
 
               <Meta label="Timeline">
-                Apr 2025 — Jun 2026
+                Apr 2025 – Jun 2026
               </Meta>
 
               <Meta label="Scope">
@@ -67,452 +344,34 @@ export default function HoloHealthCaseStudyRetro() {
               </Meta>
 
               <Meta label="Focus">
-                Iconography
+                Visual Language · Iconography · Production · QA
               </Meta>
 
-            </div>
-
-          </div>
-
-        </section>
-
-
-        {/* =====================================================
-            01 — CHALLENGE
-        ===================================================== */}
-
-        <section className="casestudy-section">
-
-          <div className="casestudy-container">
-
-            <SectionIntro
-              number="01 — The Challenge"
-              title="Building a visual language for veterinary health"
-            />
-
-            <div className="casestudy-challenge-grid">
-
-              <div className="casestudy-copy">
-
-                <p className="casestudy-body">
-                  HoloHealth needed to communicate a wide range of
-                  veterinary concepts — from animals and anatomy to
-                  conditions, medication, devices, and services.
-                </p>
-
-                <p className="casestudy-body">
-                  The challenge wasn't simply creating icons. The product
-                  needed a <strong>
-                    visual language that could stay consistent while
-                    scaling to thousands of assets.
-                  </strong>
-                </p>
-
-              </div>
-
-              <div className="casestudy-role-card">
-
-                <span className="casestudy-card-label">
-                  MY ROLE
-                </span>
-
-                <p>
-                  I worked as Creative / Design Lead, establishing the
-                  visual direction, creating the master icons, directing
-                  production, reviewing outputs, and solving visual
-                  inconsistencies throughout the process.
-                </p>
-
-              </div>
-
-            </div>
-
-            <div className="casestudy-goal">
-
-              <div className="casestudy-goal-mark">
-                GOAL
-              </div>
-
-              <p>
-                Build a scalable iconography system that could support
-                HoloHealth as the product and library continued to grow.
-              </p>
-
-            </div>
-
-            <MediaImage
-              src={holohealthTest1}
-              alt="HoloHealth iconography in product"
-              label="THE PRODUCT"
-              description="The iconography system designed to live inside the HoloHealth product."
-            />
-          </div>
-
-        </section>
-
-
-        {/* =====================================================
-            02 — STRATEGY
-        ===================================================== */}
-
-        <section className="casestudy-section casestudy-section-gray">
-
-          <div className="casestudy-container">
-
-            <SectionIntro
-              number="02 — The Strategy"
-              title="From references to a repeatable system"
-              subtitle="The system started small, then expanded through repeatable visual decisions."
-            />
-
-            <div className="casestudy-strategy-intro">
-
-              <p className="casestudy-body">
-                We started with a small set of master icons rather than
-                immediately producing at scale.
-              </p>
-
-              <p className="casestudy-body">
-                Before drawing unfamiliar veterinary concepts, we first
-                identified what information needed to survive
-                simplification.
-              </p>
-
-            </div>
-
-            <ProcessFlow />
-
-            <div className="casestudy-principles">
-
-              <StrategyPrinciple
-                number="01"
-                title="Form"
-                subtitle="Outline + fill"
-                text="Outlined forms created a shared structure across animals, anatomy, objects, and medical concepts. Filled areas added emphasis where information needed to stand out."
-              />
-
-              <StrategyPrinciple
-                number="02"
-                title="Color"
-                subtitle="Visual states and meaning"
-                text="Color became another layer of information, helping communicate states, conditions, and functional meaning without changing the underlying visual structure."
-              />
-
-              <StrategyPrinciple
-                number="03"
-                title="Consistency"
-                subtitle="One language across different subjects"
-                text="The same visual logic had to survive across species, anatomy, medication, devices, services, and conditions."
-              />
-
-            </div>
-
-            <PullQuote tone="green">
-              The goal wasn't to make every icon identical.
-              <br />
-              It was to give every icon the same{' '}
-              <strong>visual DNA.</strong>
-            </PullQuote>
-
-            <MediaImage
-              src={holohealthTest3}
-              alt="HoloHealth master icons and visual system"
-              label="MASTER ICONS"
-              description="A small set of master icons established the visual direction before production scaled."
-            />
-
-          </div>
-
-        </section>
-
-
-        {/* =====================================================
-            03 — EXECUTION
-        ===================================================== */}
-
-        <section className="casestudy-section casestudy-section-dark">
-
-          <div className="casestudy-container">
-
-            <SectionIntro
-              number="03 — The Execution"
-              title="Scaling from masters to 2,500+ icons"
-              subtitle="A repeatable production workflow allowed the visual language to scale without losing consistency."
-              dark
-            />
-
-            <div className="casestudy-execution-intro">
-
-              <div>
-
-                <p className="casestudy-body casestudy-body-large">
-                  Once the direction was approved, production moved into
-                  batches of roughly <strong>20–100 icons.</strong>
-                </p>
-
-                <p className="casestudy-body">
-                  Another designer handled most of the production while
-                  I focused on direction, review, problem solving,
-                  timeline, and client communication.
-                </p>
-
-              </div>
-
-              <PullQuote>
-                Does this still belong to the same visual language?
-              </PullQuote>
-
-            </div>
-
-            <Workflow />
-
-            <ScaleDiagram />
-                        <MediaImage
-              src={holohealthTest2}
-              alt="HoloHealth iconography in product"
-              label="THE PRODUCT"
-              description="The iconography system designed to live inside the HoloHealth product."
-            />
-
-            <div className="casestudy-master-production">
-
-              <div className="casestudy-master-card">
-           
-
-                <span className="casestudy-card-label">
-                  MASTER ICONS
-                </span>
-
-                <div className="casestudy-icon-grid">
-
-                  <IconShape type="circle" />
-                  <IconShape type="diamond" />
-                  <IconShape type="triangle" />
-                  <IconShape type="plus" />
-                  <IconShape type="square" />
-                  <IconShape type="cross" />
-                  <IconShape type="circle" />
-                  <IconShape type="diamond" />
-
-                </div>
-
-                <p>
-                  A small set of approved references.
-                </p>
-
-              </div>
-
-              <div className="casestudy-master-arrow">
-                →
-              </div>
-
-              <div className="casestudy-production-card">
-
-                <span className="casestudy-card-label">
-                  PRODUCTION
-                </span>
-
-                <div className="casestudy-icon-grid casestudy-icon-grid-large">
-
-                  {Array.from({ length: 24 }).map((_, index) => (
-
-                    <IconShape
-                      key={index}
-                      type={[
-                        'circle',
-                        'diamond',
-                        'triangle',
-                        'plus',
-                        'square',
-                        'cross',
-                      ][index % 6]}
-                    />
-
-                  ))}
-
-                </div>
-
-                <p>
-                  20–100 icons per production batch.
-                </p>
-
-              </div>
-
-            </div>
-
-            <p className="casestudy-body-wide">
-              The master icons became production references, allowing the
-              library to grow without relying entirely on individual
-              interpretation. I reviewed deliveries, resolved
-              inconsistencies, and stepped in whenever a concept needed
-              a different visual approach.
-            </p>
-
-          </div>
-
-          
-
-        </section>
-
-
-        {/* =====================================================
-            04 — IMPACT
-        ===================================================== */}
-
-        <section className="casestudy-section">
-
-          <div className="casestudy-container">
-
-            <SectionIntro
-              number="04 — The Impact"
-              title="From an icon library to a product language"
-            />
-
-            <div className="casestudy-impact-grid">
-
-              <div className="casestudy-impact-copy">
-
-                <p className="casestudy-body casestudy-body-large">
-                  The system grew to <strong>2,500+ icons</strong> covering
-                  multiple species, conditions, behaviors, medications,
-                  devices, services, and states.
-                </p>
-
-                <p className="casestudy-body">
-                  More importantly, the project established a shared
-                  visual language that could continue expanding through
-                  a repeatable production workflow.
-                </p>
-
-                <p className="casestudy-body">
-                  The icons were designed to live inside HoloHealth's
-                  actual product experience — not simply as an isolated
-                  asset collection.
-                </p>
-
-              </div>
-
-              <div className="casestudy-impact-stat">
-
-                <span className="casestudy-impact-number">
-                  2,500+
-                </span>
-
-                <span className="casestudy-impact-label">
-                  ICONS
-                </span>
-
-                <span className="casestudy-impact-description">
-                  One visual language across multiple species,
-                  conditions, behaviors, devices, and services.
-                </span>
-
-              </div>
-
-            </div>
-
-            <MediaImage
-              src={holohealthGif4}
-              alt="HoloHealth product using the iconography system"
-              label="IN CONTEXT"
-              description="The iconography system applied inside the HoloHealth product experience."
-            />
-
-          </div>
-
-        </section>
-
-
-        {/* =====================================================
-            REFLECTION
-        ===================================================== */}
-
-        <section className="casestudy-section casestudy-section-gray casestudy-reflection">
-
-          <div className="casestudy-container">
-
-            <SectionIntro
-              number="Reflection"
-              title="The project changed how I think about visual design."
-            />
-
-            <div className="casestudy-reflection-content">
-
-              <p className="casestudy-reflection-lead">
-                I became more interested in the systems behind the assets:
-                <strong>
-                  {' '}patterns, constraints, reusable decisions,
-                  and ways of working that another designer can understand
-                  and continue.
-                </strong>
-              </p>
-
-              <p className="casestudy-body">
-                It marked a shift from simply making visual assets toward
-                understanding <strong>
-                  how design systems work, how people use them,
-                  and how they can scale.
-                </strong>
-              </p>
-
-            </div>
-
-            <div className="casestudy-snapshot">
-
-              <div className="casestudy-snapshot-header">
-                Project Snapshot
-              </div>
-
-              <div className="casestudy-snapshot-grid">
-
-                <SnapshotItem
-                  label="Role"
-                  value="Creative / Design Lead"
-                />
-
-                <SnapshotItem
-                  label="Timeline"
-                  value="Apr 2025 — Jun 2026"
-                />
-
-                <SnapshotItem
-                  label="Scope"
-                  value="2,500+ icons"
-                />
-
-                <SnapshotItem
-                  label="Focus"
-                  value="Iconography · Visual System · Creative Direction · Production Direction · QA"
-                />
-
-              </div>
-
-            </div>
+            </dl>
 
             <a
               href={NOTION_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="casestudy-notion-link"
+              className="cs-link"
             >
-              Open original case study ↗
+              Open full case study ↗
             </a>
 
-          </div>
+          </section>
 
-        </section>
-
+        </div>
       </main>
 
 
-      {/* =====================================================
+      {/* =========================================================
           STATUS BAR
-      ===================================================== */}
+      ========================================================= */}
 
       <div className="casestudy-statusbar">
 
         <div className="casestudy-status-item">
-          HoloHealth — Building a Scalable Iconography System
+          HoloHealth — Translating Veterinary Complexity Into Visual Language
         </div>
 
         <div className="casestudy-status-item casestudy-status-ready">
@@ -522,112 +381,32 @@ export default function HoloHealthCaseStudyRetro() {
       </div>
 
 
+      {/* =========================================================
+          COMPONENT STYLES
+      ========================================================= */}
+
       <style>{`
 
-        /* =====================================================
-           DESIGN SYSTEM
-        ===================================================== */
+        /* =========================================================
+           COLOR TOKENS
+        ========================================================= */
 
         .casestudy-window {
 
-          --cs-color-black: #000;
-          --cs-color-white: #fff;
+          --cs-bg: #000000;
+          --cs-bg-alt: #111111;
 
-          --cs-color-ink: #fff;
-          --cs-color-text: #e8e8e8;
-          --cs-color-muted: #b8b8b8;
-          --cs-color-subtle: #999;
-          --cs-color-faint: #777;
-          --cs-color-border: #444;
+          --cs-ink: #f5f5f2;
+          --cs-body: #c8c8c5;
 
-          --cs-color-gray-50: #181818;
-          --cs-color-gray-100: #151515;
-          --cs-color-gray-150: #181818;
-          --cs-color-gray-200: #242424;
-          --cs-color-gray-300: #303030;
-          --cs-color-gray-400: #3a3a3a;
+          --cs-muted: #92928f;
+          --cs-faint: #666662;
 
-          --cs-color-blue: #5b7cfa;
-          --cs-color-green: #20bf6b;
-          --cs-color-red: #eb3b5a;
+          --cs-line: #292927;
 
-          --cs-color-dark: #101010;
-          --cs-color-dark-100: #151515;
-          --cs-color-dark-200: #181818;
-          --cs-color-dark-border: #333;
-          --cs-color-dark-text: #ccc;
-          --cs-color-dark-muted: #aaa;
-          --cs-color-dark-subtle: #888;
-
-          --cs-surface-page: #101010;
-          --cs-surface-subtle: #151515;
-          --cs-surface-muted: #181818;
-          --cs-surface-card: #181818;
-          --cs-surface-dark: #0b0b0b;
-
-          --cs-text-primary: #fff;
-          --cs-text-secondary: #d0d0d0;
-          --cs-text-muted: #aaa;
-          --cs-text-subtle: #888;
-
-          --cs-text-on-dark: #fff;
-          --cs-text-on-dark-secondary: #ccc;
-          --cs-text-on-dark-muted: #999;
-
-          --cs-border-default: #444;
-          --cs-border-light: #333;
-          --cs-border-dark: #333;
-
-          --cs-accent-primary: var(--cs-color-blue);
-          --cs-accent-success: var(--cs-color-green);
-          --cs-accent-critical: var(--cs-color-red);
-
-          --cs-space-1: 4px;
-          --cs-space-2: 6px;
-          --cs-space-3: 8px;
-          --cs-space-4: 10px;
-          --cs-space-5: 12px;
-          --cs-space-6: 13px;
-          --cs-space-7: 15px;
-          --cs-space-8: 16px;
-          --cs-space-9: 18px;
-          --cs-space-10: 20px;
-          --cs-space-11: 24px;
-          --cs-space-12: 28px;
-          --cs-space-13: 30px;
-          --cs-space-14: 32px;
-          --cs-space-15: 36px;
-          --cs-space-16: 40px;
-          --cs-space-17: 44px;
-          --cs-space-18: 48px;
-          --cs-space-19: 56px;
-          --cs-space-20: 60px;
-          --cs-space-21: 64px;
-          --cs-space-22: 72px;
-          --cs-space-23: 88px;
-
-          --cs-container-max: 60%;
-          --cs-container-gutter: 48px;
-
-          --cs-column-gap: 48px;
-          --cs-column-gap-mobile: 32px;
-
-          --cs-copy-max: 600px;
-          --cs-quote-max: 560px;
-          --cs-lead-max: 680px;
-
-          --cs-border-width: 1px;
-          --cs-window-border-width: 2px;
-
-          --cs-status-height: 23px;
-        }
-
-
-        /* =====================================================
-           BASE
-        ===================================================== */
-
-        .casestudy-window {
+          --cs-blue: #7895ff;
+          --cs-green: #35c77a;
+          --cs-red: #f05a70;
 
           width: 100%;
           min-height: 520px;
@@ -637,13 +416,8 @@ export default function HoloHealthCaseStudyRetro() {
 
           overflow: hidden;
 
-          background: #101010;
-
-          color: #fff;
-
-          border:
-            var(--cs-window-border-width)
-            solid;
+          background: var(--cs-bg);
+          color: var(--cs-ink);
 
           border-color:
             #444
@@ -652,6 +426,8 @@ export default function HoloHealthCaseStudyRetro() {
             #444;
 
           box-sizing: border-box;
+
+          text-align: left;
         }
 
 
@@ -662,1813 +438,78 @@ export default function HoloHealthCaseStudyRetro() {
         }
 
 
-        .casestudy-window p {
-          margin:
-            0
-            0
-            var(--cs-space-10);
-
-          text-align: left;
+        .casestudy-window p,
+        .casestudy-window blockquote,
+        .casestudy-window ul,
+        .casestudy-window dl,
+        .casestudy-window figure {
+          margin: 0;
         }
 
 
-        .casestudy-window strong {
-          font-weight: 700;
-          color: #fff;
-        }
-
-
-        /* =====================================================
-           MAIN
-        ===================================================== */
+        /* =========================================================
+           MAIN CASE STUDY
+        ========================================================= */
 
         .casestudy {
 
           flex: 1;
-
           min-height: 0;
 
           overflow-y: auto;
           overflow-x: hidden;
 
-          background: var(--cs-surface-page);
+          background: var(--cs-bg);
 
-          scroll-behavior: smooth;
+          font-family:
+            var(--casestudy-font-reading);
 
-          font-family: var(--casestudy-font-reading);
+          color: var(--cs-body);
 
-          color: #fff;
+          text-align: left;
 
           -webkit-font-smoothing: antialiased;
-
           text-rendering: optimizeLegibility;
         }
 
 
-        /* =====================================================
-           MASTER CONTAINER
-           
-           SENGAJA TIDAK DIUBAH.
-           Posisi/layout tetap original.
-        ===================================================== */
-
         .casestudy-container {
 
-          width: min(
-            var(--cs-container-max),
-            calc(100% - (var(--cs-container-gutter) * 2))
-          );
+          width:
+            min(55%, calc(100% - 64px));
 
-          margin-left: auto;
-          margin-right: auto;
+          min-width: 320px;
 
-          box-sizing: border-box;
-        }
+          margin: 0 auto;
 
+          /*
+            More generous vertical rhythm.
+          */
 
-        /* =====================================================
-           TYPOGRAPHY
-           
-           HANYA ALIGNMENT TEXT YANG DIUBAH.
-        ===================================================== */
-
-        .casestudy p {
-
-          font-family:
-            var(--casestudy-font-reading);
-
-          font-size:
-            var(--casestudy-font-reading-size);
-
-          line-height:
-            var(--casestudy-font-reading-line-height);
-
-          letter-spacing:
-            var(--casestudy-font-reading-letter-spacing);
+          padding:
+            40px 0 50px;
 
           text-align: left;
         }
 
 
-        .casestudy strong {
-
-          font-family:
-            var(--casestudy-font-heading);
-
-          font-weight:
-            var(--casestudy-font-heading-weight);
-
-          letter-spacing:
-            var(--casestudy-font-heading-letter-spacing);
-
-          color: #fff;
-        }
-
-
-        .casestudy h1,
-        .casestudy h2,
-        .casestudy h3,
-        .casestudy h4 {
-
-          font-family:
-            var(--casestudy-font-heading);
-
-          font-weight:
-            var(--casestudy-font-heading-weight);
-
-          letter-spacing:
-            var(--casestudy-font-heading-letter-spacing);
-
-          color: #fff;
-        }
-
-
-        /* =====================================================
+        /* =========================================================
            HERO
-        ===================================================== */
+        ========================================================= */
 
-        .casestudy-hero {
+        .cs-hero {
 
-          padding:
-            var(--cs-space-19)
-            0
-            var(--cs-space-20);
-
-          background:
-            var(--cs-surface-subtle);
-
-          border-bottom:
-            var(--cs-border-width)
-            solid
-            var(--cs-border-default);
+          text-align: left;
         }
 
 
-        .casestudy-eyebrow {
+        .cs-eyebrow {
 
           display: flex;
-
           align-items: center;
+          justify-content: flex-start;
 
-          gap:
-            var(--cs-space-3);
-
-          margin-bottom:
-            var(--cs-space-8);
-
-          color:
-            var(--cs-text-muted);
-        }
-
-
-        .casestudy-mono-muted {
-
-          font-family:
-            var(--casestudy-font-mono);
-
-          font-size:
-            var(--casestudy-font-mono-size);
-
-          line-height:
-            var(--casestudy-font-mono-line-height);
-
-          letter-spacing:
-            var(--casestudy-font-mono-letter-spacing);
-
-          font-weight: 400;
-
-          color:
-            var(--cs-text-muted);
-        }
-
-
-        .casestudy-dot {
-
-          width: 7px;
-          height: 7px;
-
-          flex: 0 0 7px;
-
-          border-radius: 50%;
-
-          background:
-            var(--cs-accent-success);
-        }
-
-
-        .casestudy-hero-title {
-
-          max-width: 820px;
-
-          margin: 0;
-
-          color:
-            #fff;
-
-          font-family:
-            var(--casestudy-font-heading);
-
-          font-size:
-            var(--casestudy-font-hero-size);
-
-          line-height:
-            var(--casestudy-font-hero-line-height);
-
-          font-weight:
-            var(--casestudy-font-heading-weight);
-
-          letter-spacing:
-            var(--casestudy-font-hero-letter-spacing);
-
-          text-align: left;
-        }
-
-
-        .casestudy-hero-lead {
-
-          max-width:
-            var(--cs-lead-max);
-
-          margin:
-            var(--cs-space-8)
-            0
-            0;
-
-          color:
-            var(--cs-text-muted);
-
-          font-family:
-            var(--casestudy-font-reading-large);
-
-          font-size:
-            var(--casestudy-font-reading-large-size);
-
-          line-height:
-            var(--casestudy-font-reading-large-line-height);
-
-          letter-spacing:
-            var(--casestudy-font-reading-large-letter-spacing);
-
-          text-align: left;
-        }
-
-
-        /* =====================================================
-           MEDIA
-        ===================================================== */
-
-        .casestudy-media {
-
-          width: 100%;
-
-          margin:
-            var(--cs-space-20)
-            0
-            0;
-
-          background:
-            #202020;
-
-          border:
-            var(--cs-border-width)
-            solid
-            var(--cs-border-default);
-
-          overflow: hidden;
-        }
-
-
-        .casestudy-hero-media {
-
-          margin-top:
-            var(--cs-space-15);
-        }
-
-
-        .casestudy-media-image {
-
-          display: block;
-
-          width: 100%;
-
-          height: auto;
-
-          max-width: 100%;
-
-          background:
-            #181818;
-        }
-
-
-        /* =====================================================
-           META
-        ===================================================== */
-
-        .casestudy-meta-grid {
-
-          display: grid;
-
-          grid-template-columns:
-            repeat(4, 1fr);
-
-          gap:
-            var(--cs-space-9);
-
-          padding-top:
-            var(--cs-space-10);
-
-          text-align: left;
-        }
-
-
-        .casestudy-meta-label {
-
-          display: block;
-
-          margin-bottom:
-            var(--cs-space-2);
-
-          color:
-            var(--cs-text-faint);
-
-          font-family:
-            var(--casestudy-font-mono);
-
-          font-size:
-            var(--casestudy-font-mono-size);
-
-          line-height:
-            var(--casestudy-font-mono-line-height);
-
-          letter-spacing:
-            var(--casestudy-font-mono-letter-spacing);
-
-          text-align: left;
-        }
-
-
-        .casestudy-meta-value {
-
-          display: block;
-
-          color:
-            #fff;
-
-          font-family:
-            var(--casestudy-font-heading);
-
-          font-size:
-            var(--casestudy-font-reading-size);
-
-          line-height:
-            var(--casestudy-font-reading-line-height);
-
-          font-weight:
-            var(--casestudy-font-heading-weight);
-
-          text-align: left;
-        }
-
-
-        /* =====================================================
-           SECTIONS
-        ===================================================== */
-
-        .casestudy-section {
-
-          padding:
-            var(--cs-space-22)
-            0;
-
-          background:
-            #101010;
-        }
-
-
-        .casestudy-section-gray {
-
-          background:
-            #181818;
-        }
-
-
-        .casestudy-section-dark {
-
-          background:
-            #0b0b0b;
-
-          color:
-            #fff;
-        }
-
-
-        .casestudy-section-dark p {
-
-          color:
-            #ccc;
-
-          text-align: left;
-        }
-
-
-        .casestudy-section-dark strong {
-
-          color:
-            #fff;
-        }
-
-
-        /* =====================================================
-           SECTION INTRO
-           
-           POSISI TIDAK DIUBAH.
-           HANYA TEXT ALIGN LEFT.
-        ===================================================== */
-
-        .casestudy-section-intro {
-
-          margin-bottom:
-            var(--cs-space-19);
-
-          text-align: left;
-        }
-
-
-        .casestudy-section-number {
-
-          display: block;
-
-          margin-bottom:
-            var(--cs-space-3);
-
-          color:
-            var(--cs-text-faint);
-
-          font-family:
-            var(--casestudy-font-mono);
-
-          font-size:
-            var(--casestudy-font-mono-size);
-
-          line-height:
-            var(--casestudy-font-mono-line-height);
-
-          letter-spacing:
-            var(--casestudy-font-mono-letter-spacing);
-
-          text-align: left;
-        }
-
-
-        .casestudy-section-dark
-        .casestudy-section-number {
-
-          color:
-            var(--cs-color-dark-subtle);
-        }
-
-
-        .casestudy-section-intro h2 {
-
-          max-width: 780px;
-
-          margin: 0;
-
-          color:
-            #fff;
-
-          font-family:
-            var(--casestudy-font-heading);
-
-          font-size:
-            clamp(26px, 3.4vw, 42px);
-
-          line-height: 1.08;
-
-          font-weight:
-            var(--casestudy-font-heading-weight);
-
-          letter-spacing:
-            var(--casestudy-font-heading-letter-spacing);
-
-          text-align: left;
-        }
-
-
-        .casestudy-section-dark
-        .casestudy-section-intro h2 {
-
-          color:
-            #fff;
-        }
-
-
-        .casestudy-section-subtitle {
-
-          max-width: 650px;
-
-          margin:
-            var(--cs-space-5)
-            0
-            0 !important;
-
-          color:
-            var(--cs-text-muted);
-
-          font-family:
-            var(--casestudy-font-reading);
-
-          font-size:
-            var(--casestudy-font-reading-size);
-
-          line-height: 24px;
-
-          letter-spacing:
-            var(--casestudy-font-reading-letter-spacing);
-
-          text-align: left;
-        }
-
-
-        .casestudy-section-dark
-        .casestudy-section-subtitle {
-
-          color:
-            var(--cs-text-on-dark-muted);
-        }
-
-
-        /* =====================================================
-           BODY
-           
-           INI BAGIAN UTAMA YANG KAMU MAU:
-           text rata kiri, tanpa mengubah layout.
-        ===================================================== */
-
-        .casestudy-body {
-
-          max-width:
-            var(--cs-copy-max);
-
-          color:
-            #d0d0d0;
-
-          text-align: left;
-        }
-
-
-        .casestudy-body-large {
-
-          font-family:
-            var(--casestudy-font-reading-large) !important;
-
-          font-size:
-            var(--casestudy-font-reading-large-size) !important;
-
-          line-height:
-            var(--casestudy-font-reading-large-line-height) !important;
-
-          letter-spacing:
-            var(--casestudy-font-reading-large-letter-spacing) !important;
-
-          text-align: left !important;
-        }
-
-
-        .casestudy-body-wide {
-
-          max-width: 760px;
-
-          margin-top:
-            var(--cs-space-18);
-
-          color:
-            #d0d0d0;
-
-          text-align: left;
-        }
-
-
-        .casestudy-section-dark
-        .casestudy-body,
-
-        .casestudy-section-dark
-        .casestudy-body-wide {
-
-          color:
-            #ccc;
-
-          text-align: left;
-        }
-
-
-        /* =====================================================
-           CHALLENGE
-        ===================================================== */
-
-        .casestudy-challenge-grid {
-
-          display: grid;
-
-          grid-template-columns:
-            minmax(0, 1.2fr)
-            minmax(280px, 0.8fr);
-
-          gap:
-            var(--cs-column-gap);
-
-          align-items: start;
-        }
-
-
-        .casestudy-copy {
-
-          max-width:
-            var(--cs-copy-max);
-
-          text-align: left;
-        }
-
-
-        .casestudy-role-card {
-
-          padding:
-            var(--cs-space-11);
-
-          background:
-            #181818;
-
-          border:
-            var(--cs-border-width)
-            solid
-            var(--cs-border-default);
-
-          text-align: left;
-        }
-
-
-        .casestudy-role-card p {
-
-          margin:
-            var(--cs-space-5)
-            0
-            0;
-
-          color:
-            var(--cs-text-secondary);
-
-          text-align: left;
-        }
-
-
-        .casestudy-card-label {
-
-          display: block;
-
-          color:
-            var(--cs-text-faint);
-
-          font-family:
-            var(--casestudy-font-mono);
-
-          font-size:
-            var(--casestudy-font-mono-size);
-
-          line-height:
-            var(--casestudy-font-mono-line-height);
-
-          letter-spacing:
-            var(--casestudy-font-mono-letter-spacing);
-
-          text-align: left;
-        }
-
-
-        .casestudy-goal {
-
-          display: grid;
-
-          grid-template-columns:
-            80px 1fr;
-
-          gap:
-            var(--cs-space-8);
-
-          max-width: 820px;
-
-          margin-top:
-            var(--cs-space-18);
-
-          padding-top:
-            var(--cs-space-10);
-
-          border-top:
-            var(--cs-border-width)
-            solid
-            var(--cs-border-default);
-
-          text-align: left;
-        }
-
-
-        .casestudy-goal-mark {
-
-          color:
-            var(--cs-accent-success);
-
-          font-family:
-            var(--casestudy-font-mono);
-
-          font-size:
-            var(--casestudy-font-mono-size);
-
-          text-align: left;
-        }
-
-
-        .casestudy-goal p {
-
-          max-width: 650px;
-
-          margin: 0;
-
-          color:
-            #fff;
-
-          font-family:
-            var(--casestudy-font-reading-large);
-
-          font-size:
-            var(--casestudy-font-reading-large-size);
-
-          line-height:
-            var(--casestudy-font-reading-large-line-height);
-
-          letter-spacing:
-            var(--casestudy-font-reading-large-letter-spacing);
-
-          text-align: left;
-        }
-
-
-        /* =====================================================
-           MEDIA CAPTION
-        ===================================================== */
-
-        .casestudy-media-caption {
-
-          display: flex;
-
-          align-items: center;
-
-          justify-content: space-between;
-
-          gap:
-            var(--cs-space-8);
-
-          padding:
-            var(--cs-space-5)
-            var(--cs-space-7);
-
-          background:
-            #181818;
-
-          border-top:
-            var(--cs-border-width)
-            solid
-            var(--cs-border-default);
-
-          text-align: left;
-        }
-
-
-        .casestudy-media-caption-label {
-
-          color:
-            #fff;
-
-          font-family:
-            var(--casestudy-font-mono);
-
-          font-size:
-            var(--casestudy-font-mono-size);
-
-          line-height:
-            var(--casestudy-font-mono-line-height);
-
-          letter-spacing:
-            var(--casestudy-font-mono-letter-spacing);
-
-          text-align: left;
-        }
-
-
-        .casestudy-media-caption-description {
-
-          max-width: 520px;
-
-          margin: 0 !important;
-
-          color:
-            var(--cs-text-subtle);
-
-          font-family:
-            var(--casestudy-font-reading);
-
-          font-size:
-            var(--casestudy-font-ui-size);
-
-          line-height:
-            var(--casestudy-font-ui-line-height);
-
-          text-align: left;
-        }
-
-
-        /* =====================================================
-           PROCESS FLOW
-        ===================================================== */
-
-        .casestudy-process-flow {
-
-          display: grid;
-
-          grid-template-columns:
-            repeat(3, 1fr);
-
-          margin-top:
-            var(--cs-space-18);
-
-          border:
-            var(--cs-border-width)
-            solid
-            var(--cs-border-default);
-        }
-
-
-        .casestudy-process-step {
-
-          min-height: 140px;
-
-          display: flex;
-
-          flex-direction: column;
-
-          justify-content: center;
-
-          padding:
-            var(--cs-space-10);
-
-          background:
-            #181818;
-
-          border-right:
-            var(--cs-border-width)
-            solid
-            var(--cs-border-default);
-
-          text-align: left;
-        }
-
-
-        .casestudy-process-step:last-child {
-
-          border-right: 0;
-        }
-
-
-        .casestudy-process-number {
-
-          color:
-            var(--cs-text-faint);
-
-          font-family:
-            var(--casestudy-font-mono);
-
-          font-size:
-            var(--casestudy-font-mono-size);
-
-          text-align: left;
-        }
-
-
-        .casestudy-process-title {
-
-          margin-top:
-            var(--cs-space-4);
-
-          color:
-            #fff;
-
-          font-family:
-            var(--casestudy-font-heading);
-
-          font-size:
-            var(--casestudy-font-reading-large-size);
-
-          line-height: 1.1;
-
-          font-weight:
-            var(--casestudy-font-heading-weight);
-
-          text-align: left;
-        }
-
-
-        .casestudy-process-description {
-
-          margin-top:
-            var(--cs-space-3);
-
-          color:
-            var(--cs-text-muted);
-
-          font-family:
-            var(--casestudy-font-reading);
-
-          font-size:
-            var(--casestudy-font-reading-size);
-
-          line-height: 21px;
-
-          text-align: left;
-        }
-
-
-        /* =====================================================
-           STRATEGY
-        ===================================================== */
-
-        .casestudy-principles {
-
-          margin-top:
-            var(--cs-space-22);
-
-          border-top:
-            var(--cs-border-width)
-            solid
-            var(--cs-border-default);
-        }
-
-
-        .casestudy-principle {
-
-          display: grid;
-
-          grid-template-columns:
-            80px 180px 1fr;
-
-          gap:
-            var(--cs-space-8);
-
-          padding:
-            var(--cs-space-11)
-            0;
-
-          border-bottom:
-            var(--cs-border-width)
-            solid
-            var(--cs-border-default);
-
-          text-align: left;
-        }
-
-
-        .casestudy-principle-number {
-
-          color:
-            var(--cs-text-faint);
-
-          font-family:
-            var(--casestudy-font-mono);
-
-          text-align: left;
-        }
-
-
-        .casestudy-principle-title {
-
-          color:
-            #fff;
-
-          font-family:
-            var(--casestudy-font-heading);
-
-          font-size: 22px;
-
-          line-height: 1.1;
-
-          font-weight:
-            var(--casestudy-font-heading-weight);
-
-          text-align: left;
-        }
-
-
-        .casestudy-principle-subtitle {
-
-          margin-top:
-            var(--cs-space-2);
-
-          color:
-            var(--cs-text-faint);
-
-          font-family:
-            var(--casestudy-font-mono);
-
-          font-size:
-            var(--casestudy-font-mono-size);
-
-          text-align: left;
-        }
-
-
-        .casestudy-principle-text {
-
-          max-width: 600px;
-
-          margin: 0 !important;
-
-          color:
-            var(--cs-text-secondary);
-
-          text-align: left;
-        }
-
-
-        /* =====================================================
-           PULL QUOTE
-        ===================================================== */
-
-        .casestudy-pullquote {
-
-          max-width:
-            var(--cs-quote-max);
-
-          margin:
-            var(--cs-space-19)
-            0
-            0;
-
-          padding-left:
-            var(--cs-space-10);
-
-          border-left:
-            3px
-            solid
-            #fff;
-
-          color:
-            #fff;
-
-          font-family:
-            var(--casestudy-font-reading-large);
-
-          font-size:
-            var(--casestudy-font-reading-large-size);
-
-          line-height:
-            var(--casestudy-font-reading-large-line-height);
-
-          letter-spacing:
-            var(--casestudy-font-reading-large-letter-spacing);
-
-          text-align: left;
-        }
-
-
-        .casestudy-pullquote-blue {
-
-          border-left-color:
-            var(--cs-accent-primary);
-        }
-
-
-        .casestudy-pullquote-green {
-
-          border-left-color:
-            var(--cs-accent-success);
-        }
-
-
-        .casestudy-section-dark
-        .casestudy-pullquote {
-
-          color:
-            #fff;
-
-          border-left-color:
-            #fff;
-
-          text-align: left;
-        }
-
-
-        /* =====================================================
-           EXECUTION
-        ===================================================== */
-
-        .casestudy-execution-intro {
-
-          display: grid;
-
-          grid-template-columns:
-            minmax(0, 1fr)
-            minmax(280px, 0.8fr);
-
-          gap:
-            var(--cs-column-gap);
-
-          align-items: start;
-
-          text-align: left;
-        }
-
-
-        .casestudy-execution-intro
-        .casestudy-pullquote {
-
-          margin-top: 0;
-
-          color:
-            #fff;
-
-          text-align: left;
-        }
-
-
-        .casestudy-workflow {
-
-          display: grid;
-
-          grid-template-columns:
-            repeat(5, 1fr);
-
-          margin-top:
-            var(--cs-space-20);
-
-          border-top:
-            var(--cs-border-width)
-            solid
-            var(--cs-border-dark);
-
-          border-left:
-            var(--cs-border-width)
-            solid
-            var(--cs-border-dark);
-        }
-
-
-        .casestudy-workflow-node {
-
-          min-height: 84px;
-
-          display: flex;
-
-          align-items: center;
-
-          padding:
-            var(--cs-space-5);
-
-          color:
-            var(--cs-text-on-dark);
-
-          border-right:
-            var(--cs-border-width)
-            solid
-            var(--cs-border-dark);
-
-          border-bottom:
-            var(--cs-border-width)
-            solid
-            var(--cs-border-dark);
-
-          font-family:
-            var(--casestudy-font-mono);
-
-          font-size:
-            var(--casestudy-font-mono-size);
-
-          line-height: 18px;
-
-          text-align: left;
-        }
-
-
-        /* =====================================================
-           SCALE
-        ===================================================== */
-
-        .casestudy-scale {
-
-          display: grid;
-
-          grid-template-columns:
-            repeat(3, 1fr);
-
-          gap:
-            var(--cs-space-3);
-
-          margin-top:
-            var(--cs-space-18);
-        }
-
-
-        .casestudy-scale-step {
-
-          min-height: 130px;
-
-          display: flex;
-
-          flex-direction: column;
-
-          justify-content: center;
-
-          padding:
-            var(--cs-space-10);
-
-          background:
-            var(--cs-color-dark-100);
-
-          border:
-            var(--cs-border-width)
-            solid
-            var(--cs-border-dark);
-
-          text-align: left;
-        }
-
-
-        .casestudy-scale-number {
-
-          color:
-            var(--cs-color-dark-subtle);
-
-          font-family:
-            var(--casestudy-font-mono);
-
-          text-align: left;
-        }
-
-
-        .casestudy-scale-title {
-
-          margin-top:
-            var(--cs-space-3);
-
-          color:
-            var(--cs-color-white);
-
-          font-family:
-            var(--casestudy-font-heading);
-
-          font-size:
-            var(--casestudy-font-reading-large-size);
-
-          line-height: 23px;
-
-          font-weight:
-            var(--casestudy-font-heading-weight);
-
-          text-align: left;
-        }
-
-
-        .casestudy-scale-description {
-
-          margin-top:
-            var(--cs-space-2);
-
-          color:
-            var(--cs-color-dark-muted);
-
-          font-family:
-            var(--casestudy-font-mono);
-
-          font-size:
-            var(--casestudy-font-mono-size);
-
-          text-align: left;
-        }
-
-
-        /* =====================================================
-           MASTER / PRODUCTION
-        ===================================================== */
-
-        .casestudy-master-production {
-
-          display: grid;
-
-          grid-template-columns:
-            1fr 70px 1.4fr;
-
-          gap:
-            var(--cs-space-8);
-
-          align-items: center;
-
-          margin-top:
-            var(--cs-space-20);
-        }
-
-
-        .casestudy-master-card,
-        .casestudy-production-card {
-
-          min-width: 0;
-
-          padding:
-            var(--cs-space-10);
-
-          background:
-            var(--cs-color-dark-100);
-
-          border:
-            var(--cs-border-width)
-            solid
-            var(--cs-border-dark);
-
-          text-align: left;
-        }
-
-
-        .casestudy-master-card p,
-        .casestudy-production-card p {
-
-          margin:
-            var(--cs-space-7)
-            0
-            0;
-
-          color:
-            var(--cs-color-dark-muted);
-
-          font-family:
-            var(--casestudy-font-mono);
-
-          font-size:
-            var(--casestudy-font-mono-size);
-
-          line-height: 18px;
-
-          text-align: left;
-        }
-
-
-        .casestudy-master-card
-        .casestudy-card-label,
-
-        .casestudy-production-card
-        .casestudy-card-label {
-
-          color:
-            var(--cs-color-dark-muted);
-
-          text-align: left;
-        }
-
-
-        .casestudy-master-arrow {
-
-          display: flex;
-
-          align-items: center;
-
-          justify-content: center;
-
-          color:
-            var(--cs-color-white);
-
-          font-size: 30px;
-        }
-
-
-        .casestudy-icon-grid {
-
-          display: grid;
-
-          grid-template-columns:
-            repeat(4, 1fr);
-
-          gap:
-            var(--cs-space-2);
-
-          margin-top:
-            var(--cs-space-8);
-        }
-
-
-        .casestudy-icon-grid-large {
-
-          grid-template-columns:
-            repeat(8, 1fr);
-        }
-
-
-        .casestudy-icon {
-
-          aspect-ratio: 1;
-
-          display: flex;
-
-          align-items: center;
-
-          justify-content: center;
-
-          color:
-            var(--cs-color-dark-text);
-
-          border:
-            1px
-            solid
-            #444;
-
-          font-size: 18px;
-        }
-
-
-        .casestudy-icon::before {
-
-          content: '';
-
-          display: block;
-        }
-
-
-        .casestudy-icon-circle::before {
-
-          width: 42%;
-          height: 42%;
-
-          border:
-            2px
-            solid
-            currentColor;
-
-          border-radius: 50%;
-        }
-
-
-        .casestudy-icon-diamond::before {
-
-          width: 38%;
-          height: 38%;
-
-          border:
-            2px
-            solid
-            currentColor;
-
-          transform:
-            rotate(45deg);
-        }
-
-
-        .casestudy-icon-triangle::before {
-
-          width: 0;
-          height: 0;
-
-          border-left:
-            7px
-            solid
-            transparent;
-
-          border-right:
-            7px
-            solid
-            transparent;
-
-          border-bottom:
-            13px
-            solid
-            currentColor;
-        }
-
-
-        .casestudy-icon-plus::before {
-
-          content: '+';
-
-          font-size: 20px;
-
-          line-height: 1;
-        }
-
-
-        .casestudy-icon-square::before {
-
-          width: 38%;
-          height: 38%;
-
-          border:
-            2px
-            solid
-            currentColor;
-        }
-
-
-        .casestudy-icon-cross::before {
-
-          content: '×';
-
-          font-size: 22px;
-
-          line-height: 1;
-        }
-
-
-        /* =====================================================
-           IMPACT
-        ===================================================== */
-
-        .casestudy-impact-grid {
-
-          display: grid;
-
-          grid-template-columns:
-            minmax(0, 1fr)
-            minmax(300px, 0.7fr);
-
-          gap:
-            var(--cs-column-gap);
-
-          align-items: stretch;
-        }
-
-
-        .casestudy-impact-copy {
-
-          text-align: left;
-        }
-
-
-        .casestudy-impact-stat {
-
-          display: flex;
-
-          flex-direction: column;
-
-          justify-content: center;
-
-          padding:
-            var(--cs-space-12);
-
-          background:
-            #000;
-
-          color:
-            #fff;
-
-          text-align: left;
-        }
-
-
-        .casestudy-impact-number {
-
-          color:
-            #fff;
-
-          font-family:
-            var(--casestudy-font-heading);
-
-          font-size:
-            clamp(52px, 7vw, 86px);
-
-          line-height: 0.9;
-
-          font-weight:
-            var(--casestudy-font-heading-weight);
-
-          text-align: left;
-        }
-
-
-        .casestudy-impact-label {
-
-          margin-top:
-            var(--cs-space-5);
-
-          color:
-            var(--cs-color-green);
-
-          font-family:
-            var(--casestudy-font-mono);
-
-          font-size:
-            var(--casestudy-font-mono-size);
-
-          text-align: left;
-        }
-
-
-        .casestudy-impact-description {
-
-          max-width: 300px;
-
-          margin-top:
-            var(--cs-space-8);
-
-          color: #aaa;
-
-          font-family:
-            var(--casestudy-font-reading);
-
-          font-size:
-            var(--casestudy-font-reading-size);
-
-          line-height: 23px;
-
-          text-align: left;
-        }
-
-
-        /* =====================================================
-           REFLECTION
-        ===================================================== */
-
-        .casestudy-reflection-content {
-
-          max-width: 760px;
-
-          text-align: left;
-        }
-
-
-        .casestudy-reflection-lead {
-
-          margin:
-            0
-            0
-            var(--cs-space-12);
-
-          color:
-            #fff;
-
-          font-family:
-            var(--casestudy-font-reading-large);
-
-          font-size:
-            var(--casestudy-font-reading-large-size);
-
-          line-height:
-            var(--casestudy-font-reading-large-line-height);
-
-          text-align: left;
-        }
-
-
-        /* =====================================================
-           SNAPSHOT
-        ===================================================== */
-
-        .casestudy-snapshot {
-
-          margin-top:
-            var(--cs-space-22);
-
-          border:
-            var(--cs-border-width)
-            solid
-            var(--cs-border-default);
-        }
-
-
-        .casestudy-snapshot-header {
-
-          padding:
-            var(--cs-space-5)
-            var(--cs-space-7);
-
-          background:
-            #000;
-
-          color:
-            #fff;
-
-          font-family:
-            var(--casestudy-font-mono);
-
-          font-size:
-            var(--casestudy-font-mono-size);
-
-          text-align: left;
-        }
-
-
-        .casestudy-snapshot-grid {
-
-          display: grid;
-
-          grid-template-columns:
-            repeat(2, 1fr);
-        }
-
-
-        .casestudy-snapshot-item {
-
-          min-height: 120px;
-
-          padding:
-            var(--cs-space-9);
-
-          background:
-            #181818;
-
-          border-right:
-            var(--cs-border-width)
-            solid
-            var(--cs-border-default);
-
-          border-bottom:
-            var(--cs-border-width)
-            solid
-            var(--cs-border-default);
-
-          text-align: left;
-        }
-
-
-        .casestudy-snapshot-item:nth-child(2n) {
-
-          border-right: 0;
-        }
-
-
-        .casestudy-snapshot-item:nth-last-child(-n + 2) {
-
-          border-bottom: 0;
-        }
-
-
-        .casestudy-snapshot-label {
-
-          display: block;
-
-          color:
-            var(--cs-text-faint);
-
-          font-family:
-            var(--casestudy-font-mono);
-
-          font-size:
-            var(--casestudy-font-mono-size);
-
-          text-align: left;
-        }
-
-
-        .casestudy-snapshot-value {
-
-          display: block;
-
-          margin-top:
-            var(--cs-space-4);
-
-          color:
-            #fff;
-
-          font-family:
-            var(--casestudy-font-heading);
-
-          font-size:
-            var(--casestudy-font-reading-size);
-
-          line-height: 23px;
-
-          font-weight:
-            var(--casestudy-font-heading-weight);
-
-          text-align: left;
-        }
-
-
-        /* =====================================================
-           NOTION LINK
-        ===================================================== */
-
-        .casestudy-notion-link {
-
-          display: inline-block;
-
-          margin-top:
-            var(--cs-space-13);
-
-          padding:
-            var(--cs-space-4)
-            var(--cs-space-7);
-
-          background:
-            #fff;
-
-          color:
-            #000;
-
-          border:
-            var(--cs-window-border-width)
-            solid
-            #fff;
+          margin-bottom: 18px !important;
 
           font-family:
             var(--casestudy-font-ui);
@@ -2477,47 +518,927 @@ export default function HoloHealthCaseStudyRetro() {
             var(--casestudy-font-ui-size);
 
           line-height:
-            var(--cs-space-10);
+            var(--casestudy-font-ui-line-height);
+
+          letter-spacing:
+            var(--casestudy-font-ui-letter-spacing);
+
+          color: var(--cs-muted);
+
+          text-align: left;
+        }
+
+
+        .cs-title {
+
+
+          margin:
+            0 0 22px !important;
+
+          font-family:
+            var(--casestudy-font-heading);
+
+          font-style: normal;
+
+          font-weight: 700;
+
+          font-size:
+            var(--casestudy-font-hero-size);
+
+          line-height:
+            1.04;
+
+          letter-spacing:
+            var(--casestudy-font-hero-letter-spacing);
+
+          color: var(--cs-ink);
+
+          text-align: left;
+        }
+
+
+        .cs-lead {
+
+
+          margin:
+            0 0 40px !important;
+
+          font-family:
+            var(--casestudy-font-reading);
+
+          font-style: normal;
+
+          font-weight: 400;
+
+          font-size:
+            var(--casestudy-font-reading-large-size);
+
+          line-height:
+            1.55;
+
+          letter-spacing:
+            var(--casestudy-font-reading-large-letter-spacing);
+
+          color: #d0d0cd;
+
+          text-align: left;
+        }
+
+
+        /* =========================================================
+           HERO IMAGE
+        ========================================================= */
+
+        .cs-hero-figure {
+
+          text-align: left;
+        }
+
+
+        .cs-hero-image {
+
+          display: block;
+
+          width: 100%;
+          height: auto;
+
+          /*
+            No border.
+          */
+
+          border: 0;
+
+          background: transparent;
+
+          border-radius: 0;
+        }
+
+
+        /* =========================================================
+           META
+        ========================================================= */
+
+        .cs-meta {
+
+          display: grid;
+
+          grid-template-columns:
+            repeat(4, 1fr);
+
+          gap:
+            28px;
+
+          margin: 0 !important;
+
+          text-align: left;
+        }
+
+
+        .cs-meta-item {
+
+          min-width: 0;
+
+          text-align: left;
+        }
+
+
+        .cs-meta-label {
+
+          display: block;
+
+          margin-bottom: 8px;
+
+          font-family:
+            var(--casestudy-font-ui);
+
+          font-size:
+            var(--casestudy-font-ui-size);
+
+          line-height:
+            var(--casestudy-font-ui-line-height);
+
+          letter-spacing:
+            0.06em;
+
+          color:
+            var(--cs-faint);
+
+          text-transform:
+            uppercase;
+
+          text-align: left;
+        }
+
+
+        .cs-meta-value {
+
+          display: block;
+
+          font-family:
+            var(--casestudy-font-ui);
+
+          font-size:
+            var(--casestudy-font-ui-reading-size);
+
+          line-height:
+            1.45;
+
+          letter-spacing:
+            var(--casestudy-font-ui-letter-spacing);
+
+          font-weight: 400;
+
+          color:
+            var(--cs-ink);
+
+          text-align: left;
+        }
+
+
+        /* =========================================================
+           SECTIONS
+        ========================================================= */
+
+        .cs-section {
+
+          padding:
+            30px 0;
+
+          border-bottom:
+            1px solid var(--cs-line);
+
+          text-align: left;
+        }
+
+
+        .cs-section-last {
+
+          border-bottom: 0;
+
+          padding-bottom: 12px;
+        }
+
+
+        /* =========================================================
+           SECTION HEADING
+        ========================================================= */
+
+        .cs-section-heading {
+
+          margin-bottom:
+            30px !important;
+
+          text-align: left;
+        }
+
+
+        .cs-section-title {
+
+          margin: 0 !important;
+
+          font-family:
+            var(--casestudy-font-heading);
+
+          font-style: normal;
+
+          font-weight:
+            var(--casestudy-font-heading-weight);
+
+          font-size: 21px;
+
+          line-height: 1.3;
+
+          letter-spacing:
+            var(--casestudy-font-heading-letter-spacing);
+
+          color:
+            var(--cs-ink);
+
+          text-align: left;
+        }
+
+
+        .cs-section-number {
+
+          display: inline-block;
+
+          margin-right: 10px;
+
+          font-family:
+            var(--casestudy-font-mono);
+
+          font-size:
+            var(--casestudy-font-mono-size);
+
+          line-height:
+            var(--casestudy-font-mono-line-height);
+
+          letter-spacing:
+            var(--casestudy-font-mono-letter-spacing);
+
+          color:
+            var(--cs-faint);
+
+          text-align: left;
+        }
+
+
+        .cs-section-subtitle {
+
+          margin:
+            9px 0 0 !important;
+
+          font-family:
+            var(--casestudy-font-reading);
+
+          font-size:
+            var(--casestudy-font-reading-size);
+
+          line-height:
+            1.55;
+
+          letter-spacing:
+            var(--casestudy-font-reading-letter-spacing);
+
+          color:
+            var(--cs-muted);
+
+          text-align: left;
+        }
+
+
+        /* =========================================================
+           COPY STACK
+        ========================================================= */
+
+        .cs-copy-stack {
+
+          display: flex;
+
+          flex-direction: column;
+
+          gap: 22px;
+
+          margin-bottom: 28px;
+        }
+
+
+        /* =========================================================
+           BODY COPY
+        ========================================================= */
+
+        .cs-body {
+
+
+          margin: 0 !important;
+
+          font-family:
+            var(--casestudy-font-reading);
+
+          font-style: normal;
+
+          font-weight: 400;
+
+          font-size:
+            var(--casestudy-font-reading-size);
+
+          line-height:
+            1.7;
+
+          letter-spacing:
+            var(--casestudy-font-reading-letter-spacing);
+
+          color:
+            var(--cs-body);
+
+          text-align: left;
+        }
+
+
+        .cs-body-strong {
+
+
+
+          margin:
+            32px 0 22px !important;
+
+          font-family:
+            var(--casestudy-font-heading);
+
+          font-style: normal;
+
+          font-weight:
+            var(--casestudy-font-heading-weight);
+
+          font-size:
+            var(--casestudy-font-reading-large-size);
+
+          line-height:
+            1.45;
+
+          letter-spacing:
+            var(--casestudy-font-heading-letter-spacing);
+
+          color:
+            var(--cs-ink);
+
+          text-align: left;
+        }
+
+
+        .cs-body strong {
+
+          font-family:
+            var(--casestudy-font-heading);
+
+          font-weight:
+            var(--casestudy-font-heading-weight);
+
+          letter-spacing:
+            var(--casestudy-font-heading-letter-spacing);
+
+          color:
+            var(--cs-ink);
+        }
+
+
+        /* =========================================================
+           PROBLEM TERMS
+        ========================================================= */
+
+        .cs-term-row {
+
+          display: flex;
+
+          flex-wrap: wrap;
+
+          justify-content: flex-start;
+
+          gap: 9px;
+
+          margin:
+            0 0 28px !important;
+
+          text-align: left;
+        }
+
+
+        .cs-term {
+
+          padding:
+            8px 12px;
+
+          background:
+            rgba(255, 255, 255, 0.035);
+
+          border:
+            1px solid rgba(255, 255, 255, 0.08);
+
+          font-family:
+            var(--casestudy-font-ui);
+
+          font-size:
+            var(--casestudy-font-ui-size);
+
+          line-height:
+            1.4;
+
+          letter-spacing:
+            var(--casestudy-font-ui-letter-spacing);
+
+          color:
+            #a7a7a3;
+
+          text-align: left;
+        }
+
+
+        /* =========================================================
+           ROLE LIST
+        ========================================================= */
+
+        .cs-list {
+
+          display: flex;
+
+          flex-wrap: wrap;
+
+          justify-content: flex-start;
+
+          gap: 9px;
+
+          list-style: none;
+
+          padding: 0;
+
+          margin:
+            28px 0 32px !important;
+
+          text-align: left;
+        }
+
+
+        .cs-list li {
+
+          padding:
+            8px 12px;
+
+          background:
+            rgba(255, 255, 255, 0.035);
+
+          border:
+            1px solid rgba(255, 255, 255, 0.08);
+
+          font-family:
+            var(--casestudy-font-ui);
+
+          font-size:
+            var(--casestudy-font-ui-size);
+
+          line-height:
+            1.4;
+
+          letter-spacing:
+            var(--casestudy-font-ui-letter-spacing);
+
+          color:
+            #d4d4d1;
+
+          text-align: left;
+        }
+
+
+        /* =========================================================
+           HEALTH STATES
+        ========================================================= */
+
+        .cs-states {
+
+          display: flex;
+
+          flex-direction: column;
+
+          gap: 1px;
+
+          margin:
+            26px 0 30px;
+
+          background:
+            var(--cs-line);
+
+          border:
+            1px solid var(--cs-line);
+
+          text-align: left;
+        }
+
+
+        .cs-state {
+
+          display: flex;
+
+          align-items: baseline;
+
+          justify-content: flex-start;
+
+          gap: 14px;
+
+          padding:
+            15px 16px;
+
+          background:
+            #111;
+
+          text-align: left;
+        }
+
+
+        .cs-state-dot {
+
+          width: 8px;
+          height: 8px;
+
+          flex: 0 0 auto;
+
+          border-radius: 50%;
+        }
+
+
+        .cs-state-blue {
+          background:
+            var(--cs-blue);
+        }
+
+
+        .cs-state-green {
+          background:
+            var(--cs-green);
+        }
+
+
+        .cs-state-red {
+          background:
+            var(--cs-red);
+        }
+
+
+        .cs-state-label {
+
+          min-width: 110px;
+
+          font-family:
+            var(--casestudy-font-ui);
+
+          font-size:
+            var(--casestudy-font-ui-reading-size);
+
+          line-height:
+            1.45;
+
+          font-weight: 700;
+
+          color:
+            var(--cs-ink);
+
+          text-align: left;
+        }
+
+
+        .cs-state-text {
+
+          font-family:
+            var(--casestudy-font-ui);
+
+          font-size:
+            var(--casestudy-font-ui-size);
+
+          line-height:
+            1.5;
+
+          color:
+            var(--cs-muted);
+
+          text-align: left;
+        }
+
+
+        /* =========================================================
+           QUOTE
+        ========================================================= */
+
+        .cs-quote {
+
+
+          margin:
+            38px 0 !important;
+
+          padding:
+            4px 0 4px 20px;
+
+          border-left:
+            2px solid var(--cs-green);
+
+          font-family:
+            var(--casestudy-font-reading);
+
+          font-size:
+            var(--casestudy-font-reading-large-size);
+
+          line-height:
+            1.55;
+
+          letter-spacing:
+            var(--casestudy-font-reading-large-letter-spacing);
+
+          font-weight: 400;
+
+          color:
+            #e5e5e1;
+
+          text-align: left;
+        }
+
+
+        /* =========================================================
+           OUTCOME
+        ========================================================= */
+
+        .cs-outcome {
+
+          display: flex;
+
+          align-items: flex-start;
+
+          justify-content: flex-start;
+
+          gap: 28px;
+
+          margin:
+            0 0 36px;
+
+          text-align: left;
+        }
+
+
+        .cs-outcome-stat {
+
+          flex: 0 0 auto;
+
+          display: flex;
+
+          flex-direction: column;
+
+          align-items: flex-start;
+
+          min-width: 128px;
+
+          padding:
+            18px 20px;
+
+          background:
+            #0d0d0d;
+
+          border:
+            1px solid var(--cs-line);
+
+          text-align: left;
+        }
+
+
+        .cs-outcome-number {
+
+          font-family:
+            var(--casestudy-font-heading);
+
+          font-size: 32px;
+
+          line-height: 1;
+
+          font-weight: 700;
+
+          letter-spacing:
+            var(--casestudy-font-heading-letter-spacing);
+
+          color:
+            var(--cs-ink);
+
+          text-align: left;
+        }
+
+
+        .cs-outcome-label {
+
+          margin-top:
+            9px;
+
+          font-family:
+            var(--casestudy-font-ui);
+
+          font-size:
+            var(--casestudy-font-ui-size);
+
+          line-height:
+            var(--casestudy-font-ui-line-height);
+
+          letter-spacing:
+            0.06em;
+
+          color:
+            var(--cs-green);
+
+          text-transform:
+            uppercase;
+
+          text-align: left;
+        }
+
+
+        .cs-outcome-copy {
+
+          flex: 1;
+
+          margin-bottom: 0 !important;
+
+          text-align: left;
+        }
+
+
+        /* =========================================================
+           FIGURES
+        ========================================================= */
+
+        .cs-figure {
+
+          margin:
+            36px 0 0 !important;
+
+          text-align: left;
+        }
+
+
+        .cs-figure img {
+
+          display: block;
+
+          width: 100%;
+
+          height: auto;
+
+          /*
+            Images intentionally have NO border.
+          */
+
+          border: 0;
+
+          background:
+            transparent;
+
+          border-radius: 0;
+        }
+
+
+        .cs-figure-caption {
+
+
+          margin:
+            12px 0 0 !important;
+
+          font-family:
+            var(--casestudy-font-ui);
+
+          font-size:
+            var(--casestudy-font-ui-size);
+
+          line-height:
+            1.5;
+
+          letter-spacing:
+            var(--casestudy-font-ui-letter-spacing);
+
+          color:
+            var(--cs-faint);
+
+          text-align: left;
+        }
+
+
+        /* =========================================================
+           SNAPSHOT
+        ========================================================= */
+
+        .cs-snapshot {
+
+          display: grid;
+
+          grid-template-columns:
+            repeat(2, 1fr);
+
+          gap:
+            24px 28px;
+
+          margin:
+            36px 0 !important;
+
+          padding:
+            22px;
+
+          background:
+            rgba(255, 255, 255, 0.025);
+
+          border:
+            1px solid var(--cs-line);
+
+          text-align: left;
+        }
+
+
+        .cs-snapshot > .cs-meta-item {
+
+          min-width: 0;
+
+          text-align: left;
+        }
+
+
+        /* =========================================================
+           LINK
+        ========================================================= */
+
+        .cs-link {
+
+          display: inline-flex;
+
+          align-items: center;
+
+          justify-content: flex-start;
+
+          padding:
+            10px 16px;
+
+          background:
+            #f2f2ef;
+
+          border:
+            2px solid #f2f2ef;
+
+          font-family:
+            var(--casestudy-font-ui);
+
+          font-size:
+            var(--casestudy-font-ui-reading-size);
+
+          line-height:
+            1.4;
+
+          font-weight: 500;
+
+          color:
+            #080808;
 
           text-decoration: none;
 
+          text-align: left;
+
           transition:
-            background-color 120ms ease,
-            color 120ms ease;
+            background 140ms ease,
+            color 140ms ease;
         }
 
 
-        .casestudy-notion-link:hover {
+        .cs-link:hover {
 
           background:
-            #000;
+            transparent;
 
           color:
-            #fff;
+            #f2f2ef;
         }
 
 
-        /* =====================================================
+        /* =========================================================
            STATUS BAR
-        ===================================================== */
+        ========================================================= */
 
         .casestudy-statusbar {
 
-          flex: 0 0 23px;
+          flex:
+            0 0 23px;
 
-          height: 23px;
+          height:
+            23px;
 
           display: flex;
 
           gap:
-            var(--cs-space-1);
+            4px;
 
           padding:
-            2px
-            var(--cs-space-1);
+            2px 4px;
 
           background:
-            #3a3a3a;
+            #353535;
+
+          text-align: left;
         }
 
 
@@ -2527,31 +1448,12 @@ export default function HoloHealthCaseStudyRetro() {
 
           align-items: center;
 
+          justify-content: flex-start;
+
+          min-width: 0;
+
           padding:
-            0
-            var(--cs-space-2);
-
-          color: #fff;
-
-          border-top:
-            1px
-            solid
-            #555;
-
-          border-left:
-            1px
-            solid
-            #555;
-
-          border-right:
-            1px
-            solid
-            #111;
-
-          border-bottom:
-            1px
-            solid
-            #111;
+            0 6px;
 
           overflow: hidden;
 
@@ -2559,324 +1461,377 @@ export default function HoloHealthCaseStudyRetro() {
 
           text-overflow: ellipsis;
 
+          border-top:
+            1px solid #505050;
+
+          border-left:
+            1px solid #505050;
+
+          border-right:
+            1px solid #111;
+
+          border-bottom:
+            1px solid #111;
+
           font-family:
             var(--casestudy-font-ui);
 
           font-size:
             var(--casestudy-font-ui-size);
+
+          line-height:
+            var(--casestudy-font-ui-line-height);
+
+          letter-spacing:
+            var(--casestudy-font-ui-letter-spacing);
+
+          color:
+            #e5e5e5;
+
+          text-align: left;
+        }
+
+
+        .casestudy-status-item:first-child {
+          flex: 1;
         }
 
 
         .casestudy-status-ready {
 
-          width: 100px;
+          flex:
+            0 0 100px;
+
+          width:
+            100px;
         }
 
 
-        /* =====================================================
-           RESPONSIVE — 900px
-        ===================================================== */
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
 
         @media (max-width: 900px) {
 
-          .casestudy-window {
+          .casestudy-container {
 
-            --cs-container-max: calc(100% - 64px);
-
-            --cs-container-gutter: 32px;
-
-            --cs-column-gap:
-              var(--cs-column-gap-mobile);
+            width:
+              calc(100% - 48px);
           }
 
 
-          .casestudy-meta-grid {
+          .cs-meta {
 
             grid-template-columns:
               repeat(2, 1fr);
-          }
-
-
-          .casestudy-challenge-grid,
-          .casestudy-execution-intro,
-          .casestudy-impact-grid {
-
-            grid-template-columns: 1fr;
-          }
-
-
-          .casestudy-process-flow {
-
-            grid-template-columns: 1fr;
-          }
-
-
-          .casestudy-process-step {
-
-            min-height: 100px;
-
-            border-right: 0;
-
-            border-bottom:
-              var(--cs-border-width)
-              solid
-              var(--cs-border-default);
-          }
-
-
-          .casestudy-process-step:last-child {
-
-            border-bottom: 0;
-          }
-
-
-          .casestudy-principle {
-
-            grid-template-columns:
-              60px 180px 1fr;
-          }
-
-
-          .casestudy-workflow {
-
-            grid-template-columns:
-              repeat(3, 1fr);
-          }
-
-
-          .casestudy-master-production {
-
-            grid-template-columns: 1fr;
 
             gap:
-              var(--cs-space-5);
+              24px;
           }
 
 
-          .casestudy-master-arrow {
+          .cs-section {
 
-            transform:
-              rotate(90deg);
+            padding:
+              56px 0;
           }
-
         }
 
 
-        /* =====================================================
-           RESPONSIVE — 700px
-        ===================================================== */
-
         @media (max-width: 700px) {
 
-          .casestudy-window {
+          .casestudy-container {
 
-            --cs-container-max: calc(100% - 48px);
+            width:
+              calc(100% - 40px);
 
-            --cs-container-gutter: 24px;
+            padding:
+              48px 0 72px;
           }
 
 
-          .casestudy-hero {
+          .cs-hero {
 
-            padding:
-              var(--cs-space-16)
-              0
-              var(--cs-space-17);
+            padding-bottom:
+              44px;
+
+            margin-bottom:
+              44px;
           }
 
 
-          .casestudy-section {
+          .cs-title {
+
+            font-size:
+              26px;
+
+            line-height:
+              1.08;
+
+            letter-spacing:
+              -0.035em;
+
+            margin-bottom:
+              18px !important;
+          }
+
+
+          .cs-lead {
+
+            font-size:
+              var(--casestudy-font-reading-size);
+
+            line-height:
+              1.65;
+
+            margin-bottom:
+              32px !important;
+          }
+
+
+          .cs-outcome {
+
+            flex-direction:
+              column;
+
+            gap:
+              20px;
+          }
+
+
+          .cs-outcome-stat {
+
+            width:
+              100%;
+          }
+
+
+          .cs-outcome-number {
+
+            font-size:
+              28px;
+          }
+
+
+          .cs-state {
+
+            align-items:
+              flex-start;
+          }
+
+
+          .cs-state-label {
+
+            min-width:
+              90px;
+          }
+        }
+
+
+        @media (max-width: 560px) {
+
+          .casestudy-container {
+
+            width:
+              calc(100% - 32px);
 
             padding:
-              var(--cs-space-19)
+              40px 0 56px;
+          }
+
+
+          .cs-hero {
+
+            padding-bottom:
+              40px;
+
+            margin-bottom:
+              40px;
+          }
+
+
+          .cs-meta {
+
+            grid-template-columns:
+              1fr 1fr;
+
+            gap:
+              22px 16px;
+          }
+
+
+          .cs-section {
+
+            padding:
+              48px 0;
+          }
+
+
+          .cs-section-heading {
+
+            margin-bottom:
+              26px !important;
+          }
+
+
+          .cs-copy-stack {
+
+            gap:
+              20px;
+
+            margin-bottom:
+              24px;
+          }
+
+
+          .cs-body {
+
+            line-height:
+              1.72;
+          }
+
+
+          .cs-body-strong {
+
+            margin:
+              28px 0 20px !important;
+
+            line-height:
+              1.45;
+          }
+
+
+          .cs-term-row {
+
+            gap:
+              7px;
+
+            margin-bottom:
+              24px !important;
+          }
+
+
+          .cs-term {
+
+            padding:
+              7px 9px;
+          }
+
+
+          .cs-list {
+
+            gap:
+              7px;
+
+            margin:
+              24px 0 28px !important;
+          }
+
+
+          .cs-list li {
+
+            padding:
+              7px 9px;
+          }
+
+
+          .cs-state {
+
+            display:
+              grid;
+
+            grid-template-columns:
+              8px 1fr;
+
+            column-gap:
+              10px;
+
+            row-gap:
+              4px;
+
+            padding:
+              14px;
+          }
+
+
+          .cs-state-dot {
+
+            grid-row:
+              1 / span 2;
+
+            margin-top:
+              5px;
+          }
+
+
+          .cs-state-label {
+
+            min-width:
               0;
           }
 
 
-          .casestudy-meta-grid {
-
-            grid-template-columns:
-              1fr 1fr;
-          }
-
-
-          .casestudy-principle {
-
-            grid-template-columns:
-              50px 180px 1fr;
-
-            gap:
-              var(--cs-space-5);
-          }
-
-
-          .casestudy-workflow {
-
-            grid-template-columns:
-              repeat(2, 1fr);
-          }
-
-
-          .casestudy-scale {
-
-            grid-template-columns: 1fr;
-          }
-
-
-          .casestudy-snapshot-grid {
-
-            grid-template-columns: 1fr;
-          }
-
-
-          .casestudy-snapshot-item,
-          .casestudy-snapshot-item:nth-child(2n) {
-
-            border-right: 0;
-          }
-
-
-          .casestudy-snapshot-item:nth-last-child(-n + 2) {
-
-            border-bottom:
-              var(--cs-border-width)
-              solid
-              var(--cs-border-default);
-          }
-
-
-          .casestudy-snapshot-item:last-child {
-
-            border-bottom: 0;
-          }
-
-
-          .casestudy-media-caption {
-
-            flex-direction: column;
-
-            align-items: flex-start;
-          }
-
-
-          .casestudy-media-caption-description {
-
-            text-align: left;
-          }
-
-        }
-
-
-        /* =====================================================
-           RESPONSIVE — 520px
-        ===================================================== */
-
-        @media (max-width: 520px) {
-
-          .casestudy-window {
-
-            --cs-container-max: calc(100% - 32px);
-
-            --cs-container-gutter: 16px;
-          }
-
-
-          .casestudy-hero-title {
-
-            font-size:
-              clamp(34px, 11vw, 52px);
-          }
-
-
-          .casestudy-hero-lead {
-
-            font-size:
-              var(--casestudy-font-reading-size);
-
-            line-height: 24px;
-          }
-
-
-          .casestudy-meta-grid {
-
-            grid-template-columns: 1fr;
-          }
-
-
-          .casestudy-goal {
-
-            grid-template-columns: 1fr;
-
-            gap:
-              var(--cs-space-3);
-          }
-
-
-          .casestudy-process-flow {
-
-            grid-template-columns: 1fr;
-          }
-
-
-          .casestudy-principle {
-
-            grid-template-columns:
-              40px 1fr;
-          }
-
-
-          .casestudy-principle-text {
+          .cs-state-text {
 
             grid-column:
-              1 / -1;
+              2;
           }
 
 
-          .casestudy-workflow {
+          .cs-quote {
 
-            grid-template-columns: 1fr;
-          }
-
-
-          .casestudy-icon-grid-large {
-
-            grid-template-columns:
-              repeat(6, 1fr);
-          }
-
-
-          .casestudy-pullquote {
+            margin:
+              32px 0 !important;
 
             padding-left:
-              var(--cs-space-8);
+              16px;
 
-            font-size:
-              var(--casestudy-font-reading-size);
-
-            line-height: 25px;
-
-            text-align: left;
+            line-height:
+              1.5;
           }
 
 
-          .casestudy-impact-number {
+          .cs-figure {
 
-            font-size: 58px;
+            margin-top:
+              32px !important;
           }
 
 
-          .casestudy-snapshot-item {
+          .cs-figure-caption {
 
-            min-height: auto;
+            margin-top:
+              10px !important;
+
+            line-height:
+              1.45;
           }
 
 
-          .casestudy-media-caption {
+          .cs-snapshot {
+
+            grid-template-columns:
+              1fr;
+
+            gap:
+              20px;
+
+            margin:
+              32px 0 !important;
 
             padding:
-              var(--cs-space-5);
+              18px;
           }
 
+
+          .casestudy-status-ready {
+
+            flex-basis:
+              70px;
+
+            width:
+              70px;
+          }
         }
 
       `}</style>
@@ -2887,51 +1842,48 @@ export default function HoloHealthCaseStudyRetro() {
 
 
 /* =========================================================
-   META
+   HELPERS
 ========================================================= */
 
-function Meta({
-  label,
-  children,
-}) {
+function Meta({ label, children }) {
   return (
-    <div>
+    <div className="cs-meta-item">
 
-      <span className="casestudy-meta-label">
+      <span className="cs-meta-label">
         {label}
       </span>
 
-      <strong className="casestudy-meta-value">
+      <span className="cs-meta-value">
         {children}
-      </strong>
+      </span>
 
     </div>
   );
 }
 
 
-/* =========================================================
-   SECTION INTRO
-========================================================= */
-
-function SectionIntro({
+function SectionHeading({
   number,
   title,
   subtitle,
 }) {
   return (
-    <div className="casestudy-section-intro">
+    <div className="cs-section-heading">
 
-      <span className="casestudy-section-number">
-        {number}
-      </span>
+      <h2 className="cs-section-title">
 
-      <h2>
+        {number && (
+          <span className="cs-section-number">
+            {number}
+          </span>
+        )}
+
         {title}
+
       </h2>
 
       {subtitle && (
-        <p className="casestudy-section-subtitle">
+        <p className="cs-section-subtitle">
           {subtitle}
         </p>
       )}
@@ -2941,291 +1893,49 @@ function SectionIntro({
 }
 
 
-/* =========================================================
-   MEDIA IMAGE
-========================================================= */
-
-function MediaImage({
+function Figure({
   src,
   alt,
-  label,
-  description,
+  caption,
 }) {
   return (
-    <figure className="casestudy-media">
+    <figure className="cs-figure">
 
       <img
         src={src}
         alt={alt}
-        className="casestudy-media-image"
       />
 
-      <figcaption className="casestudy-media-caption">
-
-        <span className="casestudy-media-caption-label">
-          {label}
-        </span>
-
-        {description && (
-          <p className="casestudy-media-caption-description">
-            {description}
-          </p>
-        )}
-
-      </figcaption>
+      {caption && (
+        <figcaption className="cs-figure-caption">
+          {caption}
+        </figcaption>
+      )}
 
     </figure>
   );
 }
 
 
-/* =========================================================
-   PROCESS FLOW
-========================================================= */
-
-function ProcessFlow() {
-
-  const steps = [
-    {
-      number: '01',
-      title: 'Understand',
-      description:
-        'Identify the concept and the information that matters.',
-    },
-    {
-      number: '02',
-      title: 'Simplify',
-      description:
-        'Reduce complexity without losing recognition.',
-    },
-    {
-      number: '03',
-      title: 'Visualize',
-      description:
-        'Translate the idea into the established visual language.',
-    },
-  ];
-
-  return (
-    <div className="casestudy-process-flow">
-
-      {steps.map((step) => (
-
-        <div
-          key={step.number}
-          className="casestudy-process-step"
-        >
-
-          <span className="casestudy-process-number">
-            {step.number}
-          </span>
-
-          <span className="casestudy-process-title">
-            {step.title}
-          </span>
-
-          <span className="casestudy-process-description">
-            {step.description}
-          </span>
-
-        </div>
-
-      ))}
-
-    </div>
-  );
-}
-
-
-/* =========================================================
-   STRATEGY PRINCIPLE
-========================================================= */
-
-function StrategyPrinciple({
-  number,
-  title,
-  subtitle,
+function State({
+  color,
+  label,
   text,
 }) {
   return (
-    <div className="casestudy-principle">
+    <div className="cs-state">
 
-      <span className="casestudy-principle-number">
-        {number}
-      </span>
+      <span
+        className={`cs-state-dot cs-state-${color}`}
+        aria-hidden="true"
+      />
 
-      <div>
-
-        <div className="casestudy-principle-title">
-          {title}
-        </div>
-
-        <div className="casestudy-principle-subtitle">
-          {subtitle}
-        </div>
-
-      </div>
-
-      <p className="casestudy-principle-text">
-        {text}
-      </p>
-
-    </div>
-  );
-}
-
-
-/* =========================================================
-   PULL QUOTE
-========================================================= */
-
-function PullQuote({
-  children,
-  tone = 'default',
-}) {
-
-  const toneClass =
-    tone === 'blue'
-      ? 'casestudy-pullquote-blue'
-      : tone === 'green'
-        ? 'casestudy-pullquote-green'
-        : '';
-
-  return (
-    <blockquote
-      className={`casestudy-pullquote ${toneClass}`}
-    >
-      {children}
-    </blockquote>
-  );
-}
-
-
-/* =========================================================
-   WORKFLOW
-========================================================= */
-
-function Workflow() {
-
-  const steps = [
-    'Master Icons',
-    'Production',
-    'Review',
-    'Refinement',
-    'Final Assets',
-  ];
-
-  return (
-    <div className="casestudy-workflow">
-
-      {steps.map((step, index) => (
-
-        <div
-          key={step}
-          className="casestudy-workflow-node"
-        >
-
-          {String(index + 1).padStart(2, '0')}
-          {'  '}
-          {step}
-
-        </div>
-
-      ))}
-
-    </div>
-  );
-}
-
-
-/* =========================================================
-   SCALE DIAGRAM
-========================================================= */
-
-function ScaleDiagram() {
-
-  const steps = [
-    {
-      number: '01',
-      title: 'MASTER',
-      description: 'Small reference set',
-    },
-    {
-      number: '02',
-      title: 'BATCHES',
-      description: '20–100 icons',
-    },
-    {
-      number: '03',
-      title: 'SYSTEM',
-      description: '2,500+ icons',
-    },
-  ];
-
-  return (
-    <div className="casestudy-scale">
-
-      {steps.map((step) => (
-
-        <div
-          key={step.number}
-          className="casestudy-scale-step"
-        >
-
-          <span className="casestudy-scale-number">
-            {step.number}
-          </span>
-
-          <span className="casestudy-scale-title">
-            {step.title}
-          </span>
-
-          <span className="casestudy-scale-description">
-            {step.description}
-          </span>
-
-        </div>
-
-      ))}
-
-    </div>
-  );
-}
-
-
-/* =========================================================
-   ICON SHAPE
-========================================================= */
-
-function IconShape({
-  type,
-}) {
-  return (
-    <span
-      className={`casestudy-icon casestudy-icon-${type}`}
-      aria-hidden="true"
-    />
-  );
-}
-
-
-/* =========================================================
-   SNAPSHOT ITEM
-========================================================= */
-
-function SnapshotItem({
-  label,
-  value,
-}) {
-  return (
-    <div className="casestudy-snapshot-item">
-
-      <span className="casestudy-snapshot-label">
+      <span className="cs-state-label">
         {label}
       </span>
 
-      <span className="casestudy-snapshot-value">
-        {value}
+      <span className="cs-state-text">
+        {text}
       </span>
 
     </div>

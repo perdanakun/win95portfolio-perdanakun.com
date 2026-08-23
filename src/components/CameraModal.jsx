@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@react95/core';
 import shutterSound from '../assets/sounds/camera_shutter.wav';
@@ -10,20 +9,26 @@ export default function CameraModal({
 }) {
   const videoRef = useRef(null);
   const streamRef = useRef(null);
+  const shutterSoundRef = useRef(null);
 
   const [cameraReady, setCameraReady] = useState(false);
   const [photo, setPhoto] = useState(null);
   const [error, setError] = useState('');
 
-  // ===== CAMERA SOUND ====
+  // ================= CAMERA SOUND =================
 
-const shutterSoundRef = useRef(null);
+  useEffect(() => {
+    shutterSoundRef.current = new Audio(shutterSound);
 
-useEffect(() => {
-  shutterSoundRef.current = new Audio(shutterSound);
-}, []);
+    return () => {
+      if (shutterSoundRef.current) {
+        shutterSoundRef.current.pause();
+        shutterSoundRef.current = null;
+      }
+    };
+  }, []);
 
-  // ================= CAMERA START =================
+  // ================= CAMERA START / STOP =================
 
   useEffect(() => {
     if (!show) {
@@ -43,6 +48,15 @@ useEffect(() => {
       setError('');
       setCameraReady(false);
 
+      // Stop previous stream if there is one
+      if (streamRef.current) {
+        streamRef.current
+          .getTracks()
+          .forEach((track) => track.stop());
+
+        streamRef.current = null;
+      }
+
       const stream =
         await navigator.mediaDevices.getUserMedia({
           video: true,
@@ -53,12 +67,20 @@ useEffect(() => {
 
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+
+        // Make sure video is ready before allowing capture
+        videoRef.current.onloadedmetadata = () => {
+          videoRef.current
+            ?.play()
+            .catch(() => {});
+
+          setCameraReady(true);
+        };
       }
-
-      setCameraReady(true);
-
     } catch (err) {
       console.error('Camera error:', err);
+
+      setCameraReady(false);
 
       setError(
         'Unable to access the camera. Please allow camera permission.'
@@ -66,67 +88,104 @@ useEffect(() => {
     }
   };
 
-  // ================= CAMERA STOP =================
-
   const stopCamera = () => {
     if (streamRef.current) {
       streamRef.current
         .getTracks()
-        .forEach(track => track.stop());
+        .forEach((track) => track.stop());
 
       streamRef.current = null;
+    }
+
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
     }
 
     setCameraReady(false);
   };
 
   // ================= CAPTURE =================
-const handleCapture = () => {
-  const video = videoRef.current;
 
-  if (!video || !cameraReady) {
-    return;
-  }
+  const handleCapture = () => {
+    const video = videoRef.current;
 
-  // 🔊 CAMERA SHUTTER
-  if (shutterSoundRef.current) {
-    shutterSoundRef.current.currentTime = 0;
-    shutterSoundRef.current.play().catch(() => {});
-  }
+    if (
+      !video ||
+      !cameraReady ||
+      !video.videoWidth ||
+      !video.videoHeight
+    ) {
+      return;
+    }
 
-  const canvas = document.createElement('canvas');
+    // ================= CAMERA SHUTTER SOUND =================
 
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
+    if (shutterSoundRef.current) {
+      shutterSoundRef.current.currentTime = 0;
 
-  const context = canvas.getContext('2d');
+      shutterSoundRef.current
+        .play()
+        .catch(() => {});
+    }
 
-  if (!context) {
-    return;
-  }
+    // ================= CREATE CANVAS =================
 
-  context.drawImage(
-    video,
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
+    const canvas = document.createElement('canvas');
 
-  const imageData = canvas.toDataURL(
-    'image/jpeg',
-    0.9
-  );
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
 
-  setPhoto(imageData);
+    const context = canvas.getContext('2d');
 
-  stopCamera();
-};
+    if (!context) {
+      return;
+    }
+
+    /*
+     * IMPORTANT:
+     *
+     * The <video> preview is mirrored using CSS:
+     *
+     * transform: scaleX(-1)
+     *
+     * But the actual video pixels are NOT mirrored.
+     *
+     * Therefore, we intentionally DO NOT use:
+     *
+     * context.scale(-1, 1)
+     *
+     * here.
+     *
+     * This makes the saved result NORMAL / NOT MIRRORED.
+     */
+
+    context.drawImage(
+      video,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    // ================= CONVERT TO IMAGE =================
+
+    const imageData = canvas.toDataURL(
+      'image/jpeg',
+      0.9
+    );
+
+    setPhoto(imageData);
+
+    // Stop camera after taking photo
+    stopCamera();
+  };
 
   // ================= RETAKE =================
 
   const handleRetake = () => {
     setPhoto(null);
+    setError('');
+
     startCamera();
   };
 
@@ -137,13 +196,13 @@ const handleCapture = () => {
       return;
     }
 
-    // Base64 → binary
-    const byteString = atob(
-      photo.split(',')[1]
-    );
+    // ================= BASE64 → BINARY =================
 
-    const mimeString = photo
-      .split(',')[0]
+    const parts = photo.split(',');
+
+    const byteString = atob(parts[1]);
+
+    const mimeString = parts[0]
       .split(':')[1]
       .split(';')[0];
 
@@ -165,40 +224,42 @@ const handleCapture = () => {
     }
 
     // ================= FILE NAME =================
-const monthNames = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
-];
 
-const dayNames = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday'
-];
+    const monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
 
-const now = new Date();
+    const dayNames = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
+    ];
 
-const pad = (value) =>
-  String(value).padStart(2, '0');
+    const now = new Date();
 
-const fileName =
-  `Caught-You-Smiling-on-${dayNames[now.getDay()]}-${pad(
-    now.getDate()
-  )}-${monthNames[now.getMonth()]}-${now.getFullYear()}.jpg`;
+    const pad = (value) =>
+      String(value).padStart(2, '0');
+
+    const fileName =
+      `Caught-You-Smiling-on-${dayNames[now.getDay()]}-${pad(
+        now.getDate()
+      )}-${monthNames[now.getMonth()]}-${now.getFullYear()}.jpg`;
+
     // ================= CREATE FILE =================
 
     const file = new File(
@@ -209,14 +270,17 @@ const fileName =
       }
     );
 
-    // Kirim file ke App.jsx
+    // ================= SEND FILE TO APP =================
+
     if (onCapture) {
       onCapture(file);
     }
 
+    // Reset state
     setPhoto(null);
+    setError('');
 
-    // Tutup window Camera
+    // Close camera window
     onClose();
   };
 
@@ -224,38 +288,47 @@ const fileName =
 
   const handleClose = () => {
     stopCamera();
+
     setPhoto(null);
     setError('');
 
     onClose();
   };
 
+  // ================= HIDDEN =================
+
   if (!show) {
     return null;
   }
 
-  // ===== CAMERA BUTTON =====
-const cameraButtonStyle = {
-  height: 28,
-  minHeight: 28,
-  boxSizing: 'border-box',
-};
+  // ================= BUTTON STYLE =================
+
+  const cameraButtonStyle = {
+    height: 28,
+    minHeight: 28,
+    boxSizing: 'border-box'
+  };
+
+  // ================= RENDER =================
 
   return (
     <div
       style={{
         width: '100%',
         height: '100%',
+
         minWidth: 0,
         minHeight: 0,
 
         boxSizing: 'border-box',
 
         padding: 10,
+
         background: '#c0c0c0',
 
         display: 'flex',
         flexDirection: 'column',
+
         gap: 10,
 
         overflow: 'hidden'
@@ -273,6 +346,7 @@ const cameraButtonStyle = {
           background: '#000',
 
           display: 'flex',
+
           alignItems: 'center',
           justifyContent: 'center',
 
@@ -297,32 +371,39 @@ const cameraButtonStyle = {
         }}
       >
 
-        {/* LIVE CAMERA */}
+        {/* ================= LIVE CAMERA ================= */}
 
         {!photo && !error && (
           <video
             ref={videoRef}
+
             autoPlay
             playsInline
             muted
+
             style={{
               width: '100%',
               height: '100%',
 
               objectFit: 'cover',
 
-              transform:
-                'scaleX(-1)'
+              /*
+               * MIRROR ONLY THE LIVE PREVIEW
+               *
+               * This does NOT affect the captured image.
+               */
+              transform: 'scaleX(-1)'
             }}
           />
         )}
 
-        {/* CAPTURED PHOTO */}
+        {/* ================= CAPTURED PHOTO ================= */}
 
         {photo && (
           <img
             src={photo}
             alt="Captured"
+
             style={{
               width: '100%',
               height: '100%',
@@ -330,11 +411,20 @@ const cameraButtonStyle = {
               objectFit: 'contain',
 
               display: 'block'
+
+              /*
+               * IMPORTANT:
+               *
+               * No scaleX(-1) here.
+               *
+               * Therefore the captured photo
+               * remains NORMAL / NOT MIRRORED.
+               */
             }}
           />
         )}
 
-        {/* ERROR */}
+        {/* ================= ERROR ================= */}
 
         {error && (
           <div
@@ -357,7 +447,6 @@ const cameraButtonStyle = {
 
       </div>
 
-
       {/* ================= CONTROLS ================= */}
 
       <div
@@ -367,7 +456,6 @@ const cameraButtonStyle = {
           display: 'flex',
 
           alignItems: 'center',
-
           justifyContent: 'center',
 
           gap: 8,
@@ -376,61 +464,64 @@ const cameraButtonStyle = {
         }}
       >
 
-{/* TAKE PHOTO */}
+        {/* ================= TAKE PHOTO ================= */}
 
-{!photo && !error && (
-  <Button
-    disabled={!cameraReady}
-    onClick={handleCapture}
-    style={{
-      ...cameraButtonStyle,
-      width: 120,
-    }}
-  >
-    Take Photo
-  </Button>
-)}
+        {!photo && !error && (
+          <Button
+            disabled={!cameraReady}
+            onClick={handleCapture}
 
-{/* AFTER PHOTO */}
+            style={{
+              ...cameraButtonStyle,
+              width: 120
+            }}
+          >
+            Take Photo
+          </Button>
+        )}
 
-{photo && (
-  <>
-    <Button
-      onClick={handleRetake}
-      style={{
-        ...cameraButtonStyle,
-        width: 80,
-      }}
-    >
-      Retake
-    </Button>
+        {/* ================= AFTER PHOTO ================= */}
 
-    <Button
-      onClick={handleUsePhoto}
-      style={{
-        ...cameraButtonStyle,
-        width: 100,
-      }}
-    >
-      Use Photo
-    </Button>
-  </>
-)}
+        {photo && (
+          <>
+            <Button
+              onClick={handleRetake}
 
+              style={{
+                ...cameraButtonStyle,
+                width: 80
+              }}
+            >
+              Retake
+            </Button>
 
-{/* ERROR */}
+            <Button
+              onClick={handleUsePhoto}
 
-{error && (
-  <Button
-    onClick={startCamera}
-    style={{
-      ...cameraButtonStyle,
-      width: 80,
-    }}
-  >
-    Retry
-  </Button>
-)}
+              style={{
+                ...cameraButtonStyle,
+                width: 100
+              }}
+            >
+              Use Photo
+            </Button>
+          </>
+        )}
+
+        {/* ================= ERROR ================= */}
+
+        {error && (
+          <Button
+            onClick={startCamera}
+
+            style={{
+              ...cameraButtonStyle,
+              width: 80
+            }}
+          >
+            Retry
+          </Button>
+        )}
 
       </div>
 

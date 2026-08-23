@@ -510,17 +510,16 @@ const handleExpanderPointerUp = (e) => {
 
             fontSize: '11px',
 
-            backgroundColor:
-              isSelected ||
-              isCurrentFolder
-                ? '#000080'
-                : 'transparent',
+backgroundColor:
+  isSelected
+    ? '#000080'
+    : 'transparent',
 
-            color:
-              isSelected ||
-              isCurrentFolder
-                ? 'white'
-                : 'black',
+color:
+  isSelected
+    ? 'white'
+    : 'black',
+
 
             cursor: 'pointer',
 
