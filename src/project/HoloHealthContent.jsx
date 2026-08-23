@@ -7,8 +7,99 @@ import holohealthTest1 from '../assets/images/case-study/holohealth-test1.jpg';
 import holohealthTest2 from '../assets/images/case-study/holohealth-test2.jpg';
 import holohealthTest3 from '../assets/images/case-study/holohealth-test3.jpg';
 
+import icon1 from './holohelalth/icons (1).svg';
+import icon2 from './holohelalth/icons (2).svg';
+import icon3 from './holohelalth/icons (3).svg';
+import icon4 from './holohelalth/icons (4).svg';
+import icon5 from './holohelalth/icons (5).svg';
+import icon6 from './holohelalth/icons (6).svg';
+import icon7 from './holohelalth/icons (7).svg';
+import icon8 from './holohelalth/icons (8).svg';
+import icon9 from './holohelalth/icons (9).svg';
+import icon10 from './holohelalth/icons (10).svg';
+
+
+const holoHealthIcons = [
+  icon1,
+  icon2,
+  icon3,
+  icon4,
+  icon5,
+  icon6,
+  icon7,
+  icon8,
+  icon9,
+  icon10,
+];
+
+const iconModules = import.meta.glob(
+  './holohelalth/icon_example *.svg',
+  {
+    eager: true,
+    query: '?url',
+    import: 'default',
+  }
+);
+
+const holoHealthExampleIcons = Object.entries(iconModules)
+  .sort(([a], [b]) => {
+    const numberA = Number(
+      a.match(/icon_example (\d+)\.svg$/)?.[1]
+    );
+
+    const numberB = Number(
+      b.match(/icon_example (\d+)\.svg$/)?.[1]
+    );
+
+    return numberA - numberB;
+  })
+  .map(([, src]) => src);
+
+
+
 const NOTION_URL =
   'https://app.notion.com/p/HoloHealth-Iconography-Visual-System-3c23e6c896238027a77ef87eeb315a85';
+
+const veterinaryTerms = [
+  'Paroxysmal Dyskinesia',
+  'Vestibular Ataxia',
+  'Leptospirosis',
+  'Canine Epilepsy',
+  'Hip Dysplasia',
+  'Cardiomyopathy',
+  'Osteoarthritis',
+  'Atopic Dermatitis',
+  'Pancreatitis',
+  'Gastroenteritis',
+  'Neuropathy',
+  'Encephalitis',
+  'Meningitis',
+  'Tachycardia',
+  'Bradycardia',
+  'Heart Murmur',
+  'Arrhythmia',
+  'Hypertension',
+  'Dermatitis',
+  'Skin Infection',
+  'Alopecia',
+  'Pruritus',
+  'Allergic Reaction',
+  'Fungal Infection',
+  'Anemia',
+  'Thrombocytopenia',
+  'Leukocytosis',
+  'Dehydration',
+  'Hypoglycemia',
+  'Hyperglycemia',
+  'Electrolyte Imbalance',,
+  'Endoscopy',
+  'Analgesic',
+  'Anticonvulsant',
+  'Sedative',
+  'Immunosuppressant',
+  'Antiparasitic',
+];
+
 
 export default function HoloHealthCaseStudyRetro() {
   return (
@@ -27,11 +118,11 @@ export default function HoloHealthCaseStudyRetro() {
             </p>
 
             <h1 className="cs-title">
-              Translating Veterinary complexity into Visual Language
+              Turning Veterinary Complexity into a Visual System
             </h1>
 
             <p className="cs-lead">
-              A 2,500+ icon system that turns highly specific veterinary
+              2,500+ icon system that turns highly specific veterinary
               health content into something anyone can read at a glance.
             </p>
 
@@ -42,6 +133,7 @@ export default function HoloHealthCaseStudyRetro() {
                 className="cs-hero-image"
               />
             </figure>
+            
 {/*
 <dl className="cs-meta">
   <Meta label="Role">
@@ -63,6 +155,35 @@ export default function HoloHealthCaseStudyRetro() {
 */}
 
           </section>
+{/* =====================================================
+    00 — THE BACKGROUND
+===================================================== */}
+
+<section className="cs-section">
+
+  <div className="cs-copy-stack">
+
+    <p className="cs-body">
+      <strong>HoloHealth</strong> is a forward-thinking veterinary technology project
+      aimed at revolutionizing animal healthcare through the
+      convergence of artificial intelligence (AI), neurotechnology,
+      and spatial computing.
+    </p>
+
+    <p className="cs-body">
+      Moving beyond traditional two-dimensional diagnostics, <strong>the
+      project introduces advanced 3D holographic imaging to
+      veterinary medicine.</strong> By transforming standard radiology scans
+      into interactive, spatial visual fields, HoloHealth empowers
+      veterinary surgeons with unprecedented anatomical insights
+      prior to surgical procedures.
+    </p>
+
+
+  </div>
+
+</section>
+
 
 
           {/* =====================================================
@@ -75,47 +196,79 @@ export default function HoloHealthCaseStudyRetro() {
               number="01"
               title="The Problem"
             />
+    <div className="cs-term-row">
 
-            <div className="cs-term-row">
+  <RandomTerm
+    terms={veterinaryTerms}
+    interval={2300}
+    scrambleDuration={520}
+  />
 
-              <span className="cs-term">
-                Paroxysmal Dyskinesia
-              </span>
+  <RandomTerm
+    terms={veterinaryTerms}
+    interval={3100}
+    scrambleDuration={680}
+  />
 
-              <span className="cs-term">
-                Vestibular Ataxia
-              </span>
+  <RandomTerm
+    terms={veterinaryTerms}
+    interval={2700}
+    scrambleDuration={580}
+  />
 
-              <span className="cs-term">
-                Leptospirosis
-              </span>
+  <RandomTerm
+    terms={veterinaryTerms}
+    interval={3600}
+    scrambleDuration={720}
+  />
 
-            </div>
+  <RandomTerm
+    terms={veterinaryTerms}
+    interval={2500}
+    scrambleDuration={460}
+  />
+
+  <RandomTerm
+    terms={veterinaryTerms}
+    interval={3300}
+    scrambleDuration={640}
+  />
+
+  <RandomTerm
+    terms={veterinaryTerms}
+    interval={2900}
+    scrambleDuration={540}
+  />
+
+  <RandomTerm
+    terms={veterinaryTerms}
+    interval={3900}
+    scrambleDuration={760}
+  />
+
+</div>
+
+
+
+
 
             <div className="cs-copy-stack">
 
-              <p className="cs-body">
-                What do you picture? Probably nothing. Now imagine
-                thousands of veterinary terms like these — each with its
-                own meaning, condition, behavior, medication, or health
-                state.
-              </p>
-
-              <p className="cs-body">
-                How do you turn something this complex into a visual that
-                anyone can understand? That was the core challenge behind
-                HoloHealth: translating highly specific veterinary content
-                into a clear, consistent visual language that could scale
-                across the whole product.
-              </p>
+<p className="cs-body"> <strong>What do these words mean to you?</strong> </p>
+<p className="cs-body"> To a veterinarian, they represent specific 
+  diseases, conditions, symptoms, and health states. 
+  But to most people, they can feel complex, unfamiliar, and 
+  difficult to understand at a glance. </p> 
+<p className="cs-body"> Now imagine thousands of veterinary terms 
+  like these — each with its own meaning and medical context. 
+  <strong>The challenge was not simply organizing this information, 
+  but finding a visual way to make it instantly recognizable.</strong> </p> 
+<p className="cs-body"> That became the core design challenge behind 
+  HoloHealth: translating complex veterinary knowledge into a clear,
+   consistent, and scalable icon system — one that could make even the 
+   most unfamiliar terms easier to understand. </p>
 
             </div>
-
-            <Figure
-              src={holohealthTest1}
-              alt="HoloHealth product interface and visual language"
-              caption="The actual HoloHealth product, where the visual language and iconography live."
-            />
 
           </section>
 
@@ -128,24 +281,10 @@ export default function HoloHealthCaseStudyRetro() {
 
             <SectionHeading
               number="02"
-              title="My role"
+              title="Role & Contribution"
             />
 
-            <div className="cs-copy-stack">
-
-              <p className="cs-body">
-                I worked directly with the founder to turn complex
-                veterinary content into visual concepts that were
-                understandable to users while staying aligned with the
-                brand. I also supervised a second designer — reviewing
-                execution and maintaining consistency as the system grew —
-                and produced reference assets for cross-functional teams,
-                including material later developed into motion.
-              </p>
-
-            </div>
-
-            <ul className="cs-list">
+                <ul className="cs-list">
 
               <li>
                 Visual direction
@@ -169,11 +308,25 @@ export default function HoloHealthCaseStudyRetro() {
 
             </ul>
 
-            <Figure
-              src={holohealthTest3}
-              alt="HoloHealth visual design explorations"
-              caption="Early explorations showing how veterinary concepts were translated into a clear visual language."
-            />
+            <div className="cs-copy-stack">
+
+              <p className="cs-body">
+                I worked directly with the founder to <strong>create the master visual of
+                veterinary content</strong> into visual system that were
+                understandable to users while staying aligned with the
+                brand. I also <strong>supervised and manage designer</strong> — reviewing
+                execution and maintaining consistency as the system grew —
+                and <strong>produced reference assets for cross-functional teams</strong>,
+                including material later developed into motion.
+              </p>
+
+            </div>
+
+
+<IconScaleCarousel
+  icons={holoHealthIcons}
+/>
+
 
           </section>
 
@@ -186,8 +339,8 @@ export default function HoloHealthCaseStudyRetro() {
 
             <SectionHeading
               number="03"
-              title="Make complex feel familiar"
-              subtitle="Reduce cognitive load without reducing meaning."
+              title="Key Design Decisions"
+              subtitle="Make complex feel familiar to reduce cognitive load without reducing meaning."
             />
 
             <div className="cs-copy-stack">
@@ -234,18 +387,16 @@ export default function HoloHealthCaseStudyRetro() {
               veterinary subjects still read as one system.
             </p>
 
+            <IconScaleSystem
+  icons={holoHealthExampleIcons}
+/>
+
+
             <blockquote className="cs-quote">
               The goal wasn't to make every concept look the same. It
               was to make every concept feel like it belongs to the same
               visual language.
             </blockquote>
-
-            <Figure
-              src={holohealthTest2}
-              alt="HoloHealth visual system and icon details"
-              caption="A selection of icons across different veterinary subjects, following the same underlying visual logic."
-            />
-
           </section>
 
 
@@ -269,25 +420,25 @@ export default function HoloHealthCaseStudyRetro() {
                 </span>
 
                 <span className="cs-outcome-label">
-                  Icons
+                  ICONS SYSTEM
                 </span>
 
               </div>
 
               <p className="cs-body cs-outcome-copy">
-                <strong>
-                  2,500+ icons
-                </strong>{' '}
-                became the foundation for a scalable product visual
-                system, covering multiple species, conditions,
+                
+               <strong> became the foundation for a scalable product visual
+                system</strong>  covering multiple species, conditions,
                 behaviors, medications, devices, services, and health
-                states. The master icons became production references,
+                states.The master icons became production references,
                 illustration foundations, and part of the broader
+
+
                 HoloHealth design system. I reviewed production output,
                 resolved inconsistencies, and introduced new solutions
-                when existing rules weren't enough — helping the
+                when existing rules weren't enough — <strong> helping the
                 language scale across the design team and
-                cross-functional product work.
+                cross-functional product work.</strong>
               </p>
 
             </div>
@@ -312,6 +463,13 @@ export default function HoloHealthCaseStudyRetro() {
             />
 
             <div className="cs-copy-stack">
+
+                          <Figure
+              src={holohealthTest2}
+              alt="HoloHealth visual system and icon details"
+              caption="A selection of icons across different veterinary subjects, following the same underlying visual logic."
+            />
+
 
               <p className="cs-body-strong">
                 This project shifted my focus from creating individual
@@ -386,6 +544,347 @@ export default function HoloHealthCaseStudyRetro() {
       ========================================================= */}
 
       <style>{`
+/* =========================================================
+   ICON SCALE SYSTEM
+========================================================= */
+
+.cs-icon-scale-system {
+  width: 100%;
+  margin: 42px 0 40px;
+}
+
+
+/* =========================================================
+   FIXED ICON GRID
+========================================================= */
+
+.cs-icon-scale-field {
+  display: grid;
+
+  grid-template-columns: repeat(6, 96px);
+  grid-template-rows: repeat(5, 96px);
+
+  column-gap: 70px;
+  row-gap: 20px;
+
+  justify-content: center;
+
+  width: 100%;
+
+}
+
+
+
+/* =========================================================
+   FIXED CELL
+========================================================= */
+
+.cs-icon-scale-cell {
+  width: 96px;
+  height: 96px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   ICON
+========================================================= */
+
+.cs-icon-scale-cell img {
+  display: block;
+
+  max-width: 96px;
+  max-height: 96px;
+
+  object-fit: contain;
+
+  transition:
+    width 180ms ease,
+    height 180ms ease;
+}
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+.cs-icon-scale-controls {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  margin-top: 16px;
+}
+
+
+.cs-icon-scale-label {
+  flex: 0 0 auto;
+
+  font-family:
+    var(--casestudy-font-ui);
+
+  font-size:
+    var(--casestudy-font-ui-size);
+
+  line-height: 1;
+
+  color:
+    var(--cs-faint);
+
+  text-transform:
+    uppercase;
+
+  letter-spacing:
+    0.06em;
+}
+
+
+.cs-icon-scale-slider {
+  flex: 1;
+
+  width: 100%;
+  height: 2px;
+
+  appearance: none;
+
+  background:
+    #383836;
+
+  cursor: pointer;
+}
+
+
+.cs-icon-scale-slider::-webkit-slider-thumb {
+  appearance: none;
+
+  width: 12px;
+  height: 12px;
+
+  border: 0;
+  border-radius: 50%;
+
+  background:
+    var(--cs-ink);
+
+  cursor: pointer;
+}
+
+
+.cs-icon-scale-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+
+  border: 0;
+  border-radius: 50%;
+
+  background:
+    var(--cs-ink);
+
+  cursor: pointer;
+}
+
+
+.cs-icon-scale-value {
+  flex: 0 0 42px;
+
+  font-family:
+    var(--casestudy-font-mono);
+
+  font-size:
+    var(--casestudy-font-mono-size);
+
+  line-height: 1;
+
+  color:
+    var(--cs-muted);
+
+  text-align: right;
+}
+
+
+
+/* =========================================================
+   ICON SCALE CAROUSEL
+========================================================= */
+
+.cs-icon-carousel {
+  width: 100%;
+
+  margin:
+    42px 0 0;
+
+  text-align: center;
+}
+
+.cs-icon-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+
+  margin-top: 20px;
+}
+
+
+.cs-icon-button {
+  width: 42px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  background: transparent;
+
+  border: 0;
+
+  color: var(--cs-muted);
+
+  font-family:
+    var(--casestudy-font-ui);
+
+  font-size: 18px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    color 140ms ease,
+    transform 140ms ease;
+}
+
+
+.cs-icon-button:hover {
+  color: var(--cs-ink);
+}
+
+
+.cs-icon-button-prev:hover {
+  transform: translateX(-3px);
+}
+
+
+.cs-icon-button-next:hover {
+  transform: translateX(3px);
+}
+
+
+.cs-icon-button:active {
+  transform: scale(0.9);
+}
+
+
+.cs-icon-button-prev:active {
+  transform: translateX(-2px) scale(0.9);
+}
+
+
+.cs-icon-button-next:active {
+  transform: translateX(2px) scale(0.9);
+}
+
+
+.cs-icon-counter {
+  min-width: 62px;
+
+  font-family:
+    var(--casestudy-font-mono);
+
+  font-size:
+    var(--casestudy-font-mono-size);
+
+  line-height:
+    1;
+
+  letter-spacing:
+    0.04em;
+
+  color:
+    var(--cs-faint);
+
+  text-align: center;
+}
+
+
+.cs-icon-counter-divider {
+  color:
+    #444;
+}
+
+
+/* =========================================================
+   STAGE
+========================================================= */
+
+.cs-icon-stage {
+  position: relative;
+
+  width: 100%;
+  height: 260px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background:
+    #000000;
+
+
+}
+
+
+/* =========================================================
+   ICON ITEM
+========================================================= */
+.cs-icon-item {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 110px;
+  height: 110px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transform:
+    translate(
+      calc(-50% + var(--icon-distance) * 150px),
+      -50%
+    )
+    scale(var(--icon-scale));
+
+  opacity:
+    calc(
+      1 - abs(var(--icon-distance)) * 0.18
+    );
+
+  z-index:
+    calc(10 - abs(var(--icon-distance)));
+
+  transition:
+    transform 550ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 400ms ease;
+
+  pointer-events: none;
+}
+
 
         /* =========================================================
            COLOR TOKENS
@@ -905,52 +1404,79 @@ export default function HoloHealthCaseStudyRetro() {
         /* =========================================================
            PROBLEM TERMS
         ========================================================= */
+/* =========================================================
+   RANDOM TERMS — TYPOGRAPHIC
+========================================================= */
+.cs-term-row {
+  display: grid;
 
-        .cs-term-row {
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
 
-          display: flex;
+  column-gap: 48px;
+  row-gap: 16px;
 
-          flex-wrap: wrap;
+  width: 100%;
+  max-width: 900px;
 
-          justify-content: flex-start;
+  margin:
+    12px auto 42px !important;
 
-          gap: 9px;
-
-          margin:
-            0 0 28px !important;
-
-          text-align: left;
-        }
+  text-align: center;
+}
 
 
-        .cs-term {
+.cs-term {
+  display: block;
 
-          padding:
-            8px 12px;
+  width: 100%;
+  min-width: 0;
 
-          background:
-            rgba(255, 255, 255, 0.035);
+  padding: 0;
+  margin: 0;
 
-          border:
-            1px solid rgba(255, 255, 255, 0.08);
+  background: transparent;
+  border: 0;
 
-          font-family:
-            var(--casestudy-font-ui);
+  font-family:
+    var(--casestudy-font-heading);
 
-          font-size:
-            var(--casestudy-font-ui-size);
+  font-size:
+    clamp(22px, 2.2vw, 32px);
 
-          line-height:
-            1.4;
+  line-height: 1.15;
 
-          letter-spacing:
-            var(--casestudy-font-ui-letter-spacing);
+  letter-spacing:
+    -0.035em;
 
-          color:
-            #a7a7a3;
+  font-weight: 600;
 
-          text-align: left;
-        }
+  color:
+    #f5f5f2;
+
+  text-align: center;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  transition:
+    color 120ms ease,
+    opacity 120ms ease,
+    filter 120ms ease;
+}
+
+
+.cs-term-scrambling {
+  color:
+    #777773;
+
+  opacity:
+    0.65;
+
+  filter:
+    blur(0.2px);
+}
 
 
         /* =========================================================
@@ -1179,30 +1705,20 @@ export default function HoloHealthCaseStudyRetro() {
           text-align: left;
         }
 
+.cs-outcome-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-        .cs-outcome-stat {
+  min-width: 128px;
+  padding: 18px 20px;
 
-          flex: 0 0 auto;
+  background: #0d0d0d;
+  border: 1px solid var(--cs-line);
 
-          display: flex;
-
-          flex-direction: column;
-
-          align-items: flex-start;
-
-          min-width: 128px;
-
-          padding:
-            18px 20px;
-
-          background:
-            #0d0d0d;
-
-          border:
-            1px solid var(--cs-line);
-
-          text-align: left;
-        }
+  text-align: center;
+}
 
 
         .cs-outcome-number {
@@ -1540,6 +2056,48 @@ export default function HoloHealthCaseStudyRetro() {
 
         @media (max-width: 700px) {
 
+@media (max-width: 700px) {
+
+  .cs-icon-stage {
+    height: 220px;
+  }
+
+  .cs-icon-item {
+    width: 82px;
+    height: 82px;
+
+    transform:
+      translate(
+        calc(-50% + var(--icon-distance) * 90px),
+        -50%
+      )
+      scale(var(--icon-scale));
+  }
+
+}
+
+
+.cs-term-row {
+    grid-template-columns: 1fr;
+
+    row-gap: 14px;
+  }
+
+  .cs-term:nth-child(n + 5) {
+    display: none;
+  }
+
+  .cs-term:nth-child(1),
+  .cs-term:nth-child(2),
+  .cs-term:nth-child(3),
+  .cs-term:nth-child(4) {
+    text-align: center;
+  }
+
+  .cs-term {
+    font-size: 24px;
+  }
+
           .casestudy-container {
 
             width:
@@ -1711,11 +2269,11 @@ export default function HoloHealthCaseStudyRetro() {
           }
 
 
-          .cs-term {
-
-            padding:
-              7px 9px;
-          }
+.cs-term {
+  font-size: clamp(22px, 2.2vw, 32px);
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+}
 
 
           .cs-list {
@@ -1937,6 +2495,299 @@ function State({
       <span className="cs-state-text">
         {text}
       </span>
+
+    </div>
+  );
+}
+
+function RandomTerm({
+  terms,
+  interval = 2600,
+  scrambleDuration = 650,
+}) {
+  const getRandomTerm = React.useCallback(() => {
+    return terms[
+      Math.floor(
+        Math.random() * terms.length
+      )
+    ];
+  }, [terms]);
+
+  const [current, setCurrent] = React.useState(
+    getRandomTerm()
+  );
+
+  const [isScrambling, setIsScrambling] =
+    React.useState(false);
+
+  const randomTerm = React.useCallback(() => {
+    if (!terms.length) return;
+
+    const availableTerms = terms.filter(
+      (term) => term !== current
+    );
+
+    const nextTerm =
+      availableTerms[
+        Math.floor(
+          Math.random() * availableTerms.length
+        )
+      ];
+
+    setIsScrambling(true);
+
+    const startTime = Date.now();
+
+    const scramble = () => {
+      const elapsed =
+        Date.now() - startTime;
+
+      if (elapsed >= scrambleDuration) {
+        setCurrent(nextTerm);
+        setIsScrambling(false);
+        return;
+      }
+
+      const randomText =
+        terms[
+          Math.floor(
+            Math.random() * terms.length
+          )
+        ];
+
+      setCurrent(randomText);
+
+      const progress =
+        elapsed / scrambleDuration;
+
+      const delay =
+        35 +
+        Math.pow(progress, 2) * 140;
+
+      setTimeout(scramble, delay);
+    };
+
+    scramble();
+  }, [
+    terms,
+    current,
+    scrambleDuration,
+  ]);
+
+  React.useEffect(() => {
+    const timer = setInterval(
+      randomTerm,
+      interval
+    );
+
+    return () => clearInterval(timer);
+  }, [randomTerm, interval]);
+
+  return (
+    <span
+      className={`cs-term ${
+        isScrambling
+          ? 'cs-term-scrambling'
+          : ''
+      }`}
+    >
+      {current}
+    </span>
+  );
+}
+
+// Icon Scale
+function IconScaleCarousel({ icons }) {
+  const [activeIndex, setActiveIndex] = React.useState(0);
+
+  const previous = () => {
+    setActiveIndex((current) =>
+      current === 0
+        ? icons.length - 1
+        : current - 1
+    );
+  };
+
+  const next = () => {
+    setActiveIndex((current) =>
+      current === icons.length - 1
+        ? 0
+        : current + 1
+    );
+  };
+
+  const getDistance = (index) => {
+    let distance = index - activeIndex;
+
+    const half = Math.floor(icons.length / 2);
+
+    if (distance > half) {
+      distance -= icons.length;
+    }
+
+    if (distance < -half) {
+      distance += icons.length;
+    }
+
+    return distance;
+  };
+
+  const visualMap = {
+    '-2': {
+      scale: 0.45,
+      opacity: 0.25,
+    },
+
+    '-1': {
+      scale: 0.70,
+      opacity: 0.55,
+    },
+
+    '0': {
+      scale: 1.35,
+      opacity: 1,
+    },
+
+    '1': {
+      scale: 0.70,
+      opacity: 0.55,
+    },
+
+    '2': {
+      scale: 0.45,
+      opacity: 0.25,
+    },
+  };
+
+  return (
+    <div className="cs-icon-carousel">
+
+      <div className="cs-icon-stage">
+
+        {icons.map((icon, index) => {
+
+          const distance = getDistance(index);
+
+          if (Math.abs(distance) > 2) {
+            return null;
+          }
+
+          const visual =
+            visualMap[String(distance)];
+
+          return (
+            <div
+              key={index}
+              className="cs-icon-item"
+              style={{
+                '--icon-distance': distance,
+                '--icon-scale': visual.scale,
+                '--icon-opacity': visual.opacity,
+              }}
+            >
+
+              <img
+                src={icon}
+                alt={`HoloHealth icon ${index + 1}`}
+              />
+
+            </div>
+          );
+        })}
+
+      </div>
+
+<div className="cs-icon-controls">
+
+  <button
+    type="button"
+    className="cs-icon-button cs-icon-button-prev"
+    onClick={previous}
+    aria-label="Previous icon"
+  >
+    <span aria-hidden="true">←</span>
+  </button>
+
+  <span className="cs-icon-counter">
+    {String(activeIndex + 1).padStart(2, '0')}
+    <span className="cs-icon-counter-divider"> / </span>
+    {String(icons.length).padStart(2, '0')}
+  </span>
+
+  <button
+    type="button"
+    className="cs-icon-button cs-icon-button-next"
+    onClick={next}
+    aria-label="Next icon"
+  >
+    <span aria-hidden="true">→</span>
+  </button>
+
+</div>
+
+
+    </div>
+  );
+}
+function IconScaleSystem({ icons }) {
+  const MIN_SIZE = 48;
+  const MAX_SIZE = 96;
+
+  const [scale, setScale] = React.useState(50);
+
+  const iconSize =
+    MIN_SIZE +
+    ((MAX_SIZE - MIN_SIZE) * scale) / 100;
+
+  const visibleIcons = icons.slice(0, 30);
+
+  return (
+    <div className="cs-icon-scale-system">
+
+      <div className="cs-icon-scale-field">
+
+        {visibleIcons.map((icon, index) => (
+          <div
+            className="cs-icon-scale-cell"
+            key={index}
+          >
+            <img
+              src={icon}
+              alt=""
+              aria-hidden="true"
+              style={{
+                width: `${iconSize}px`,
+                height: `${iconSize}px`,
+              }}
+            />
+          </div>
+        ))}
+
+      </div>
+
+      <div className="cs-icon-scale-controls">
+
+        <span className="cs-icon-scale-label">
+          Scale
+        </span>
+
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value={scale}
+          onChange={(event) =>
+            setScale(Number(event.target.value))
+          }
+          className="cs-icon-scale-slider"
+          aria-label="Icon scale"
+        />
+
+        <span className="cs-icon-scale-value">
+          {Math.round(iconSize)}px
+        </span>
+
+      </div>
 
     </div>
   );
