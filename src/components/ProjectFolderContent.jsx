@@ -125,19 +125,20 @@ export default function ProjectFolderContent({
           message: '',
           children: [
             {
-              id: 'holohealth-case-study',
-              name: 'Case Study',
-              type: 'file',
-              iconType: 'caseStudy',
-              openWindow: 'holohealth',
-            },
-            {
               id: 'holohealth-icon-system',
               name: 'HoloHealth.exe',
               type: 'file',
               iconType: 'holohealth',
               link: 'https://holo.health/',
             },
+            {
+              id: 'holohealth-case-study',
+              name: 'Case Study',
+              type: 'file',
+              iconType: 'website',
+              openWindow: 'holohealth',
+            },
+
           ],
         },
 
@@ -178,22 +179,16 @@ export default function ProjectFolderContent({
           name: "Perdana's Computer",
           type: 'folder',
           iconType: 'folder',
-          isLocked: true,
-          message:
-            'This folder is currently unavailable.',
+          isLocked: false,
           children: [
-            {
-              id: 'pc-product-overview',
-              name: 'Overview',
-              type: 'file',
-              iconType: 'caseStudy',
-            },
-            {
-              id: 'pc-product-thinking',
-              name: 'Product Thinking',
-              type: 'file',
-              iconType: 'documentation',
-            },
+        {
+          id: 'pc-product-overview',
+          name: 'Overview',
+          type: 'file',
+          iconType: 'caseStudy',
+          openWindow: 'perdana-computer-product',
+        },
+            
             {
               id: 'pc-features',
               name: 'Features',
@@ -245,12 +240,6 @@ export default function ProjectFolderContent({
                   iconType: 'caseStudy',
                 },
               ],
-            },
-            {
-              id: 'pc-learnings',
-              name: 'Learnings',
-              type: 'file',
-              iconType: 'documentation',
             },
           ],
         },
@@ -510,12 +499,12 @@ export default function ProjectFolderContent({
             style={{
               width:
                 size === '32x32_4'
-                  ? '48px'
+                  ? '45px'
                   : '20px',
 
               height:
                 size === '32x32_4'
-                  ? '48px'
+                  ? '45px'
                   : '20px',
 
               objectFit:
@@ -1926,80 +1915,76 @@ export default function ProjectFolderContent({
               0,
           }}
         >
-          <button
-            type="button"
+<div
+  onClick={handleDropdownToggle}
 
-            onClick={
-              handleDropdownToggle
-            }
+  style={{
+    width:
+      '100%',
 
-            style={{
-              width:
-                '100%',
+    height:
+      isMobile
+        ? '24px'
+        : '22px',
 
-              height:
-                isMobile
-                  ? '24px'
-                  : '22px',
+    display:
+      'flex',
 
-              display:
-                'flex',
+    alignItems:
+      'center',
 
-              alignItems:
-                'center',
+    justifyContent:
+      'space-between',
 
-              justifyContent:
-                'space-between',
+    padding:
+      '1px 2px 1px 4px',
 
-              padding:
-                '1px 2px 1px 4px',
+    backgroundColor:
+      '#ffffff',
 
-              backgroundColor:
-                '#ffffff',
+    color:
+      '#000000',
 
-              color:
-                '#000000',
+    border:
+      '1px solid #808080',
 
-              border:
-                '1px solid #808080',
+    borderTopColor:
+      '#404040',
 
-              borderTopColor:
-                '#404040',
+    borderLeftColor:
+      '#404040',
 
-              borderLeftColor:
-                '#404040',
+    borderRightColor:
+      '#ffffff',
 
-              borderRightColor:
-                '#ffffff',
+    borderBottomColor:
+      '#ffffff',
 
-              borderBottomColor:
-                '#ffffff',
+    fontFamily:
+      'MS Sans Serif, sans-serif',
 
-              fontFamily:
-                'MS Sans Serif, sans-serif',
+    fontSize:
+      '11px',
 
-              fontSize:
-                '11px',
+    textAlign:
+      'left',
 
-              textAlign:
-                'left',
+    cursor:
+      'pointer',
 
-              cursor:
-                'pointer',
+    boxSizing:
+      'border-box',
 
-              boxSizing:
-                'border-box',
+    userSelect:
+      'none',
 
-              userSelect:
-                'none',
+    touchAction:
+      'manipulation',
 
-              touchAction:
-                'manipulation',
-
-              WebkitTapHighlightColor:
-                'transparent',
-            }}
-          >
+    WebkitTapHighlightColor:
+      'transparent',
+  }}
+>
             <span
               style={{
                 display:
@@ -2069,7 +2054,10 @@ export default function ProjectFolderContent({
             {/* ARROW */}
 
 <Button
-  onClick={handleDropdownToggle}
+  onClick={(event) => {
+    event.stopPropagation();
+    handleDropdownToggle(event);
+  }}
   style={{
     width: '18px',
     minWidth: '18px',
@@ -2108,7 +2096,7 @@ export default function ProjectFolderContent({
 </Button>
 
 
-          </button>
+         </div>
 
           {/* =================================================
               DROPDOWN PANEL

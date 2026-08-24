@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import React, {
+  useCallback,
+  useRef,
+  useState,
+} from 'react';
 
 import {
   Modal,
@@ -36,10 +40,22 @@ export default function ProjectWindowModal({
   children,
 }) {
   // =========================================================
+  // REFS
+  // =========================================================
+
+  const modalRef = useRef(null);
+
+  // =========================================================
   // MAXIMIZE STATE
   // =========================================================
 
   const [isMaximized, setIsMaximized] = useState(false);
+
+  // =========================================================
+  // SAVE NORMAL WINDOW RECT
+  // =========================================================
+
+  const [normalRect, setNormalRect] = useState(null);
 
   // =========================================================
   // ADDRESS STATE
@@ -48,18 +64,10 @@ export default function ProjectWindowModal({
   const [address, setAddress] = useState(url);
 
   // =========================================================
-  // MAXIMIZE
-  // =========================================================
-
-  const toggleMaximize = () => {
-    setIsMaximized((previous) => !previous);
-  };
-
-  // =========================================================
   // WINDOW STYLE
   // =========================================================
 
-  const getWindowStyle = () => {
+  const getNormalWindowStyle = useCallback(() => {
     // =======================================================
     // MOBILE
     // =======================================================
@@ -86,37 +94,8 @@ export default function ProjectWindowModal({
         margin: 0,
 
         boxSizing: 'border-box',
-      };
-    }
 
-    // =======================================================
-    // MAXIMIZED
-    // =======================================================
-
-    if (isMaximized) {
-      return {
-        position: 'fixed',
-
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: '28px',
-
-        width: '100vw',
-        height: 'auto',
-
-        maxWidth: 'none',
-        maxHeight: 'none',
-
-        minWidth: 0,
-        minHeight: 0,
-
-        transform: 'none',
-        margin: 0,
-
-        boxSizing: 'border-box',
-
-        inset: '0 0 28px 0',
+        overflow: 'hidden',
       };
     }
 
@@ -143,6 +122,8 @@ export default function ProjectWindowModal({
         transform,
 
         boxSizing: 'border-box',
+
+        overflow: 'hidden',
       };
     }
 
@@ -168,7 +149,104 @@ export default function ProjectWindowModal({
       transform,
 
       boxSizing: 'border-box',
+
+      overflow: 'hidden',
     };
+  }, [
+    isMobile,
+    isTablet,
+    top,
+    left,
+    width,
+    height,
+    transform,
+  ]);
+
+  // =========================================================
+  // MAXIMIZED STYLE
+  // =========================================================
+
+  const getMaximizedWindowStyle = () => {
+    return {
+      position: 'fixed',
+
+      /*
+       * LOCK KE VIEWPORT
+       *
+       * top    = 0
+       * right  = 0
+       * bottom = 28px  -> taskbar
+       * left   = 0
+       */
+      top: 0,
+      right: 0,
+      bottom: '28px',
+      left: 0,
+
+      width: 'auto',
+      height: 'auto',
+
+      maxWidth: 'none',
+      maxHeight: 'none',
+
+      minWidth: 0,
+      minHeight: 0,
+
+      transform: 'none',
+
+      margin: 0,
+
+      boxSizing: 'border-box',
+
+      overflow: 'hidden',
+    };
+  };
+
+  // =========================================================
+  // FINAL WINDOW STYLE
+  // =========================================================
+
+  const windowStyle = isMaximized
+    ? getMaximizedWindowStyle()
+    : getNormalWindowStyle();
+
+  // =========================================================
+  // MAXIMIZE / RESTORE
+  // =========================================================
+
+  const toggleMaximize = () => {
+    if (isMobile) {
+      return;
+    }
+
+    const element = modalRef.current;
+
+    // =======================================================
+    // MAXIMIZE
+    // =======================================================
+
+    if (!isMaximized) {
+      if (element) {
+        const rect = element.getBoundingClientRect();
+
+        setNormalRect({
+          top: rect.top,
+          left: rect.left,
+          width: rect.width,
+          height: rect.height,
+        });
+      }
+
+      setIsMaximized(true);
+
+      return;
+    }
+
+    // =======================================================
+    // RESTORE
+    // =======================================================
+
+    setIsMaximized(false);
   };
 
   // =========================================================
@@ -232,9 +310,15 @@ export default function ProjectWindowModal({
 
   return (
     <Modal
+      ref={modalRef}
       icon={icon}
       title={title}
-      style={getWindowStyle()}
+
+      /*
+       * INI YANG MENGONTROL POSISI WINDOW
+       */
+      style={windowStyle}
+
       titleBarOptions={
         <>
           {/* =================================================
@@ -270,35 +354,28 @@ export default function ProjectWindowModal({
     >
       {/* =====================================================
           WINDOW BODY
-
-          Seluruh browser chrome dibuat sebagai satu layout
-          vertikal agar menu → address → content → status
-          terasa seperti aplikasi Win95.
       ===================================================== */}
 
       <div
         style={{
-          position: 'relative',
+          flex: '1 1 0',
+
+          minWidth: 0,
+          minHeight: 0,
+
+          width: '100%',
+          height: '100%',
+
+          padding: 6,
+          margin: 0,
+
+          boxSizing: 'border-box',
+
+          background: '#c0c0c0',
 
           display: 'flex',
 
           flexDirection: 'column',
-
-          width: '100%',
-
-          height: '100%',
-
-          minWidth: 0,
-
-          minHeight: 0,
-
-          padding: 6,
-
-          margin: 0,
-
-          backgroundColor: '#c0c0c0',
-
-          boxSizing: 'border-box',
 
           overflow: 'hidden',
         }}
@@ -307,29 +384,34 @@ export default function ProjectWindowModal({
             MENU BAR
         =================================================== */}
 
-        <div
+        <header
           style={{
+            flexShrink: 0,
+
+            minWidth: 0,
+
+            width: '100%',
+
+            height: '22px',
+            minHeight: '22px',
+
+            boxSizing: 'border-box',
+
+            background: '#c0c0c0',
+
+            borderBottom: '1px solid #808080',
+
             display: 'flex',
 
             alignItems: 'center',
 
-            gap: isMobile ? '2px' : '4px',
-
-            width: '100%',
-
-            minHeight: '22px',
-
-            height: '22px',
+            gap: isMobile
+              ? '2px'
+              : '4px',
 
             padding: isMobile
               ? '2px 4px'
               : '2px 6px',
-
-            boxSizing: 'border-box',
-
-            backgroundColor: '#c0c0c0',
-
-            borderBottom: '1px solid #808080',
 
             fontFamily:
               'MS Sans Serif, sans-serif',
@@ -338,32 +420,24 @@ export default function ProjectWindowModal({
 
             lineHeight: '12px',
 
-            userSelect: 'none',
+            color: '#000000',
 
-            flexShrink: 0,
+            userSelect: 'none',
 
             overflow: 'hidden',
           }}
         >
-          {/* FILE */}
-
           <span style={menuItemStyle}>
             <u>F</u>ile
           </span>
-
-          {/* EDIT */}
 
           <span style={menuItemStyle}>
             <u>E</u>dit
           </span>
 
-          {/* VIEW */}
-
           <span style={menuItemStyle}>
             <u>V</u>iew
           </span>
-
-          {/* FAVORITES */}
 
           {!isMobile && (
             <span style={menuItemStyle}>
@@ -371,59 +445,60 @@ export default function ProjectWindowModal({
             </span>
           )}
 
-          {/* TOOLS */}
-
           {!isMobile && (
             <span style={menuItemStyle}>
               <u>T</u>ools
             </span>
           )}
 
-          {/* HELP */}
-
           <span style={menuItemStyle}>
             <u>H</u>elp
           </span>
-        </div>
+        </header>
 
         {/* ===================================================
             ADDRESS BAR
         =================================================== */}
 
-        <div
+        <header
           style={{
+            flexShrink: 0,
+
+            minWidth: 0,
+
+            width: '100%',
+
+            height: isMobile
+              ? '28px'
+              : '29px',
+
+            minHeight: isMobile
+              ? '28px'
+              : '29px',
+
+            boxSizing: 'border-box',
+
+            background: '#c0c0c0',
+
+            borderBottom:
+              '1px solid #808080',
+
             display: 'flex',
 
             alignItems: 'center',
 
             gap: '5px',
 
-            width: '100%',
-
-            minHeight: isMobile
-              ? '28px'
-              : '29px',
-
-            height: isMobile
-              ? '28px'
-              : '29px',
-
             padding: isMobile
               ? '3px 4px'
               : '3px 6px',
-
-            boxSizing: 'border-box',
-
-            backgroundColor: '#c0c0c0',
-
-            borderBottom: '1px solid #808080',
 
             fontFamily:
               'MS Sans Serif, sans-serif',
 
             fontSize: '11px',
 
-            flexShrink: 0,
+            color: '#000000',
           }}
         >
           {/* ADDRESS LABEL */}
@@ -439,6 +514,8 @@ export default function ProjectWindowModal({
 
               fontSize: '11px',
 
+              lineHeight: '16px',
+
               color: '#000000',
             }}
           >
@@ -452,24 +529,23 @@ export default function ProjectWindowModal({
             style={{
               display: 'flex',
 
-              flex: 1,
+              flex: '1 1 0',
 
               minWidth: 0,
 
               height: '20px',
 
               margin: 0,
-
               padding: 0,
+
+              boxSizing: 'border-box',
             }}
           >
             <input
               type="text"
               value={address}
               onChange={(event) => {
-                setAddress(
-                  event.target.value
-                );
+                setAddress(event.target.value);
               }}
               aria-label="Address"
               spellCheck={false}
@@ -482,7 +558,10 @@ export default function ProjectWindowModal({
 
                 padding: '1px 4px',
 
-                border: '1px solid #808080',
+                margin: 0,
+
+                border:
+                  '1px solid #808080',
 
                 borderRadius: 0,
 
@@ -508,63 +587,92 @@ export default function ProjectWindowModal({
               }}
             />
           </form>
+        </header>
+
+        {/* ===================================================
+            BROWSER CONTENT FRAME
+        =================================================== */}
+
+        <div
+          aria-label="Browser content frame"
+          style={{
+            flex: '1 1 0',
+
+            minWidth: 0,
+            minHeight: 0,
+
+            width: '100%',
+
+            margin: 0,
+
+            background: '#ffffff',
+
+            boxSizing: 'border-box',
+
+            border: '2px solid',
+
+            borderTopColor: '#808080',
+
+            borderLeftColor: '#808080',
+
+            borderRightColor: '#ffffff',
+
+            borderBottomColor: '#ffffff',
+
+            boxShadow: `
+              inset 1px 1px 0 #000000,
+              inset -1px -1px 0 #dfdfdf
+            `,
+
+            display: 'flex',
+
+            flexDirection: 'column',
+
+            overflow: 'hidden',
+          }}
+        >
+          {/* =================================================
+              ACTUAL SCROLLABLE CONTENT
+          ================================================= */}
+
+          <main
+            className="reading-font"
+            aria-label="Browser page content"
+            style={{
+              flex: '1 1 0',
+
+              minWidth: 0,
+              minHeight: 0,
+
+              width: '100%',
+
+              background: '#ffffff',
+
+              boxSizing: 'border-box',
+
+              overflowY: 'auto',
+
+              overflowX: 'hidden',
+
+              color: '#000000',
+
+              fontFamily:
+                'MS Sans Serif, sans-serif',
+
+              textAlign: 'left',
+
+              touchAction: 'pan-y',
+
+              WebkitOverflowScrolling:
+                'touch',
+
+              scrollbarWidth: 'auto',
+            }}
+          >
+            {children}
+          </main>
         </div>
-{/* ===================================================
-    BROWSER CONTENT
-=================================================== */}
-
-<div
-  style={{
-    flex: '1 1 0',
-
-    minWidth: 0,
-    minHeight: 0,
-
-    width: '100%',
-    height: '100%',
-
-    boxSizing: 'border-box',
-
-    backgroundColor: '#ffffff',
-
-    /*
-      INI AREA SCROLL
-    */
-    overflowY: 'scroll',
-    overflowX: 'hidden',
-
-    /*
-      WIN95 BORDER
-    */
-    borderTop: '2px solid #808080',
-    borderLeft: '2px solid #808080',
-    borderRight: '2px solid #ffffff',
-    borderBottom: '2px solid #ffffff',
-
-    boxShadow: `
-      inset 1px 1px 0 #000000,
-      inset -1px -1px 0 #dfdfdf
-    `,
-
-    fontFamily: 'MS Sans Serif, sans-serif',
-
-    color: '#000000',
-
-    touchAction: 'pan-y',
-
-    WebkitOverflowScrolling: 'touch',
-
-    /*
-      Supaya scrollbar tidak hilang
-      di browser modern.
-    */
-    scrollbarWidth: 'auto',
-  }}
->
-  {children}
-</div>
-
-        </div>
+      </div>
     </Modal>
   );
 }

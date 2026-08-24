@@ -59,7 +59,6 @@ const holoHealthExampleIcons = Object.entries(iconModules)
 
 const NOTION_URL =
   'https://app.notion.com/p/HoloHealth-Iconography-Visual-System-3c23e6c896238027a77ef87eeb315a85';
-
 const veterinaryTerms = [
   'Paroxysmal Dyskinesia',
   'Vestibular Ataxia',
@@ -91,7 +90,7 @@ const veterinaryTerms = [
   'Dehydration',
   'Hypoglycemia',
   'Hyperglycemia',
-  'Electrolyte Imbalance',,
+  'Electrolyte Imbalance',
   'Endoscopy',
   'Analgesic',
   'Anticonvulsant',
@@ -114,7 +113,7 @@ export default function HoloHealthCaseStudyRetro() {
           <section className="cs-hero">
 
             <p className="cs-eyebrow">
-              HoloHealth — Visual Language
+              HoloHealth — Visual System
             </p>
 
             <h1 className="cs-title">
@@ -312,7 +311,7 @@ export default function HoloHealthCaseStudyRetro() {
 
               <p className="cs-body">
                 I worked directly with the founder to <strong>create the master visual of
-                veterinary content</strong> into visual system that were
+                veterinary content into visual system</strong> that were
                 understandable to users while staying aligned with the
                 brand. I also <strong>supervised and manage designer</strong> — reviewing
                 execution and maintaining consistency as the system grew —
@@ -427,21 +426,23 @@ export default function HoloHealthCaseStudyRetro() {
 
               <p className="cs-body cs-outcome-copy">
                 
-               <strong> became the foundation for a scalable product visual
+                became the <strong>foundation for a scalable product visual
                 system</strong>  covering multiple species, conditions,
                 behaviors, medications, devices, services, and health
-                states.The master icons became production references,
+                states.The master icons<strong> became production references,
                 illustration foundations, and part of the broader
-
-
-                HoloHealth design system. I reviewed production output,
-                resolved inconsistencies, and introduced new solutions
-                when existing rules weren't enough — <strong> helping the
-                language scale across the design team and
-                cross-functional product work.</strong>
-              </p>
+                HoloHealth design system.</strong> 
+                </p>
 
             </div>
+
+                            
+ <p>            I reviewed production output,
+                resolved inconsistencies, and introduced new solutions
+                when existing rules weren't enough —  helping the
+               <strong> language scale across the design team and
+                cross-functional product work.</strong>
+</p>
 
             <Figure
               src={holohealthGif4}
@@ -520,23 +521,6 @@ export default function HoloHealthCaseStudyRetro() {
 
         </div>
       </main>
-
-
-      {/* =========================================================
-          STATUS BAR
-      ========================================================= */}
-
-      <div className="casestudy-statusbar">
-
-        <div className="casestudy-status-item">
-          HoloHealth — Translating Veterinary Complexity Into Visual Language
-        </div>
-
-        <div className="casestudy-status-item casestudy-status-ready">
-          Ready
-        </div>
-
-      </div>
 
 
       {/* =========================================================
@@ -710,17 +694,13 @@ export default function HoloHealthCaseStudyRetro() {
 }
 
 
-
 /* =========================================================
    ICON SCALE CAROUSEL
 ========================================================= */
 
 .cs-icon-carousel {
   width: 100%;
-
-  margin:
-    42px 0 0;
-
+  margin: 42px 0 0;
   text-align: center;
 }
 
@@ -728,99 +708,136 @@ export default function HoloHealthCaseStudyRetro() {
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 14px;
-
   margin-top: 20px;
 }
-
 
 .cs-icon-button {
   width: 42px;
   height: 32px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 0;
-
   background: transparent;
-
   border: 0;
-
   color: var(--cs-muted);
-
-  font-family:
-    var(--casestudy-font-ui);
-
+  font-family: var(--casestudy-font-ui);
   font-size: 18px;
-
   line-height: 1;
-
   cursor: pointer;
-
   transition:
     color 140ms ease,
     transform 140ms ease;
 }
 
-
 .cs-icon-button:hover {
   color: var(--cs-ink);
 }
-
 
 .cs-icon-button-prev:hover {
   transform: translateX(-3px);
 }
 
-
 .cs-icon-button-next:hover {
   transform: translateX(3px);
 }
-
 
 .cs-icon-button:active {
   transform: scale(0.9);
 }
 
-
 .cs-icon-button-prev:active {
   transform: translateX(-2px) scale(0.9);
 }
-
 
 .cs-icon-button-next:active {
   transform: translateX(2px) scale(0.9);
 }
 
-
 .cs-icon-counter {
   min-width: 62px;
-
-  font-family:
-    var(--casestudy-font-mono);
-
-  font-size:
-    var(--casestudy-font-mono-size);
-
-  line-height:
-    1;
-
-  letter-spacing:
-    0.04em;
-
-  color:
-    var(--cs-faint);
-
+  font-family: var(--casestudy-font-mono);
+  font-size: var(--casestudy-font-mono-size);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: var(--cs-faint);
   text-align: center;
 }
 
-
 .cs-icon-counter-divider {
-  color:
-    #444;
+  color: #444;
+}
+
+
+/* =========================================================
+   STAGE
+========================================================= */
+
+.cs-icon-stage {
+  position: relative;
+  width: 100%;
+
+  /*
+    Responsive height.
+    Smaller on phones, more generous on desktop.
+  */
+  height: clamp(170px, 25vw, 260px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+  background: #000000;
+}
+
+
+/* =========================================================
+   ICON ITEM
+========================================================= */
+
+.cs-icon-item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  /*
+    Base icon size is now responsive.
+  */
+  width: clamp(64px, 8vw, 110px);
+  height: clamp(64px, 8vw, 110px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transform:
+    translate(
+      calc(-50% + var(--icon-distance) * clamp(70px, 11vw, 150px)),
+      -50%
+    )
+    scale(var(--icon-scale));
+
+  opacity: var(--icon-opacity);
+
+  z-index:
+    calc(10 - abs(var(--icon-distance)));
+
+  transition:
+    transform 550ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 400ms ease;
+
+  pointer-events: none;
+}
+
+.cs-icon-item img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
 }
 
 
@@ -1425,12 +1442,14 @@ export default function HoloHealthCaseStudyRetro() {
   text-align: center;
 }
 
-
 .cs-term {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   width: 100%;
   min-width: 0;
+  height: 34px;
 
   padding: 0;
   margin: 0;
@@ -1438,27 +1457,23 @@ export default function HoloHealthCaseStudyRetro() {
   background: transparent;
   border: 0;
 
-  font-family:
-    var(--casestudy-font-heading);
+  font-family: var(--casestudy-font-heading);
+  font-size: clamp(20px, 2.8vw, 30px);
+  line-height: 1;
 
-  font-size:
-    clamp(22px, 2.2vw, 32px);
-
-  line-height: 1.15;
-
-  letter-spacing:
-    -0.035em;
-
+  letter-spacing: -0.035em;
   font-weight: 600;
 
-  color:
-    #f5f5f2;
-
+  color: #f5f5f2;
   text-align: center;
 
+  /*
+    Jangan biarkan term panjang
+    memperbesar layout.
+  */
   white-space: nowrap;
-
   overflow: hidden;
+  text-overflow: ellipsis;
 
   transition:
     color 120ms ease,
@@ -2054,8 +2069,6 @@ export default function HoloHealthCaseStudyRetro() {
         }
 
 
-        @media (max-width: 700px) {
-
 @media (max-width: 700px) {
 
   .cs-icon-stage {
@@ -2077,27 +2090,20 @@ export default function HoloHealthCaseStudyRetro() {
 }
 
 
-.cs-term-row {
-    grid-template-columns: 1fr;
+  .cs-term-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 14px;
+    row-gap: 10px;
 
-    row-gap: 14px;
-  }
-
-  .cs-term:nth-child(n + 5) {
-    display: none;
-  }
-
-  .cs-term:nth-child(1),
-  .cs-term:nth-child(2),
-  .cs-term:nth-child(3),
-  .cs-term:nth-child(4) {
-    text-align: center;
+    margin: 12px auto 36px !important;
   }
 
   .cs-term {
-    font-size: 24px;
+    height: 30px;
+    font-size: 21px;
+    line-height: 1;
   }
-
+}
           .casestudy-container {
 
             width:
@@ -2633,31 +2639,27 @@ function IconScaleCarousel({ icons }) {
   };
 
   const visualMap = {
-    '-2': {
-      scale: 0.45,
-      opacity: 0.25,
-    },
-
-    '-1': {
-      scale: 0.70,
-      opacity: 0.55,
-    },
-
-    '0': {
-      scale: 1.35,
-      opacity: 1,
-    },
-
-    '1': {
-      scale: 0.70,
-      opacity: 0.55,
-    },
-
-    '2': {
-      scale: 0.45,
-      opacity: 0.25,
-    },
-  };
+  '-2': {
+    scale: 0.42,
+    opacity: 0.22,
+  },
+  '-1': {
+    scale: 0.64,
+    opacity: 0.50,
+  },
+  '0': {
+    scale: 1.12,
+    opacity: 1,
+  },
+  '1': {
+    scale: 0.64,
+    opacity: 0.50,
+  },
+  '2': {
+    scale: 0.42,
+    opacity: 0.22,
+  },
+};
 
   return (
     <div className="cs-icon-carousel">
