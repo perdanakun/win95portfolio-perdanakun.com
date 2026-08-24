@@ -5,9 +5,32 @@ import React, {
 } from 'react';
 
 import {
+  Button,
   Modal,
   TitleBar,
 } from '@react95/core';
+
+import {
+  Folder,
+  ArrowLeft,
+  ArrowRight,
+  User4,
+  Refresh,
+
+  Inetcpl1313,
+  Fave,
+  Inetcpl1308,
+  Time,
+  Websrch,
+  Nwnp32PrinterIcon,
+  Mailnews12,
+  Globe,
+  Progman44,
+  Progman45,
+  Logo,
+  Ie,
+
+} from '@react95/icons';
 
 export default function ProjectWindowModal({
   title = 'Project.exe',
@@ -303,6 +326,130 @@ export default function ProjectWindowModal({
 
     cursor: 'default',
   };
+// =========================================================
+// TOOLBAR
+// =========================================================
+const ToolbarButton = ({
+  label,
+  icon: Icon,
+  width = 64,
+  iconVariant,
+  isMobile = false,
+}) => {
+  const [isHovered, setIsHovered] =
+    useState(false);
+
+  const [isPressed, setIsPressed] =
+    useState(false);
+
+  const buttonWidth = isMobile
+    ? '40px'
+    : `${width}px`;
+
+  const buttonHeight = isMobile
+    ? '30px'
+    : '38px';
+
+  const iconSize = isMobile
+    ? 16
+    : 20;
+
+  return (
+    <Button
+      type="button"
+      aria-label={label}
+
+      onMouseEnter={() => {
+        setIsHovered(true);
+      }}
+
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setIsPressed(false);
+      }}
+
+      onMouseDown={() => {
+        setIsPressed(true);
+      }}
+
+      onMouseUp={() => {
+        setIsPressed(false);
+      }}
+
+      style={{
+        width: buttonWidth,
+        height: buttonHeight,
+
+        padding: isMobile
+          ? '1px'
+          : '2px 3px',
+
+        margin: 0,
+
+        boxSizing: 'border-box',
+
+        display: 'flex',
+        flexDirection: 'column',
+
+        alignItems: 'center',
+        justifyContent: 'center',
+
+        gap: isMobile
+          ? 0
+          : '2px',
+
+        fontFamily:
+          'MS Sans Serif, sans-serif',
+
+        fontSize: isMobile
+          ? '9px'
+          : '10px',
+
+        lineHeight: '11px',
+
+        flexShrink: 0,
+
+        background:
+          isHovered
+            ? '#c0c0c0'
+            : 'transparent',
+
+        border:
+          isHovered
+            ? isPressed
+              ? '1px solid #808080'
+              : '1px solid #ffffff'
+            : '1px solid transparent',
+
+        boxShadow:
+          isHovered && !isPressed
+            ? 'inset -1px -1px 0 #808080'
+            : isPressed
+              ? 'inset 1px 1px 0 #808080'
+              : 'none',
+
+        transform:
+          isPressed
+            ? 'translate(1px, 1px)'
+            : 'none',
+      }}
+    >
+      <Icon
+        variant={iconVariant}
+        style={{
+          width: iconSize,
+          height: iconSize,
+        }}
+      />
+
+      {!isMobile && (
+        <span>
+          {label}
+        </span>
+      )}
+    </Button>
+  );
+};
 
   // =========================================================
   // RENDER
@@ -455,6 +602,218 @@ export default function ProjectWindowModal({
             <u>H</u>elp
           </span>
         </header>
+{/* ===================================================
+    INTERNET EXPLORER TOOLBAR
+=================================================== */}
+
+<div
+  style={{
+    flexShrink: 0,
+
+    minWidth: 0,
+
+    width: '100%',
+
+    height: isMobile
+      ? '30px'
+      : '42px',
+
+    minHeight: isMobile
+      ? '30px'
+      : '42px',
+
+    boxSizing: 'border-box',
+
+    background: '#c0c0c0',
+
+    borderBottom:
+      '1px solid #808080',
+
+    display: 'flex',
+
+    alignItems: 'center',
+
+    gap: isMobile
+      ? '2px'
+      : '3px',
+
+    padding: isMobile
+      ? '2px 3px'
+      : '2px 5px',
+
+    overflow: 'hidden',
+  }}
+>
+  {/* =================================================
+      NAVIGATION
+  ================================================= */}
+
+  <ToolbarButton
+    label="Back"
+    icon={Progman44}
+    width={64}
+    isMobile={isMobile}
+  />
+
+  <ToolbarButton
+    label="Forward"
+    icon={Progman45}
+    width={64}
+    isMobile={isMobile}
+  />
+
+  <ToolbarButton
+    label="Stop"
+    icon={User4}
+    iconVariant="32x32_4"
+    width={64}
+    isMobile={isMobile}
+  />
+
+  <ToolbarButton
+    label="Refresh"
+    icon={Refresh}
+    iconVariant="16x16_4"
+    width={64}
+    isMobile={isMobile}
+  />
+
+  <ToolbarButton
+    label="Home"
+    icon={Ie}
+    iconVariant="16x16_8"
+    width={64}
+    isMobile={isMobile}
+  />
+
+  {/* =================================================
+      DIVIDER
+  ================================================= */}
+
+  {!isMobile && (
+    <div
+      style={{
+        width: '1px',
+        height: '30px',
+
+        margin: '0 4px',
+
+        flexShrink: 0,
+
+        background: '#808080',
+
+        borderRight:
+          '1px solid #ffffff',
+
+        boxSizing: 'border-box',
+      }}
+    />
+  )}
+
+  {/* =================================================
+      SEARCH / FAVORITES / HISTORY / CHANNELS
+  ================================================= */}
+
+  {!isMobile && (
+    <>
+      <ToolbarButton
+        label="Search"
+        width={64}
+        icon={Websrch}
+        iconVariant="16x16_4"
+        isMobile={isMobile}
+      />
+
+      <ToolbarButton
+        label="Favorites"
+        width={70}
+        icon={Fave}
+        iconVariant="16x16_4"
+        isMobile={isMobile}
+      />
+
+      <ToolbarButton
+        label="History"
+         icon={Time}
+        iconVariant="16x16_4"
+        width={64}
+        isMobile={isMobile}
+      />
+
+      <ToolbarButton
+        label="Channels"
+        icon={Globe}
+        iconVariant="16x16_4"
+        width={68}
+        isMobile={isMobile}
+      />
+    </>
+  )}
+
+  {/* =================================================
+      DIVIDER
+  ================================================= */}
+
+  {!isMobile && (
+    <div
+      style={{
+        width: '1px',
+        height: '30px',
+
+        margin: '0 4px',
+
+        flexShrink: 0,
+
+        background: '#808080',
+
+        borderRight:
+          '1px solid #ffffff',
+
+        boxSizing: 'border-box',
+      }}
+    />
+  )}
+
+  {/* =================================================
+      FULL SCREEN / MAIL
+  ================================================= */}
+
+  {!isMobile && (
+    <>
+
+      <ToolbarButton
+        label="Mail"
+        icon={Mailnews12}
+        iconVariant="16x16_4"
+        width={64}
+        isMobile={isMobile}
+      />
+
+      <ToolbarButton
+        label="Print"
+        icon={Nwnp32PrinterIcon}
+        iconVariant="16x16_4"
+        width={72}
+        isMobile={isMobile}
+      />
+
+    </>
+  )}
+
+
+
+  {/* =================================================
+      EMPTY SPACE
+  ================================================= */}
+
+  <div
+    style={{
+      flex: '1 1 0',
+      minWidth: 0,
+    }}
+  />
+</div>
+
 
         {/* ===================================================
             ADDRESS BAR

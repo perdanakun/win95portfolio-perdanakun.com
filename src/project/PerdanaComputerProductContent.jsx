@@ -1,5 +1,14 @@
 import React from 'react';
 
+import perdanaComputerMain
+  from './perdanacomputer/perdanacomputer_main.gif';
+
+  import perdanaComputerMain1
+  from './perdanacomputer/perdanacomputer_main2.gif';
+
+  import perdanaComputer
+  from './perdanacomputer/perdanacomputer.png';
+
 /*
   =========================================================
   PERDANA'S COMPUTER — PRODUCT CASE STUDY
@@ -26,6 +35,40 @@ import React from 'react';
   - responsive behavior
   - component-specific visual treatment
 */
+const caseStudyNavigation = [
+  {
+    id: 'hero',
+    title: 'Overview',
+  },
+  {
+    id: 'product-problem',
+    title: 'Product & Problem',
+  },
+  {
+    id: 'role-contribution',
+    title: 'Role & Contribution',
+  },
+  {
+    id: 'design-decisions',
+    title: 'Key Design Decisions',
+  },
+  {
+    id: 'design-in-code',
+    title: 'From Design to Code',
+  },
+  {
+    id: 'testing',
+    title: 'Testing',
+  },
+  {
+    id: 'outcome',
+    title: 'Outcome',
+  },
+  {
+    id: 'reflection',
+    title: 'Reflection',
+  },
+];
 
 const productFeatures = [
   'Interactive portfolio experience',
@@ -62,6 +105,9 @@ const designPrinciples = [
 export default function PerdanaComputerProductContent() {
   return (
     <div className="perdana-case-study casestudy">
+
+<CaseStudyNavigation />
+
       <main className="perdana-case-study-main">
         <div className="perdana-case-study-container">
 
@@ -69,14 +115,15 @@ export default function PerdanaComputerProductContent() {
               HERO
           ===================================================== */}
 
-          <section className="pcs-hero">
+          <section id="hero"
+          className="pcs-hero">
 
             <p className="pcs-eyebrow casestudy-ui">
               Perdana's Computer — Product Case Study
             </p>
 
             <h1 className="pcs-title casestudy-hero-title">
-              My Portfolio Is My First Product
+              Hello Im working on this case Study!
             </h1>
 
             <p className="pcs-lead casestudy-reading-large">
@@ -86,11 +133,10 @@ export default function PerdanaComputerProductContent() {
               exploratory, and human.
             </p>
 
-            <PlaceholderMedia
-              label="Portfolio interface preview"
-              aspect="16 / 9"
-            />
-
+<PlaceholderMedia
+  src={perdanaComputerMain}
+  alt="Perdana Computer main visual"
+/>
           </section>
 
 
@@ -98,7 +144,8 @@ export default function PerdanaComputerProductContent() {
               00 — PRODUCT & PROBLEM
           ===================================================== */}
 
-          <section className="pcs-section">
+          <section id="product-problem" 
+          className="pcs-section">
 
             <SectionHeading
               number="00"
@@ -121,14 +168,17 @@ export default function PerdanaComputerProductContent() {
                 Yet many portfolio websites still follow almost the
                 same structure: a landing page, a collection of
                 projects, long case studies, and endless scrolling.
-                The work might be good, but the experience itself can
-                become difficult to remember.
+                <u>The work might be good, but the experience itself can
+                become difficult to remember.</u>
               </p>
 
-              <p className="pcs-body-strong casestudy-heading">
-                What if the portfolio itself was treated as a product
-                that needed to solve a user problem?
-              </p>
+
+<p className="pcs-highlight-quote">
+  <mark>
+  <strong>  What if the portfolio itself was treated as a product
+                that needed to solve a user problem?</strong></mark>
+</p>
+              
 
               <p className="pcs-body casestudy-reading">
                 That became the starting point for this project.
@@ -163,75 +213,52 @@ export default function PerdanaComputerProductContent() {
 
 
           {/* =====================================================
-              01 — ROLE & CONTRIBUTION
+              01 — Role & Contribution
           ===================================================== */}
 
-          <section className="pcs-section">
+          <section id="role-contribution"
+          className="pcs-section">
+<SectionHeading
+  number="01"
+  title="Role & Contribution"
+  subtitle="Responsible for the product from concept to implementation."
+/>
 
-            <SectionHeading
-              number="01"
-              title="Role & Contribution"
-              subtitle="I treated the portfolio as a product — and took responsibility for the entire process."
-            />
+<div className="pcs-copy-stack">
 
-            <div className="pcs-feature-list">
+  <p className="pcs-body casestudy-reading">
+    The project covered
+    <span className="text-highlight">
+    <strong>  product definition, UX, visual design, interaction design,
+      development, testing, and iteration.</strong>
+    </span>
+  </p>
 
-              {productFeatures.map((feature, index) => (
-                <div
-                  className="pcs-feature"
-                  key={feature}
-                >
-                  <span className="pcs-feature-number casestudy-mono">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
+  <p className="pcs-body casestudy-reading">
+    The work included <u>defining the problem and experience direction,
+    developing the visual and interaction system, structuring content
+    and navigation, and translating the design into a working
+    interface using React, HTML, and CSS.</u>
+  </p>
 
-                  <span className="pcs-feature-title casestudy-ui-reading">
-                    {feature}
-                  </span>
-                </div>
-              ))}
+  <p className="pcs-body casestudy-reading">
+    Initial research and alpha testing were also part of the process,
+    using findings and user feedback to inform further iterations.
+  </p>
 
-            </div>
+  <p className="pcs-body casestudy-reading">
+  <strong>  AI was used as a development assistance</strong> throughout implementation,
+    while <strong>React95</strong> provided part of the interface
+    foundation.
+  </p>
 
-            <div className="pcs-copy-stack">
+</div>
 
-              <p className="pcs-body casestudy-reading">
-                My role covers the whole product process:
-                <strong>
-                  {' '}
-                  ideation, definition, planning, visual design,
-                  interaction design, development, testing, and
-                  iteration.
-                </strong>
-              </p>
-
-              <p className="pcs-body casestudy-reading">
-                I am not only designing the interface and creating
-                prototypes. I am also developing the actual product
-                using React, HTML, and CSS, with the assistance of AI
-                throughout the development process.
-              </p>
-
-              <p className="pcs-body casestudy-reading">
-                I also use <strong>React95</strong> as part of the
-                implementation, which means some of the interface
-                foundations do not have to be rebuilt completely from
-                scratch.
-              </p>
-
-              <p className="pcs-body casestudy-reading">
-                But the visual decisions, interaction details,
-                composition, content structure, and the work of
-                translating the design language into a functioning
-                product remain a significant part of the process.
-              </p>
-
-            </div>
-
-            <PlaceholderMedia
-              label="Design and development process"
-              aspect="3 / 2"
-            />
+<PlaceholderMedia
+  src={perdanaComputerMain1}
+  alt="Perdana Computer workflow design in code"
+  caption="A closer look at the workflow, bringing together product thinking, visual design, and a code alltogether."
+/>
 
           </section>
 
@@ -240,7 +267,8 @@ export default function PerdanaComputerProductContent() {
               02 — KEY DESIGN DECISIONS
           ===================================================== */}
 
-          <section className="pcs-section">
+          <section id="design-decisions"
+          className="pcs-section">
 
             <SectionHeading
               number="02"
@@ -252,23 +280,412 @@ export default function PerdanaComputerProductContent() {
 
               <p className="pcs-body casestudy-reading">
                 The problem statement led to one important design
-                direction: the portfolio should become part of the
-                solution.
+                direction: <u>the portfolio should become part of the
+                solution.</u>
               </p>
 
-              <p className="pcs-body-strong casestudy-heading">
-                I wanted to give recruiters a reason to pause.
-              </p>
 
-              <p className="pcs-body casestudy-reading">
-                Instead of presenting the portfolio as a conventional
-                website, I designed it around a familiar computing
-                metaphor — a Windows 95-inspired environment where
-                projects, information, and interactions can be
-                discovered through an interface.
-              </p>
+
+              <p className="pcs-highlight-quote">
+  <mark>
+  <strong> The challenge wasn't simply getting recruiters to spend more time on my portfolio. It was making the time they already spend more memorable and useful.</strong></mark>
+</p>
+
+
 
             </div>
+
+{/* =================================================
+    RESEARCH
+================================================= */}
+
+<section id="research"
+className="pcs-research">
+
+  {/* HEADER */}
+
+  <div className="pcs-research-intro">
+
+    <div className="pcs-research-intro-top">
+
+      <span className="pcs-research-kicker casestudy-mono">
+        RESEARCH
+      </span>
+
+    </div>
+
+    <h3 className="pcs-research-title casestudy-heading">
+      What makes a portfolio worth exploring?
+    </h3>
+
+    <p className="pcs-research-intro-copy casestudy-reading">
+     To test whether this direction had a reasonable foundation, 
+     I looked at research around web interactivity, engagement, and 
+     interactive storytelling. I wasn't trying to prove that 
+     interaction automatically makes a portfolio better.
+      I wanted to understand when interaction could 
+     support the experience rather than become decoration.
+    </p>
+
+  </div>
+
+
+  {/* RESEARCH SNAPSHOT */}
+
+  <div className="pcs-research-metrics">
+
+    <div className="pcs-research-metric">
+
+      <strong className="pcs-research-metric-number">
+        63
+      </strong>
+
+      <span className="pcs-research-metric-label casestudy-mono">
+        STUDIES
+      </span>
+
+    </div>
+
+
+    <div className="pcs-research-metric">
+
+      <strong className="pcs-research-metric-number">
+        13,484
+      </strong>
+
+      <span className="pcs-research-metric-label casestudy-mono">
+        PARTICIPANTS
+      </span>
+
+    </div>
+
+
+    <div className="pcs-research-metric">
+
+      <strong className="pcs-research-metric-number">
+        3
+      </strong>
+
+      <span className="pcs-research-metric-label casestudy-mono">
+        RESEARCH DIRECTIONS
+      </span>
+
+    </div>
+
+  </div>
+
+
+  {/* KEY FINDINGS */}
+
+  <div className="pcs-research-findings">
+
+    <div className="pcs-research-section-label casestudy-mono">
+      KEY FINDINGS
+    </div>
+
+
+    {/* FINDING 01 */}
+
+    <article className="pcs-research-finding">
+
+      <div className="pcs-research-finding-index casestudy-mono">
+        01
+      </div>
+
+      <div className="pcs-research-finding-main">
+
+        <div className="pcs-research-finding-meta">
+
+          <span className="casestudy-mono">
+            WEB INTERACTIVITY
+          </span>
+
+          <span className="pcs-research-finding-tag">
+            ENJOYMENT
+          </span>
+
+        </div>
+
+        <h4 className="casestudy-heading">
+          Interaction can make digital experiences more engaging.
+        </h4>
+
+        <p className="casestudy-reading">
+          A meta-analysis of 63 studies and 13,484 participants
+          found that web interactivity was associated with greater
+          enjoyment, more positive attitudes, and desirable
+          behavioral intentions.
+        </p>
+
+
+        <div className="pcs-research-response">
+
+          <span className="casestudy-mono">
+            DESIGN RESPONSE
+          </span>
+
+          <strong className="casestudy-reading">
+            <span className="text-highlight">
+            Use interaction to support the experience —
+            not compete with the work.</span>
+          </strong>
+
+        </div>
+
+        <span className="pcs-research-source casestudy-mono">
+          YANG & SHEN · COMMUNICATION RESEARCH · 2018
+        </span>
+
+      </div>
+
+    </article>
+
+
+    {/* FINDING 02 */}
+
+    <article className="pcs-research-finding">
+
+      <div className="pcs-research-finding-index casestudy-mono">
+        02
+      </div>
+
+      <div className="pcs-research-finding-main">
+
+        <div className="pcs-research-finding-meta">
+
+          <span className="casestudy-mono">
+            USER ENGAGEMENT
+          </span>
+
+          <span className="pcs-research-finding-tag">
+            EXPLORATION
+          </span>
+
+        </div>
+
+        <h4 className="casestudy-heading">
+          Browsing can become part of the experience.
+        </h4>
+
+        <p className="casestudy-reading">
+          A peer-reviewed study of 717 mobile-commerce users
+          in Indonesia found a positive relationship between
+          interactivity and the customer engagement behaviors
+          examined in the study.
+        </p>
+
+
+        <div className="pcs-research-response">
+
+          <span className="casestudy-mono">
+            DESIGN RESPONSE
+          </span>
+
+          <strong className="casestudy-reading">
+           <span className="text-highlight"> Let visitors open, navigate, discover, and choose
+            what they want to explore.</span>
+          </strong>
+
+        </div>
+
+        <span className="pcs-research-source casestudy-mono">
+          UTAMI ET AL. · INTERNATIONAL JOURNAL OF MARKET RESEARCH · 2022
+        </span>
+
+      </div>
+
+    </article>
+
+
+    {/* FINDING 03 */}
+
+    <article className="pcs-research-finding">
+
+      <div className="pcs-research-finding-index casestudy-mono">
+        03
+      </div>
+
+      <div className="pcs-research-finding-main">
+
+        <div className="pcs-research-finding-meta">
+
+          <span className="casestudy-mono">
+            INTERACTIVE STORYTELLING
+          </span>
+
+          <span className="pcs-research-finding-tag">
+            AGENCY
+          </span>
+
+        </div>
+
+        <h4 className="casestudy-heading">
+          The interface can become part of how the work is discovered.
+        </h4>
+
+        <p className="casestudy-reading">
+          Research comparing interactive and non-interactive
+          digital storytelling provides another reference for
+          treating interaction as part of the content experience,
+          rather than as an additional visual layer.
+        </p>
+
+
+        <div className="pcs-research-response">
+
+          <span className="casestudy-mono">
+            DESIGN RESPONSE
+          </span>
+
+          <strong className="casestudy-reading">
+        <span className="text-highlight"> Make the interface part of the story,
+            not just a layer around it.</span>
+          </strong>
+
+        </div>
+
+        <span className="pcs-research-source casestudy-mono">
+          HOANG ET AL. · FRONTIERS IN COMPUTER SCIENCE · 2026
+        </span>
+
+      </div>
+
+    </article>
+
+  </div>
+
+
+  {/* RESEARCH → DESIGN */}
+
+  <div className="pcs-research-translation">
+
+    <div className="pcs-research-translation-header">
+
+      <span className="casestudy-mono">
+        FROM RESEARCH TO DESIGN
+      </span>
+
+      <span className="casestudy-mono">
+        DECISION 01
+      </span>
+
+    </div>
+
+
+    <div className="pcs-research-flow">
+
+      <div className="pcs-research-flow-item">
+
+        <span className="casestudy-mono">
+          RESEARCH
+        </span>
+
+        <strong className="casestudy-heading">
+          Interactivity
+        </strong>
+
+      </div>
+
+
+      <div className="pcs-research-flow-arrow">
+        →
+      </div>
+
+
+      <div className="pcs-research-flow-item">
+
+        <span className="casestudy-mono">
+          INSIGHT
+        </span>
+
+        <strong className="casestudy-heading">
+          Browsing can become exploration
+        </strong>
+
+      </div>
+
+
+      <div className="pcs-research-flow-arrow">
+        →
+      </div>
+
+
+      <div className="pcs-research-flow-item pcs-research-flow-item-final">
+
+        <span className="casestudy-mono">
+          DESIGN OBJECTIVE
+        </span>
+
+        <strong className="casestudy-heading">
+          Make the portfolio worth exploring
+        </strong>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  {/* DESIGN IMPLICATION */}
+
+  <div className="pcs-research-conclusion">
+
+    <span className="casestudy-mono">
+      DESIGN IMPLICATION
+    </span>
+
+    <h4 className="casestudy-heading">
+  <span className="text-highlight">Make the portfolio something people explore,
+      not just something they scroll through.</span> 
+    </h4>
+
+    <p className="casestudy-reading">
+      The research pointed toward a simple objective: <u>increase engagement through exploration while keeping
+      the actual work easy to find and understand.</u>
+    </p>
+
+  </div>
+
+  {/* SOURCES */}
+
+  <div className="pcs-research-sources">
+
+    <span className="casestudy-mono">
+      SOURCES
+    </span>
+
+    <a
+      href="https://doi.org/10.1177/0093650217700748"
+      target="_blank"
+      rel="noreferrer"
+      className="casestudy-reading"
+    >
+      Yang & Shen — Effects of Web Interactivity: A Meta-Analysis ↗
+    </a>
+
+    <a
+      href="https://doi.org/10.1177/14707853211027483"
+      target="_blank"
+      rel="noreferrer"
+      className="casestudy-reading"
+    >
+      Utami et al. — The Role of Interactivity on Customer Engagement ↗
+    </a>
+
+    <a
+      href="https://doi.org/10.3389/fcomp.2026.1843009"
+      target="_blank"
+      rel="noreferrer"
+      className="casestudy-reading"
+    >
+      Hoang et al. — The Power of Agency: Interactivity in Data Storytelling ↗
+    </a>
+
+  </div>
+
+</section>
 
 
             {/* ===================================================
@@ -276,77 +693,48 @@ export default function PerdanaComputerProductContent() {
             =================================================== */}
 
             <DesignDecision
-              number="01"
-              title="Why a retro interface?"
             >
-              <p className="casestudy-reading">
-                The retro visual direction is not only an aesthetic
+
+                                <h3 className="pcs-research-title casestudy-heading">
+      The retro visual direction is not only an aesthetic
                 choice. It is a strategy for memorability.
+    </h3>
+                  <p className="pcs-body casestudy-reading">
+                Instead of presenting the portfolio as a conventional
+                website, I designed it around a familiar computing
+                metaphor — a <b>Windows 95-inspired </b>environment where
+                projects, information, and interactions can be
+                discovered through an interface.
               </p>
+              
+  <PlaceholderMedia
+  src={perdanaComputer}
+  alt="Perdana Computer illustration"
+/>
+
 
               <p className="casestudy-reading">
                 When many portfolio websites use similar contemporary
-                layouts, a recognizable visual metaphor can help the
-                experience stand apart before the recruiter even
+                layouts, a recognizable visual metaphor can <span className="text-highlight">
+                  help the experience stand apart</span> before the recruiter even
                 reaches the individual project content.
               </p>
 
               <p className="casestudy-reading">
                 The Windows 95-inspired language also creates an
-                opportunity to make interaction part of the story.
-                Windows, folders, menus, buttons, dialogs, and other
+                opportunity to<span className="text-highlight"> make interaction part of the story.</span>
+               Windows, folders, menus, buttons, dialogs, and other
                 interface elements become ways to explore the work
                 rather than decoration placed on top of it.
               </p>
             </DesignDecision>
 
+            <blockquote className="pcs-quote casestudy-reading-large">
+              The portfolio is not only a container for the work.
+              The portfolio itself is the first product I am asking
+              the user to experience.
+            </blockquote>
 
-            {/* ===================================================
-                RESEARCH
-            =================================================== */}
-
-            <div className="pcs-research-card">
-
-              <div className="pcs-research-header">
-
-                <span className="pcs-research-number casestudy-mono">
-                  RESEARCH
-                </span>
-
-                <span className="pcs-research-status casestudy-mono">
-                  DATA TO BE ADDED
-                </span>
-
-              </div>
-
-              <h3 className="casestudy-heading">
-                Why this visual approach makes sense for the audience
-              </h3>
-
-              <p className="casestudy-reading">
-                This section will document research into recruiter
-                and hiring-manager demographics, portfolio browsing
-                behavior, and the familiarity of retro computing
-                interfaces across relevant age groups.
-              </p>
-
-              <div className="pcs-data-placeholder">
-
-                <span className="casestudy-mono">
-                  [ Recruiter / hiring manager demographic data ]
-                </span>
-
-                <span className="casestudy-mono">
-                  [ Portfolio review behavior ]
-                </span>
-
-                <span className="casestudy-mono">
-                  [ Memorability / distinctive interface research ]
-                </span>
-
-              </div>
-
-            </div>
 
 
             {/* ===================================================
@@ -378,26 +766,17 @@ export default function PerdanaComputerProductContent() {
 
             </div>
 
-
-            <PlaceholderMedia
-              label="Interactive portfolio / interface exploration"
-              aspect="16 / 9"
-            />
-
-            <blockquote className="pcs-quote casestudy-reading-large">
-              The portfolio is not only a container for the work.
-              The portfolio itself is the first product I am asking
-              the user to experience.
-            </blockquote>
-
           </section>
+
+          
 
 
           {/* =====================================================
               03 — DEVELOPMENT
           ===================================================== */}
 
-          <section className="pcs-section">
+          <section id="design-in-code"
+          className="pcs-section">
 
             <SectionHeading
               number="03"
@@ -423,16 +802,16 @@ export default function PerdanaComputerProductContent() {
               </p>
 
               <p className="pcs-body casestudy-reading">
-                AI became an additional development partner during
-                implementation. It helped accelerate exploration,
+             <span className="text-highlight">   AI became an additional development partner during
+                implementation.</span> It helped accelerate exploration,
                 debugging, and repetitive coding tasks, allowing me
                 to spend more time on the visual and product decisions.
               </p>
 
               <p className="pcs-body casestudy-reading">
                 The result is intentionally not presented as a
-                finished artifact. It is a working product that can
-                continue to change as I learn from people using it.
+                finished artifact. It is a <strong>working product that can
+                continue to change</strong> as I learn from people using it.
               </p>
 
             </div>
@@ -485,7 +864,8 @@ export default function PerdanaComputerProductContent() {
               04 — TESTING
           ===================================================== */}
 
-          <section className="pcs-section">
+          <section id="testing" 
+          className="pcs-section">
 
             <SectionHeading
               number="04"
@@ -498,16 +878,13 @@ export default function PerdanaComputerProductContent() {
               <p className="pcs-body casestudy-reading">
                 Before making the experience public, I am testing it
                 with a limited group of users.
-              </p>
-
-              <p className="pcs-body casestudy-reading">
                 And if you are reading this case study, there is a
                 good chance that <strong>you are one of the testers.</strong>
               </p>
 
               <p className="pcs-body-strong casestudy-heading">
-                Tell me what works. Tell me what doesn't.
-              </p>
+            <span className="text-highlight">   Tell me what works. Tell me what doesn't.
+          </span>     </p>
 
               <p className="pcs-body casestudy-reading">
                 The goal of this stage is not to prove that the
@@ -534,24 +911,21 @@ export default function PerdanaComputerProductContent() {
                 feels unnecessary? I'd genuinely like to know.
               </p>
 
-              <button
-                type="button"
-                className="pcs-feedback-button casestudy-ui-reading"
-                onClick={() => {
-                  window.location.href =
-                    'mailto:hello@example.com?subject=Perdana%27s%20Computer%20Feedback';
-                }}
-              >
-                Send feedback ↗
-              </button>
+<button
+  type="button"
+  className="pcs-feedback-button casestudy-ui-reading"
+  onClick={() => {
+    window.location.href =
+      'mailto:perdanakurniawan25@gmail.com' +
+      '?subject=Perdana%27s%20Computer%20Feedback' +
+      '&body=Hi%20Perdana,%0A%0AHere%27s%20my%20feedback:';
+  }}
+>
+  Send feedback ↗
+</button>
 
             </div>
 
-
-            <PlaceholderMedia
-              label="User testing / feedback"
-              aspect="3 / 2"
-            />
 
           </section>
 
@@ -560,7 +934,8 @@ export default function PerdanaComputerProductContent() {
               05 — OUTCOME
           ===================================================== */}
 
-          <section className="pcs-section">
+          <section id="outcome" 
+          className="pcs-section">
 
             <SectionHeading
               number="05"
@@ -586,10 +961,7 @@ export default function PerdanaComputerProductContent() {
                 <p className="pcs-body casestudy-reading">
                   This project is still relatively new, so I do not
                   want to manufacture success metrics simply to make
-                  the case study look complete.
-                </p>
-
-                <p className="pcs-body casestudy-reading">
+                  the case study look complete
                   Instead, I am treating the portfolio itself as an
                   ongoing experiment.
                 </p>
@@ -602,16 +974,14 @@ export default function PerdanaComputerProductContent() {
             <div className="pcs-future-card">
 
               <span className="pcs-future-label casestudy-mono">
-                SEPTEMBER 2026+
+                24 AUGUST 2026
               </span>
 
               <p className="casestudy-reading">
                 If I update this case study later and I have landed a
                 product design role through this portfolio, then that
                 will be one meaningful signal that the product worked.
-              </p>
 
-              <p className="casestudy-reading">
                 If it did not, that is useful information too.
                 The next question becomes:
                 <strong>
@@ -622,12 +992,6 @@ export default function PerdanaComputerProductContent() {
 
             </div>
 
-
-            <PlaceholderMedia
-              label="Future product outcome"
-              aspect="16 / 9"
-            />
-
           </section>
 
 
@@ -635,10 +999,11 @@ export default function PerdanaComputerProductContent() {
               REFLECTION
           ===================================================== */}
 
-          <section className="pcs-section pcs-section-last">
+          <section id="reflection"
+          className="pcs-section pcs-section-last">
 
             <SectionHeading
-              title="A portfolio that keeps evolving"
+              title="Reflection : a portfolio that keeps evolving"
             />
 
             <div className="pcs-copy-stack">
@@ -649,16 +1014,16 @@ export default function PerdanaComputerProductContent() {
 
               <p className="pcs-body casestudy-reading">
                 A portfolio does not have to be a static archive of
-                previous work. It can be a product itself — something
+                previous work. <span className="text-highlight">It can be a product itself — something
                 with a problem, users, a value proposition, an
                 interface, interactions, testing, and continuous
-                iteration.
+                iteration.</span>
               </p>
 
               <p className="pcs-body casestudy-reading">
-                I also see this project as a bridge between my decade
+                I also see this project as a <b>bridge between my decade
                 of experience in visual design and my growing practice
-                in product design and development.
+                in product design and development.</b>
               </p>
 
               <p className="pcs-body casestudy-reading">
@@ -767,6 +1132,18 @@ export default function PerdanaComputerProductContent() {
         }
 
 
+.text-highlight {
+  background: linear-gradient(
+    to bottom,
+    transparent 20%,
+    #fff27a 20%,
+    #fff27a 90%,
+    transparent 90%
+  );
+  padding: 0 3px;
+}
+
+
         /* =====================================================
            MAIN
         ===================================================== */
@@ -822,7 +1199,6 @@ export default function PerdanaComputerProductContent() {
 
           color: var(--pcs-muted);
 
-          text-transform: uppercase;
 
         }
 
@@ -1043,83 +1419,41 @@ export default function PerdanaComputerProductContent() {
         }
 
 
-        /* =====================================================
-           PLACEHOLDER MEDIA
-        ===================================================== */
+  .pcs-placeholder-image {
+  display: block;
 
-        .pcs-placeholder {
+  width: 100%;
+  height: auto;
 
-          position: relative;
+  background: transparent;
 
-          display: flex;
+  border-radius: 0;
 
-          align-items: center;
+  border:
+            5px solid var(--pcs-line);
+}
 
-          justify-content: center;
+.pcs-placeholder-caption {
+  margin:
+    12px 0 0 !important;
 
-          width: 100%;
+  font-family:
+    var(--casestudy-font-ui);
 
-          margin: 36px 0 0;
+  font-size:
+    var(--casestudy-font-ui-size);
 
-          background: #f2f2ef;
+  line-height:
+    1.5;
 
-          border:
-            1px dashed #cfcfca;
+  letter-spacing:
+    var(--casestudy-font-ui-letter-spacing);
 
-          overflow: hidden;
+  color:
+    var(--cs-faint);
 
-        }
-
-
-        .pcs-placeholder-inner {
-
-          display: flex;
-
-          flex-direction: column;
-
-          align-items: center;
-
-          justify-content: center;
-
-          gap: 8px;
-
-          padding: 40px;
-
-          text-align: center;
-
-        }
-
-
-        .pcs-placeholder-icon {
-
-          width: 42px;
-          height: 42px;
-
-          display: flex;
-
-          align-items: center;
-          justify-content: center;
-
-          border:
-            1px solid #cfcfca;
-
-          color: var(--pcs-muted);
-
-        }
-
-
-        .pcs-placeholder-label {
-
-          color: var(--pcs-muted);
-
-        }
-
-
-        .pcs-placeholder-note {
-
-          color: var(--pcs-faint);
-
-        }
+  text-align: left;
+}
 
 
         /* =====================================================
@@ -1191,102 +1525,27 @@ export default function PerdanaComputerProductContent() {
 
 
         /* =====================================================
-           RESEARCH
-        ===================================================== */
-
-        .pcs-research-card {
-
-          margin: 42px 0;
-
-          padding: 24px;
-
-          background: #f8f8f6;
-
-          border:
-            1px solid var(--pcs-line);
-
-        }
-
-
-        .pcs-research-header {
-
-          display: flex;
-
-          align-items: center;
-
-          justify-content: space-between;
-
-          gap: 16px;
-
-          margin-bottom: 30px;
-
-        }
-
-
-        .pcs-research-number {
-
-          color: var(--pcs-muted);
-
-        }
-
-
-        .pcs-research-status {
-
-          padding: 5px 8px;
-
-          background: #ecece8;
-
-          color: var(--pcs-muted);
-
-        }
-
-
-        .pcs-research-card h3 {
-
-          margin: 0 0 12px !important;
-
-          color: var(--pcs-ink);
-
-        }
-
-
-        .pcs-research-card > p {
-
-          max-width: 700px;
-
-          color: var(--pcs-muted);
-
-        }
-
-
-        .pcs-data-placeholder {
-
-          display: flex;
-
-          flex-direction: column;
-
-          gap: 8px;
-
-          margin-top: 24px;
-
-          padding-top: 18px;
-
-          border-top:
-            1px solid var(--pcs-line);
-
-        }
-
-
-        .pcs-data-placeholder span {
-
-          color: var(--pcs-faint);
-
-        }
-
-
-        /* =====================================================
            QUOTE
         ===================================================== */
+
+.pcs-highlight-quote {
+  max-width: 680px;
+  margin: 48px auto !important;
+
+  font-family: var(--casestudy-font-heading);
+  font-size: var(--casestudy-font-reading-large-size);
+  line-height: 1.5;
+  letter-spacing: var(--casestudy-font-heading-letter-spacing);
+
+  text-align: center;
+}
+
+.pcs-highlight-quote mark {
+  background: #fff27a;
+  color: inherit;
+  padding: 2px 5px;
+}
+
 
         .pcs-quote {
 
@@ -1402,7 +1661,7 @@ export default function PerdanaComputerProductContent() {
 
         .pcs-feedback-card p {
 
-          max-width: 620px;
+
 
           margin-bottom: 22px !important;
 
@@ -1610,6 +1869,611 @@ export default function PerdanaComputerProductContent() {
 
         }
 
+        /* =====================================================
+   RESEARCH — BASE
+===================================================== */
+
+.pcs-research {
+  margin-top: 52px;
+}
+
+
+/* =====================================================
+   RESEARCH — INTRO
+===================================================== */
+
+.pcs-research-intro {
+  padding-bottom: 28px;
+}
+
+.pcs-research-intro-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  margin-bottom: 18px;
+}
+
+.pcs-research-kicker {
+  color: var(--pcs-ink);
+  letter-spacing: .08em;
+}
+
+.pcs-research-status {
+  color: var(--pcs-faint);
+  letter-spacing: .06em;
+  text-align: right;
+}
+
+.pcs-research-title {
+  max-width: 760px;
+  margin: 0 0 14px !important;
+
+  color: var(--pcs-ink);
+}
+
+.pcs-research-intro-copy {
+  max-width: 680px;
+  color: var(--pcs-muted);
+}
+
+
+/* =====================================================
+   RESEARCH — METRICS
+===================================================== */
+
+.pcs-research-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  border-top: 1px solid var(--pcs-line);
+  border-bottom: 1px solid var(--pcs-line);
+
+  margin-bottom: 52px;
+}
+
+.pcs-research-metric {
+  min-width: 0;
+  padding: 22px 24px;
+
+  border-right: 1px solid var(--pcs-line);
+}
+
+.pcs-research-metric:first-child {
+  padding-left: 0;
+}
+
+.pcs-research-metric:last-child {
+  padding-right: 0;
+  border-right: 0;
+}
+
+.pcs-research-metric-number {
+  display: block;
+
+  margin-bottom: 8px;
+
+
+
+  letter-spacing: -.05em;
+
+  color: var(--pcs-ink);
+}
+
+.pcs-research-metric-label {
+  display: block;
+
+  color: var(--pcs-muted);
+  font-size: 10px;
+  line-height: 1.3;
+  letter-spacing: .08em;
+}
+
+
+/* =====================================================
+   RESEARCH — SECTION LABEL
+===================================================== */
+
+.pcs-research-section-label {
+  margin-bottom: 0;
+
+  padding-bottom: 12px;
+
+  color: var(--pcs-faint);
+
+  letter-spacing: .08em;
+}
+
+
+/* =====================================================
+   RESEARCH — FINDING
+===================================================== */
+
+.pcs-research-finding {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+
+  gap: 18px;
+
+  padding: 30px 0;
+
+  border-top: 1px solid var(--pcs-line);
+}
+
+.pcs-research-finding:last-child {
+  border-bottom: 1px solid var(--pcs-line);
+}
+
+.pcs-research-finding-index {
+  color: var(--pcs-faint);
+}
+
+.pcs-research-finding-main {
+  min-width: 0;
+}
+
+.pcs-research-finding-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-bottom: 12px;
+}
+
+.pcs-research-finding-meta > span:first-child {
+  color: var(--pcs-muted);
+  letter-spacing: .07em;
+}
+
+.pcs-research-finding-tag {
+  padding: 4px 7px;
+
+  border: 1px solid var(--pcs-line);
+
+  color: var(--pcs-faint);
+
+  font-family: var(--casestudy-font-mono);
+  font-size: 9px;
+  line-height: 1;
+
+  letter-spacing: .06em;
+}
+
+.pcs-research-finding h4 {
+  max-width: 700px;
+
+  margin: 0 0 12px !important;
+
+  color: var(--pcs-ink);
+}
+
+.pcs-research-finding-main > p {
+  max-width: 680px;
+
+  color: var(--pcs-muted);
+}
+
+
+/* =====================================================
+   RESEARCH — DESIGN RESPONSE
+===================================================== */
+
+.pcs-research-response {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+
+  gap: 18px;
+
+  max-width: 700px;
+
+  margin-top: 20px;
+  padding: 16px 0;
+
+  border-top: 1px dashed var(--pcs-line);
+  border-bottom: 1px dashed var(--pcs-line);
+}
+
+.pcs-research-response > span {
+  color: var(--pcs-faint);
+  font-size: 9px;
+  letter-spacing: .07em;
+}
+
+.pcs-research-response strong {
+  color: var(--pcs-ink);
+}
+
+.pcs-research-source {
+  display: block;
+
+  margin-top: 14px;
+
+  color: var(--pcs-faint);
+
+  font-size: 9px;
+  letter-spacing: .04em;
+}
+
+
+/* =====================================================
+   RESEARCH — TRANSLATION
+===================================================== */
+
+.pcs-research-translation {
+  margin-top: 52px;
+
+  border: 1px solid var(--pcs-line);
+  background: var(--pcs-bg-soft);
+}
+
+.pcs-research-translation-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 13px 18px;
+
+  border-bottom: 1px solid var(--pcs-line);
+
+  color: var(--pcs-faint);
+
+  font-size: 9px;
+  letter-spacing: .07em;
+}
+
+.pcs-research-flow {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1.2fr;
+
+  align-items: stretch;
+}
+
+.pcs-research-flow-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  min-height: 150px;
+
+  padding: 22px;
+
+  background: var(--pcs-bg);
+}
+
+.pcs-research-flow-item > span {
+  margin-bottom: 10px;
+
+  color: var(--pcs-faint);
+
+  font-size: 9px;
+  letter-spacing: .07em;
+}
+
+.pcs-research-flow-item strong {
+  color: var(--pcs-ink);
+}
+
+.pcs-research-flow-item-final {
+  background: var(--pcs-ink);
+}
+
+.pcs-research-flow-item-final > span {
+  color: #999;
+}
+
+.pcs-research-flow-item-final strong {
+  color: white;
+}
+
+.pcs-research-flow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+
+  background: var(--pcs-bg);
+
+  color: var(--pcs-faint);
+
+  font-size: 18px;
+}
+
+
+/* =====================================================
+   RESEARCH — CONCLUSION
+===================================================== */
+
+.pcs-research-conclusion {
+  margin-top: 24px;
+
+  padding: 30px;
+
+
+  color: white;
+}
+
+.pcs-research-conclusion > span {
+  display: block;
+
+  margin-bottom: 18px;
+
+  color: #000000;
+
+  font-size: 9px;
+  letter-spacing: .08em;
+}
+
+.pcs-research-conclusion h4 {
+  max-width: 760px;
+
+  margin: 0 0 16px !important;
+
+  color: 000000;
+}
+
+.pcs-research-conclusion p {
+  max-width: 680px;
+
+  color: #000000;
+}
+
+
+/* =====================================================
+   RESEARCH — SOURCES
+===================================================== */
+
+.pcs-research-sources {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+
+  margin-top: 28px;
+  padding-top: 18px;
+
+  border-top: 1px solid var(--pcs-line);
+}
+
+.pcs-research-sources > span {
+  margin-bottom: 4px;
+
+  color: var(--pcs-faint);
+
+  font-size: 9px;
+  letter-spacing: .08em;
+}
+
+.pcs-research-sources a {
+  color: var(--pcs-muted);
+
+  text-decoration: none;
+
+  transition:
+    color 140ms ease,
+    padding-left 140ms ease;
+}
+
+.pcs-research-sources a:hover {
+  padding-left: 4px;
+
+  color: var(--pcs-ink);
+  text-decoration: underline;
+}
+
+
+/* =====================================================
+   RESEARCH — RESPONSIVE
+===================================================== */
+
+@media (max-width: 700px) {
+
+  .pcs-research-intro-top {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .pcs-research-status {
+    text-align: left;
+  }
+
+  .pcs-research-metrics {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .pcs-research-metric {
+    padding: 18px 14px;
+  }
+
+  .pcs-research-metric:first-child {
+    padding-left: 0;
+  }
+
+  .pcs-research-metric-number {
+    font-size: 34px;
+  }
+
+  .pcs-research-finding {
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .pcs-research-response {
+    grid-template-columns: 1fr;
+    gap: 7px;
+  }
+
+  .pcs-research-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .pcs-research-flow-arrow {
+    width: 100%;
+    height: 30px;
+  }
+
+  .pcs-research-flow-item {
+    min-height: 120px;
+  }
+}
+
+
+@media (max-width: 480px) {
+
+  .pcs-research-metric {
+    padding: 16px 8px;
+  }
+
+  .pcs-research-metric-number {
+    font-size: 28px;
+  }
+
+  .pcs-research-metric-label {
+    font-size: 8px;
+  }
+
+  .pcs-research-finding {
+    padding: 24px 0;
+  }
+
+  .pcs-research-conclusion {
+    padding: 22px;
+  }
+
+}
+
+/* =====================================================
+   CASE STUDY NAVIGATION
+===================================================== */
+/* =====================================================
+   MINIMAL LEFT NAVIGATION
+===================================================== */
+
+.pcs-navigation {
+  position: fixed;
+
+  top: 20%;
+  left: 15px;
+
+  z-index: 100;
+
+
+}
+
+.pcs-navigation-inner {
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+
+  width: 180px;
+
+  padding: 0;
+
+  border: 0;
+}
+
+.pcs-navigation-label {
+  display: none;
+}
+
+.pcs-navigation-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.pcs-navigation-item {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+
+  padding: 6px 8px;
+
+  border: 0;
+
+  background: transparent;
+
+  color: var(--pcs-faint);
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    color 160ms ease,
+    background 160ms ease;
+}
+
+.pcs-navigation-item:hover {
+  color: var(--pcs-ink);
+
+  background: var(--pcs-bg-soft);
+}
+
+
+.pcs-navigation-title {
+  font-size: 10px;
+  line-height: 1.4;
+
+  color: inherit;
+}
+
+
+/* ACTIVE */
+
+.pcs-navigation-item.is-active {
+  color: var(--pcs-ink);
+}
+
+.pcs-navigation-item.is-active
+
+/* subtle active indicator */
+
+.pcs-navigation-item::before {
+  content: '';
+
+  position: absolute;
+
+  left: -8px;
+  top: 50%;
+
+  width: 3px;
+  height: 3px;
+
+  border-radius: 50%;
+
+  background: var(--pcs-ink);
+
+  opacity: 0;
+
+  transform: translateY(-50%);
+
+  transition: opacity 160ms ease;
+}
+
+.pcs-navigation-item.is-active::before {
+  opacity: 1;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 1200px) {
+
+  .pcs-navigation {
+    display: none;
+  }
+
+}
 
         /* =====================================================
            RESPONSIVE
@@ -1635,6 +2499,8 @@ export default function PerdanaComputerProductContent() {
 
 
         @media (max-width: 700px) {
+
+        
 
           .perdana-case-study-container {
 
@@ -1681,6 +2547,8 @@ export default function PerdanaComputerProductContent() {
 
 
         @media (max-width: 560px) {
+
+        
 
           .perdana-case-study-container {
 
@@ -1737,15 +2605,9 @@ export default function PerdanaComputerProductContent() {
           }
 
 
-          .pcs-research-header {
-
-            align-items: flex-start;
-
-            flex-direction: column;
-
-          }
-
         }
+
+
 
       `}</style>
     </div>
@@ -1807,6 +2669,9 @@ function SectionHeading({
 
 function PlaceholderMedia({
   label,
+  src,
+  alt = '',
+  caption,
   aspect = '16 / 9',
 }) {
   return (
@@ -1816,26 +2681,40 @@ function PlaceholderMedia({
         aspectRatio: aspect,
       }}
     >
+      {src ? (
+        <>
+          <img
+            src={src}
+            alt={alt}
+            className="pcs-placeholder-image"
+          />
 
-      <div className="pcs-placeholder-inner">
+          {caption && (
+            <figcaption className="pcs-placeholder-caption">
+              {caption}
+            </figcaption>
+          )}
+        </>
+      ) : (
+        <div className="pcs-placeholder-inner">
 
-        <div
-          className="pcs-placeholder-icon casestudy-mono"
-          aria-hidden="true"
-        >
-          +
+          <div
+            className="pcs-placeholder-icon casestudy-mono"
+            aria-hidden="true"
+          >
+            +
+          </div>
+
+          <span className="pcs-placeholder-label casestudy-ui">
+            {label}
+          </span>
+
+          <span className="pcs-placeholder-note casestudy-mono">
+            MEDIA PLACEHOLDER
+          </span>
+
         </div>
-
-        <span className="pcs-placeholder-label casestudy-ui">
-          {label}
-        </span>
-
-        <span className="pcs-placeholder-note casestudy-mono">
-          MEDIA PLACEHOLDER
-        </span>
-
-      </div>
-
+      )}
     </figure>
   );
 }
@@ -1891,5 +2770,131 @@ function ProcessStep({
       </p>
 
     </article>
+  );
+}
+
+function ResearchBar({
+  label,
+  value,
+  suffix = '%',
+}) {
+  return (
+    <div className="pcs-research-bar">
+
+      <div className="pcs-research-bar-meta">
+
+        <span className="casestudy-reading">
+          {label}
+        </span>
+
+        <span className="casestudy-mono">
+          {value}{suffix}
+        </span>
+
+      </div>
+
+      <div className="pcs-research-bar-track">
+
+        <div
+          className="pcs-research-bar-fill"
+          style={{
+            width: `${value}%`,
+          }}
+        />
+
+      </div>
+
+    </div>
+  );
+}
+
+function CaseStudyNavigation() {
+  const [activeSection, setActiveSection] = React.useState('hero');
+
+  React.useEffect(() => {
+    const sections = caseStudyNavigation
+      .map((item) => document.getElementById(item.id))
+      .filter(Boolean);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleSections = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort(
+            (a, b) =>
+              a.boundingClientRect.top -
+              b.boundingClientRect.top
+          );
+
+        if (visibleSections.length > 0) {
+          setActiveSection(visibleSections[0].target.id);
+        }
+      },
+      {
+        root: null,
+        rootMargin: '-20% 0px -65% 0px',
+        threshold: 0,
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
+  }, []);
+
+  const handleNavigation = (id) => {
+    const element = document.getElementById(id);
+
+    if (!element) return;
+
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  };
+
+  return (
+    <nav className="pcs-navigation" aria-label="Case study navigation">
+
+      <div className="pcs-navigation-inner">
+
+        <span className="pcs-navigation-label casestudy-mono">
+          CONTENTS
+        </span>
+
+        <div className="pcs-navigation-list">
+
+          {caseStudyNavigation.map((item) => {
+            const isActive = activeSection === item.id;
+
+            return (
+              <button
+                key={item.id}
+                type="button"
+                className={`pcs-navigation-item ${
+                  isActive ? 'is-active' : ''
+                }`}
+                onClick={() => handleNavigation(item.id)}
+              >
+
+                <span className="pcs-navigation-number casestudy-mono">
+                  {item.number}
+                </span>
+
+                <span className="pcs-navigation-title casestudy-ui">
+                  {item.title}
+                </span>
+
+              </button>
+            );
+          })}
+
+        </div>
+
+      </div>
+
+    </nav>
   );
 }

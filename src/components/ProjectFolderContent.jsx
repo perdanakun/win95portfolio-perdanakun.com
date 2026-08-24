@@ -133,9 +133,9 @@ export default function ProjectFolderContent({
             },
             {
               id: 'holohealth-case-study',
-              name: 'Case Study',
+              name: 'Case Studies',
               type: 'file',
-              iconType: 'website',
+              iconType: 'file',
               openWindow: 'holohealth',
             },
 
@@ -183,7 +183,7 @@ export default function ProjectFolderContent({
           children: [
         {
           id: 'pc-product-overview',
-          name: 'Overview',
+          name: 'Case Studies',
           type: 'file',
           iconType: 'caseStudy',
           openWindow: 'perdana-computer-product',

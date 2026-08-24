@@ -31,6 +31,7 @@ import WelcomeInstaller from './components/installer/WelcomeInstaller';
 import WelcomeInstallerLoading from './components/installer/WelcomeInstallerLoading';
 import PerdanaInstaller from './components/installer/PerdanaInstaller';
 import BlogContent from './components/BlogContent';
+import BrowserModal from './components/BrowserModal';
 import WelcomeModal from './components/WelcomeModal';
 import PerdanaBootScreen from './components/boot/PerdanaBootScreen';
 import PerdanaInstallLoading from './components/installer/PerdanaInstallLoading';
@@ -567,6 +568,7 @@ const [windows, setWindows] = useState({
   recycleBin: false,
   imageViewer: false,
   blog: false,
+  browser: false,
 
     // Project windows
   holohealth: false,
@@ -739,6 +741,7 @@ const handleRestart = () => {
     recycleBin: false,
     imageViewer: false,
     blog: false,
+    browser: false,
 
 // Project windows
   holohealth: false,
@@ -1290,6 +1293,7 @@ onContinue={() => {
     </div>
   </DesktopIcon>
 </Rnd>
+
 
 
 {/* Installer */}

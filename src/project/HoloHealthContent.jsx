@@ -1,5 +1,7 @@
 import React from 'react';
 
+import CaseStudyNavbar from './CaseStudyNavbar';
+
 import holohealthGif from '../assets/images/case-study/holohealth.gif';
 import holohealthGif4 from '../assets/images/case-study/holohealth4.gif';
 
@@ -100,9 +102,24 @@ const veterinaryTerms = [
 ];
 
 
+
 export default function HoloHealthCaseStudyRetro() {
   return (
+    
     <div className="casestudy-window">
+
+      <CaseStudyNavbar
+        current="HoloHealth"
+        sections={[
+          { id: 'hero', label: 'Overview' },
+          { id: 'problem', label: 'Problem' },
+          { id: 'role', label: 'Role' },
+          { id: 'decisions', label: 'Design Decisions' },
+          { id: 'outcome', label: 'Outcome' },
+          { id: 'reflection', label: 'Reflection' },
+        ]}
+      />
+
       <main className="casestudy">
         <div className="casestudy-container">
 
@@ -110,7 +127,7 @@ export default function HoloHealthCaseStudyRetro() {
               HERO
           ===================================================== */}
 
-          <section className="cs-hero">
+          <section className="cs-hero" id="hero">
 
             <p className="cs-eyebrow">
               HoloHealth — Visual System
@@ -158,7 +175,7 @@ export default function HoloHealthCaseStudyRetro() {
     00 — THE BACKGROUND
 ===================================================== */}
 
-<section className="cs-section">
+<section className="cs-section" >
 
   <div className="cs-copy-stack">
 
@@ -189,7 +206,7 @@ export default function HoloHealthCaseStudyRetro() {
               01 — THE PROBLEM
           ===================================================== */}
 
-          <section className="cs-section">
+          <section className="cs-section" id="problem">
 
             <SectionHeading
               number="01"
@@ -276,7 +293,7 @@ export default function HoloHealthCaseStudyRetro() {
               02 — MY ROLE
           ===================================================== */}
 
-          <section className="cs-section">
+          <section className="cs-section" id="role">
 
             <SectionHeading
               number="02"
@@ -334,7 +351,7 @@ export default function HoloHealthCaseStudyRetro() {
               03 — KEY DECISIONS
           ===================================================== */}
 
-          <section className="cs-section">
+          <section className="cs-section" id="decisions">
 
             <SectionHeading
               number="03"
@@ -403,7 +420,7 @@ export default function HoloHealthCaseStudyRetro() {
               04 — OUTCOME
           ===================================================== */}
 
-          <section className="cs-section">
+          <section className="cs-section" id="outcome">
 
             <SectionHeading
               number="04"
@@ -457,7 +474,7 @@ export default function HoloHealthCaseStudyRetro() {
               REFLECTION
           ===================================================== */}
 
-          <section className="cs-section cs-section-last">
+          <section className="cs-section cs-section-last" id="reflection">
 
             <SectionHeading
               title="From visual assets to visual systems"
