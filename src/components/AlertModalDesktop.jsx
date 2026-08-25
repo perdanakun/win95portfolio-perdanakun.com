@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { Modal, Button, TitleBar } from '@react95/core';
-import { Drvspace7 } from '@react95/icons';
+import { Warning } from '@react95/icons';
 
-import tadaSound from '../assets/sounds/win95_tada.wav';
+import errorSound from '../assets/sounds/win95_error.wav';
 
 export default function AlertModal({
   show,
@@ -15,10 +15,10 @@ export default function AlertModal({
 
   // ==========================================
   // CUSTOM ICON
-  // Default: Drvspace7
+  // Default: Warning
   // ==========================================
   icon = (
-    <Drvspace7
+    <Warning
       variant="32x32_4"
     />
   ),
@@ -34,12 +34,12 @@ export default function AlertModal({
   const audioRef = useRef(null);
 
   // ==========================================
-  // PLAY WINDOWS 95 TADA SOUND WHEN OPEN
+  // PLAY WINDOWS 95 Error SOUND WHEN OPEN
   // ==========================================
   useEffect(() => {
     if (!show) return;
 
-    const audio = new Audio(tadaSound);
+    const audio = new Audio(errorSound);
 
     audio.volume = 0.7;
 

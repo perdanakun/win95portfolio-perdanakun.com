@@ -1,263 +1,1028 @@
-import React, { useState } from 'react';
-import { Modal, Button } from '@react95/core';
+import React from 'react';
+
+import {
+  Modal,
+  Button,
+} from '@react95/core';
+
+import {
+  Computer,
+  Url1102,
+  Wordpad,
+  Notepad2,
+} from '@react95/icons';
+
 import perdanaImage from '../assets/images/perdana.png';
 
-export default function AboutContent() {
-  const [page, setPage] = useState(1);
-  const totalPages = 2;
+import instagramIcon from '../assets/icons/instagram.svg';
+import githubIcon from '../assets/icons/github.svg';
+import linkedinIcon from '../assets/icons/linkedin.svg';
+import mediumIcon from '../assets/icons/medium.svg';
+
+
+export default function AboutContent({ onClose }) {
 
   return (
-    <Modal.Content
-      style={{
-        padding: 0,
-        background: '#c0c0c0',
-        boxSizing: 'border-box',
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%'
-      }}
+    <Modal.Content className="about-content">
+      <style>{`
+
+        /* =====================================================
+           ABOUT CONTENT
+        ===================================================== */
+
+        .about-content {
+          width: 100%;
+          height: 100%;
+          min-width: 0;
+          min-height: 0;
+
+          padding: 6px;
+          box-sizing: border-box;
+          overflow: hidden;
+
+          display: flex;
+          flex-direction: column;
+
+          background: #c0c0c0;
+          color: #000;
+
+          font-family: "MS Sans Serif", sans-serif;
+          font-size: 11px;
+        }
+
+
+        /* =====================================================
+           CUSTOM TABS
+        ===================================================== */
+
+        .about-tabs {
+          width: 100%;
+          min-width: 0;
+          min-height: 0;
+
+          flex: 1 1 auto;
+
+          display: flex;
+          flex-direction: column;
+        }
+
+        .about-tab-buttons {
+          width: 100%;
+          height: 23px;
+          flex: 0 0 23px;
+
+          display: flex;
+          align-items: flex-end;
+
+          box-sizing: border-box;
+          background: #c0c0c0;
+        }
+
+        .about-tab-button {
+          position: relative;
+
+          height: 22px;
+          min-width: 72px;
+
+          padding: 2px 11px;
+          box-sizing: border-box;
+
+          border: 1px solid transparent;
+
+          background: #c0c0c0;
+          color: #000;
+
+          font-family: "MS Sans Serif", sans-serif;
+          font-size: 11px;
+          line-height: 16px;
+
+          cursor: pointer;
+          white-space: nowrap;
+        }
+
+        .about-tab-button + .about-tab-button {
+          margin-left: 2px;
+        }
+
+        .about-tab-button:hover {
+          background: #d0d0d0;
+        }
+
+        .about-tab-button:focus {
+          outline: none;
+        }
+
+        .about-tab-button.active {
+          z-index: 2;
+
+          height: 23px;
+          margin-bottom: -1px;
+
+          background: #c0c0c0;
+
+          border-top: 1px solid #ffffff;
+          border-left: 1px solid #ffffff;
+          border-right: 1px solid #636363;
+          border-bottom: 1px solid #c0c0c0;
+        }
+
+
+        /* =====================================================
+           TAB CONTENT
+        ===================================================== */
+
+        .about-tab-content {
+          width: 100%;
+          min-width: 0;
+          min-height: 0;
+
+          flex: 1 1 0;
+
+          box-sizing: border-box;
+
+          border-top: 1px solid #ffffff;
+          border-left: 1px solid #ffffff;
+          border-right: 1px solid #636363;
+          border-bottom: 1px solid #636363;
+
+          background: #c0c0c0;
+          overflow: hidden;
+        }
+
+        .about-tab-panel {
+          width: 100%;
+          height: 100%;
+          min-width: 0;
+          min-height: 0;
+
+          padding: 12px;
+          box-sizing: border-box;
+
+          overflow-x: hidden;
+          overflow-y: auto;
+
+          background: #c0c0c0;
+        }
+
+
+        /* =====================================================
+           PROFILE
+        ===================================================== */
+
+        .about-profile {
+          width: 100%;
+          min-width: 0;
+
+          display: grid;
+          grid-template-columns: minmax(118px, 0.82fr) minmax(0, 1.18fr);
+          gap: 14px;
+          align-items: stretch;
+
+          margin-bottom: 14px;
+        }
+
+
+        /* =====================================================
+           PHOTO
+        ===================================================== */
+
+        .about-photo-frame {
+          width: 100%;
+          height: 100%;
+          min-width: 0;
+          min-height: 0;
+
+          padding: 2px;
+          box-sizing: border-box;
+
+          overflow: hidden;
+
+          background: #c0c0c0;
+
+          border-top: 1px solid #808080;
+          border-left: 1px solid #808080;
+          border-right: 1px solid #ffffff;
+          border-bottom: 1px solid #ffffff;
+
+          box-shadow: inset 1px 1px 0 #404040;
+        }
+
+        .about-photo {
+          display: block;
+
+          width: 100%;
+          height: 100%;
+
+          object-fit: cover;
+          object-position: center top;
+        }
+
+
+        /* =====================================================
+           PROFILE INFORMATION
+        ===================================================== */
+
+        .about-profile-info {
+          min-width: 0;
+
+          display: flex;
+          flex-direction: column;
+          gap: 7px;
+        }
+
+
+        /* =====================================================
+           PROPERTY ROW
+        ===================================================== */
+
+        .about-property-row {
+          width: 100%;
+          min-width: 0;
+
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+
+          margin: 0;
+
+          font-size: 11px;
+          text-align: left;
+        }
+
+        .about-property-label {
+          width: 100%;
+          min-width: 0;
+
+          padding: 0;
+
+          color: #000;
+
+          font-size: 11px;
+          line-height: 13px;
+
+          overflow-wrap: anywhere;
+        }
+
+        .about-property-value {
+          width: 100%;
+          min-width: 0;
+          min-height: 24px;
+
+          display: flex;
+          align-items: center;
+
+          padding: 3px 6px;
+          box-sizing: border-box;
+
+          background: #ffffff;
+          color: #000000;
+
+          border: 1px solid #808080;
+          border-top-color: #404040;
+          border-left-color: #404040;
+          border-right-color: #ffffff;
+          border-bottom-color: #ffffff;
+
+          font-size: 11px;
+          line-height: 1.35;
+
+          white-space: normal;
+          overflow-wrap: anywhere;
+          word-break: normal;
+        }
+
+
+        /* =====================================================
+           PROPERTY GROUP
+        ===================================================== */
+
+        .about-property-group {
+          width: 100%;
+          min-width: 0;
+
+          margin: 0 0 12px;
+          padding: 9px 10px 9px;
+          box-sizing: border-box;
+
+          border: 1px solid #808080;
+        }
+
+        .about-property-group:last-child {
+          margin-bottom: 0;
+        }
+
+        .about-property-group legend {
+          padding: 0 4px;
+
+          color: #000;
+
+          font-family: "MS Sans Serif", sans-serif;
+          font-size: 11px;
+          line-height: 11px;
+          font-weight: bold;
+          text-align: left;
+        }
+
+        .about-property-group > .about-property-row {
+          margin-bottom: 8px;
+        }
+
+        .about-property-group > .about-property-row:last-of-type {
+          margin-bottom: 0;
+        }
+
+
+        /* =====================================================
+           TEXT
+        ===================================================== */
+
+        .about-text {
+          margin: 0 0 8px;
+
+          color: #000;
+
+          font-family: "MS Sans Serif", sans-serif;
+          font-size: 11px;
+          line-height: 1.55;
+          text-align: left;
+
+          overflow-wrap: anywhere;
+        }
+
+        .about-text:last-child {
+          margin-bottom: 0;
+        }
+
+        .about-strong {
+          font-weight: bold;
+          text-decoration: underline;
+        }
+
+        .about-property-group > .about-text.after-fields {
+          margin-top: 10px;
+        }
+
+
+        /* =====================================================
+           TOOL / LEARNING LIST
+        ===================================================== */
+
+        .about-tool-list {
+          display: flex;
+          flex-direction: column;
+          gap: 7px;
+        }
+
+        .about-tool-row {
+          min-width: 0;
+          min-height: 20px;
+
+          display: flex;
+          align-items: center;
+          gap: 7px;
+
+          font-size: 11px;
+        }
+
+        .about-tool-icon {
+          width: 18px;
+          height: 18px;
+          flex: 0 0 18px;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .about-tool-label {
+          min-width: 0;
+          line-height: 1.35;
+          overflow-wrap: anywhere;
+        }
+
+
+        /* =====================================================
+           CONTACT
+        ===================================================== */
+
+        .about-list {
+          margin: 6px 0 0;
+          padding-left: 20px;
+
+          font-size: 11px;
+          line-height: 1.65;
+          text-align: left;
+        }
+
+        .about-online-row {
+          min-width: 0;
+          min-height: 22px;
+
+          display: flex;
+          align-items: center;
+          gap: 7px;
+        }
+
+        .about-online-row img {
+  width: 16px;
+  height: 16px;
+
+  flex: 0 0 16px;
+
+  display: block;
+
+  object-fit: contain;
+}
+
+
+        .about-online-row svg {
+          flex: 0 0 auto;
+        }
+
+        .about-link {
+          min-width: 0;
+
+          color: #0000ee;
+
+          font-size: 11px;
+          line-height: 1.4;
+
+          text-decoration: underline;
+          cursor: pointer;
+
+          overflow-wrap: anywhere;
+          word-break: break-word;
+        }
+
+        .about-actions {
+          width: 100%;
+
+          display: flex;
+          justify-content: flex-end;
+          gap: 6px;
+
+          margin-top: 10px;
+        }
+
+        /* =====================================================
+           BUTTON
+        ===================================================== */
+
+.about-close-button {
+  width: 75px;
+  min-width: 75px;
+}
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .about-footer {
+          width: 100%;
+
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+
+          gap: 6px;
+
+          padding-top: 8px;
+          box-sizing: border-box;
+
+          flex: 0 0 auto;
+        }
+
+
+        /* =====================================================
+           MEDIUM / SMALL WINDOW
+        ===================================================== */
+
+        @media (max-width: 480px) {
+
+          .about-content {
+            padding: 5px;
+          }
+
+          .about-tab-panel {
+            padding: 10px;
+          }
+
+          .about-profile {
+            grid-template-columns: minmax(96px, 0.72fr) minmax(0, 1.28fr);
+            gap: 10px;
+
+            margin-bottom: 12px;
+          }
+
+          .about-profile-info {
+            gap: 6px;
+          }
+
+          .about-property-group {
+            padding: 8px;
+            margin-bottom: 10px;
+          }
+
+          .about-tab-button {
+            min-width: 64px;
+
+            padding-left: 8px;
+            padding-right: 8px;
+          }
+        }
+
+
+        /* =====================================================
+           VERY SMALL WINDOW
+        ===================================================== */
+
+        @media (max-width: 360px) {
+
+          .about-content {
+            padding: 4px;
+          }
+
+          .about-tab-panel {
+            padding: 8px;
+          }
+
+          .about-profile {
+            grid-template-columns: 1fr;
+            gap: 9px;
+
+            margin-bottom: 12px;
+          }
+
+          .about-photo-frame {
+            width: 100%;
+            height: 160px;
+          }
+
+          .about-photo {
+            object-position: center 22%;
+          }
+
+          .about-profile-info {
+            gap: 7px;
+          }
+
+          .about-property-group {
+            padding: 8px;
+          }
+
+          .about-actions {
+            justify-content: stretch;
+          }
+
+          .about-actions > * {
+            width: 100%;
+          }
+
+          .about-tab-buttons {
+            height: 22px;
+            flex-basis: 22px;
+          }
+
+          .about-tab-button {
+            min-width: 0;
+            flex: 1;
+
+            padding-left: 5px;
+            padding-right: 5px;
+          }
+        }
+
+
+        /* =====================================================
+           ULTRA NARROW
+        ===================================================== */
+
+        @media (max-width: 280px) {
+
+          .about-photo-frame {
+            height: 140px;
+          }
+
+          .about-tab-button {
+            font-size: 10px;
+          }
+        }
+
+      `}</style>
+
+
+      <AboutTabs>
+
+        {/* =====================================================
+            GENERAL
+        ===================================================== */}
+
+        <AboutTab title="General">
+
+          <div className="about-tab-panel">
+
+            <div className="about-profile">
+
+              <div className="about-photo-frame">
+                <img
+                  src={perdanaImage}
+                  alt="Perdana Kurniawan Arta"
+                  className="about-photo"
+                />
+              </div>
+
+
+              <div className="about-profile-info">
+
+                <PropertyRow
+                  label="Name"
+                  value="Perdana Kurniawan Arta"
+                />
+
+                <PropertyRow
+                  label="Role"
+                  value="Visual Designer → Product Design & Design Engineering"
+                />
+
+                <PropertyRow
+                  label="Background"
+                  value="10+ years in Visual Design"
+                />
+
+                <PropertyRow
+                  label="Exploring"
+                  value="Product, Interaction & Design in Code"
+                />
+
+              </div>
+
+            </div>
+
+
+            <PropertyGroup title="About">
+
+              <p className="about-text">
+                Perdana is a Visual Designer expanding his practice into
+                Product Design and Design Engineering.
+              </p>
+
+              <p className="about-text">
+                His background in visual systems, iconography, illustration,
+                and design direction now serves as the foundation for exploring
+                how interfaces work, behave, and get built.
+              </p>
+
+            </PropertyGroup>
+
+
+            <PropertyGroup title="Direction">
+
+              <p className="about-text">
+                Bridging user needs, business goals, visual craft, and technology to build products that work.
+              </p>
+
+            </PropertyGroup>
+
+          </div>
+
+        </AboutTab>
+
+
+        {/* =====================================================
+            PRACTICE
+        ===================================================== */}
+
+        <AboutTab title="Practice">
+
+          <div className="about-tab-panel">
+
+
+            <PropertyGroup title="Current Project">
+
+              <PropertyRow
+                label="Project"
+                value="Perdana's Computer"
+              />
+
+              <PropertyRow
+                label="Type"
+                value="Interactive Portfolio"
+              />
+
+              <PropertyRow
+                label="Focus"
+                value="Product Design & Design Engineering"
+              />
+
+              <PropertyRow
+                label="Status"
+                value="Building & Iterating"
+              />
+
+              <p className="about-text after-fields">
+                A Windows 95-inspired desktop experience where visual
+                direction, interaction design, product thinking, and
+                front-end development come together in a working interface.
+              </p>
+
+            </PropertyGroup>
+
+
+            <PropertyGroup title="Exploring">
+
+              <div className="about-tool-list">
+
+                <ToolRow
+                  icon={<Wordpad variant="16x16_4" />}
+                  label="UX & Product Thinking"
+                />
+
+                <ToolRow
+                  icon={<Notepad2 variant="16x16_4" />}
+                  label="Interaction Design & Design Systems"
+                />
+
+                <ToolRow
+                  icon={<Computer variant="16x16_4" />}
+                  label="Front-end Development & Design in Code"
+                />
+
+              </div>
+
+            </PropertyGroup>
+
+          </div>
+
+        </AboutTab>
+
+
+        {/* =====================================================
+            CONTACT
+        ===================================================== */}
+
+        <AboutTab title="Contact">
+
+          <div className="about-tab-panel">
+
+
+            <PropertyGroup title="Availability">
+
+              <PropertyRow
+                label="Status"
+                value="Open to New Opportunities"
+              />
+
+              <PropertyRow
+                label="Interested In"
+                value="Product Design & Design Engineering"
+              />
+
+              <p className="about-text after-fields">
+Opportunities where user needs, business goals,
+ design, and technology 
+come together to shape and build products.
+              </p>
+
+            </PropertyGroup>
+
+<PropertyGroup title="Online">
+
+  <div className="about-online-row">
+
+    <div className="about-online-icon">
+      <img
+        src={linkedinIcon}
+        alt=""
+        aria-hidden="true"
+      />
+    </div>
+
+    <a
+      href="https://www.linkedin.com/in/perdanakun/"
+      target="_blank"
+      rel="noreferrer"
+      className="about-link"
     >
-      {/* --- BODY: left photo panel + right content panel --- */}
-      <div
-        style={{
-          display: 'flex',
-          flex: 1,
-          minHeight: 320
-        }}
-      >
-        {/* LEFT PHOTO PANEL */}
-        <div
-          style={{
-            width: '30%',
-            flexShrink: 0,
-            overflow: 'hidden',
-            background: '#000',
-            display: 'flex'
-          }}
-        >
-          <img
-            src={perdanaImage}
-            alt="Perdana Kurniawan Arta"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              display: 'block'
-            }}
-          />
-        </div>
+      linkedin.com/in/perdanakun
+    </a>
 
-        {/* RIGHT PANEL */}
-<div
-  style={{
-    flex: 1,
-    height: 350,
-    padding: '20px 20px 8px 20px',
-    fontFamily: '"MS Sans Serif", sans-serif',
-    color: '#000',
-    overflowY: 'auto',
-    boxSizing: 'border-box'
-  }}
->
-          
-{page === 1 && (
-  <>
-    <h3 style={titleStyle}>
-    <span style={highlightStyle}>
-        Perdana Kurniawan Arta
-    </span>
-    </h3>
-
-    <p style={textStyle}>
-      Designer exploring the intersection of visual systems,
-      UX, product design, and technology.
-    </p>
+  </div>
 
 
-    <p style={textStyle}>
-      Background in{' '}
-      <strong style={strongStyle}>
-        Visual Communication Design
-      </strong>{' '}
-      and{' '}
-      <strong style={strongStyle}>
-        Industrial Electronics Engineering
-      </strong>{' '}
-      — a mix that shapes how I think about both form and function.
-    </p>
+  <div className="about-online-row">
 
+    <div className="about-online-icon">
+      <img
+        src={mediumIcon}
+        alt=""
+        aria-hidden="true"
+      />
+    </div>
 
-    <p style={textStyle}>
-      Over the past decade, I've delivered{' '}
-      <strong style={strongStyle}>
-        3,000+ design projects
-      </strong>{' '}
-      across iconography, illustration, and visual systems
-      for founders, startups, and businesses worldwide.
-    </p>
-
-
-    <p style={textStyle}>
-      Currently expanding into{' '}
-      <strong style={strongStyle}>
-        UX and Design Engineering
-      </strong>,
-      combining design thinking with front-end development.
-    </p>
-
-
-    <p style={textStyle}>
-      More on my{' '}
-      <a
-        href="https://www.linkedin.com/in/perdanakun/"
-        target="_blank"
-        rel="noreferrer"
-        style={linkStyle}
-      >
-        LinkedIn profile
-      </a>.
-    </p>
-
-  </>
-)}
-
-
-
-{page === 2 && (
-  <>
-    <h3 style={titleStyle}>
-      About This Portfolio
-    </h3>
-
-
-    <p style={textStyle}>
-      This portfolio is an{' '}
-      <strong style={strongStyle}>
-        interactive desktop environment
-      </strong>{' '}
-      inspired by Windows 95 — built directly in code rather than
-      as a static prototype.
-    </p>
-
-
-    <p style={textStyle}>
-      Every window, icon, and click is treated as part of a small
-      working system — a way of asking what happens when a{' '}
-      <strong style={strongStyle}>
-        design system stops being static
-      </strong>{' '}
-      and starts behaving like real software.
-      It's my playground for{' '}
-      <strong style={strongStyle}>
-        Design Engineering
-      </strong>:
-      where design thinking, UX, and front-end craft meet in one
-      continuous workflow.
-    </p>
-
-
-    <hr
-      style={{
-        border:'none',
-        borderTop:'1px solid #808080',
-        margin:'10px 0'
-      }}
-    />
-
-
-    <p
-      style={{
-        ...textStyle,
-        fontWeight:'bold'
-      }}
+    <a
+      href="https://medium.com/@perdanakun"
+      target="_blank"
+      rel="noreferrer"
+      className="about-link"
     >
-      Interested in working together?
-    </p>
+      medium.com/@perdanakun
+    </a>
+
+  </div>
 
 
-    <p style={textStyle}>
-      Open to opportunities in UX Design, Product Design,
-      Design Systems, and Design Engineering.
-      Connect via{' '}
-      <a
-        href="https://www.linkedin.com/in/perdanakun/"
-        target="_blank"
-        rel="noreferrer"
-        style={linkStyle}
-      >
-        LinkedIn
-      </a>.
-    </p>
+  <div className="about-online-row">
 
-  </>
-)}
+    <div className="about-online-icon">
+      <img
+        src={githubIcon}
+        alt=""
+        aria-hidden="true"
+      />
+    </div>
 
-        </div>
-      </div>
+    <a
+      href="https://github.com/perdanakun"
+      target="_blank"
+      rel="noreferrer"
+      className="about-link"
+    >
+      github.com/perdanakun
+    </a>
 
-      {/* --- DIVIDER --- */}
-      <div style={{ borderTop: '1px solid #808080', boxShadow: '0 1px 0 #ffffff' }} />
+  </div>
 
-      {/* --- FOOTER: Back / Next / Cancel --- */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          gap: 6,
-          padding: '10px 14px'
-        }}
-      >
-        <Button
-          disabled={page === 1}
-          onClick={() => setPage((p) => Math.max(1, p - 1))}
-        >
-          {'< Back'}
-        </Button>
 
-        {page < totalPages ? (
-          <Button
-            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-          >
-            {'Next >'}
-          </Button>
-        ) : (
-          <Button disabled>{'Next >'}</Button>
-        )}
+  <div className="about-online-row">
 
-        <Button onClick={() => setPage(1)}>Cancel</Button>
-      </div>
+    <div className="about-online-icon">
+      <img
+        src={instagramIcon}
+        alt=""
+        aria-hidden="true"
+      />
+    </div>
+
+    <a
+      href="https://www.instagram.com/perdanakun/"
+      target="_blank"
+      rel="noreferrer"
+      className="about-link"
+    >
+      instagram.com/perdanakun
+    </a>
+
+  </div>
+
+</PropertyGroup>
+
+          </div>
+
+        </AboutTab>
+
+      </AboutTabs>
+
+
+<div className="about-footer">
+
+  <Button
+    className="about-close-button"
+    onClick={onClose}
+  >
+    OK
+  </Button>
+
+  <Button
+    className="about-close-button"
+    onClick={onClose}
+  >
+    Cancel
+  </Button>
+
+</div>
+
+
     </Modal.Content>
   );
 }
 
-const titleStyle = {
-  margin: '0 0 12px',
-  fontSize: 16,
-  fontWeight: 'bold'
-};
 
-const textStyle = {
-  fontSize: 12,
-  lineHeight: 1.5,
-  margin: '0 0 10px',
-  color: '#000',
-  textAlign: 'left'
-};
+/* ============================================================
+   CUSTOM TABS
+============================================================ */
 
-const strongStyle = {
-  fontWeight:'bold',
-  textDecoration:'underline'
-};
+function AboutTabs({ children }) {
+  const tabs = React.Children.toArray(children);
+  const [activeTab, setActiveTab] = React.useState(0);
 
-const highlightStyle = {
-  backgroundColor:'#ffff66',
-  fontWeight:'bold',
-  padding:'0 2px'
-};
+  return (
+    <div className="about-tabs">
 
-const linkStyle = {
-  color: '#0000ee',
-  textDecoration: 'underline',
-  cursor: 'pointer'
-};
+      <div className="about-tab-buttons">
+
+        {tabs.map((tab, index) => {
+          const title = tab.props.title;
+
+          return (
+            <button
+              key={title}
+              type="button"
+              className={`about-tab-button ${
+                activeTab === index ? 'active' : ''
+              }`}
+              onClick={() => setActiveTab(index)}
+            >
+              {title}
+            </button>
+          );
+        })}
+
+      </div>
+
+
+      <div className="about-tab-content">
+        {tabs[activeTab]}
+      </div>
+
+    </div>
+  );
+}
+
+
+/* ============================================================
+   CUSTOM TAB
+============================================================ */
+
+function AboutTab({ children }) {
+  return children;
+}
+
+
+/* ============================================================
+   PROPERTY GROUP
+============================================================ */
+
+function PropertyGroup({
+  title,
+  children,
+}) {
+  return (
+    <fieldset className="about-property-group">
+
+      <legend>
+        {title}
+      </legend>
+
+      {children}
+
+    </fieldset>
+  );
+}
+
+
+/* ============================================================
+   PROPERTY ROW
+============================================================ */
+
+function PropertyRow({
+  label,
+  value,
+}) {
+  return (
+    <div className="about-property-row">
+
+      <div className="about-property-label">
+        {label}
+      </div>
+
+      <div className="about-property-value">
+        {value}
+      </div>
+
+    </div>
+  );
+}
+
+
+/* ============================================================
+   TOOL ROW
+============================================================ */
+
+function ToolRow({
+  icon,
+  label,
+}) {
+  return (
+    <div className="about-tool-row">
+
+      <div className="about-tool-icon">
+        {icon}
+      </div>
+
+      <span className="about-tool-label">
+        {label}
+      </span>
+
+    </div>
+  );
+}

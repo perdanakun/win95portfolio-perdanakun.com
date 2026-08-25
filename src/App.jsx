@@ -1268,23 +1268,7 @@ onContinue={() => {
   enableResizing={false}
   disableDragging={false}
 >
-<DesktopIcon 
-    onOpen={() => openAlertDesktop(
-      'Sorry about that...', 
-      <>
-        This section is still under construction. While I'm polishing the design & code, 
-        you can know a little more about me by checking out my{' '}
-        <a 
-          href="https://linkedin.com/in/perdanakun" // Ganti dengan link LinkedIn kamu
-          target="_blank" 
-          rel="noopener noreferrer"
-          style={{ color: '#000080', textDecoration: 'underline', }}
-        >
-          LinkedIn
-        </a>
-      </>
-    )}
-  >
+  <DesktopIcon onOpen={() => openWindow('about')}>
     <div style={desktopIconStyle}>
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Computer variant="32x32_4" />
@@ -1460,7 +1444,13 @@ onContinue={() => {
 <AlertModalInstall
   show={showInstallAlert}
 title="Perdana Installer"
-message="Perdana's Computer is already installed. Run the Installer again to explore Perdana's profile from the beginning."
+message={
+<>
+  Perdana's Computer is already installed.{" "}
+  <strong>Do you want to install it again</strong> and explore the profile from the beginning?
+</>
+}
+
 
 
   onClose={() => setShowInstallAlert(false)}
@@ -2015,7 +2005,7 @@ INI ENDING KODE INACTIVE*/}
   <Modal
     key="about-window"
     icon={<Computer variant="16x16_4" />}
-    title="PERDANA-PC"
+    title="About Perdana's Computer"
     style={{
       position: 'fixed',
 
@@ -2042,35 +2032,39 @@ INI ENDING KODE INACTIVE*/}
 
         // =====================================
         // TABLET
-        // CENTER
+        // PROPERTIES DIALOG
         // =====================================
         : isTablet
         ? {
             left: '50%',
             top: '50%',
 
-            width: '70vw',
-            height: '50vh',
+            width: 'min(620px, 88vw)',
+            height: 'min(440px, 72vh)',
 
-            maxWidth: '90vw',
-            maxHeight: 'calc(100vh - 40px)',
+            minWidth: '520px',
+            minHeight: '380px',
+
+            maxWidth: 'calc(100vw - 40px)',
+            maxHeight: 'calc(100vh - 50px)',
 
             transform: 'translate(-50%, -50%)',
           }
 
         // =====================================
         // DESKTOP
-        // UKURAN NORMAL
+        // PROPERTIES DIALOG
         // =====================================
         : {
             left: '50%',
             top: '50%',
 
-            width: '50%',
-            height: '70%',
+            width: '450px',
+            height: 'auto',
+            minHeight: '600px',
 
-            maxWidth: 'calc(100vw - 20px)',
-            maxHeight: 'calc(100vh - 50px)',
+            maxWidth: 'calc(100vw - 40px)',
+            maxHeight: 'calc(100vh - 60px)',
 
             transform: 'translate(-50%, -50%)',
           }),
@@ -2088,9 +2082,12 @@ INI ENDING KODE INACTIVE*/}
       </>
     }
   >
-    <AboutContent />
+    <AboutContent
+  onClose={() => toggleWindow('about', false)}
+/>
   </Modal>
 )}
+
 
 {/* --- JENDELA RECYCLE BIN --- */}
 {windows.recycleBin && (

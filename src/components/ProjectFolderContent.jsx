@@ -12,6 +12,7 @@ import {
   Notepad2,
   Shdocvw272,
   Wordpad,
+  Url1102,
 } from '@react95/icons';
 
 import {
@@ -124,6 +125,13 @@ export default function ProjectFolderContent({
           isLocked: false,
           message: '',
           children: [
+             {
+              id: 'holohealth-case-study',
+              name: 'Case Studies',
+              type: 'file',
+              iconType: 'website',
+              openWindow: 'holohealth',
+            },
             {
               id: 'holohealth-icon-system',
               name: 'HoloHealth.exe',
@@ -131,13 +139,7 @@ export default function ProjectFolderContent({
               iconType: 'holohealth',
               link: 'https://holo.health/',
             },
-            {
-              id: 'holohealth-case-study',
-              name: 'Case Studies',
-              type: 'file',
-              iconType: 'file',
-              openWindow: 'holohealth',
-            },
+
 
           ],
         },
@@ -185,7 +187,7 @@ export default function ProjectFolderContent({
           id: 'pc-product-overview',
           name: 'Case Studies',
           type: 'file',
-          iconType: 'caseStudy',
+          iconType: 'website',
           openWindow: 'perdana-computer-product',
         },
             
@@ -581,7 +583,7 @@ export default function ProjectFolderContent({
 
       case 'website':
         return (
-          <Shdocvw272
+          <Url1102
             variant={size}
           />
         );

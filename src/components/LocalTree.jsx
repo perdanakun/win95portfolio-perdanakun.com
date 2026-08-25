@@ -6,6 +6,7 @@ import {
   Shdocvw272,
   Notepad2,
   Wordpad,
+  Url1102,
 } from '@react95/icons';
 
 import githubIcon from '../icons/github.svg';
@@ -62,7 +63,7 @@ case 'holohealth':
 
     case 'website':
       return (
-        <Shdocvw272
+        <Url1102
           variant="16x16_4"
         />
       );
