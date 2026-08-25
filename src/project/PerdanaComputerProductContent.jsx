@@ -1486,7 +1486,7 @@ export default function PerdanaComputerProductContent() {
   display: block;
 
   width: 100%;
-  height: auto;
+  height: 100%;
 
   background: transparent;
 
