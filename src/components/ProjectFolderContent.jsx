@@ -24,10 +24,10 @@ import arrowDownIcon from '../assets/icons/arrow_down.png';
 
 
 import holohealthIcon from '../assets/images/case-study/holohealthIcon.png';
-import githubIcon from '../icons/github.svg';
-import instagramIcon from '../icons/instagram.svg';
-import figmaIcon from '../icons/figma.svg';
-
+import shipfasterIcon from '../assets/icons/shipfaster.svg';
+import figmaIcon from "../assets/icons/figma.svg";
+import githubIcon from "../assets/icons/github.svg";
+import instagramIcon from "../assets/icons/instagram.svg";
 import LocalTree from './LocalTree';
 
 export default function ProjectFolderContent({
@@ -149,10 +149,30 @@ export default function ProjectFolderContent({
           name: 'Ship UI',
           type: 'folder',
           iconType: 'folder',
-          isLocked: true,
-          message:
-            'This folder is currently unavailable.',
-          openWindow: 'ship-ui',
+          isLocked: false,
+          children: [
+             {
+              id: 'ship-ui-case-study',
+              name: 'Case Studies',
+              type: 'file',
+              iconType: 'website',
+              openWindow: 'ship-ui',
+            },
+            {
+              id: 'ship-ui-live-preview',
+              name: 'Live Preview',
+              type: 'file',
+              iconType: 'figma',
+              link: 'https://www.figma.com/proto/0oLNU1icRnTTjeiScs6eXa/Shipfaster-UI---v2.7.1--LIVE----29-7?node-id=6-8&t=wr8to2OlRaiPT3AV-1',
+            },
+            {
+              id: 'ship-ui-icon-system',
+              name: 'Shipfaster UI',
+              type: 'file',
+              iconType: 'shipfaster',
+              link: 'https://www.shipfasterui.com/',
+            },
+          ],
         },
 
         {
@@ -508,6 +528,29 @@ export default function ProjectFolderContent({
                 size === '32x32_4'
                   ? '45px'
                   : '20px',
+
+              objectFit:
+                'contain',
+            }}
+          />
+        );
+
+
+        case 'shipfaster':
+        return (
+          <img
+            src={shipfasterIcon}
+            alt="Shipfaster"
+            style={{
+              width:
+                size === '32x32_4'
+                  ? '32px'
+                  : '16px',
+
+              height:
+                size === '32x32_4'
+                  ? '32px'
+                  : '16px',
 
               objectFit:
                 'contain',

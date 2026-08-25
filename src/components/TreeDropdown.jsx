@@ -16,9 +16,11 @@ import {
 } from '@react95/icons';
 
 import holohealthIcon from '../assets/images/case-study/holohealthIcon.png';
-import githubIcon from '../icons/github.svg';
-import instagramIcon from '../icons/instagram.svg';
-import figmaIcon from '../icons/figma.svg';
+import shipfasterIcon from '../assets/icons/shipfaster.svg';
+import figmaIcon from '../assets/icons/figma.svg';
+import githubIcon from '../assets/icons/github.svg';
+import instagramIcon from '../assets/icons/instagram.svg';
+
 
 export default function TreeDropdown({
   data = [],
@@ -296,13 +298,29 @@ export default function TreeDropdown({
           />
         );
 
+      case 'shipfaster':
+        return (
+          <img
+            src={
+              shipfasterIcon
+            }
+            alt="Shipfaster"
+            style={{
+              width: '16px',
+              height: '16px',
+              objectFit:
+                'contain',
+            }}
+          />
+        );
+
       case 'github':
         return (
           <img
             src={
               githubIcon
             }
-            alt=""
+            alt="github"
             style={{
               width: '16px',
               height: '16px',
@@ -318,7 +336,7 @@ export default function TreeDropdown({
             src={
               instagramIcon
             }
-            alt=""
+            alt="instagram"
             style={{
               width: '16px',
               height: '16px',
@@ -329,13 +347,11 @@ export default function TreeDropdown({
         );
 
       case 'figma':
-        return (
-          <img
-            src={
-              figmaIcon
-            }
-            alt=""
-            style={{
+         return (
+           <img
+             src={figmaIcon}
+             alt="Figma"
+             style={{
               width: '16px',
               height: '16px',
               objectFit:

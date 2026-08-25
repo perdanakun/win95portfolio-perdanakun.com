@@ -9,10 +9,11 @@ import {
   Url1102,
 } from '@react95/icons';
 
-import githubIcon from '../icons/github.svg';
-import instagramIcon from '../icons/instagram.svg';
-
 import holohealthIcon from '../assets/images/case-study/holohealthIcon.png';
+import shipfasterIcon from '../assets/icons/shipfaster.svg';
+import figmaIcon from '../assets/icons/figma.svg';
+import githubIcon from '../assets/icons/github.svg';
+import instagramIcon from '../assets/icons/instagram.svg';
 
 // =========================================================
 // FILE ICON
@@ -29,6 +30,19 @@ case 'holohealth':
       style={{
         width: '20px',
         height: '20px',
+        objectFit: 'contain',
+      }}
+    />
+  );
+
+  case 'shipfaster':
+  return (
+    <img
+      src={shipfasterIcon}
+      alt="Shipfaster"
+      style={{
+        width: '16px',
+        height: '16px',
         objectFit: 'contain',
       }}
     />
@@ -52,6 +66,19 @@ case 'holohealth':
       return (
         <img
           src={instagramIcon}
+          alt=""
+          style={{
+            width: '16px',
+            height: '16px',
+            objectFit: 'contain',
+          }}
+        />
+      );
+
+      case 'figma':
+      return (
+        <img
+          src={figmaIcon}
           alt=""
           style={{
             width: '16px',
