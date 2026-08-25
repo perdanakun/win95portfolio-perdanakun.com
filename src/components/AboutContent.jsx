@@ -10,7 +10,12 @@ import {
   Url1102,
   Wordpad,
   Notepad2,
+  Download,
+  Shdocvw272,
 } from '@react95/icons';
+
+import resumeFile from '../assets/files/perdana_kurniawan_arta_resume.pdf';
+
 
 import perdanaImage from '../assets/images/perdana.png';
 
@@ -26,7 +31,233 @@ export default function AboutContent({ onClose }) {
     <Modal.Content className="about-content">
       <style>{`
 
+/* =====================================================
+   RESUME
+   ===================================================== */
+
+.about-resume {
+  width: 100%;
+  min-width: 0;
+}
+
+/* ACTION BUTTONS — TOP */
+.about-resume-actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 6px;
+
+  margin-bottom: 10px;
+}
+
+.about-resume-button {
+  min-width: 120px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+
+/* WHITE RESUME VIEWER */
+.about-resume-viewer {
+  width: 100%;
+  height: 400px;
+  min-width: 0;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border-top: 1px solid #404040;
+  border-left: 1px solid #404040;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+
+  box-shadow: inset 1px 1px 0 #808080;
+
+  overflow: hidden;
+}
+
+.about-resume-scroll {
+  width: 100%;
+  height: 100%;
+
+  padding: 14px;
+  box-sizing: border-box;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  background: #ffffff;
+  color: #000000;
+}
+
+/* HEADER */
+.about-resume-header {
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+
+  border-bottom: 1px solid #c0c0c0;
+}
+
+.about-resume-name {
+  margin-bottom: 3px;
+
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: bold;
+}
+
+.about-resume-role {
+  margin-bottom: 5px;
+
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: bold;
+}
+
+.about-resume-contact {
+  font-size: 10px;
+  line-height: 1.5;
+
+  overflow-wrap: anywhere;
+}
+
+.about-resume-links {
+  margin-top: 2px;
+
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.about-resume-links a {
+  color: #0000ee;
+  text-decoration: underline;
+}
+
+/* SECTIONS */
+.about-resume-section {
+  margin-bottom: 16px;
+}
+
+.about-resume-section:last-child {
+  margin-bottom: 0;
+}
+
+.about-resume-section-title {
+  margin-bottom: 7px;
+
+  font-size: 11px;
+  line-height: 13px;
+  font-weight: bold;
+
+  text-align: left;
+
+  text-transform: uppercase;
+}
+
+/* ITEMS */
+.about-resume-item {
+  margin-bottom: 11px;
+  text-align: left;
+}
+
+.about-resume-item:last-child {
+  margin-bottom: 0;
+}
+
+.about-resume-item-title {
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: bold;
+  text-align: left;
+}
+
+.about-resume-item-meta {
+  margin-top: 1px;
+  margin-bottom: 4px;
+
+  color: #404040;
+
+  font-size: 10px;
+  line-height: 1.4;
+  
+  
+}
+
+/* BODY COPY */
+.about-resume-copy {
+  margin: 0;
+
+  font-size: 11px;
+  line-height: 1.55;
+  text-align: left;
+}
+
+/* BULLETS */
+.about-resume-list {
+  margin: 4px 0 0;
+  padding-left: 20px;
+
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.about-resume-list li {
+  margin-bottom: 3px;
+  
+}
+
+/* SKILLS */
+.about-resume-skills {
+  margin: 0 0 6px;
+
+  font-size: 11px;
+  line-height: 1.55;
+  text-align: left;
+}
+
+.about-resume-skills:last-child {
+  margin-bottom: 0;
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+  .about-resume-actions {
+    flex-direction: column;
+  }
+
+  .about-resume-button {
+    width: 100%;
+  }
+ .about-resume-button svg {
+  margin-right: 4px;
+}
+
+  .about-resume-viewer {
+    height: 380px;
+  }
+
+  .about-resume-scroll {
+    padding: 10px;
+  }
+}
+
+
         /* =====================================================
+           ABOUT RESUME
+        ===================================================== */
+  .about-resume-actions {
+  display: flex;
+  gap: 6px;
+
+}
+
+.about-resume-button {
+  min-width: 95px;
+}
+  /* =====================================================
            ABOUT CONTENT
         ===================================================== */
 
@@ -499,6 +730,15 @@ export default function AboutContent({ onClose }) {
 
         @media (max-width: 480px) {
 
+  .about-resume-actions {
+  flex-direction: column;
+}
+
+.about-resume-button {
+  width: 100%;
+}
+
+
           .about-content {
             padding: 5px;
           }
@@ -537,6 +777,7 @@ export default function AboutContent({ onClose }) {
         ===================================================== */
 
         @media (max-width: 360px) {
+
 
           .about-content {
             padding: 4px;
@@ -876,30 +1117,498 @@ come together to shape and build products.
 
 </PropertyGroup>
 
+
+
           </div>
 
         </AboutTab>
+<AboutTab title="Resume">
+
+  <div className="about-tab-panel">
+
+    <PropertyGroup title="Resume">
+
+      <div className="about-resume">
+
+        {/* =====================================================
+            ACTIONS
+        ===================================================== */}
+
+        <div className="about-resume-actions">
+
+          <Button
+            className="about-resume-button"
+            onClick={() => {
+              window.open(
+                resumeFile,
+                '_blank',
+                'noopener,noreferrer'
+              );
+            }}
+          >
+        <Shdocvw272 variant="16x16_4" />Open
+          </Button>
+
+          <Button
+            className="about-resume-button"
+            onClick={() => {
+              const link = document.createElement('a');
+
+              link.href = resumeFile;
+              link.download =
+                'perdana_kurniawan_arta_resume.pdf';
+
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }}
+          >
+            <Download variant="16x16_4" />
+            Download Resume
+          </Button>
+
+        </div>
+
+
+        {/* =====================================================
+            RESUME VIEWER
+        ===================================================== */}
+
+        <div className="about-resume-viewer">
+
+          <div className="about-resume-scroll">
+
+
+            {/* HEADER */}
+
+            <div className="about-resume-header">
+
+              <div className="about-resume-name">
+                PERDANA KURNIAWAN ARTA
+              </div>
+
+              <div className="about-resume-role">
+                Product Design | Visual Systems | Design in Code
+              </div>
+
+              <div className="about-resume-contact">
+                Jakarta, Indonesia | Open to relocation & hybrid |
+                {' '}+62 858-6778-6231 |
+                {' '}perdanakurniawan25@gmail.com
+              </div>
+
+              <div className="about-resume-links">
+
+                <a
+                  href="https://perdanakun.com"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  perdanakun.com
+                </a>
+
+                {' | '}
+
+                <a
+                  href="https://www.linkedin.com/in/perdanakun/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  LinkedIn
+                </a>
+
+                {' | '}
+
+                <a
+                  href="https://github.com/perdanakun"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  GitHub
+                </a>
+
+              </div>
+
+            </div>
+
+
+            {/* =====================================================
+                SUMMARY
+            ===================================================== */}
+
+            <div className="about-resume-section">
+
+              <div className="about-resume-section-title">
+                Summary
+              </div>
+
+              <p className="about-resume-copy">
+                Visual Designer transitioning into Product Design,
+                with a strong foundation in visual systems, design
+                direction, and client-facing work across digital
+                products and brands. Currently building hands-on
+                experience in UX, interaction design, Figma, and
+                design in code through a live self-initiated product
+                and the Google UX Design Professional Certificate.
+                Seeking to grow within a product team while
+                contributing established visual craft, systems
+                thinking, and professional design experience.
+              </p>
+
+            </div>
+
+
+            {/* =====================================================
+                SELECTED PRODUCT & SYSTEMS WORK
+            ===================================================== */}
+
+            <div className="about-resume-section">
+
+              <div className="about-resume-section-title">
+                Selected Product & Systems Work
+              </div>
+
+
+              {/* PERDANA'S COMPUTER */}
+
+              <div className="about-resume-item">
+
+                <div className="about-resume-item-title">
+                  Perdana&apos;s Computer — Product Design & Design Engineering
+                </div>
+
+                <div className="about-resume-item-meta">
+                  Independent Project | Jun 2026–Present
+                </div>
+
+                <ul className="about-resume-list">
+
+                  <li>
+                    Designed and shipped a live interactive portfolio
+                    for recruiters and design teams, using a Windows
+                    95-inspired desktop experience to differentiate
+                    the portfolio and encourage exploration.
+                  </li>
+
+                  <li>
+                    Mapped user flows and information architecture,
+                    created early wireframes in Figma, then refined
+                    interactions directly in code through an
+                    AI-assisted design-to-code workflow.
+                  </li>
+
+                  <li>
+                    Tested early versions with 3 users and iterated
+                    from feedback, simplifying project navigation
+                    into two clear entry points: case study and final
+                    product/result.
+                  </li>
+
+                  <li>
+                    Built responsive onboarding, desktop/folder
+                    navigation, AI chat, project discovery, and
+                    contact flows with React, HTML/CSS/JavaScript,
+                    Git/GitHub, and Vercel.
+                  </li>
+
+                </ul>
+
+              </div>
+
+
+              {/* HOLOHEALTH */}
+
+              <div className="about-resume-item">
+
+                <div className="about-resume-item-title">
+                  HoloHealth — Scalable Iconography System
+                </div>
+
+                <div className="about-resume-item-meta">
+                  Design Lead | Apr 2025–Jun 2026
+                </div>
+
+                <ul className="about-resume-list">
+
+                  <li>
+                    Led visual direction and production for 2,500+
+                    veterinary, medical, health, and product-related
+                    icons/assets; established master designs,
+                    directed another designer, reviewed quality,
+                    and managed founder communication.
+                  </li>
+
+                </ul>
+
+              </div>
+
+
+              {/* SHIPFASTER */}
+
+              <div className="about-resume-item">
+
+                <div className="about-resume-item-title">
+                  Shipfaster UI — Iconography Design System
+                </div>
+
+                <div className="about-resume-item-meta">
+                  Iconography Designer | Jun 2024–Aug 2024
+                </div>
+
+                <ul className="about-resume-list">
+
+                  <li>
+                    Developed a scalable icon library for a Figma UI
+                    kit, building reusable components and variants
+                    across styles and sizes with consistent grids and
+                    implementation-ready structures.
+                  </li>
+
+                </ul>
+
+              </div>
+
+            </div>
+
+
+            {/* =====================================================
+                PROFESSIONAL EXPERIENCE
+            ===================================================== */}
+
+            <div className="about-resume-section">
+
+              <div className="about-resume-section-title">
+                Professional Experience
+              </div>
+
+
+              {/* INDEPENDENT DEVELOPMENT */}
+
+              <div className="about-resume-item">
+
+                <div className="about-resume-item-title">
+                  Product Design & Design Engineering — Independent Development
+                </div>
+
+                <div className="about-resume-item-meta">
+                  Jul 2026–Present
+                </div>
+
+                <ul className="about-resume-list">
+
+                  <li>
+                    Completed the Google UX Design Professional
+                    Certificate while developing foundations in UX
+                    principles, user research, user flows,
+                    wireframing, prototyping, and usability.
+                  </li>
+
+                  <li>
+                    Expanding into Figma, responsive interfaces,
+                    HTML/CSS/JavaScript, React, Git/GitHub, and
+                    AI-assisted design-to-code through
+                    Perdana&apos;s Computer.
+                  </li>
+
+                </ul>
+
+              </div>
+
+
+              {/* CONANIA */}
+
+              <div className="about-resume-item">
+
+                <div className="about-resume-item-title">
+                  Conania — Visual Designer & Design Lead
+                </div>
+
+                <div className="about-resume-item-meta">
+                  Mar 2016–Jul 2026 | Indonesia
+                </div>
+
+                <ul className="about-resume-list">
+
+                  <li>
+                    Delivered 3,000+ visual design projects for
+                    startups, founders, and SME clients worldwide,
+                    earning 2,000+ five-star ratings.
+                  </li>
+
+                  <li>
+                    Built scalable visual and icon systems for
+                    digital products, websites, apps, and physical
+                    products; worked directly with founders to
+                    clarify requirements and translate complex ideas
+                    into clear design solutions.
+                  </li>
+
+                  <li>
+                    Led design direction and coordinated freelance
+                    designers and production partners, managing
+                    feedback, quality, and delivery across concurrent
+                    projects.
+                  </li>
+
+                </ul>
+
+              </div>
+
+
+              {/* SINIDIKARA */}
+
+              <div className="about-resume-item">
+
+                <div className="about-resume-item-title">
+                  Sinidikara — Social Media Designer
+                </div>
+
+                <div className="about-resume-item-meta">
+                  Dec 2019–Jan 2022 | Jakarta, Indonesia
+                </div>
+
+                <ul className="about-resume-list">
+
+                  <li>
+                    Contributed to growing Mayora&apos;s community
+                    from 40K to 100K (+150%) through audience-informed
+                    content strategy, visual design, and iterative
+                    experiments informed by behavior and performance
+                    data.
+                  </li>
+
+                </ul>
+
+              </div>
+
+
+              {/* ADDITIONAL EXPERIENCE */}
+
+              <p className="about-resume-copy">
+
+                <strong>
+                  Additional Experience:
+                </strong>
+
+                {' '}
+                PT Bank Mandiri — Environmental Graphic Designer
+                (2019) | Kementerian Sekretariat Negara — Design
+                Curator (2019) | Mehibi Studio — Graphic Design
+                Intern (2016)
+
+              </p>
+
+            </div>
+
+
+            {/* =====================================================
+                EDUCATION
+            ===================================================== */}
+
+            <div className="about-resume-section">
+
+              <div className="about-resume-section-title">
+                Education & Certification
+              </div>
+
+
+              <div className="about-resume-item">
+
+                <div className="about-resume-item-title">
+                  Google UX Design Professional Certificate
+                </div>
+
+                <div className="about-resume-item-meta">
+                  Google / Coursera | Aug 2026
+                </div>
+
+              </div>
+
+
+              <div className="about-resume-item">
+
+                <div className="about-resume-item-title">
+                  Bachelor of Design, Visual Communication Design
+                </div>
+
+                <div className="about-resume-item-meta">
+                  Institut Kesenian Jakarta | 2017–2021 |
+                  GPA 3.70/4.00
+                </div>
+
+              </div>
+
+            </div>
+
+
+            {/* =====================================================
+                SKILLS
+            ===================================================== */}
+
+            <div className="about-resume-section">
+
+              <div className="about-resume-section-title">
+                Skills
+              </div>
+
+
+              <p className="about-resume-skills">
+
+                <strong>
+                  Product & UX:
+                </strong>
+
+                {' '}
+                User Flows, Information Architecture, Wireframing,
+                Interactive Prototyping, UX/UI Design, Interaction
+                Design, Responsive Design, UX Principles
+
+              </p>
+
+
+              <p className="about-resume-skills">
+
+                <strong>
+                  Systems & Visual:
+                </strong>
+
+                {' '}
+                Design Systems, UI Components, Component Variants,
+                Iconography Systems, Visual Systems, Typography,
+                Layout & Grid
+
+              </p>
+
+
+              <p className="about-resume-skills">
+
+                <strong>
+                  Tools & Technical:
+                </strong>
+
+                {' '}
+                Figma, Adobe Illustrator, Adobe Photoshop, HTML, CSS,
+                JavaScript, React, Git, GitHub, Vercel, AI-Assisted
+                Design & Development
+
+              </p>
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </PropertyGroup>
+
+  </div>
+
+</AboutTab>
 
       </AboutTabs>
-
-
-<div className="about-footer">
-
-  <Button
-    className="about-close-button"
-    onClick={onClose}
-  >
-    OK
-  </Button>
-
-  <Button
-    className="about-close-button"
-    onClick={onClose}
-  >
-    Cancel
-  </Button>
-
-</div>
 
 
     </Modal.Content>
@@ -910,10 +1619,24 @@ come together to shape and build products.
 /* ============================================================
    CUSTOM TABS
 ============================================================ */
-
 function AboutTabs({ children }) {
   const tabs = React.Children.toArray(children);
   const [activeTab, setActiveTab] = React.useState(0);
+
+  const isFirstTab = activeTab === 0;
+  const isLastTab = activeTab === tabs.length - 1;
+
+  const handleBack = () => {
+    if (!isFirstTab) {
+      setActiveTab((current) => current - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (!isLastTab) {
+      setActiveTab((current) => current + 1);
+    }
+  };
 
   return (
     <div className="about-tabs">
@@ -944,9 +1667,31 @@ function AboutTabs({ children }) {
         {tabs[activeTab]}
       </div>
 
+
+      <div className="about-footer">
+
+        <Button
+          className="about-close-button"
+          onClick={handleBack}
+          disabled={isFirstTab}
+        >
+          Back
+        </Button>
+
+        <Button
+          className="about-close-button"
+          onClick={handleNext}
+          disabled={isLastTab}
+        >
+          Next
+        </Button>
+
+      </div>
+
     </div>
   );
 }
+
 
 
 /* ============================================================
