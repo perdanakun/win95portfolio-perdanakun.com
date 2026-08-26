@@ -99,7 +99,7 @@ const placeholders = [
     setLoading(true);
 
     // Panggil AI
-    getAIResponse(userMessage)
+   getAIResponse(userMessage, chatHistory)
       .then((response) => {
         setTimeout(() => {
           setChatHistory(prev => [
