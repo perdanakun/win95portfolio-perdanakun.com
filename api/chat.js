@@ -35,6 +35,12 @@ Jawab singkat, ramah, gaya chatbot portfolio. Kalau di luar topik ini, arahkan b
   );
 
   const data = await r.json();
+
+  if (!r.ok) {
+    console.error('Gemini error:', data);
+    return res.status(200).json({ text: `DEBUG: ${JSON.stringify(data.error)}` });
+  }
+
   const text = data?.candidates?.[0]?.content?.parts?.[0]?.text
     ?? 'Maaf, ada gangguan sistem.';
 
