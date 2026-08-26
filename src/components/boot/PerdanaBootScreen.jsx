@@ -958,7 +958,6 @@ function EPAEnergyStar() {
   );
 }
 
-
 /* ============================================================
    WINDOWS 95 STARTING
    ============================================================ */
@@ -970,17 +969,19 @@ function Windows95Starting({
     <div className="windows-starting">
 
       <div className="windows-starting-text">
-
         Starting Perdana's Computer Windows 95
+      </div>
 
-        <span className="windows-dots">
-          {cursor ? '...' : '   '}
-        </span>
-
+      <div className="windows-underscore">
+        {cursor ? '_' : ' '}
       </div>
 
 
       <style>{`
+
+        /* =====================================================
+           WINDOWS STARTING BASE
+           ===================================================== */
 
         .windows-starting {
           position: absolute;
@@ -1009,6 +1010,8 @@ function Windows95Starting({
 
           display: flex;
 
+          flex-direction: column;
+
           align-items: flex-start;
 
           justify-content: flex-start;
@@ -1023,17 +1026,35 @@ function Windows95Starting({
         }
 
 
+        /* =====================================================
+           STARTING TEXT
+           ===================================================== */
+
         .windows-starting-text {
           color: #fff;
 
           white-space: pre;
+
+          height: 16px;
+
+          line-height: 16px;
         }
 
 
-        .windows-dots {
+        /* =====================================================
+           BLINKING UNDERSCORE
+           ===================================================== */
+
+        .windows-underscore {
           color: #fff;
 
-          letter-spacing: 0;
+          width: 16px;
+
+          height: 16px;
+
+          line-height: 16px;
+
+          white-space: pre;
         }
 
 
@@ -1055,13 +1076,27 @@ function Windows95Starting({
             3vh 2.5vw;
         }
 
+
+        .desktop-mode .windows-starting-text {
+          height: 1.05em;
+
+          line-height: 1.05;
+        }
+
+
+        .desktop-mode .windows-underscore {
+          width: 1em;
+
+          height: 1.05em;
+
+          line-height: 1.05;
+        }
+
       `}</style>
 
     </div>
   );
 }
-
-
 /* ============================================================
    RESPONSIVE MODE
    ============================================================ */

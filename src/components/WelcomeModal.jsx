@@ -7,7 +7,7 @@ import {
 } from '@react95/core';
 
 import {
-  Computer,
+  Textchat,
 } from '@react95/icons';
 
 import didYouKnowIcon
@@ -15,6 +15,8 @@ import didYouKnowIcon
 
 import win95Pc
   from '../assets/images/win95_pc.png';
+
+import Changelog from './Changelog';
 
 
 /* ======================================
@@ -192,6 +194,7 @@ export default function WelcomeModal({
   isMobile,
   isTablet,
   onClose,
+  openWindow,
 }) {
 
   /* ====================================
@@ -201,6 +204,65 @@ export default function WelcomeModal({
   const [showWelcome, setShowWelcome] =
     React.useState(true);
 
+  /* ====================================
+     DID YOU KNOW STATE
+  ==================================== */
+
+  const didYouKnowTips = [
+  {
+    firstParagraph:
+      'Perdana Kurniawan Arta is a Visual Designer and Design Lead currently exploring Product Design, UX, and Design Engineering.',
+
+    secondParagraph:
+      'With 10+ years of experience across visual design, visual systems, iconography, illustration, and design direction, he now explores how design, interaction, and code can come together to build functional digital experiences.',
+  },
+
+  {
+    firstParagraph:
+      'Visual systems are one of Perdana’s strongest foundations.',
+
+    secondParagraph:
+      'Over the years, he has worked extensively with iconography, illustration, visual systems, and design direction — learning how consistency, hierarchy, constraints, and reusable rules help design scale beyond individual assets.',
+  },
+
+  {
+    firstParagraph:
+      'Perdana’s Computer is more than a visual portfolio experiment.',
+
+    secondParagraph:
+      'Built as an interactive Windows 95-inspired experience, it is also a space for exploring Product Design, interaction design, React, front-end development, and design directly in code.',
+  },
+
+  {
+    firstParagraph:
+      'Perdana has worked across more than 3,000 design projects during his visual design career.',
+
+    secondParagraph:
+      'Working at that scale shaped how he thinks about reusable systems, production constraints, consistency, communication, and turning ambiguous requests into clear visual outcomes.',
+  },
+
+  {
+    firstParagraph:
+      'His current learning process moves between design tools and the browser.',
+
+    secondParagraph:
+      'Alongside UX research, user flows, wireframing, and prototyping, he is learning HTML, CSS, JavaScript, and React to understand how an interface moves from an idea into something people can actually use.',
+  },
+
+  {
+    firstParagraph:
+      'The move toward Product Design and Design Engineering is not about abandoning visual design.',
+
+    secondParagraph:
+      'It is about expanding that foundation — connecting visual craft with product thinking, interaction, systems, and implementation so he can participate in more of the journey from idea to shipped experience.',
+  },
+];
+
+const [currentTipIndex, setCurrentTipIndex] =
+  React.useState(0);
+
+const currentTip =
+  didYouKnowTips[currentTipIndex];
 
   /* ====================================
      DELAY SHOW WELCOME
@@ -232,25 +294,24 @@ export default function WelcomeModal({
   };
 
 
-  const handleWhatsNew = () => {
-    window.alert(
-      "What's New is not available yet."
-    );
-  };
+const handleWhatsNew = () => {
+  openWindow('whatsNew');
+};
 
 
-  const handleOnlineRegistration = () => {
-    window.alert(
-      'Online Registration is not available yet.'
-    );
-  };
+
+const handleAskAi = () => {
+  openWindow('aiAssistant');
+};
 
 
-  const handleNextTip = () => {
-    window.alert(
-      'Next Tip is not available yet.'
-    );
-  };
+
+const handleNextTip = () => {
+  setCurrentTipIndex((currentIndex) =>
+    (currentIndex + 1) %
+    didYouKnowTips.length
+  );
+};
 
 
   /* ====================================
@@ -271,7 +332,7 @@ export default function WelcomeModal({
       key="welcome-window"
 
       icon={
-        <Computer variant="16x16_4" />
+        <Textchat variant="16x16_4" />
       }
 
       title="Welcome to Windows 95"
@@ -283,24 +344,23 @@ export default function WelcomeModal({
            MOBILE
         ================================= */
 
-        ...(isMobile
-          ? {
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: '28px',
+...(isMobile
+  ? {
+      left: '50%',
+      top: 'calc((100vh - 28px) / 2)',
 
-              width: '100vw',
-              height: 'auto',
+      width: '90vw',
+      height: '60vh',
 
-              maxWidth: '100vw',
-              maxHeight:
-                'calc(100vh - 28px)',
+      maxWidth: '90vw',
+      maxHeight: '60vh',
 
-              transform: 'none',
+      transform:
+        'translate(-50%, -50%)',
 
-              margin: 0,
-            }
+      margin: 0,
+    }
+
 
         /* ================================
            TABLET
@@ -363,72 +423,78 @@ export default function WelcomeModal({
           MODAL CONTENT
       ================================== */}
 
-      <Modal.Content
-        className="ui-font"
-        style={{
-          padding: 0,
+<Modal.Content
+  className="ui-font"
+  style={{
+    padding: 0,
 
-          width: '100%',
-          height: '100%',
+    width: '100%',
+    height: '100%',
 
-          minWidth: 0,
-          minHeight: 0,
+    minWidth: 0,
+    minHeight: 0,
 
-          background: '#c0c0c0',
+    background: '#c0c0c0',
 
-          boxSizing: 'border-box',
+    boxSizing: 'border-box',
 
-          overflow: 'hidden',
-        }}
-      >
+    overflow: 'hidden',
+}}
+>
+
 
         {/* ==================================
             MAIN ARTICLE
         ================================== */}
 
-        <article
-          aria-labelledby="welcome-title"
-          className="ui-font"
-          style={{
-            width: '100%',
-            height: '100%',
+<article
+  aria-labelledby="welcome-title"
+  className="ui-font"
+  style={{
+    width: '100%',
+    height: '100%',
 
-            minWidth: 0,
-            minHeight: 0,
+    minWidth: 0,
+    minHeight: 0,
 
-            boxSizing: 'border-box',
+    boxSizing: 'border-box',
 
-            backgroundColor: '#c0c0c0',
+    backgroundColor: '#c0c0c0',
 
-            overflow: 'hidden',
+    overflow: 'hidden',
 
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
+    display: 'flex',
+    flexDirection: 'column',
+  }}
+>
+
+
 
           {/* ==================================
               CONTENT AREA
           ================================== */}
 
-          <div
-            style={{
-              flex: '1 1 auto',
+<div
+  style={{
+    flex: '1 1 auto',
 
-              minWidth: 0,
-              minHeight: 0,
+    width: '100%',
 
-              padding:
-                '10px 12px 0',
+    minWidth: 0,
+    minHeight: 0,
 
-              boxSizing: 'border-box',
+    padding: '10px 12px 0',
 
-              display: 'flex',
-              flexDirection: 'column',
+    boxSizing: 'border-box',
 
-              overflow: 'hidden',
-            }}
-          >
+    display: 'flex',
+    flexDirection: 'column',
+
+    overflow: 'hidden',
+  }}
+>
+
+
 
             {/* ==================================
                 TITLE
@@ -512,69 +578,62 @@ export default function WelcomeModal({
                 MAIN ROW
             ================================== */}
 
-            <div
-              style={{
-                flex: '1 1 auto',
+<div
+  style={{
+    flex: '1 1 auto',
 
-                minWidth: 0,
-                minHeight: 0,
+    minWidth: 0,
+    minHeight: 0,
 
-                display: 'flex',
+    display: 'flex',
 
-                flexDirection: isMobile
-                  ? 'column'
-                  : 'row',
+    flexDirection: isMobile
+      ? 'column'
+      : 'row',
 
-                alignItems: 'stretch',
+    alignItems: 'stretch',
 
-                gap: isMobile ? 8 : 10,
+    gap: isMobile ? 8 : 10,
 
-                overflow: 'hidden',
-              }}
-            >
+    overflow: 'hidden',
+  }}
+>
+
+
 
               {/* ==================================
                   INFORMATION PANEL
               ================================== */}
 
-              <section
-                aria-label="Welcome information"
+<section
+  aria-label="Welcome information"
+  style={{
+    flex: '1 1 auto',
 
-                style={{
-                  flex: '1 1 auto',
+    minWidth: 0,
+    minHeight: 0,
 
-                  minWidth: 0,
-                  minHeight: 0,
+    backgroundColor: '#ffffff',
 
-                  backgroundColor:
-                    '#ffffff',
+    borderTop: '1px solid #808080',
+    borderLeft: '1px solid #808080',
+    borderRight: '1px solid #ffffff',
+    borderBottom: '1px solid #ffffff',
 
-                  borderTop:
-                    '1px solid #808080',
+    boxSizing: 'border-box',
 
-                  borderLeft:
-                    '1px solid #808080',
+    /* INI YANG PENTING */
+    overflowY: 'auto',
+    overflowX: 'hidden',
 
-                  borderRight:
-                    '1px solid #ffffff',
+    padding: '14px 14px',
 
-                  borderBottom:
-                    '1px solid #ffffff',
+    display: 'flex',
+    flexDirection: 'column',
+  }}
+>
 
-                  boxSizing:
-                    'border-box',
 
-                  overflow: 'hidden',
-
-                  padding:
-                    '14px 14px',
-
-                  display: 'flex',
-
-                  flexDirection:
-                    'column',
-                }}
-              >
 
                 {/* ==================================
                     DID YOU KNOW
@@ -598,59 +657,44 @@ export default function WelcomeModal({
                   {/* ==================================
                       ICON
                   ================================== */}
+{!isMobile && (
+  <div
+    aria-hidden="true"
+    style={{
+      width: 64,
+      minWidth: 64,
+      height: 64,
 
-                  <div
-                    aria-hidden="true"
+      marginRight: 12,
+      marginTop: -10,
 
-                    style={{
-                      width: 64,
-                      minWidth: 64,
+      padding: 0,
 
-                      height: 64,
+      display: 'flex',
 
-                      marginRight: 12,
+      alignItems: 'flex-start',
+      justifyContent: 'flex-start',
 
-                      marginTop: -10,
+      flexShrink: 0,
 
-                      padding: 0,
+      boxSizing: 'border-box',
+    }}
+  >
+    <img
+      src={didYouKnowIcon}
+      alt=""
+      width={64}
+      height={64}
+      style={{
+        width: 64,
+        height: 64,
+        display: 'block',
+        imageRendering: 'pixelated',
+      }}
+    />
+  </div>
+)}
 
-                      display: isMobile
-                        ? 'inline-flex'
-                        : 'flex',
-
-                      alignItems:
-                        'flex-start',
-
-                      justifyContent:
-                        'flex-start',
-
-                      flexShrink: 0,
-
-                      boxSizing:
-                        'border-box',
-
-                      verticalAlign:
-                        'top',
-                    }}
-                  >
-                    <img
-                      src={didYouKnowIcon}
-                      alt=""
-
-                      width={64}
-                      height={64}
-
-                      style={{
-                        width: 64,
-                        height: 64,
-
-                        display: 'block',
-
-                        imageRendering:
-                          'pixelated',
-                      }}
-                    />
-                  </div>
 
 
                   {/* ==================================
@@ -697,60 +741,31 @@ export default function WelcomeModal({
 
 
                       {/* INTRODUCTION */}
+<p
+  className="reading-font"
+  style={{
+    margin: '20px 30px 0 0',
+    padding: 0,
+    maxWidth: 480,
+    textAlign: 'left',
+    color: '#000000',
+  }}
+>
+  {currentTip.firstParagraph}
+</p>
 
-                      <p
-                        className="reading-font"
-                        style={{
-                          margin:
-                            '20px 30px 0 0',
-
-                          padding: 0,
-
-                          maxWidth: 480,
-
-                          textAlign: 'left',
-
-                          color: '#000000',
-                        }}
-                      >
-                        Perdana Kurniawan Arta
-                        is a Visual Designer
-                        and Design Lead
-                        currently exploring
-                        Product Design, UX,
-                        and Design Engineering.
-                      </p>
-
-
-                      {/* EXPERIENCE */}
-
-                      <p
-                        className="reading-font"
-                        style={{
-                          margin:
-                            '11px 30px 15px 0',
-
-                          padding: 0,
-
-                          maxWidth: 480,
-
-                          textAlign: 'left',
-
-                          color: '#000000',
-                        }}
-                      >
-                        With 10+ years of
-                        experience across
-                        visual design, visual
-                        systems, iconography,
-                        illustration, and design
-                        direction, he now
-                        explores how design,
-                        interaction, and code
-                        can come together to
-                        build functional digital
-                        experiences.
-                      </p>
+<p
+  className="reading-font"
+  style={{
+    margin: '11px 30px 15px 0',
+    padding: 0,
+    maxWidth: 480,
+    textAlign: 'left',
+    color: '#000000',
+  }}
+>
+  {currentTip.secondParagraph}
+</p>
 
                     </div>
                   )}
@@ -774,60 +789,33 @@ export default function WelcomeModal({
                       }}
                     >
 
-                      <p
-                        className="reading-font"
-                        style={{
-                          margin: 0,
+ <p
+  className="reading-font"
+  style={{
+    margin: 0,
+    padding: 0,
+    width: '100%',
+    maxWidth: 480,
+    textAlign: 'left',
+    color: '#000000',
+  }}
+>
+  {currentTip.firstParagraph}
+</p>
 
-                          padding: 0,
-
-                          width: '100%',
-
-                          maxWidth: 480,
-
-                          textAlign: 'left',
-
-                          color: '#000000',
-                        }}
-                      >
-                        Perdana Kurniawan Arta
-                        is a Visual Designer
-                        and Design Lead
-                        currently exploring
-                        Product Design, UX,
-                        and Design Engineering.
-                      </p>
-
-
-                      <p
-                        className="reading-font"
-                        style={{
-                          margin:
-                            '11px 0 0',
-
-                          padding: 0,
-
-                          width: '100%',
-
-                          maxWidth: 480,
-
-                          textAlign: 'left',
-
-                          color: '#000000',
-                        }}
-                      >
-                        With 10+ years of
-                        experience across
-                        visual design, visual
-                        systems, iconography,
-                        illustration, and design
-                        direction, he now
-                        explores how design,
-                        interaction, and code
-                        can come together to
-                        build functional digital
-                        experiences.
-                      </p>
+<p
+  className="reading-font"
+  style={{
+    margin: '11px 0 0',
+    padding: 0,
+    width: '100%',
+    maxWidth: 480,
+    textAlign: 'left',
+    color: '#000000',
+  }}
+>
+  {currentTip.secondParagraph}
+</p>
 
                     </div>
                   )}
@@ -868,170 +856,127 @@ export default function WelcomeModal({
                       overflow: 'hidden',
                     }}
                   >
-                    <img
-                      src={win95Pc}
-                      alt=""
-
-                      style={{
-                        display: 'block',
-
-                        width: 'auto',
-                        height: 'auto',
-
-                        maxWidth: '75%',
-                        maxHeight: '75%',
-
-                        objectFit:
-                          'contain',
-
-                        imageRendering:
-                          'pixelated',
-
-                        flexShrink: 1,
-
-                        transform:
-                          'translateY(-20%)',
-                      }}
-                    />
                   </div>
                 )}
 
               </section>
 
 
-              {/* ==================================
-                  RIGHT BUTTONS
-              ================================== */}
+          {/* ==================================
+    RIGHT BUTTONS
+================================== */}
 
-              <aside
-                aria-label="Welcome actions"
+<aside
+  aria-label="Welcome actions"
+  className="ui-font"
+  style={{
+    width: isMobile
+      ? '100%'
+      : 140,
 
-                className="ui-font"
+    minWidth: isMobile
+      ? 0
+      : 140,
 
-                style={{
-                  width: isMobile
-                    ? '100%'
-                    : 140,
+    flexShrink: 0,
 
-                  minWidth: isMobile
-                    ? 0
-                    : 140,
+    gap: 8,
 
-                  flexShrink: 0,
+    display: 'flex',
 
-                  gap: 8,
+    flexDirection: 'column',
 
-                  display: 'flex',
+    boxSizing: 'border-box',
+  }}
+>
 
-                  flexDirection:
-                    'column',
+  {/* AskAi
+      Desktop + Tablet only */}
 
-                  boxSizing:
-                    'border-box',
-                }}
-              >
+    <Button
+      onClick={handleAskAi}
+    >
+      <ShortcutLabel
+        shortcut="A"
+      >
+        Ask the Assistant
+      </ShortcutLabel>
+    </Button>
 
-                <Button
-                  onClick={
-                    handleWindowsTour
-                  }
-                >
-                  <ShortcutLabel
-                    shortcut="W"
-                  >
-                    Windows Tour
-                  </ShortcutLabel>
-                </Button>
-
-
-                <Button
-                  onClick={
-                    handleWhatsNew
-                  }
-                >
-                  <ShortcutLabel
-                    shortcut="W"
-                  >
-                    What's New
-                  </ShortcutLabel>
-                </Button>
+  {/* WHAT'S NEW
+      Semua device */}
+  <Button
+    onClick={handleWhatsNew}
+  >
+    <ShortcutLabel
+      shortcut="N"
+    >
+      What's New
+    </ShortcutLabel>
+  </Button>
 
 
-                <Button
-                  onClick={
-                    handleOnlineRegistration
-                  }
-                >
-                  <ShortcutLabel
-                    shortcut="O"
-                  >
-                    Online Registration
-                  </ShortcutLabel>
-                </Button>
+
+  {/* NEXT TIP
+      Semua device */}
+  <Button
+    onClick={handleNextTip}
+  >
+    <ShortcutLabel
+      shortcut="N"
+    >
+      Next Tip
+    </ShortcutLabel>
+  </Button>
 
 
-                <Button
-                  onClick={
-                    handleNextTip
-                  }
-                >
-                  <ShortcutLabel
-                    shortcut="N"
-                  >
-                    Next Tip
-                  </ShortcutLabel>
-                </Button>
+  {/* SPACER */}
+  <div
+    style={{
+      flex: '1 1 auto',
+      minHeight: isMobile
+        ? 8
+        : 14,
+    }}
+  />
 
 
-                {/* SPACER */}
+  {/* SEPARATOR */}
+  <div
+    aria-hidden="true"
+    style={{
+      width: '100%',
+      height: 2,
 
-                <div
-                  style={{
-                    flex: '1 1 auto',
-                    minHeight: 14,
-                  }}
-                />
+      margin: '0 0 8px',
 
+      borderTop:
+        '1px solid #808080',
 
-                {/* SEPARATOR */}
+      borderBottom:
+        '1px solid #ffffff',
 
-                <div
-                  aria-hidden="true"
+      boxSizing: 'border-box',
 
-                  style={{
-                    width: '100%',
-                    height: 2,
-
-                    margin:
-                      '0 0 8px',
-
-                    borderTop:
-                      '1px solid #808080',
-
-                    borderBottom:
-                      '1px solid #ffffff',
-
-                    boxSizing:
-                      'border-box',
-
-                    flexShrink: 0,
-                  }}
-                />
+      flexShrink: 0,
+    }}
+  />
 
 
-                {/* CLOSE */}
+  {/* CLOSE
+      Semua device */}
+  <Button
+    onClick={onClose}
+  >
+    <ShortcutLabel
+      shortcut="C"
+    >
+      Close
+    </ShortcutLabel>
+  </Button>
 
-                <Button
-                  onClick={onClose}
-                >
-                  <ShortcutLabel
-                    shortcut="C"
-                  >
-                    Close
-                  </ShortcutLabel>
-                </Button>
+</aside>
 
-              </aside>
 
             </div>
 

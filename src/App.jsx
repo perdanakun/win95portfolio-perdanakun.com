@@ -16,6 +16,7 @@ import ProjectFolderContent from './components/ProjectFolderContent';
 import CSGameModal from './components/CSGameModal';
 import FlappyGame from './components/FlappyGame';
 import ContactContent from './components/ContactContent';
+import Changelog from './components/Changelog';
 import RecycleBin from './components/RecycleBin';
 import AboutContent from './components/AboutContent';
 import AlertModal from './components/AlertModal';
@@ -69,6 +70,10 @@ import {
   Install,
   Sndrec3210,
   Sndvol32303,
+  Textchat,
+  Computer4,
+  FilePin,
+  Wordpad,
 } from '@react95/icons';
 import { useState, useEffect, useRef } from 'react';
 import { Rnd } from 'react-rnd';
@@ -125,12 +130,14 @@ function ResizableModal({
   // =========================
   lockPosition = false,
 
-  // =========================
-  // SMARTPHONE
-  // =========================
-  minHeightRatio = 0.5,
-  mobileWidth = '100vw',
-  mobileLockBottom = true,
+// =========================
+// SMARTPHONE
+// =========================
+minHeightRatio = 0.5,
+mobileHeightRatio = 1,
+mobileWidth = '100vw',
+mobileLockBottom = true,
+
 
   // =========================
   // TABLET
@@ -169,7 +176,14 @@ function ResizableModal({
     return window.innerHeight * minHeightRatio;
   };
 
-  const [height, setHeight] = useState(() => getMaxHeight());
+const [height, setHeight] = useState(() => {
+  if (isMobile) {
+    return window.innerHeight * mobileHeightRatio;
+  }
+
+  return getMaxHeight();
+});
+
 
   const resizeRef = useRef(null);
 
@@ -1260,7 +1274,6 @@ onContinue={() => {
     onClick={openAiAssistantV2}
   />
 )/*}
-
 {/* About */}
 <Rnd
   default={{ x: 24, y: 24, width: 80, height: 80 }}
@@ -1278,59 +1291,26 @@ onContinue={() => {
   </DesktopIcon>
 </Rnd>
 
-
-
 {/* Installer */}
-<Rnd
-  default={{
-    x: 120,
-    y: 24,
-    width: 80,
-    height: 80,
-  }}
-  bounds="window"
-  enableResizing={false}
-  disableDragging={false}
->
-  <DesktopIcon
-    onOpen={() => setShowInstallAlert(true)}
-  >
-    <div style={desktopIconStyle}>
-      <div
-        style={{
-          fontSize: '32px',
-          marginBottom: '0',
-        }}
-      >
-        <Install variant="32x32_4" />
-      </div>
-
-      <span>Installer</span>
-    </div>
-  </DesktopIcon>
-</Rnd>
-
-
-{/* AI Chat */}
 <Rnd
   default={{ x: 24, y: 120, width: 80, height: 80 }}
   bounds="window"
   enableResizing={false}
   disableDragging={false}
 >
-  <DesktopIcon onOpen={() => openWindow('aiAssistant')}>
+  <DesktopIcon onOpen={() => setShowInstallAlert(true)}>
     <div style={desktopIconStyle}>
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <Intl101 variant="32x32_4" />
+        <Install variant="32x32_4" />
       </div>
-      <span>AI Chat</span>
+      <span>Installer</span>
     </div>
   </DesktopIcon>
 </Rnd>
 
 {/* Contact */}
 <Rnd
-  default={{ x: 120, y: 120, width: 80, height: 80 }}
+  default={{ x: 24, y: 216, width: 80, height: 80 }}
   bounds="window"
   enableResizing={false}
   disableDragging={false}
@@ -1340,51 +1320,32 @@ onContinue={() => {
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Mapi32801 variant="32x32_4" />
       </div>
-      <span>Contact</span>
+      <span>Mail</span>
     </div>
   </DesktopIcon>
 </Rnd>
 
 {/* Projects */}
 <Rnd
-  default={{ x: 24, y: 216, width: 80, height: 80 }}
+  default={{ x: 120, y: 120, width: 80, height: 80 }}
   bounds="window"
   enableResizing={false}
   disableDragging={false}
 >
+
   <DesktopIcon onOpen={() => openWindow('projects')}>
     <div style={desktopIconStyle}>
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Folder variant="32x32_4" />
       </div>
-      <span>Projects</span>
-    </div>
-  </DesktopIcon>
-</Rnd>
-
-{/* Games */}
-<Rnd
-  default={{ x: 120, y: 216, width: 80, height: 80 }}
-  bounds="window"
-  enableResizing={false}
-  disableDragging={false}
->
-<DesktopIcon onOpen={() => openAlertDesktop(
-  "I'm sorry...", 
-  "This game module is still under construction. While I'm polishing the design & code for your entertainment, please check back in the next system update."
-)}>
-    <div style={desktopIconStyle}>
-      <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <MsDos variant="32x32_32" />
-      </div>
-      <span>Games</span>
+      <span>My Projects</span>
     </div>
   </DesktopIcon>
 </Rnd>
 
 {/* Recycle Bin */}
 <Rnd
-  default={{ x: 24, y: 312, width: 80, height: 80 }}
+  default={{ x: 24, y: 408, width: 80, height: 80 }}
   bounds="window"
   enableResizing={false}
   disableDragging={false}
@@ -1399,38 +1360,83 @@ onContinue={() => {
   </DesktopIcon>
 </Rnd>
 
-{/* Writing */}
+{/* AI Chat */}
 <Rnd
-  default={{ x: 24, y: 408, width: 80, height: 80 }}
+  default={{ x: 120, y: 24, width: 80, height: 80 }}
   bounds="window"
   enableResizing={false}
   disableDragging={false}
 >
-<DesktopIcon 
-  onOpen={() => openAlertDesktop(
-  'Feature Locked', 
-  <>
-    This module is still under construction. While I'm polishing the design & code, 
-    feel free to browse my thoughts on {' '}
-    <a 
-      href="https://medium.com/@perdanakun" 
-      target="_blank" 
-      rel="noopener noreferrer"
-      style={{ color: '#000080', textDecoration: 'underline' }}
-    >
-     Medium
-    </a>
-  </>
-)}
->
+  <DesktopIcon onOpen={() => openWindow('aiAssistant')}>
     <div style={desktopIconStyle}>
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <Notepad2 variant="32x32_4" />
+        <Intl101 variant="32x32_4" />
+      </div>
+      <span>AI Chat</span>
+    </div>
+  </DesktopIcon>
+</Rnd>
+
+{/* Games */}
+<Rnd
+  default={{ x: 24, y: 312, width: 80, height: 80 }}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={false}
+>
+
+  <DesktopIcon
+    onOpen={() =>
+      openAlertDesktop(
+        "I'm sorry...",
+        "This game module is still under construction. While I'm polishing the design & code for your entertainment, please check back in the next system update."
+      )
+    }
+  >
+    <div style={desktopIconStyle}>
+      <div style={{ fontSize: '32px', marginBottom: '0' }}>
+        <MsDos variant="32x32_32" />
+      </div>
+      <span>Games</span>
+    </div>
+  </DesktopIcon>
+</Rnd>
+
+{/* Writing */}
+<Rnd
+  default={{ x: 120, y: 216, width: 80, height: 80 }}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={false}
+>
+  <DesktopIcon
+    onOpen={() =>
+      openAlertDesktop(
+        'Feature Locked',
+        <>
+          This module is still under construction. While I'm polishing the
+          design & code, feel free to browse my thoughts on{' '}
+          <a
+            href="https://medium.com/@perdanakun"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#000080', textDecoration: 'underline' }}
+          >
+            Medium
+          </a>
+        </>
+      )
+    }
+  >
+    <div style={desktopIconStyle}>
+      <div style={{ fontSize: '32px', marginBottom: '0' }}>
+        <Wordpad variant="32x32_4" />
       </div>
       <span>Writing</span>
     </div>
   </DesktopIcon>
 </Rnd>
+
 
  {/* --- JENDELA ALERT--- */}
 {/* Render Alert Modal untuk fitur locked */}
@@ -1606,6 +1612,7 @@ INI ENDING KODE INACTIVE*/}
     isMobile={isMobile}
     isTablet={isTablet}
     onClose={() => toggleWindow('welcome', false)}
+    openWindow={openWindow}
   />
 )}
 
@@ -1740,59 +1747,63 @@ INI ENDING KODE INACTIVE*/}
   </ResizableModal>
 )}
 
+{/* --- JENDELA CHANGELOG --- */}
+
+{windows.whatsNew && (
+  <Changelog
+    isMobile={isMobile}
+    isTablet={isTablet}
+    onClose={() =>
+      toggleWindow('whatsNew', false)
+    }
+  />
+)}
 
 {/* --- JENDELA PROJECTS --- */}
 {windows.projects && (
-  <ResizableModal
-    isMobile={isMobile}
-    isTablet={isTablet}
+ <ResizableModal
+  isMobile={isMobile}
+  isTablet={isTablet}
 
-    // LOCK WINDOW
-    lockPosition={false}
+  mobileHeightRatio={0.4}
+  minHeightRatio={0.4}
 
-    minHeightRatio={0.5}
+  lockPosition={false}
 
-    // =========================
-    // TABLET
-    // CENTER SCREEN
-    // =========================
-    tabletWidth="70%"
-    tabletHeight="60%"
-    tabletTop="50%"
-    tabletLeft="50%"
-    tabletRight="auto"
-    tabletBottom="auto"
-    tabletTransform="translate(-50%, -50%)"
+  tabletWidth="70%"
+  tabletHeight="60%"
+  tabletTop="50%"
+  tabletLeft="50%"
+  tabletRight="auto"
+  tabletBottom="auto"
+  tabletTransform="translate(-50%, -50%)"
 
-    // =========================
-    // DESKTOP
-    // CENTER SCREEN
-    // =========================
-    desktopWidth="40%"
-    desktopHeight="50%"
-    desktopTop="50%"
-    desktopLeft="50%"
-    desktopRight="auto"
-    desktopBottom="auto"
-    desktopTransform="translate(-50%, -50%)"
+  desktopWidth="40%"
+  desktopHeight="50%"
+  desktopTop="50%"
+  desktopLeft="50%"
+  desktopRight="auto"
+  desktopBottom="auto"
+  desktopTransform="translate(-50%, -50%)"
 
-    icon={<Folder variant="16x16_4" />}
-    title="Project Explorer"
+  icon={<Folder variant="16x16_4" />}
+  title="Project Explorer"
 
-    titleBarOptions={
-      <>
-        <Modal.Minimize />
+  titleBarOptions={
+    <>
+      <Modal.Minimize />
 
-        <TitleBar.Close
-          onClick={() => toggleWindow('projects', false)}
-        />
-      </>
-    }
-  >
-    <ProjectFolderContent
-      isTouchDevice={isTouchDevice}
-    />
-  </ResizableModal>
+      <TitleBar.Close
+        onClick={() => toggleWindow('projects', false)}
+      />
+    </>
+  }
+>
+  <ProjectFolderContent
+    isTouchDevice={isTouchDevice}
+  />
+</ResizableModal>
+
 )}
 
 
@@ -2209,17 +2220,16 @@ INI ENDING KODE INACTIVE*/}
     <List style={{ width: '240px' }}>
 
       <List.Item
-        icon={<Computer variant="16x16_4" />}
+        icon={<Textchat variant="16x16_4" />}
         onClick={() => toggleWindow('welcome', true)}
       >
         Welcome
       </List.Item>
-
       <List.Item
-        icon={<Intl101 variant="16x16_4" />}
-        onClick={() => toggleWindow('aiAssistant', true)}
+        icon={<FilePin variant="16x16_4" />}
+        onClick={() => toggleWindow('whatsNew', true)}
       >
-        AI Assistant
+        What's New
       </List.Item>
 
       <List.Divider />
@@ -2252,12 +2262,19 @@ INI ENDING KODE INACTIVE*/}
         About
       </List.Item>
 
+            <List.Item
+        icon={<Intl101 variant="16x16_4" />}
+        onClick={() => toggleWindow('aiAssistant', true)}
+      >
+        AI Chat
+      </List.Item>
+
       {/* PROJECTS */}
       <List.Item
         icon={<Folder variant="16x16_4" />}
         onClick={() => toggleWindow('projects', true)}
       >
-        Projects
+        My Projects
       </List.Item>
 
       {/* CONTACT */}
@@ -2265,7 +2282,7 @@ INI ENDING KODE INACTIVE*/}
         icon={<Mapi32801 variant="16x16_4" />}
         onClick={() => toggleWindow('contact', true)}
       >
-        Contact Me
+        Mail
       </List.Item>
 
       {/* GAMES */}
@@ -2283,7 +2300,7 @@ INI ENDING KODE INACTIVE*/}
 
       {/* WRITING */}
       <List.Item
-        icon={<Notepad2 variant="16x16_4" />}
+        icon={<Wordpad variant="16x16_4" />}
         onClick={() =>
           openAlertDesktop(
             'Feature Locked',
@@ -2320,7 +2337,7 @@ INI ENDING KODE INACTIVE*/}
 
       {/* RESET */}
       <List.Item
-        icon={<PowerOff variant="16x16_4" />}
+        icon={<Computer4 variant="16x16_4" />}
         onClick={handleRestart}
       >
         Reset Desktop
