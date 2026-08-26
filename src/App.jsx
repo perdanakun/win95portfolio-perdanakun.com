@@ -11,6 +11,9 @@ import winAfternoon from './assets/images/4afternoon.png';
 import winSunset from './assets/images/5sunset.png';
 import winBlueHour from './assets/images/6bluehour.png';
 
+import ClippyAssistant from './components/ClippyAssistant';
+  
+
 import AiAssistantContentModal from './components/AiAssistantContentModal';
 import ProjectFolderContent from './components/ProjectFolderContent';
 import CSGameModal from './components/CSGameModal';
@@ -49,7 +52,6 @@ import { Frame, TitleBar, Button, TaskBar, List, Modal, useModal } from '@react9
 
 import {
   ClippyProvider,
-  useClippy,
 } from '@react95/clippy';
 
 import { 
@@ -961,6 +963,28 @@ const handleAttachmentTooLarge = (file) => {
 
   return (
     <>
+
+<ClippyAssistant
+  pcScreen={pcScreen}
+  pcInstalled={pcState.installed}
+
+  isMobile={isMobile}
+  isTablet={isTablet}
+
+  windows={windows}
+
+  welcomeInstallerVisible={
+    welcomeInstallerVisible
+  }
+
+  welcomeInstallerLoadingVisible={
+    welcomeInstallerLoadingVisible
+  }
+
+  installerVisible={
+    installerVisible
+  }
+/>
       {/* CSS Reset untuk layar full screen dan background Windows XP */}
       <style>
         {`
@@ -1007,6 +1031,22 @@ const handleAttachmentTooLarge = (file) => {
             transform: scale(0.75);
             transform-origin: left center;
           }
+
+.clippy {
+  pointer-events: auto !important;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .clippy {
+    touch-action: none !important;
+    cursor: grab;
+  }
+
+  .clippy:active {
+    cursor: grabbing;
+  }
+}
         }
 
 
@@ -1253,6 +1293,7 @@ onContinue={() => {
       overflow: 'hidden',
     }}
   >
+
 
   <header
   className="portfolio-identity"
@@ -2499,4 +2540,12 @@ const inputStyle = {
   outline: 'none'
 };
 
-export default App;
+function AppWithClippy() {
+  return (
+    <ClippyProvider>
+      <App />
+    </ClippyProvider>
+  );
+}
+
+export default AppWithClippy;
