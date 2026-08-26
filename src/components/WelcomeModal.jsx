@@ -16,8 +16,6 @@ import didYouKnowIcon
 import win95Pc
   from '../assets/images/win95_pc.png';
 
-import Changelog from './Changelog';
-
 
 /* ======================================
    SHORTCUT LABEL

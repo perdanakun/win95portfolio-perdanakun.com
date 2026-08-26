@@ -1,14 +1,9 @@
 import React from 'react';
 
 import {
-  Modal,
   Button,
-  TitleBar,
 } from '@react95/core';
 
-import {
-  FilePin,
-} from '@react95/icons';
 
 
 /* ======================================
@@ -21,7 +16,7 @@ const GITHUB_REPO =
   'win95portfolio-perdanakun.com';
 
 const GITHUB_COMMITS_URL =
-  `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/commits?per_page=20`;
+  `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/commits?per_page=100`;
 
 const GITHUB_HISTORY_URL =
   `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/commits`;
@@ -247,6 +242,60 @@ export default function Changelog({
     let isMounted = true;
 
 
+    const fetchAllCommits =
+      async () => {
+
+        let page = 1;
+        let allCommits = [];
+
+
+        while (true) {
+
+          const response =
+            await fetch(
+              `${GITHUB_COMMITS_URL}&page=${page}`
+            );
+
+
+          if (!response.ok) {
+            throw new Error(
+              `GitHub request failed: ${response.status}`
+            );
+          }
+
+
+          const pageCommits =
+            await response.json();
+
+
+          allCommits = [
+            ...allCommits,
+            ...pageCommits,
+          ];
+
+
+          /*
+            GitHub returns a maximum of
+            100 commits per page.
+
+            If this page contains fewer
+            than 100 commits, this is the
+            final page.
+          */
+
+          if (pageCommits.length < 100) {
+            break;
+          }
+
+
+          page += 1;
+        }
+
+
+        return allCommits;
+      };
+
+
     const loadCommits =
       async () => {
 
@@ -290,24 +339,11 @@ export default function Changelog({
 
 
           /* ==============================
-             FETCH GITHUB
+             FETCH ALL GITHUB COMMITS
           ============================== */
 
-          const response =
-            await fetch(
-              GITHUB_COMMITS_URL
-            );
-
-
-          if (!response.ok) {
-            throw new Error(
-              `GitHub request failed: ${response.status}`
-            );
-          }
-
-
           const data =
-            await response.json();
+            await fetchAllCommits();
 
 
           /* ==============================
@@ -322,6 +358,18 @@ export default function Changelog({
                     ?.message
                 )
             );
+
+
+          /*
+            GitHub already returns commits
+            newest first.
+
+            Do not reverse the array so the
+            changelog starts with the latest
+            update and visitors can scroll
+            all the way down to the first
+            commit.
+          */
 
 
           /* ==============================
@@ -393,139 +441,30 @@ export default function Changelog({
   /* ====================================
      RENDER
   ==================================== */
+return (
+  <article
+    aria-labelledby="changelog-title"
+    className="ui-font"
 
-  return (
+    style={{
+      width: '100%',
+      height: '100%',
 
-    <Modal
-      key="changelog-window"
+      minWidth: 0,
+      minHeight: 0,
 
-      icon={
-        <FilePin variant="16x16_4" />
-      }
+      boxSizing: 'border-box',
 
-      title="What's New"
+      backgroundColor: '#c0c0c0',
 
-      style={{
-        position: 'fixed',
+      overflow: 'hidden',
 
-        /*
-          Narrower + taller than
-          WelcomeModal.
+      display: 'flex',
+      flexDirection: 'column',
 
-          This keeps the changelog visually
-          secondary instead of dominating
-          the desktop.
-        */
-
-        ...(isMobile
-          ? {
-              left: '50%',
-
-              top:
-                'calc((100vh - 28px) / 2)',
-
-              width: '90vw',
-
-              height: '72vh',
-
-              maxWidth: '90vw',
-
-              maxHeight: '72vh',
-
-              transform:
-                'translate(-50%, -50%)',
-
-              margin: 0,
-            }
-
-          : isTablet
-          ? {
-              left: '50%',
-
-              top:
-                'calc((100vh - 28px) / 2)',
-
-              width: 480,
-
-              height: '68vh',
-
-              maxWidth:
-                '82vw',
-
-              maxHeight:
-                'calc(100vh - 50px)',
-
-              transform:
-                'translate(-50%, -50%)',
-            }
-
-          : {
-              left: '50%',
-
-              top:
-                'calc((100vh - 28px) / 2)',
-
-              width: 440,
-
-              height: 600,
-
-              maxWidth:
-                'calc(100vw - 40px)',
-
-              maxHeight:
-                'calc(100vh - 50px)',
-
-              transform:
-                'translate(-50%, -50%)',
-            }),
-
-        boxSizing:
-          'border-box',
-      }}
-
-
-      /* ==================================
-         TITLE BAR BUTTONS
-      ================================== */
-
-titleBarOptions={
-  <>
-    <Modal.Minimize />
-
-    <TitleBar.Close
-      onClick={onClose}
-    />
-  </>
-}
-    >
-
-
-      {/* ==================================
-          MODAL CONTENT
-      ================================== */}
-
-      <Modal.Content
-        className="ui-font"
-
-        style={{
-          padding: 0,
-
-          width: '100%',
-          height: '100%',
-
-          minWidth: 0,
-          minHeight: 0,
-
-          background:
-            '#c0c0c0',
-
-          boxSizing:
-            'border-box',
-
-          overflow:
-            'hidden',
-        }}
-      >
+      textAlign: 'left',
+    }}
+  >
 
 
         {/* ==================================
@@ -1117,8 +1056,6 @@ titleBarOptions={
 
         </article>
 
-      </Modal.Content>
-
-    </Modal>
+      </article>
   );
 }

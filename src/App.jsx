@@ -46,6 +46,12 @@ import PerdanaComputerProductContent from './project/PerdanaComputerProductConte
 
 import { getAIResponse } from "./services/aiService";
 import { Frame, TitleBar, Button, TaskBar, List, Modal, useModal } from '@react95/core';
+
+import {
+  ClippyProvider,
+  useClippy,
+} from '@react95/clippy';
+
 import { 
   Notepad,
   Notepad2,
@@ -583,6 +589,7 @@ const [windows, setWindows] = useState({
   imageViewer: false,
   blog: false,
   browser: false,
+  whatsNew: false,
 
     // Project windows
   holohealth: false,
@@ -756,6 +763,7 @@ const handleRestart = () => {
     imageViewer: false,
     blog: false,
     browser: false,
+    whatsNew: false,
 
 // Project windows
   holohealth: false,
@@ -1320,7 +1328,7 @@ onContinue={() => {
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Mapi32801 variant="32x32_4" />
       </div>
-      <span>Mail</span>
+      <span>Inbox</span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1345,7 +1353,7 @@ onContinue={() => {
 
 {/* Recycle Bin */}
 <Rnd
-  default={{ x: 24, y: 408, width: 80, height: 80 }}
+  default={{ x: 24, y: 312, width: 80, height: 80 }}
   bounds="window"
   enableResizing={false}
   disableDragging={false}
@@ -1379,7 +1387,7 @@ onContinue={() => {
 
 {/* Games */}
 <Rnd
-  default={{ x: 24, y: 312, width: 80, height: 80 }}
+  default={{ x: 24, y: 408, width: 80, height: 80 }}
   bounds="window"
   enableResizing={false}
   disableDragging={false}
@@ -1616,7 +1624,6 @@ INI ENDING KODE INACTIVE*/}
   />
 )}
 
-
 {/* =========================
     Jendela Writing
 ========================= */}
@@ -1625,6 +1632,14 @@ INI ENDING KODE INACTIVE*/}
   <ResizableModal
     isMobile={isMobile}
     isTablet={isTablet}
+
+    // =========================
+    // SMARTPHONE
+    // =========================
+
+    mobileHeightRatio={0.78}
+    minHeightRatio={0.55}
+    mobileWidth="100vw"
 
     // =========================
     // TABLET
@@ -1656,14 +1671,9 @@ INI ENDING KODE INACTIVE*/}
 
     title="Writing.exe"
 
-    /*
-     * Replace this with whichever
-     * React95 icon you want for Writing.
-     *
-     * You can temporarily remove
-     * the icon prop if necessary.
-     */
-    icon={<Notepad variant="16x16_4" />}
+    icon={
+      <Notepad variant="16x16_4" />
+    }
 
     titleBarOptions={
       <>
@@ -1685,8 +1695,10 @@ INI ENDING KODE INACTIVE*/}
 
 
 
+{/* =========================
+    Jendela AI Assistant
+========================= */}
 
-{/* --- JENDELA AI MESSENGER --- */}
 {windows.aiAssistant && (
   <ResizableModal
     id="aiAssistant-window"
@@ -1694,20 +1706,19 @@ INI ENDING KODE INACTIVE*/}
     isMobile={isMobile}
     isTablet={isTablet}
 
-    minHeightRatio={0.5}
-
     // =========================
     // SMARTPHONE
-    // TETAP / TIDAK DIUBAH
     // =========================
+
+    mobileHeightRatio={1}
+    minHeightRatio={0.5}
     mobileWidth="100vw"
 
     // =========================
     // TABLET
     // LOCK KANAN
-    // MINUS TASKBAR
-    // MAX WIDTH 30%
     // =========================
+
     tabletWidth="50%"
     tabletHeight="auto"
     tabletTop="0"
@@ -1718,9 +1729,8 @@ INI ENDING KODE INACTIVE*/}
     // =========================
     // DESKTOP
     // LOCK KANAN
-    // MINUS TASKBAR
-    // MAX WIDTH 30%
     // =========================
+
     desktopWidth="20%"
     desktopHeight="auto"
     desktopTop="0"
@@ -1728,7 +1738,10 @@ INI ENDING KODE INACTIVE*/}
     desktopRight="0"
     desktopBottom="28px"
 
-    icon={<Intl101 variant="16x16_4" />}
+    icon={
+      <Intl101 variant="16x16_4" />
+    }
+
     title="AI Assistant.exe"
 
     titleBarOptions={
@@ -1737,7 +1750,10 @@ INI ENDING KODE INACTIVE*/}
 
         <TitleBar.Close
           onClick={() =>
-            toggleWindow('aiAssistant', false)
+            toggleWindow(
+              'aiAssistant',
+              false
+            )
           }
         />
       </>
@@ -1750,15 +1766,75 @@ INI ENDING KODE INACTIVE*/}
 {/* --- JENDELA CHANGELOG --- */}
 
 {windows.whatsNew && (
-  <Changelog
+  <ResizableModal
     isMobile={isMobile}
     isTablet={isTablet}
-    onClose={() =>
-      toggleWindow('whatsNew', false)
-    }
-  />
-)}
 
+    // =========================
+    // SMARTPHONE
+    // =========================
+
+    mobileHeightRatio={0.72}
+    minHeightRatio={0.5}
+    mobileWidth="100vw"
+
+    // =========================
+    // TABLET
+    // =========================
+
+    tabletWidth="480px"
+    tabletHeight="68%"
+    tabletTop="50%"
+    tabletLeft="50%"
+    tabletRight="auto"
+    tabletBottom="auto"
+    tabletTransform="translate(-50%, -50%)"
+
+    // =========================
+    // DESKTOP
+    // =========================
+
+    desktopWidth="440px"
+    desktopHeight="600px"
+    desktopTop="50%"
+    desktopLeft="50%"
+    desktopRight="auto"
+    desktopBottom="auto"
+    desktopTransform="translate(-50%, -50%)"
+
+    icon={
+      <FilePin variant="16x16_4" />
+    }
+
+    title="What's New"
+
+    titleBarOptions={
+      <>
+        <Modal.Minimize />
+
+        <TitleBar.Close
+          onClick={() =>
+            toggleWindow(
+              'whatsNew',
+              false
+            )
+          }
+        />
+      </>
+    }
+  >
+    <Changelog
+      isMobile={isMobile}
+
+      onClose={() =>
+        toggleWindow(
+          'whatsNew',
+          false
+        )
+      }
+    />
+  </ResizableModal>
+)}
 {/* --- JENDELA PROJECTS --- */}
 {windows.projects && (
  <ResizableModal
@@ -1806,17 +1882,28 @@ INI ENDING KODE INACTIVE*/}
 
 )}
 
+{/* =========================
+    Jendela Contact
+========================= */}
 
-{/* Jendela Contact */}
 {windows.contact && (
   <ResizableModal
     isMobile={isMobile}
     isTablet={isTablet}
 
     // =========================
+    // SMARTPHONE
+    // =========================
+
+    mobileHeightRatio={0.72}
+    minHeightRatio={0.6}
+    mobileWidth="100vw"
+
+    // =========================
     // TABLET
     // CENTER
     // =========================
+
     tabletWidth="70%"
     tabletHeight="50%"
     tabletTop="50%"
@@ -1829,6 +1916,7 @@ INI ENDING KODE INACTIVE*/}
     // DESKTOP
     // CENTER
     // =========================
+
     desktopWidth="40%"
     desktopHeight="60%"
     desktopTop="50%"
@@ -1837,7 +1925,10 @@ INI ENDING KODE INACTIVE*/}
     desktopBottom="auto"
     desktopTransform="translate(-50%, -50%)"
 
-    icon={<Mapi32801 variant="16x16_4" />}
+    icon={
+      <Mapi32801 variant="16x16_4" />
+    }
+
     title="Contact.exe"
 
     titleBarOptions={
@@ -1845,19 +1936,33 @@ INI ENDING KODE INACTIVE*/}
         <Modal.Minimize />
 
         <TitleBar.Close
-          onClick={() => toggleWindow('contact', false)}
+          onClick={() =>
+            toggleWindow('contact', false)
+          }
         />
       </>
     }
   >
     <ContactContent
       isMobile={isMobile}
-      onSendSuccess={() => setShowContactAlert(true)}
-      onSendError={() => setShowContactErrorAlert(true)}
-      onOpenCamera={() => setShowCamera(true)}
-      cameraAttachment={cameraAttachment}
-      onRemoveAttachment={() => setCameraAttachment(null)}
-      onAttachmentTooLarge={handleAttachmentTooLarge}
+      onSendSuccess={() =>
+        setShowContactAlert(true)
+      }
+      onSendError={() =>
+        setShowContactErrorAlert(true)
+      }
+      onOpenCamera={() =>
+        setShowCamera(true)
+      }
+      cameraAttachment={
+        cameraAttachment
+      }
+      onRemoveAttachment={() =>
+        setCameraAttachment(null)
+      }
+      onAttachmentTooLarge={
+        handleAttachmentTooLarge
+      }
     />
   </ResizableModal>
 )}
@@ -2099,18 +2204,27 @@ INI ENDING KODE INACTIVE*/}
   </Modal>
 )}
 
-
 {/* --- JENDELA RECYCLE BIN --- */}
+
 {windows.recycleBin && (
   <ResizableModal
     isMobile={isMobile}
     isTablet={isTablet}
 
     // =========================
+    // SMARTPHONE
+    // =========================
+
+    mobileHeightRatio={0.45}
+    minHeightRatio={0.35}
+    mobileWidth="100vw"
+
+    // =========================
     // TABLET
     // LEBIH KE KIRI + ATAS
     // DARI PROJECTS
     // =========================
+
     tabletWidth="60%"
     tabletHeight="30%"
     tabletTop="35%"
@@ -2124,6 +2238,7 @@ INI ENDING KODE INACTIVE*/}
     // LEBIH KE KIRI + ATAS
     // DARI PROJECTS
     // =========================
+
     desktopWidth="30%"
     desktopHeight="45%"
     desktopTop="35%"
@@ -2132,7 +2247,10 @@ INI ENDING KODE INACTIVE*/}
     desktopBottom="auto"
     desktopTransform="translate(-50%, -50%)"
 
-    icon={<RecycleFull variant="16x16_4" />}
+    icon={
+      <RecycleFull variant="16x16_4" />
+    }
+
     title="Recycle Bin"
 
     titleBarOptions={
@@ -2140,17 +2258,23 @@ INI ENDING KODE INACTIVE*/}
         <Modal.Minimize />
 
         <TitleBar.Close
-          onClick={() => toggleWindow('recycleBin', false)}
+          onClick={() =>
+            toggleWindow(
+              'recycleBin',
+              false
+            )
+          }
         />
       </>
     }
   >
     <RecycleBin
-  onOpenFile={openImageFile}
-  isTouchDevice={isTouchDevice}
-/>
+      onOpenFile={openImageFile}
+      isTouchDevice={isTouchDevice}
+    />
   </ResizableModal>
 )}
+
 {/* --- JENDELA IMAGE VIEWER --- */}
 {imageViewers.map((viewer) => (
   <ResizableModal
@@ -2282,7 +2406,7 @@ INI ENDING KODE INACTIVE*/}
         icon={<Mapi32801 variant="16x16_4" />}
         onClick={() => toggleWindow('contact', true)}
       >
-        Mail
+        Inbox
       </List.Item>
 
       {/* GAMES */}

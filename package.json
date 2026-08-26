@@ -3,14 +3,15 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-"scripts": {
-  "dev": "vite",
-  "build": "vite build && node src/scripts/generate-blog.js",
-  "lint": "eslint .",
-  "preview": "vite preview"
-},
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node src/scripts/generate-blog.js",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "@fontsource/open-sans": "^5.3.0",
+    "@react95/clippy": "^2.2.3",
     "@react95/core": "^9.8.3",
     "@react95/icons": "^2.5.3",
     "gray-matter": "^4.0.3",
