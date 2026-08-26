@@ -11,6 +11,7 @@ import {
 
 import holohealthIcon from '../assets/images/case-study/holohealthIcon.png';
 import shipfasterIcon from '../assets/icons/shipfaster.svg';
+import mayoraIcon from '../assets/icons/mayora.svg';
 import figmaIcon from '../assets/icons/figma.svg';
 import githubIcon from '../assets/icons/github.svg';
 import instagramIcon from '../assets/icons/instagram.svg';
@@ -47,6 +48,20 @@ case 'holohealth':
       }}
     />
   );
+  
+    case 'mayora':
+  return (
+    <img
+      src={mayoraIcon}
+      alt="Mayora"
+      style={{
+        width: '14px',
+        height: '14px',
+        objectFit: 'contain',
+      }}
+    />
+  );
+
 
 
     case 'github':

@@ -525,15 +525,6 @@ export default function HoloHealthCaseStudyRetro() {
 
             </dl>
 
-            <a
-              href={NOTION_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="cs-link"
-            >
-              Open full case study ↗
-            </a>
-
           </section>
 
         </div>

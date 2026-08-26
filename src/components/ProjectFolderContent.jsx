@@ -25,10 +25,13 @@ import arrowDownIcon from '../assets/icons/arrow_down.png';
 
 import holohealthIcon from '../assets/images/case-study/holohealthIcon.png';
 import shipfasterIcon from '../assets/icons/shipfaster.svg';
+import mayoraIcon from '../assets/icons/mayora.svg';
 import figmaIcon from "../assets/icons/figma.svg";
 import githubIcon from "../assets/icons/github.svg";
 import instagramIcon from "../assets/icons/instagram.svg";
+
 import LocalTree from './LocalTree';
+
 
 export default function ProjectFolderContent({
   isTouchDevice,
@@ -134,13 +137,11 @@ export default function ProjectFolderContent({
             },
             {
               id: 'holohealth-icon-system',
-              name: 'HoloHealth.exe',
+              name: 'Holoealth',
               type: 'file',
               iconType: 'holohealth',
               link: 'https://holo.health/',
             },
-
-
           ],
         },
 
@@ -163,7 +164,7 @@ export default function ProjectFolderContent({
               name: 'Live Preview',
               type: 'file',
               iconType: 'figma',
-              link: 'https://www.figma.com/proto/0oLNU1icRnTTjeiScs6eXa/Shipfaster-UI---v2.7.1--LIVE----29-7?node-id=6-8&t=wr8to2OlRaiPT3AV-1',
+              openWindow: 'ship-ui-figma',
             },
             {
               id: 'ship-ui-icon-system',
@@ -180,10 +181,23 @@ export default function ProjectFolderContent({
           name: 'Mayora',
           type: 'folder',
           iconType: 'folder',
-          isLocked: true,
-          message:
-            'This folder is currently unavailable.',
-          openWindow: 'mayora',
+          isLocked: false,
+          children: [
+             {
+              id: 'mayora-case-study',
+              name: 'Case Studies',
+              type: 'file',
+              iconType: 'website',
+              openWindow: 'mayora',
+            },
+            {
+              id: 'mayora-icon-system',
+              name: 'Mayora Official',
+              type: 'file',
+              iconType: 'mayora',
+              link: 'https://www.instagram.com/mayoraofficial/',
+            },
+          ],
         },
       ],
     },
@@ -216,8 +230,8 @@ export default function ProjectFolderContent({
               name: 'Features',
               type: 'folder',
               iconType: 'folder',
-              isLocked: false,
-              message: '',
+              isLocked: true,
+              message: 'This folder is still on progress!',
               children: [
                 {
                   id: 'pc-installer',
@@ -558,6 +572,27 @@ export default function ProjectFolderContent({
           />
         );
 
+         case 'mayora':
+        return (
+          <img
+            src={mayoraIcon}
+            alt="Mayora"
+            style={{
+              width:
+                size === '32x32_4'
+                  ? '32px'
+                  : '16px',
+
+              height:
+                size === '32x32_4'
+                  ? '32px'
+                  : '16px',
+
+              objectFit:
+                'contain',
+            }}
+          />
+        );
       case 'github':
         return (
           <img
