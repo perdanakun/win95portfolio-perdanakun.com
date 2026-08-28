@@ -1627,85 +1627,6 @@ INI ENDING KODE INACTIVE*/}
 
 
 
-{/* =========================
-    Jendela Project
-========================= */}
-
-{/* =========================================================
-    JENDELA PROJECT INSIDE
-========================================================= */}
-{Object.entries(projectWindows).map(
-  ([windowName, project]) =>
-    windows[windowName] && (
-      <ProjectWindowModal
-        key={windowName}
-
-        title={project.title}
-
-        icon={
-          <Url1102 variant="16x16_4" />
-        }
-
-        style={{
-          zIndex: 200,
-        }}
-
-        isMobile={isMobile}
-        isTablet={isTablet}
-
-        width="60%"
-        height="80%"
-        
-       
-              
-        
-
-        onClose={() =>
-          toggleWindow(
-            windowName,
-            false
-          )
-        }
-      >
-        {project.content}
-      </ProjectWindowModal>
-    )
-)}
-
-{/* =========================================================
-    JENDELA NOTEPAD OVERVIEW 
-========================================================= */}
-
-{Object.entries(notepadWindows).map(
-  ([windowName, notepad]) =>
-    windows[windowName] && (
-      <NotepadModal
-        key={windowName}
-
-        title={notepad.title}
-
-        icon={
-          <Notepad2 variant="16x16_4" />
-        }
-
-        isMobile={isMobile}
-        isTablet={isTablet}
-
-        width="55%"
-        height="70%"
-
-        onClose={() =>
-          toggleWindow(
-            windowName,
-            false
-          )
-        }
-      >
-        {notepad.content}
-      </NotepadModal>
-    )
-)}
-
 
 {/* =========================
     Jendela Welcome
@@ -1978,6 +1899,82 @@ INI ENDING KODE INACTIVE*/}
 </ResizableModal>
 
 )}
+
+{/* =========================
+    Jendela Project
+========================= */}
+
+{/* =========================================================
+    JENDELA PROJECT INSIDE
+========================================================= */}
+{Object.entries(projectWindows).map(
+  ([windowName, project]) =>
+    windows[windowName] && (
+      <ProjectWindowModal
+        key={windowName}
+
+        title={project.title}
+
+        icon={
+          <Url1102 variant="16x16_4" />
+        }
+
+        isMobile={isMobile}
+        isTablet={isTablet}
+
+        width="60%"
+        height="80%"
+        
+       
+              
+        
+
+        onClose={() =>
+          toggleWindow(
+            windowName,
+            false
+          )
+        }
+      >
+        {project.content}
+      </ProjectWindowModal>
+    )
+)}
+
+{/* =========================================================
+    JENDELA NOTEPAD OVERVIEW 
+========================================================= */}
+
+{Object.entries(notepadWindows).map(
+  ([windowName, notepad]) =>
+    windows[windowName] && (
+      <NotepadModal
+        key={windowName}
+
+        title={notepad.title}
+
+        icon={
+          <Notepad2 variant="16x16_4" />
+        }
+
+        isMobile={isMobile}
+        isTablet={isTablet}
+
+        width="55%"
+        height="70%"
+
+        onClose={() =>
+          toggleWindow(
+            windowName,
+            false
+          )
+        }
+      >
+        {notepad.content}
+      </NotepadModal>
+    )
+)}
+
 
 {/* =========================
     Jendela Contact
