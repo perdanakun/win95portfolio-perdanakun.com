@@ -3,16 +3,20 @@ import React from 'react';
 import perdanaComputerMain
   from './perdanacomputer/perdanacomputer_main.gif';
 
-  import perdanaComputerMain1
+import perdanaComputerMain1
   from './perdanacomputer/perdanacomputer_main2.gif';
 
-  import perdanaComputer
+import perdanaComputer
   from './perdanacomputer/perdanacomputer.png';
 
 /*
   =========================================================
   PERDANA'S COMPUTER — PRODUCT CASE STUDY
   =========================================================
+
+  Content structure:
+  Overview → Ground the Problem → Define Direction →
+  Prototype & Build → Validate → Outcome → Reflection
 
   Typography is inherited from the global Case Study system:
 
@@ -26,79 +30,87 @@ import perdanaComputerMain
   .casestudy-mono
   .casestudy-mono-muted
 
-  This component only controls:
-  - layout
-  - spacing
-  - colors
-  - borders
-  - surfaces
-  - responsive behavior
-  - component-specific visual treatment
+  This component keeps the original layout / visual system and
+  restructures the case study around a product hypothesis and
+  evidence trail.
 */
+
 const caseStudyNavigation = [
   {
     id: 'hero',
+    number: '00',
     title: 'Overview',
   },
   {
-    id: 'product-problem',
-    title: 'Product & Problem',
+    id: 'ground-problem',
+    number: '01',
+    title: 'Ground the Problem',
   },
   {
-    id: 'role-contribution',
-    title: 'Role & Contribution',
+    id: 'define-direction',
+    number: '02',
+    title: 'Define Direction',
   },
   {
-    id: 'design-decisions',
-    title: 'Key Design Decisions',
+    id: 'prototype-build',
+    number: '03',
+    title: 'Prototype & Build',
   },
   {
-    id: 'design-in-code',
-    title: 'From Design to Code',
-  },
-  {
-    id: 'testing',
-    title: 'Testing',
+    id: 'validate',
+    number: '04',
+    title: 'Validate',
   },
   {
     id: 'outcome',
+    number: '05',
     title: 'Outcome',
   },
   {
     id: 'reflection',
+    number: '06',
     title: 'Reflection',
   },
 ];
 
-const productFeatures = [
-  'Hiring-focused portfolio experience',
-  'Windows 95-inspired interface',
-  'Explorable project structure',
-  'Product-oriented navigation',
-  'Design + development in React',
-  'Continuous product iteration',
-];
-
-const designPrinciples = [
+const productPrinciples = [
   {
-    title: 'Memorable over ordinary',
+    title: 'Distinctive, not distracting',
     text:
-      'A hiring portfolio has to compete for attention, but memorability should come from a useful experience — not from a visual gimmick.',
-  },
-  {
-    title: 'Portfolio as a product',
-    text:
-      'The portfolio has users, a problem, a value proposition, interactions, testing, and room to evolve — just like the products I want to work on.',
-  },
-  {
-    title: 'Interactive, not overwhelming',
-    text:
-      'Exploration should create a reason to keep going while the work, capabilities, and career direction remain easy to understand.',
+      'Memorability can earn attention, but the experience still has to help a hiring team evaluate the candidate without unnecessary effort.',
   },
   {
     title: 'Show, not just tell',
     text:
-      'Instead of only saying I am moving toward product design and design engineering, the portfolio demonstrates that transition through a real working product.',
+      'The portfolio should demonstrate product thinking, interaction decisions, and implementation instead of only describing those capabilities in copy.',
+  },
+  {
+    title: 'Familiar rules inside an unfamiliar format',
+    text:
+      'The portfolio can look unconventional while borrowing recognizable desktop concepts such as folders, windows, files, and a taskbar.',
+  },
+  {
+    title: 'Build to learn',
+    text:
+      'When behavior is part of the problem, implementation can become part of prototyping so interaction friction appears earlier.',
+  },
+];
+
+const portfolioFormats = [
+  {
+    title: 'Modern template portfolio',
+    text:
+      'Fast to produce, familiar to reviewers, responsive, and visually polished — but the portfolio itself provides limited evidence of interaction design or implementation.',
+  },
+  {
+    title: 'Case-study-first portfolio',
+    text:
+      'Strong for structured storytelling and easy to understand, but most of the product capability still has to be explained rather than experienced.',
+  },
+  {
+    title: 'Product-like portfolio',
+    text:
+      'Navigation, system states, AI, communication features, responsive behavior, and implementation can become part of the evidence — with a higher risk of usability friction.',
   },
 ];
 
@@ -112,7 +124,7 @@ export default function PerdanaComputerProductContent() {
         <div className="perdana-case-study-container">
 
           {/* =====================================================
-              HERO
+              HERO / OVERVIEW
           ===================================================== */}
 
           <section
@@ -121,89 +133,40 @@ export default function PerdanaComputerProductContent() {
           >
 
             <p className="pcs-eyebrow casestudy-ui">
-              Perdana's Computer — Product Case Study
+              Perdana's Computer — Product Design + Design Engineering Case Study
             </p>
 
             <h1 className="pcs-title casestudy-hero-title">
-              A Portfolio Built to Show the Transition
+              Standing Out Without Slowing Reviewers Down
             </h1>
 
             <p className="pcs-lead casestudy-reading-large">
-              A personal portfolio designed and developed as an
-              interactive product — built not only to be memorable,
-              but to show how a decade of visual design experience is
-              being applied to product design, UX, and design engineering.
+              A self-initiated portfolio product built to test one career
+              hypothesis: can a portfolio become distinctive enough to be
+              remembered while still making it easy for hiring teams to
+              understand the work, the thinking, and the designer behind it?
             </p>
 
             <PlaceholderMedia
               src={perdanaComputerMain}
-              alt="Perdana Computer main visual"
+              alt="Perdana's Computer main portfolio experience"
             />
 
-          </section>
+            <div className="pcs-future-card">
 
-
-          {/* =====================================================
-              00 — PRODUCT & PROBLEM
-          ===================================================== */}
-
-          <section
-            id="product-problem"
-            className="pcs-section"
-          >
-
-            <SectionHeading
-              number="00"
-              title="Product & Problem"
-            />
-
-            <div className="pcs-copy-stack">
-
-              <p className="pcs-body casestudy-reading">
-                Perdana's Computer started from a career problem as much as
-                a portfolio problem: <strong>how can a portfolio help a
-                recruiter understand a candidate quickly while also
-                showing what that candidate can actually do?</strong>
-              </p>
-
-              <p className="pcs-body casestudy-reading">
-                Most portfolios still follow a familiar structure: a landing
-                page, a collection of projects, long case studies, and
-                endless scrolling. <u>The work may be strong, but the
-                portfolio often does little to demonstrate how the person
-                thinks, works, and builds.</u>
-              </p>
-
-              <p className="pcs-highlight-quote">
-                <mark>
-                  <strong>
-                    What if the portfolio itself became the first product I
-                    could use to demonstrate the kind of designer I am becoming?
-                  </strong>
-                </mark>
-              </p>
-
-              <p className="pcs-body casestudy-reading">
-                That became the starting point for this project. Instead of
-                designing another static portfolio, I wanted to <strong>build
-                a working product that could make the experience more
-                memorable while also making my transition visible</strong> —
-                from visual design toward product design, UX, and design
-                engineering.
-              </p>
-
-            </div>
-
-            <div className="pcs-problem-card">
-
-              <span className="pcs-problem-label casestudy-ui">
-                THE PROBLEM
+              <span className="pcs-future-label casestudy-mono">
+                PROJECT NOTE
               </span>
 
-              <p className="casestudy-heading">
-                How might I make a portfolio memorable while using it to
-                clearly demonstrate product thinking, UX, and the ability
-                to turn design into a working product?
+              <p className="casestudy-reading">
+                This is a self-initiated portfolio product, not a client
+                project. I had no access to internal recruiting data, so
+                hiring impact is treated as a hypothesis rather than a proven
+                outcome. Secondary research uses public sources, while
+                formative usability testing was conducted repeatedly with
+                one participant from my personal circle. The findings guide
+                design decisions; they are not presented as statistical
+                validation.
               </p>
 
             </div>
@@ -212,102 +175,73 @@ export default function PerdanaComputerProductContent() {
 
 
           {/* =====================================================
-              01 — ROLE & CONTRIBUTION
+              01 — GROUND THE PROBLEM
           ===================================================== */}
 
           <section
-            id="role-contribution"
+            id="ground-problem"
             className="pcs-section"
           >
 
             <SectionHeading
               number="01"
-              title="Role & Contribution"
-              subtitle="Responsible for the product from problem definition to implementation."
+              title="Ground the Problem"
+              subtitle="Start with the hiring problem, then challenge the idea before committing to the interface."
             />
 
             <div className="pcs-copy-stack">
 
               <p className="pcs-body casestudy-reading">
-                The project covered
+                Perdana's Computer started from a career problem as much as a
+                portfolio problem. I was moving from a decade of visual design
+                into Product Design and Design Engineering, which meant I would
+                be competing for junior product roles against candidates whose
+                portfolios were already built specifically around product work.
+              </p>
+
+              <p className="pcs-body casestudy-reading">
+                A conventional portfolio could show previous projects, but it
+                could leave the strongest signal of the transition hidden. I
+                did not only want to show polished screens. I wanted to show
                 <span className="text-highlight">
-                  <strong>
-                    {' '}product definition, UX, visual design,
-                    interaction design, development, testing, and iteration.
-                  </strong>
+                  {' '}how I notice a problem, make a decision, turn it into a
+                  working interaction, test it, and change it when it fails.
                 </span>
-                {' '}— the same range of work I want to bring into my next role.
-              </p>
-
-              <p className="pcs-body casestudy-reading">
-                The work included <u>defining the problem and experience
-                direction, structuring content and navigation, developing
-                the visual and interaction system, and translating the
-                design into a working interface using React, HTML, and CSS.</u>
-                {' '}The goal was not simply to make the portfolio look
-                different, but to make the work demonstrate how I approach
-                a product from end to end.
-              </p>
-
-              <p className="pcs-body casestudy-reading">
-                Initial research and alpha testing were also part of the
-                process, using findings and user feedback to identify
-                friction, improve the experience, and test whether the
-                product communicates the intended story clearly.
-              </p>
-
-              <p className="pcs-body casestudy-reading">
-                <strong>
-                  AI was used as development assistance
-                </strong>
-                {' '}throughout implementation, while <strong>React95</strong>
-                {' '}provided part of the interface foundation. The important
-                part was still the product decisions: what to build, why it
-                should exist, and how the pieces should work together.
               </p>
 
             </div>
 
-            <PlaceholderMedia
-              src={perdanaComputerMain1}
-              alt="Perdana Computer workflow design in code"
-              caption="A closer look at the workflow, bringing together product thinking, visual design, and implementation."
-            />
 
-          </section>
+            <div className="pcs-problem-card">
 
+              <span className="pcs-problem-label casestudy-ui">
+                INITIAL HYPOTHESIS
+              </span>
 
-          {/* =====================================================
-              02 — KEY DESIGN DECISIONS
-          ===================================================== */}
+              <p className="casestudy-heading">
+                If the portfolio itself became a distinctive but usable
+                product, it could give hiring teams a more memorable way to
+                evaluate not only what I can design, but how I think, make
+                decisions, and build working interactions.
+              </p>
 
-          <section
-            id="design-decisions"
-            className="pcs-section"
-          >
+            </div>
 
-            <SectionHeading
-              number="02"
-              title="Key Design Decisions"
-              subtitle="Use the portfolio experience itself to demonstrate how I think, design, and build."
-            />
 
             <div className="pcs-copy-stack">
 
               <p className="pcs-body casestudy-reading">
-                The problem statement led to one important design direction:
-                {' '}<u>the portfolio should become part of the proof.</u>
+                The user was not “everyone on the internet.” The primary users
+                were recruiters, hiring managers, and design leads evaluating
+                whether I was worth moving forward for a Product Designer or
+                Design Engineer opportunity.
               </p>
 
-              <p className="pcs-highlight-quote">
-                <mark>
-                  <strong>
-                    The challenge wasn't simply getting recruiters to spend
-                    more time on my portfolio. It was making the time they
-                    already spend more useful — helping them understand both
-                    the work and the person behind it.
-                  </strong>
-                </mark>
+              <p className="pcs-body casestudy-reading">
+                For them, the job was to understand the candidate with as
+                little unnecessary effort as possible. For me, the business
+                goal was to increase the probability of moving from portfolio
+                screening into a real hiring conversation.
               </p>
 
             </div>
@@ -317,83 +251,29 @@ export default function PerdanaComputerProductContent() {
                 RESEARCH
             ================================================= */}
 
-            <section
-              id="research"
-              className="pcs-research"
-            >
+            <section className="pcs-research">
 
               <div className="pcs-research-intro">
 
                 <div className="pcs-research-intro-top">
-
                   <span className="pcs-research-kicker casestudy-mono">
-                    RESEARCH
+                    SECONDARY RESEARCH
                   </span>
-
                 </div>
 
                 <h3 className="pcs-research-title casestudy-heading">
-                  What makes a portfolio useful to someone evaluating a candidate?
+                  I was not trying to prove that an interactive portfolio is better.
                 </h3>
 
                 <p className="pcs-research-intro-copy casestudy-reading">
-                  To test whether this direction had a reasonable foundation,
-                  I looked at research around web interactivity, engagement,
-                  and interactive storytelling. I wasn't trying to prove that
-                  interaction automatically makes a portfolio better. I wanted
-                  to understand when interaction could support the experience
-                  rather than become decoration.
+                  The research was used to challenge the hypothesis from both
+                  sides: what hiring teams need from portfolios, and what
+                  interactivity can — and cannot — contribute to a digital
+                  experience.
                 </p>
 
               </div>
 
-
-              {/* RESEARCH SNAPSHOT */}
-
-              <div className="pcs-research-metrics">
-
-                <div className="pcs-research-metric">
-
-                  <strong className="pcs-research-metric-number">
-                    63
-                  </strong>
-
-                  <span className="pcs-research-metric-label casestudy-mono">
-                    STUDIES
-                  </span>
-
-                </div>
-
-
-                <div className="pcs-research-metric">
-
-                  <strong className="pcs-research-metric-number">
-                    13,484
-                  </strong>
-
-                  <span className="pcs-research-metric-label casestudy-mono">
-                    PARTICIPANTS
-                  </span>
-
-                </div>
-
-
-                <div className="pcs-research-metric">
-
-                  <strong className="pcs-research-metric-number">
-                    3
-                  </strong>
-
-                  <span className="pcs-research-metric-label casestudy-mono">
-                    RESEARCH DIRECTIONS
-                  </span>
-
-                </div>
-
-              </div>
-
-
-              {/* KEY FINDINGS */}
 
               <div className="pcs-research-findings">
 
@@ -401,8 +281,6 @@ export default function PerdanaComputerProductContent() {
                   KEY FINDINGS
                 </div>
 
-
-                {/* FINDING 01 */}
 
                 <article className="pcs-research-finding">
 
@@ -413,57 +291,48 @@ export default function PerdanaComputerProductContent() {
                   <div className="pcs-research-finding-main">
 
                     <div className="pcs-research-finding-meta">
-
                       <span className="casestudy-mono">
-                        WEB INTERACTIVITY
+                        HIRING AUDIENCE
                       </span>
-
                       <span className="pcs-research-finding-tag">
-                        ENJOYMENT
+                        CLARITY
                       </span>
-
                     </div>
 
                     <h4 className="casestudy-heading">
-                      Interaction can make digital experiences more engaging.
+                      A portfolio has to serve the person evaluating it.
                     </h4>
 
                     <p className="casestudy-reading">
-                      A meta-analysis of 63 studies and 13,484 participants
-                      found that web interactivity was associated with greater
-                      enjoyment, more positive attitudes, and desirable
-                      behavioral intentions. For this portfolio, that supported
-                      using interaction deliberately rather than treating it
-                      as decoration.
+                      Nielsen Norman Group's 2026 interview with design
+                      recruiter Hang Xu highlights a common mistake in UX
+                      hiring: candidates often optimize application materials
+                      for other designers instead of understanding the actual
+                      reviewer. The first evaluator may be a recruiter, product
+                      manager, founder, or design leader with a different level
+                      of design knowledge and a different goal.
                     </p>
 
-
                     <div className="pcs-research-response">
-
                       <span className="casestudy-mono">
-                        DESIGN RESPONSE
+                        PRODUCT IMPLICATION
                       </span>
-
                       <strong className="casestudy-reading">
                         <span className="text-highlight">
-                          Use interaction to create engagement — without
-                          hiding the work or making the candidate harder
-                          to understand.
+                          Design the portfolio around evaluation, not around
+                          proving how much design terminology I know.
                         </span>
                       </strong>
-
                     </div>
 
                     <span className="pcs-research-source casestudy-mono">
-                      YANG & SHEN · COMMUNICATION RESEARCH · 2018
+                      NIELSEN NORMAN GROUP · UX HIRING INSIGHTS · 2026
                     </span>
 
                   </div>
 
                 </article>
 
-
-                {/* FINDING 02 */}
 
                 <article className="pcs-research-finding">
 
@@ -474,56 +343,47 @@ export default function PerdanaComputerProductContent() {
                   <div className="pcs-research-finding-main">
 
                     <div className="pcs-research-finding-meta">
-
                       <span className="casestudy-mono">
-                        USER ENGAGEMENT
+                        ENTRY-LEVEL MARKET
                       </span>
-
                       <span className="pcs-research-finding-tag">
-                        EXPLORATION
+                        JUDGMENT
                       </span>
-
                     </div>
 
                     <h4 className="casestudy-heading">
-                      Browsing can become part of the experience.
+                      Surface polish alone is becoming weaker evidence.
                     </h4>
 
                     <p className="casestudy-reading">
-                      A peer-reviewed study of 717 mobile-commerce users
-                      in Indonesia found a positive relationship between
-                      interactivity and the customer engagement behaviors
-                      examined in the study. This reinforced the value of
-                      giving visitors meaningful ways to explore rather than
-                      forcing one path.
+                      Nielsen Norman Group's State of UX 2026 describes a
+                      competitive entry-level market and argues that UI alone
+                      is becoming less of a differentiator as interfaces become
+                      easier to produce through standardization and AI-assisted
+                      tools. Contextual understanding, critical thinking,
+                      judgment, and adaptability become stronger signals.
                     </p>
 
-
                     <div className="pcs-research-response">
-
                       <span className="casestudy-mono">
-                        DESIGN RESPONSE
+                        PRODUCT IMPLICATION
                       </span>
-
                       <strong className="casestudy-reading">
                         <span className="text-highlight">
-                          Let visitors open, navigate, discover, and choose
-                          what they need to understand about the work.
+                          Make the portfolio demonstrate decisions and behavior,
+                          not only finished screens.
                         </span>
                       </strong>
-
                     </div>
 
                     <span className="pcs-research-source casestudy-mono">
-                      UTAMI ET AL. · INTERNATIONAL JOURNAL OF MARKET RESEARCH · 2022
+                      NIELSEN NORMAN GROUP · STATE OF UX 2026
                     </span>
 
                   </div>
 
                 </article>
 
-
-                {/* FINDING 03 */}
 
                 <article className="pcs-research-finding">
 
@@ -534,47 +394,91 @@ export default function PerdanaComputerProductContent() {
                   <div className="pcs-research-finding-main">
 
                     <div className="pcs-research-finding-meta">
-
                       <span className="casestudy-mono">
-                        INTERACTIVE STORYTELLING
+                        REVIEWER ATTENTION
                       </span>
-
                       <span className="pcs-research-finding-tag">
-                        AGENCY
+                        FRICTION
                       </span>
-
                     </div>
 
                     <h4 className="casestudy-heading">
-                      The interface can become part of how the work is discovered.
+                      Standing out cannot require the reviewer to work harder.
                     </h4>
 
                     <p className="casestudy-reading">
-                      Research comparing interactive and non-interactive
-                      digital storytelling provided another reference for
-                      treating interaction as part of the content experience
-                      rather than as an additional visual layer.
+                      Guidance from design recruiter Korin Harris emphasizes
+                      quick project access, easy-to-parse information, and
+                      avoiding visual effects or interactions that come at the
+                      expense of basic usability. Novelty can earn attention,
+                      but clarity still has to earn the next click.
                     </p>
 
-
                     <div className="pcs-research-response">
-
                       <span className="casestudy-mono">
-                        DESIGN RESPONSE
+                        PRODUCT IMPLICATION
                       </span>
-
                       <strong className="casestudy-reading">
                         <span className="text-highlight">
-                          Make the interface part of the story, so the
-                          product experience demonstrates the thinking
-                          behind it.
+                          Distinctiveness is useful only if the work remains
+                          easy to find and understand.
                         </span>
                       </strong>
-
                     </div>
 
                     <span className="pcs-research-source casestudy-mono">
-                      HOANG ET AL. · FRONTIERS IN COMPUTER SCIENCE · 2026
+                      DRIBBBLE · DESIGN RECRUITER PORTFOLIO TIPS
+                    </span>
+
+                  </div>
+
+                </article>
+
+
+                <article className="pcs-research-finding">
+
+                  <div className="pcs-research-finding-index casestudy-mono">
+                    04
+                  </div>
+
+                  <div className="pcs-research-finding-main">
+
+                    <div className="pcs-research-finding-meta">
+                      <span className="casestudy-mono">
+                        WEB INTERACTIVITY
+                      </span>
+                      <span className="pcs-research-finding-tag">
+                        COUNTER-EVIDENCE
+                      </span>
+                    </div>
+
+                    <h4 className="casestudy-heading">
+                      Interactivity can support engagement, but it does not
+                      automatically improve understanding.
+                    </h4>
+
+                    <p className="casestudy-reading">
+                      Yang and Shen's meta-analysis covered 63 studies and
+                      13,484 participants. Web interactivity was associated
+                      with outcomes such as enjoyment, positive attitudes, and
+                      behavioral intention, but it did not automatically improve
+                      knowledge acquisition, cognitive elaboration, or recall.
+                    </p>
+
+                    <div className="pcs-research-response">
+                      <span className="casestudy-mono">
+                        PRODUCT IMPLICATION
+                      </span>
+                      <strong className="casestudy-reading">
+                        <span className="text-highlight">
+                          Interaction can support exploration, but it cannot
+                          replace clear communication.
+                        </span>
+                      </strong>
+                    </div>
+
+                    <span className="pcs-research-source casestudy-mono">
+                      YANG & SHEN · COMMUNICATION RESEARCH · 2018
                     </span>
 
                   </div>
@@ -584,71 +488,52 @@ export default function PerdanaComputerProductContent() {
               </div>
 
 
-              {/* RESEARCH → DESIGN */}
-
               <div className="pcs-research-translation">
 
                 <div className="pcs-research-translation-header">
-
                   <span className="casestudy-mono">
-                    FROM RESEARCH TO DESIGN
+                    REFINED PRODUCT TENSION
                   </span>
-
                   <span className="casestudy-mono">
-                    DECISION 01
+                    DISTINCTIVENESS ↔ EFFICIENCY
                   </span>
-
                 </div>
-
 
                 <div className="pcs-research-flow">
 
                   <div className="pcs-research-flow-item">
-
                     <span className="casestudy-mono">
-                      RESEARCH
+                      CANDIDATE NEED
                     </span>
-
                     <strong className="casestudy-heading">
-                      Interactivity
+                      Be remembered
                     </strong>
-
                   </div>
-
 
                   <div className="pcs-research-flow-arrow">
-                    →
+                    ↔
                   </div>
-
 
                   <div className="pcs-research-flow-item">
-
                     <span className="casestudy-mono">
-                      INSIGHT
+                      REVIEWER NEED
                     </span>
-
                     <strong className="casestudy-heading">
-                      Browsing can become evaluation
+                      Evaluate quickly
                     </strong>
-
                   </div>
-
 
                   <div className="pcs-research-flow-arrow">
                     →
                   </div>
 
-
                   <div className="pcs-research-flow-item pcs-research-flow-item-final">
-
                     <span className="casestudy-mono">
-                      DESIGN OBJECTIVE
+                      PRODUCT GOAL
                     </span>
-
                     <strong className="casestudy-heading">
-                      Make the portfolio useful to evaluate
+                      Distinctive without friction
                     </strong>
-
                   </div>
 
                 </div>
@@ -656,38 +541,62 @@ export default function PerdanaComputerProductContent() {
               </div>
 
 
-              {/* DESIGN IMPLICATION */}
-
               <div className="pcs-research-conclusion">
 
                 <span className="casestudy-mono">
-                  DESIGN IMPLICATION
+                  REFINED PROBLEM
                 </span>
 
                 <h4 className="casestudy-heading">
                   <span className="text-highlight">
-                    Make the portfolio something people can explore while
-                    quickly understanding the work, capabilities, and direction.
+                    How might I create a portfolio that stands out in a crowded
+                    hiring process while still making it fast and easy for
+                    hiring teams to understand my work, thinking, and direction?
                   </span>
                 </h4>
 
                 <p className="casestudy-reading">
-                  The research pointed toward a simple objective:
-                  {' '}<u>use exploration to create engagement while keeping
-                  the work, capabilities, and candidate story easy to find
-                  and understand.</u>
+                  The research did not validate the solution. It made the
+                  constraint clearer: an unconventional portfolio only works if
+                  the reviewer can still evaluate the candidate without paying
+                  a usability tax for the novelty.
                 </p>
 
               </div>
 
-
-              {/* SOURCES */}
 
               <div className="pcs-research-sources">
 
                 <span className="casestudy-mono">
                   SOURCES
                 </span>
+
+                <a
+                  href="https://www.nngroup.com/articles/ux-hiring-insights/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="casestudy-reading"
+                >
+                  Nielsen Norman Group — UX Hiring: Insights from a Design Recruiter ↗
+                </a>
+
+                <a
+                  href="https://www.nngroup.com/articles/state-of-ux-2026/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="casestudy-reading"
+                >
+                  Nielsen Norman Group — State of UX 2026 ↗
+                </a>
+
+                <a
+                  href="https://dribbble.com/resources/career/design-recruiter-portfolio-tips"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="casestudy-reading"
+                >
+                  Dribbble — What Design Recruiters Look For ↗
+                </a>
 
                 <a
                   href="https://doi.org/10.1177/0093650217700748"
@@ -698,91 +607,62 @@ export default function PerdanaComputerProductContent() {
                   Yang & Shen — Effects of Web Interactivity: A Meta-Analysis ↗
                 </a>
 
-                <a
-                  href="https://doi.org/10.1177/14707853211027483"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="casestudy-reading"
-                >
-                  Utami et al. — The Role of Interactivity on Customer Engagement ↗
-                </a>
-
-                <a
-                  href="https://doi.org/10.3389/fcomp.2026.1843009"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="casestudy-reading"
-                >
-                  Hoang et al. — The Power of Agency: Interactivity in Data Storytelling ↗
-                </a>
-
               </div>
 
             </section>
 
 
-            {/* ===================================================
-                RETRO DESIGN DECISION
-            =================================================== */}
+            <div className="pcs-future-card">
 
-            <DesignDecision>
+              <span className="pcs-future-label casestudy-mono">
+                SUCCESS HYPOTHESIS
+              </span>
 
-              <h3 className="pcs-research-title casestudy-heading">
-                The retro visual direction is not only an aesthetic
-                choice. It is a strategy for making the candidate memorable.
-              </h3>
+              <p className="casestudy-reading">
+                In the short term, success means a visitor can understand what
+                kind of designer I am becoming, find relevant work, understand
+                where they are, use shortcuts when time is limited, and contact
+                me without unnecessary friction. The longer-term business signal
+                is whether the portfolio helps applications progress from
+                screening into interviews and eventually an offer.
+              </p>
+
+            </div>
+
+          </section>
+
+
+          {/* =====================================================
+              02 — DEFINE DIRECTION
+          ===================================================== */}
+
+          <section
+            id="define-direction"
+            className="pcs-section"
+          >
+
+            <SectionHeading
+              number="02"
+              title="Define the Direction"
+              subtitle="Choose a product direction that can create differentiation without hiding the work."
+            />
+
+            <div className="pcs-copy-stack">
 
               <p className="pcs-body casestudy-reading">
-                Instead of presenting the portfolio as a conventional
-                website, I designed it around a familiar computing
-                metaphor — a <b>Windows 95-inspired</b> environment where
-                projects, information, and interactions can be discovered
-                through an interface that demonstrates product thinking.
+                I did not run a formal competitor study of three named
+                portfolios, and I did not create three polished concepts just
+                to manufacture a selection exercise. The real comparison was
+                between portfolio formats I had already observed and one I had
+                already tried myself through modern Framer-style templates.
               </p>
 
-              <PlaceholderMedia
-                src={perdanaComputer}
-                alt="Perdana Computer illustration"
-              />
+            </div>
 
-              <p className="casestudy-reading">
-                When many portfolio websites use similar contemporary
-                layouts, a recognizable visual metaphor can
-                {' '}<span className="text-highlight">
-                  help the candidate stand apart
-                </span>
-                {' '}before a recruiter even reaches the individual
-                project content.
-              </p>
-
-              <p className="casestudy-reading">
-                The Windows 95-inspired language also creates an
-                opportunity to
-                <span className="text-highlight">
-                  {' '}make interaction part of the proof.
-                </span>
-                {' '}Windows, folders, menus, buttons, dialogs, and other
-                interface elements become ways to explore the work,
-                rather than decoration placed on top of it.
-              </p>
-
-            </DesignDecision>
-
-
-            <blockquote className="pcs-quote casestudy-reading-large">
-              The portfolio is not only a container for the work.
-              It is the first product I am asking a potential employer
-              to experience.
-            </blockquote>
-
-
-            {/* ===================================================
-                DESIGN PRINCIPLES
-            =================================================== */}
 
             <div className="pcs-design-grid">
 
-              {designPrinciples.map((item, index) => (
+              {portfolioFormats.map((item, index) => (
                 <article
                   className="pcs-design-card"
                   key={item.title}
@@ -805,100 +685,376 @@ export default function PerdanaComputerProductContent() {
 
             </div>
 
+
+            <DesignDecision
+              number="DECISION 01"
+              title="Use a desktop metaphor as the product direction"
+            >
+
+              <h3 className="pcs-research-title casestudy-heading">
+                Why Windows 95 became more than a visual reference
+              </h3>
+
+              <p className="pcs-body casestudy-reading">
+                The Windows 95 idea initially appealed to me because it was
+                distinctive and personally memorable. It became more useful
+                when I looked beyond the visual style and saw an existing
+                interaction language: desktop, folders, files, windows, menus,
+                and a taskbar.
+              </p>
+
+              <PlaceholderMedia
+                src={perdanaComputer}
+                alt="Windows 95-inspired visual direction for Perdana's Computer"
+              />
+
+              <p className="pcs-body casestudy-reading">
+                Instead of inventing an entirely new way to navigate an
+                experimental portfolio, I could borrow concepts many computer
+                users already understand. The bet was not that everyone would
+                remember Windows 95 perfectly. The bet was that recognizable
+                desktop concepts could reduce some of the learning cost created
+                by an unconventional presentation.
+              </p>
+
+              <div className="pcs-research-sources">
+
+                <span className="casestudy-mono">
+                  SUPPORTING PRINCIPLE
+                </span>
+
+                <a
+                  href="https://www.nngroup.com/articles/mental-models/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="casestudy-reading"
+                >
+                  Nielsen Norman Group — Mental Models and User Experience Design ↗
+                </a>
+
+              </div>
+
+            </DesignDecision>
+
+
+            <div className="pcs-research-translation">
+
+              <div className="pcs-research-translation-header">
+                <span className="casestudy-mono">
+                  METAPHOR → PRODUCT BEHAVIOR
+                </span>
+                <span className="casestudy-mono">
+                  SYSTEM MAP
+                </span>
+              </div>
+
+              <div className="pcs-research-flow">
+
+                <div className="pcs-research-flow-item">
+                  <span className="casestudy-mono">
+                    FOLDERS
+                  </span>
+                  <strong className="casestudy-heading">
+                    Navigation
+                  </strong>
+                </div>
+
+                <div className="pcs-research-flow-arrow">
+                  →
+                </div>
+
+                <div className="pcs-research-flow-item">
+                  <span className="casestudy-mono">
+                    WINDOWS
+                  </span>
+                  <strong className="casestudy-heading">
+                    Content containers
+                  </strong>
+                </div>
+
+                <div className="pcs-research-flow-arrow">
+                  →
+                </div>
+
+                <div className="pcs-research-flow-item pcs-research-flow-item-final">
+                  <span className="casestudy-mono">
+                    DESKTOP
+                  </span>
+                  <strong className="casestudy-heading">
+                    Main workspace
+                  </strong>
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div className="pcs-copy-stack">
+
+              <p className="pcs-body casestudy-reading">
+                The metaphor then became a product system. Folders organize
+                projects. Windows contain tasks and content. The taskbar exposes
+                open state. AI Chat acts as an information shortcut. Inbox
+                creates a contact flow without forcing visitors to leave the
+                experience.
+              </p>
+
+              <p className="pcs-highlight-quote">
+                <mark>
+                  <strong>
+                    If I was going to make the portfolio unconventional, the
+                    interaction itself should still borrow from something familiar.
+                  </strong>
+                </mark>
+              </p>
+
+            </div>
+
+
+            <div className="pcs-design-grid">
+
+              {productPrinciples.map((item, index) => (
+                <article
+                  className="pcs-design-card"
+                  key={item.title}
+                >
+
+                  <span className="pcs-design-number casestudy-mono">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+
+                  <h3 className="casestudy-heading">
+                    {item.title}
+                  </h3>
+
+                  <p className="casestudy-reading">
+                    {item.text}
+                  </p>
+
+                </article>
+              ))}
+
+            </div>
+
+
+            <div className="pcs-future-card">
+
+              <span className="pcs-future-label casestudy-mono">
+                SELECTION CRITERIA
+              </span>
+
+              <p className="casestudy-reading">
+                I evaluated the direction through four practical criteria:
+                <strong> problem fit, evaluation clarity, capability signal,
+                and feasibility.</strong> The desktop direction required more
+                implementation work, but it was the only direction where the
+                portfolio itself could directly demonstrate interaction design
+                and working code rather than only describe those skills.
+              </p>
+
+            </div>
+
           </section>
 
 
           {/* =====================================================
-              03 — DEVELOPMENT
+              03 — PROTOTYPE & BUILD
           ===================================================== */}
 
           <section
-            id="design-in-code"
+            id="prototype-build"
             className="pcs-section"
           >
 
             <SectionHeading
               number="03"
-              title="From Design to Code"
-              subtitle="The interface was designed and built as one continuous process."
+              title="Prototype by Building"
+              subtitle="Use Figma to establish the flow, then move into code early because behavior is part of the hypothesis."
             />
 
             <div className="pcs-copy-stack">
 
               <p className="pcs-body casestudy-reading">
-                One of the biggest differences between this project and
-                a conventional portfolio design is that the interface did
-                not stop at a Figma prototype. The product had to work in
-                the browser because the implementation itself is part of
-                what I want to demonstrate.
+                I used Figma to define the first flows and basic window
+                interfaces. I did not spend time exploring multiple visual
+                layouts because the selected direction intentionally borrowed
+                from an existing Windows 95 interface pattern.
               </p>
 
               <p className="pcs-body casestudy-reading">
-                <u>I translated the visual decisions</u> directly into
-                <strong>
-                  {' '}React, HTML, and CSS
-                </strong>
-                , using code as part of the design process itself and
-                learning where design decisions change once they become real.
+                The more important questions were behavioral: what happens
+                when a folder opens, how someone navigates deeper, how multiple
+                windows behave, how an opened project stays visible, and what
+                happens on mobile when desktop conventions stop translating
+                cleanly.
               </p>
 
-              <p className="pcs-body casestudy-reading">
-                <span className="text-highlight">
-                  AI became an additional development partner during
-                  implementation.
-                </span>
-                {' '}It helped accelerate exploration, debugging, and
-                repetitive coding tasks, while I remained responsible for
-                the product, UX, visual, and implementation decisions.
-              </p>
-
-              <p className="pcs-body casestudy-reading">
-                The result is intentionally not presented as a finished
-                artifact. It is a <strong>working product that can continue
-                to change</strong> as I learn from people using it — and
-                as I learn what helps a hiring team understand my work.
+              <p className="pcs-highlight-quote">
+                <mark>
+                  <strong>
+                    Figma was the starting point. React became part of the prototype.
+                  </strong>
+                </mark>
               </p>
 
             </div>
+
+            <PlaceholderMedia
+              src={perdanaComputerMain1}
+              alt="Perdana's Computer design-in-code workflow"
+              caption="The product moved into code early so system behavior could be designed and tested in a working environment."
+            />
 
 
             <div className="pcs-process">
 
               <ProcessStep
                 number="01"
-                title="Ideate"
-                text="Identify the hiring and portfolio problem I wanted the product to solve."
+                title="Arrive"
+                text="A first-time visitor is introduced to Perdana and the idea behind the computer."
               />
 
               <ProcessStep
                 number="02"
-                title="Define"
-                text="Turn the portfolio into a product with a clear user and career goal."
+                title="Reach the desktop"
+                text="The desktop becomes the main workspace and starting point for exploration."
               />
 
               <ProcessStep
                 number="03"
-                title="Design"
-                text="Develop the visual language, interface, interaction, and information architecture around that goal."
+                title="Choose a path"
+                text="Visitors can open projects, profile information, writing, contact tools, or smaller experiments."
               />
 
               <ProcessStep
                 number="04"
-                title="Build"
-                text="Translate the design directly into React, HTML, and CSS so the work can be experienced, not just viewed."
+                title="Explore evidence"
+                text="Folders and windows reveal case studies, visual work, product work, and design engineering evidence."
               />
 
               <ProcessStep
                 number="05"
-                title="Test"
-                text="Run limited alpha testing and collect feedback on clarity, navigation, and the overall experience."
+                title="Take a shortcut"
+                text="AI Chat offers a faster route when a visitor wants specific information instead of manual exploration."
               />
 
               <ProcessStep
                 number="06"
-                title="Iterate"
-                text="Use feedback and future hiring signals to continuously evolve the product."
+                title="Continue the conversation"
+                text="Inbox provides a direct contact path from inside the portfolio experience."
               />
+
+            </div>
+
+
+            <DesignDecision
+              number="BUILD 01"
+              title="Start with the system shell"
+            >
+
+              <p className="pcs-body casestudy-reading">
+                I started with the desktop, clickable icons, windows, and the
+                taskbar system. React95 provided part of the interface
+                foundation, so the goal was not to recreate every Windows
+                component from zero. My responsibility was the product layer
+                around it: what should exist, how the parts connect, what
+                information belongs where, and how visitors move through the system.
+              </p>
+
+            </DesignDecision>
+
+
+            <DesignDecision
+              number="BUILD 02"
+              title="Create feature surfaces before completing every backend"
+            >
+
+              <p className="pcs-body casestudy-reading">
+                I then designed the main windows: About, Project Explorer,
+                AI Chat, Inbox, Writing, Games, and Recycle Bin. Several of
+                these began as interface shells before their complete behavior
+                existed. Once the surfaces were clear, I made the functions
+                operational one by one.
+              </p>
+
+            </DesignDecision>
+
+
+            <DesignDecision
+              number="BUILD 03"
+              title="Let the product reveal new opportunities"
+            >
+
+              <p className="pcs-body casestudy-reading">
+                Project navigation became functional, case studies were added,
+                About was refined, Inbox was connected through Resend, and AI
+                Chat evolved into a Gemini-powered interface connected to
+                structured data about me. I also added an installer using
+                localStorage and a randomized welcome window for repeat visits.
+              </p>
+
+              <p className="pcs-body casestudy-reading">
+                The feature set did not come from one perfect specification at
+                the beginning. Some ideas emerged while designing and building
+                because the working product exposed new questions: what if a
+                reviewer does not want to read everything? What if they want to
+                contact me immediately? What if deeper folders become difficult
+                to navigate?
+              </p>
+
+            </DesignDecision>
+
+
+            <div className="pcs-research-translation">
+
+              <div className="pcs-research-translation-header">
+                <span className="casestudy-mono">
+                  ACTUAL WORKING LOOP
+                </span>
+                <span className="casestudy-mono">
+                  DESIGN IN CODE
+                </span>
+              </div>
+
+              <div className="pcs-research-flow">
+
+                <div className="pcs-research-flow-item">
+                  <span className="casestudy-mono">
+                    01
+                  </span>
+                  <strong className="casestudy-heading">
+                    Define
+                  </strong>
+                </div>
+
+                <div className="pcs-research-flow-arrow">
+                  →
+                </div>
+
+                <div className="pcs-research-flow-item">
+                  <span className="casestudy-mono">
+                    02
+                  </span>
+                  <strong className="casestudy-heading">
+                    Build & observe
+                  </strong>
+                </div>
+
+                <div className="pcs-research-flow-arrow">
+                  →
+                </div>
+
+                <div className="pcs-research-flow-item pcs-research-flow-item-final">
+                  <span className="casestudy-mono">
+                    03
+                  </span>
+                  <strong className="casestudy-heading">
+                    Test & refine
+                  </strong>
+                </div>
+
+              </div>
 
             </div>
 
@@ -906,73 +1062,202 @@ export default function PerdanaComputerProductContent() {
 
 
           {/* =====================================================
-              04 — TESTING
+              04 — VALIDATE
           ===================================================== */}
 
           <section
-            id="testing"
+            id="validate"
             className="pcs-section"
           >
 
             <SectionHeading
               number="04"
-              title="Testing"
-              subtitle="Test whether the product communicates the work, the person, and the transition clearly."
+              title="Validate Through Repeated Tasks"
+              subtitle="Use lightweight formative testing to catch interaction friction while the product is still changing."
             />
 
-            <div className="pcs-copy-stack">
+            <div className="pcs-future-card">
 
-              <p className="pcs-body casestudy-reading">
-                Before treating the experience as finished, I am testing it
-                with a limited group of users. And if you are reading this
-                case study, there is a good chance that <strong>you are one
-                of the testers.</strong>
-              </p>
+              <span className="pcs-future-label casestudy-mono">
+                TESTING SETUP
+              </span>
 
-              <p className="pcs-body-strong casestudy-heading">
-                <span className="text-highlight">
-                  Tell me what works. Tell me what doesn't.
-                </span>
-              </p>
-
-              <p className="pcs-body casestudy-reading">
-                The goal of this stage is not to prove that the portfolio
-                is perfect. It is to understand where people get confused,
-                what they remember, what they skip, and whether the product
-                makes the intended capabilities and career direction clear.
+              <p className="casestudy-reading">
+                <strong>Participant:</strong> 1 person from my personal circle.<br />
+                <strong>Method:</strong> repeated task-based usability checks as new features were introduced.<br />
+                <strong>Devices:</strong> desktop and smartphone when relevant.<br />
+                <strong>Purpose:</strong> catch obvious interaction friction early — not claim population-level usability.
               </p>
 
             </div>
 
 
-            <div className="pcs-feedback-card">
+            <DesignDecision
+              number="TEST 01"
+              title="Finding and exploring a project"
+            >
 
-              <span className="pcs-feedback-label casestudy-mono">
-                ALPHA TEST
-              </span>
-
-              <h3 className="casestudy-heading">
-                You are part of the testing process.
+              <h3 className="pcs-research-title casestudy-heading">
+                Task: find a case study about work I have done
               </h3>
 
-              <p className="casestudy-reading">
-                Found something confusing? Have an idea? Something feels
-                unnecessary? Feedback is useful because the goal is not only
-                to make the portfolio more interesting, but more effective.
+              <p className="pcs-body casestudy-reading">
+                I asked the participant to open the website and imagine they
+                wanted to inspect a case study about my previous work. They
+                understood that the desktop folders were interactive and were
+                able to navigate into the project structure without instruction.
               </p>
 
-              <button
-                type="button"
-                className="pcs-feedback-button casestudy-ui-reading"
-                onClick={() => {
-                  window.location.href =
-                    'mailto:perdanakurniawan25@gmail.com' +
-                    '?subject=Perdana%27s%20Computer%20Feedback' +
-                    '&body=Hi%20Perdana,%0A%0AHere%27s%20my%20feedback:';
-                }}
-              >
-                Send feedback ↗
-              </button>
+              <div className="pcs-research-response">
+                <span className="casestudy-mono">
+                  FRICTION — MOBILE
+                </span>
+                <strong className="casestudy-reading">
+                  Requiring double tap to open an item matched the desktop
+                  metaphor but conflicted with the participant's expectation
+                  that a single tap should open it on a phone.
+                </strong>
+              </div>
+
+              <div className="pcs-research-response">
+                <span className="casestudy-mono">
+                  FRICTION — WAYFINDING
+                </span>
+                <strong className="casestudy-reading">
+                  As the participant navigated deeper, similar folder icons and
+                  changing content made it harder to understand the current
+                  location and how deep they had explored.
+                </strong>
+              </div>
+
+              <p className="pcs-body casestudy-reading">
+                <strong>Iteration:</strong> I added a folder tree to expose the
+                hierarchy and a current-folder control above the content so the
+                user's location remains visible while navigating. For mobile,
+                the interaction model needs to favor touch expectations over
+                literal historical desktop behavior.
+              </p>
+
+              <p className="pcs-highlight-quote">
+                <mark>
+                  <strong>
+                    The file tree was added because testing exposed a
+                    wayfinding problem — not because it looked more like Windows.
+                  </strong>
+                </mark>
+              </p>
+
+            </DesignDecision>
+
+
+            <DesignDecision
+              number="TEST 02"
+              title="Using AI when time is limited"
+            >
+
+              <h3 className="pcs-research-title casestudy-heading">
+                Task: use the portfolio when you do not have much time
+              </h3>
+
+              <p className="pcs-body casestudy-reading">
+                I asked what the participant would expect to do after noticing
+                the AI Chat while imagining they did not have much time to
+                explore. They immediately started asking questions about me.
+                That supported the use case of conversational search as an
+                information shortcut.
+              </p>
+
+              <p className="pcs-body casestudy-reading">
+                The first implementation failed that expectation. The interface
+                looked like an AI conversation, but the underlying behavior was
+                still limited to template-style responses. The participant
+                quickly became frustrated.
+              </p>
+
+              <div className="pcs-research-response">
+                <span className="casestudy-mono">
+                  FINDING
+                </span>
+                <strong className="casestudy-reading">
+                  The feature had a useful mental model, but the interface
+                  promised a level of conversation the implementation could not deliver.
+                </strong>
+              </div>
+
+              <p className="pcs-body casestudy-reading">
+                <strong>Iteration:</strong> I replaced the static behavior with
+                a Gemini API integration connected to structured data about my
+                profile, experience, projects, skills, and career direction. I
+                also added language-aware responses so the assistant can answer
+                in English or Indonesian based on the visitor's language.
+              </p>
+
+            </DesignDecision>
+
+
+            <DesignDecision
+              number="TEST 03"
+              title="Contacting me through Inbox"
+            >
+
+              <h3 className="pcs-research-title casestudy-heading">
+                Task: imagine you want to contact me after reviewing the portfolio
+              </h3>
+
+              <p className="pcs-body casestudy-reading">
+                The participant initially looked for an email address, then
+                noticed the Inbox icon and opened it. The feature itself was
+                discoverable. The failure happened inside the form.
+              </p>
+
+              <p className="pcs-body casestudy-reading">
+                The original Inbox required a valid sender email containing
+                an @ symbol. From my perspective that protected the ability to
+                reply. From the participant's perspective, the immediate goal
+                was simply to send a message. The validation created enough
+                friction that the task was abandoned.
+              </p>
+
+              <div className="pcs-research-response">
+                <span className="casestudy-mono">
+                  TRADE-OFF
+                </span>
+                <strong className="casestudy-reading">
+                  Requiring an email improves replyability for me, but it can
+                  block the user's primary goal of sending the message.
+                </strong>
+              </div>
+
+              <p className="pcs-body casestudy-reading">
+                <strong>Next iteration — not shipped yet:</strong> make email
+                optional. If a visitor omits it, allow the message to send but
+                clearly explain that I will not have a way to reply. This keeps
+                the primary task completable while making the consequence explicit.
+              </p>
+
+            </DesignDecision>
+
+
+            <div className="pcs-research-conclusion">
+
+              <span className="casestudy-mono">
+                WHAT THE TESTING ACTUALLY SUPPORTS
+              </span>
+
+              <h4 className="casestudy-heading">
+                One participant is enough to expose friction. It is not enough
+                to claim that “users prefer” the product.
+              </h4>
+
+              <p className="casestudy-reading">
+                For this participant, the desktop metaphor was discoverable
+                enough to begin exploring projects; deeper navigation created
+                a wayfinding problem; mobile inherited a desktop interaction
+                that did not fit touch expectations; AI Chat created a useful
+                shortcut expectation that the first implementation failed to
+                meet; and mandatory email validation blocked the contact task.
+                Those observations were enough to change the product.
+              </p>
 
             </div>
 
@@ -991,6 +1276,7 @@ export default function PerdanaComputerProductContent() {
             <SectionHeading
               number="05"
               title="Outcome"
+              subtitle="Ship the first release, but keep the hiring result separate from the product result."
             />
 
             <div className="pcs-outcome">
@@ -998,25 +1284,33 @@ export default function PerdanaComputerProductContent() {
               <div className="pcs-outcome-stat">
 
                 <span className="pcs-outcome-number casestudy-heading">
-                  TBD
+                  V1
                 </span>
 
                 <span className="pcs-outcome-label casestudy-ui">
-                  PRODUCT RESULT
+                  INITIAL RELEASE
                 </span>
 
               </div>
 
-
               <div className="pcs-copy-stack pcs-outcome-copy">
 
                 <p className="pcs-body casestudy-reading">
-                  This project is still relatively new, so I do not want
-                  to manufacture success metrics simply to make the case
-                  study look complete. Instead, I am treating the portfolio
-                  as an ongoing product experiment with two outcomes to learn
-                  from: how people experience it and whether it creates real
-                  hiring conversations.
+                  By 26 August 2026, the project had moved from an initial
+                  hypothesis and basic wireframe into a working portfolio
+                  product. The first release included the desktop environment,
+                  functional windows and taskbar behavior, project folders,
+                  case-study navigation, onboarding, AI, Inbox, writing,
+                  responsive behavior, and smaller interactions supporting the
+                  computer metaphor.
+                </p>
+
+                <p className="pcs-body casestudy-reading">
+                  The implementation was built with React, HTML, CSS, and
+                  JavaScript, using React95 as part of the interface foundation.
+                  AI was also used as development assistance during exploration,
+                  implementation, and debugging. Product, UX, visual, and final
+                  implementation decisions remained my responsibility.
                 </p>
 
               </div>
@@ -1027,29 +1321,85 @@ export default function PerdanaComputerProductContent() {
             <div className="pcs-future-card">
 
               <span className="pcs-future-label casestudy-mono">
-                24 AUGUST 2026
+                WHAT I AM NOT CLAIMING YET
               </span>
 
               <p className="casestudy-reading">
-                The strongest long-term signal will be whether this portfolio
-                helps create real conversations with companies looking for
-                product designers or design engineers. That does not mean
-                claiming a result before it happens. It means keeping the
-                hiring outcome visible as part of the product's success criteria.
-
-                <strong>
-                  {' '}The goal is not just to be remembered. It is to be
-                  remembered for the right reasons.
-                </strong>
+                I do not yet have enough application data to claim that
+                Perdana's Computer increases screening conversion, creates more
+                interviews, or improves the probability of receiving an offer.
+                Those are the long-term business hypotheses. Manufacturing those
+                numbers would make the case study look more complete while
+                making the evidence less credible.
               </p>
 
             </div>
+
+
+            <div className="pcs-research-translation">
+
+              <div className="pcs-research-translation-header">
+                <span className="casestudy-mono">
+                  TWO LEVELS OF OUTCOME
+                </span>
+                <span className="casestudy-mono">
+                  CURRENT SNAPSHOT
+                </span>
+              </div>
+
+              <div className="pcs-research-flow">
+
+                <div className="pcs-research-flow-item">
+                  <span className="casestudy-mono">
+                    PRODUCT
+                  </span>
+                  <strong className="casestudy-heading">
+                    Built, tested, iterated
+                  </strong>
+                </div>
+
+                <div className="pcs-research-flow-arrow">
+                  →
+                </div>
+
+                <div className="pcs-research-flow-item">
+                  <span className="casestudy-mono">
+                    HIRING
+                  </span>
+                  <strong className="casestudy-heading">
+                    Still measuring
+                  </strong>
+                </div>
+
+                <div className="pcs-research-flow-arrow">
+                  →
+                </div>
+
+                <div className="pcs-research-flow-item pcs-research-flow-item-final">
+                  <span className="casestudy-mono">
+                    NORTH STAR
+                  </span>
+                  <strong className="casestudy-heading">
+                    Open the next conversation
+                  </strong>
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <blockquote className="pcs-quote casestudy-reading-large">
+              The goal is not simply to make someone think the website is
+              cool. It is to help the right person understand my capabilities
+              well enough to start the next conversation.
+            </blockquote>
 
           </section>
 
 
           {/* =====================================================
-              REFLECTION
+              06 — REFLECTION
           ===================================================== */}
 
           <section
@@ -1058,46 +1408,169 @@ export default function PerdanaComputerProductContent() {
           >
 
             <SectionHeading
-              title="Reflection : a portfolio that keeps evolving"
+              number="06"
+              title="Reflection"
+              subtitle="The most useful lesson was the tension between differentiation and usability — not the retro interface itself."
             />
 
             <div className="pcs-copy-stack">
 
               <p className="pcs-body-strong casestudy-heading">
-                This project changed the way I think about what a portfolio
-                is supposed to do.
+                Different is useful only when it does not become expensive for the user.
               </p>
 
               <p className="pcs-body casestudy-reading">
-                A portfolio does not have to be a static archive of
-                previous work.
-                {' '}<span className="text-highlight">
-                  It can be a product itself — something with a problem,
-                  users, a value proposition, an interface, interactions,
-                  testing, and continuous iteration.
+                I started this project wanting to make something different and
+                memorable. Research and testing made that goal more precise.
+                Every unconventional interaction creates a cost. Sometimes that
+                cost is worth paying because it creates engagement, communicates
+                personality, or demonstrates capability. Sometimes it is simply friction.
+              </p>
+
+              <p className="pcs-body casestudy-reading">
+                The mobile double-tap problem is a small example. Following
+                Windows behavior made the concept more authentic. Following
+                mobile behavior made the product easier to use. When those two
+                goals conflict, <strong>the product has to win the argument.</strong>
+              </p>
+
+              <p className="pcs-body casestudy-reading">
+                The project also changed how I think about prototyping. Figma
+                was useful for defining structure, but many of the important
+                questions only appeared when the product was running: how a
+                folder hierarchy behaves, what happens when multiple windows
+                are open, what an AI interface promises by looking like AI, and
+                how a desktop interaction model behaves on a phone.
+              </p>
+
+              <p className="pcs-body casestudy-reading">
+                Those are behavior questions, not only visual questions. Moving
+                into React early allowed implementation to become part of the
+                design process. For me, that is where Product Design and Design
+                Engineering started to connect.
+              </p>
+
+            </div>
+
+
+            <div className="pcs-design-grid">
+
+              <article className="pcs-design-card">
+                <span className="pcs-design-number casestudy-mono">
+                  EVIDENCE
                 </span>
-                {' '}More importantly, it can demonstrate skills that a
-                resume or project thumbnail cannot show on its own.
-              </p>
+                <h3 className="casestudy-heading">
+                  Supported so far
+                </h3>
+                <p className="casestudy-reading">
+                  I can take a self-defined problem through secondary research,
+                  interaction design, implementation, task-based testing, and
+                  iteration. The first participant also exposed concrete friction
+                  that changed project navigation and AI behavior.
+                </p>
+              </article>
+
+              <article className="pcs-design-card">
+                <span className="pcs-design-number casestudy-mono">
+                  ASSUMPTION
+                </span>
+                <h3 className="casestudy-heading">
+                  Still unvalidated
+                </h3>
+                <p className="casestudy-reading">
+                  The participant is not a recruiter or hiring manager. One
+                  participant cannot represent broader usability. Memorability,
+                  AI usefulness after launch, and the relationship between this
+                  portfolio and hiring conversion still need stronger evidence.
+                </p>
+              </article>
+
+            </div>
+
+
+            <DesignDecision
+              number="NEXT 01"
+              title="Test with the actual target audience"
+            >
 
               <p className="pcs-body casestudy-reading">
-                I also see this project as a <b>bridge between my decade
-                of experience in visual design and my growing practice in
-                product design, UX, and design engineering.</b> Instead of
-                hiding where I came from, the project uses that foundation
-                while showing where I am going.
+                The next meaningful test is with recruiters, hiring managers,
+                Product Designers, or Design Leads. The question should not be
+                “Do you like the Windows 95 style?” It should be:
               </p>
 
+              <p className="pcs-highlight-quote">
+                <mark>
+                  <strong>
+                    After exploring this portfolio, what do you think this
+                    candidate can do — and what evidence led you to that conclusion?
+                  </strong>
+                </mark>
+              </p>
+
+            </DesignDecision>
+
+
+            <DesignDecision
+              number="NEXT 02"
+              title="Reduce friction before adding more features"
+            >
+
               <p className="pcs-body casestudy-reading">
-                It is not perfect. And it probably never will be.
-                That's intentional. The product is part of the learning process.
+                The next product work should prioritize mobile interaction,
+                clearer window and folder state, and the unfinished optional
+                email flow in Inbox. The portfolio already has enough features
+                to test. The next question is whether those features make the
+                evaluation experience more effective.
+              </p>
+
+            </DesignDecision>
+
+
+            <DesignDecision
+              number="NEXT 03"
+              title="Measure the hiring funnel"
+            >
+
+              <p className="pcs-body casestudy-reading">
+                The long-term experiment needs behavioral and career evidence:
+                application → screening → portfolio review → interview → offer,
+                combined with qualitative feedback about what reviewers
+                understood and remembered. That will provide a stronger answer
+                to the original hypothesis than page views alone.
+              </p>
+
+            </DesignDecision>
+
+
+            <div className="pcs-problem-card">
+
+              <span className="pcs-problem-label casestudy-ui">
+                CLOSING
+              </span>
+
+              <p className="casestudy-heading">
+                Perdana's Computer started as an attempt to create a portfolio
+                that could stand out. It became a more useful experiment:
+                can the portfolio itself demonstrate the kind of designer I am
+                trying to become without making the person evaluating me work harder?
+              </p>
+
+            </div>
+
+
+            <div className="pcs-copy-stack">
+
+              <p className="pcs-body casestudy-reading">
+                The answer is not finished. Some assumptions have been
+                challenged, some interactions have already failed and improved,
+                and others still need better evidence.
               </p>
 
               <p className="pcs-body casestudy-reading">
                 <strong>
-                  Because this portfolio is a product — and its job is to
-                  keep getting better until it helps me do what it was built
-                  to do: open the next conversation.
+                  That is why I do not see Perdana's Computer as a finished
+                  portfolio. I see it as the first product in the transition.
                 </strong>
               </p>
 
@@ -1110,16 +1583,16 @@ export default function PerdanaComputerProductContent() {
                 Visual Designer → Product Design / Design Engineering
               </Meta>
 
-              <Meta label="Scope">
-                Product · UX · UI · Development
-              </Meta>
-
-              <Meta label="Technology">
-                React · HTML · CSS · React95
+              <Meta label="Product">
+                Perdana's Computer
               </Meta>
 
               <Meta label="Status">
-                Alpha Testing · Hiring Experiment
+                Initial Release · Ongoing Iteration
+              </Meta>
+
+              <Meta label="Business Goal">
+                Portfolio Screening → Interview → Offer
               </Meta>
 
             </dl>
@@ -1128,7 +1601,6 @@ export default function PerdanaComputerProductContent() {
 
         </div>
       </main>
-
 
       {/* =========================================================
           COMPONENT STYLES

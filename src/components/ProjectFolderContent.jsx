@@ -219,6 +219,13 @@ export default function ProjectFolderContent({
           children: [
         {
           id: 'pc-product-overview',
+          name: 'Overview',
+          type: 'file',
+          iconType: 'file',
+          openWindow: 'perdana-computer-product',
+        },
+        {
+          id: 'pc-product-case-studies',
           name: 'Case Studies',
           type: 'file',
           iconType: 'website',
@@ -279,6 +286,14 @@ export default function ProjectFolderContent({
             },
           ],
         },
+      {
+       id: 'hotel booking',
+       name: 'Hotel Booking',
+       type: 'folder',
+       iconType: 'folder',
+       isLocked: true,
+       message: 'This folder is still on progress!',
+      },
       ],
     },
 

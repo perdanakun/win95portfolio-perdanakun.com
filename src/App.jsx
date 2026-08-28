@@ -2402,27 +2402,7 @@ INI ENDING KODE INACTIVE*/}
       {/* ABOUT */}
       <List.Item
         icon={<Computer variant="16x16_4" />}
-        onClick={() =>
-          openAlertDesktop(
-            'Sorry about that...',
-            <>
-              This section is still under construction. While I'm polishing the
-              design & code, you can know a little more about me by checking out
-              my{' '}
-              <a
-                href="https://linkedin.com/in/perdanakun"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  color: '#000080',
-                  textDecoration: 'underline',
-                }}
-              >
-                LinkedIn
-              </a>
-            </>
-          )
-        }
+        onClick={() => toggleWindow('about', true)}
       >
         About
       </List.Item>
