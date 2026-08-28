@@ -606,1680 +606,886 @@ function getSafePosition({
    CLIPPY ASSISTANT
 ====================================== */
 
+const GUIDE_STORAGE_KEY = 'perdana-clippy-guide-seen';
+
+// Random Clippy muncul setiap 10–20 detik
+const RANDOM_MIN_DELAY = 10000;
+const RANDOM_MAX_EXTRA_DELAY = 10000;
+
+// Setelah muncul, Clippy stay selama 8 detik
+const RANDOM_VISIBLE_DURATION = 8000;
+
+const CONTEXTUAL_VISIBLE_DURATION = 8000;
+
+function getStoredGuideState() {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+
+  return window.localStorage.getItem(GUIDE_STORAGE_KEY) === 'true';
+}
+
 export default function ClippyAssistant({
   pcScreen,
   pcInstalled,
-
   isMobile,
   isTablet,
-
   windows,
-
   welcomeInstallerVisible,
   welcomeInstallerLoadingVisible,
   installerVisible,
+  startGuide,
 }) {
+  const { clippy } = useClippy();
 
-  const { clippy } =
-    useClippy();
+  const [guideCompleted, setGuideCompleted] =
+    React.useState(getStoredGuideState);
 
+  const previousState = React.useRef({
+    about: false,
+    projects: false,
+    aiAssistant: false,
+    contact: false,
+  });
+
+  const lastRandomIndex = React.useRef(-1);
+  const tourStartedRef = React.useRef(false);
+  const tourTimersRef = React.useRef([]);
+  const chatterTimerRef = React.useRef(null);
+  const chatterHideTimerRef = React.useRef(null);
+  const contextualHideTimerRef = React.useRef(null);
+
+  const installerOpen = Boolean(
+    welcomeInstallerVisible ||
+      welcomeInstallerLoadingVisible ||
+      installerVisible
+  );
+
+  const desktopReady = Boolean(
+    clippy &&
+      pcScreen === 'desktop' &&
+      pcInstalled &&
+      !installerOpen &&
+      !windows?.welcome
+  );
 
   /* ====================================
-     PREVIOUS WINDOW STATE
-
-     Digunakan supaya contextual
-     message hanya muncul ketika
-     false -> true.
+     TIMER HELPERS
   ==================================== */
 
-  const previousState =
-    React.useRef({
-
-      about: false,
-
-      projects: false,
-
-      aiAssistant: false,
-
-      contact: false,
-
-      installer: false,
-
+  const clearTourTimers = React.useCallback(() => {
+    tourTimersRef.current.forEach((timer) => {
+      window.clearTimeout(timer);
     });
 
+    tourTimersRef.current = [];
+  }, []);
+
+  const clearChatterTimers = React.useCallback(() => {
+    if (chatterTimerRef.current) {
+      window.clearTimeout(chatterTimerRef.current);
+      chatterTimerRef.current = null;
+    }
+
+    if (chatterHideTimerRef.current) {
+      window.clearTimeout(chatterHideTimerRef.current);
+      chatterHideTimerRef.current = null;
+    }
+  }, []);
+
+  const clearContextualTimer = React.useCallback(() => {
+    if (contextualHideTimerRef.current) {
+      window.clearTimeout(contextualHideTimerRef.current);
+      contextualHideTimerRef.current = null;
+    }
+  }, []);
 
   /* ====================================
-     FIRST VISIT TOUR TIMERS
+     SPEAK HELPERS
   ==================================== */
 
-  const introTimers =
-    React.useRef([]);
-
-
-  /* ====================================
-     RANDOM MESSAGE HISTORY
-  ==================================== */
-
-  const lastRandomIndex =
-    React.useRef(-1);
-
-
-  /* ====================================
-     SPEAK HELPER
-  ==================================== */
-
-  const speak =
-    React.useCallback(
-      (
-        message,
-        animation = 'Acknowledge'
-      ) => {
-
-        if (!clippy) {
-          return;
-        }
-
-
-        /*
-          Stop queue / animation lama
-          supaya message baru punya
-          prioritas.
-        */
-
-        if (clippy.stop) {
-
-          clippy.stop();
-
-        }
-
-
-        /*
-          Mainkan animation bila tersedia.
-        */
-
-        if (
-          animation &&
-          clippy.play
-        ) {
-
-          clippy.play(
-            animation
-          );
-
-        }
-
-
-        /*
-          Speech balloon.
-        */
-
-        clippy.speak(
-          message
-        );
-
-      },
-      [
-        clippy,
-      ]
-    );
-
-
-  /* ====================================
-     RANDOM SPEAK HELPER
-  ==================================== */
-
-  const speakRandomMessage =
-    React.useCallback(() => {
-
+  const speak = React.useCallback(
+    (message, animation = 'Acknowledge') => {
       if (!clippy) {
         return;
       }
 
+      clippy.stop?.();
 
-      let nextIndex =
-        0;
+      if (animation && clippy.play) {
+        clippy.play(animation);
+      }
 
+      clippy.speak(message);
+    },
+    [clippy]
+  );
 
-      /*
-        Hindari pesan yang sama
-        dua kali berturut-turut.
-      */
+  const speakRandomMessage = React.useCallback(() => {
+    if (!clippy) {
+      return;
+    }
 
-      do {
+    let nextIndex = 0;
 
-        nextIndex =
-          Math.floor(
-            Math.random() *
-            RANDOM_MESSAGES.length
-          );
-
-      } while (
-        RANDOM_MESSAGES.length > 1 &&
-        nextIndex ===
-          lastRandomIndex.current
+    do {
+      nextIndex = Math.floor(
+        Math.random() * RANDOM_MESSAGES.length
       );
+    } while (
+      RANDOM_MESSAGES.length > 1 &&
+      nextIndex === lastRandomIndex.current
+    );
 
+    lastRandomIndex.current = nextIndex;
 
-      lastRandomIndex.current =
-        nextIndex;
-
-
-      const item =
-        RANDOM_MESSAGES[
-          nextIndex
-        ];
-
-
-      speak(
-        item.text,
-        item.animation
-      );
-
-    }, [
-      clippy,
-      speak,
-    ]);
-
+    const item = RANDOM_MESSAGES[nextIndex];
+    speak(item.text, item.animation);
+  }, [clippy, speak]);
 
   /* ====================================
      MOVE HELPER
   ==================================== */
 
-  const moveClippy =
-    React.useCallback(
-      (
-        feature = null
-      ) => {
+  const moveClippy = React.useCallback(
+    (feature = null) => {
+      if (!clippy) {
+        return;
+      }
 
-        if (!clippy) {
-          return;
-        }
+      const position = feature
+        ? getSafePosition({
+            feature,
+            isMobile,
+            isTablet,
+          })
+        : getClippyPosition();
 
-
-        const position =
-          feature
-            ? getSafePosition({
-                feature,
-                isMobile,
-                isTablet,
-              })
-            : getClippyPosition();
-
-
-        clippy.moveTo(
-          position.x,
-          position.y
-        );
-
-      },
-      [
-        clippy,
-        isMobile,
-        isTablet,
-      ]
-    );
-
+      clippy.moveTo(position.x, position.y);
+    },
+    [clippy, isMobile, isTablet]
+  );
 
   /* ====================================
      COMPACT SPEECH BALLOON
-
-     Inject styling karena balloon
-     dibuat oleh Clippy library.
   ==================================== */
 
   React.useEffect(() => {
+    const styleId = 'perdana-clippy-style';
 
-    const styleId =
-      'perdana-clippy-style';
-
-
-    /*
-      Jangan duplicate style.
-    */
-
-    if (
-      document.getElementById(
-        styleId
-      )
-    ) {
-
-      return;
-
+    if (document.getElementById(styleId)) {
+      return undefined;
     }
 
-
-    const style =
-      document.createElement(
-        'style'
-      );
-
-
-    style.id =
-      styleId;
-
+    const style = document.createElement('style');
+    style.id = styleId;
 
     style.textContent = `
-
       .clippy {
         pointer-events: auto !important;
+        z-index: 10 !important;
       }
 
       .clippy-balloon {
-        font-family:
-          "MS Sans Serif",
-          Arial,
-          sans-serif !important;
+        font-family: "MS Sans Serif", Arial, sans-serif !important;
+        z-index: 11 !important;
       }
 
       .clippy-content {
-        font-family:
-          "MS Sans Serif",
-          Arial,
-          sans-serif !important;
-
-        font-size:
-          11px !important;
-
-        line-height:
-          1.08 !important;
+        font-family: "MS Sans Serif", Arial, sans-serif !important;
+        font-size: 11px !important;
+        line-height: 0.95 !important;
       }
 
       @media (max-width: 600px) {
-
         .clippy {
-          touch-action:
-            none !important;
-
-          cursor:
-            grab;
+          touch-action: none !important;
+          cursor: grab;
         }
 
         .clippy:active {
-          cursor:
-            grabbing;
+          cursor: grabbing;
         }
 
         .clippy-content {
-          line-height:
-            1.05 !important;
+          line-height: 1.05 !important;
         }
-
       }
-
     `;
 
-
-    document.head.appendChild(
-      style
-    );
-
+    document.head.appendChild(style);
 
     return () => {
-
-      /*
-        Tidak wajib dibuang karena
-        component biasanya hidup sepanjang
-        lifecycle app.
-
-        Tapi cleanup tetap aman.
-      */
-
-      const element =
-        document.getElementById(
-          styleId
-        );
-
-
-      if (element) {
-
-        element.remove();
-
-      }
-
+      document.getElementById(styleId)?.remove();
     };
-
   }, []);
 
-
   /* ====================================
-     SHOW / HIDE
+     BASE VISIBILITY GUARD
+
+     - Boot / installer / Welcome: hidden.
+     - Returning visitor: hidden by default.
+     - First guide controls its own visibility.
+     - Random/contextual appearances are not
+       overwritten by this effect while idle.
   ==================================== */
 
   React.useEffect(() => {
-
     if (!clippy) {
       return;
     }
 
+    const blocked =
+      pcScreen === 'boot' ||
+      !pcInstalled ||
+      installerOpen ||
+      Boolean(windows?.welcome);
 
-    /*
-      Tidak tampil ketika BIOS / boot.
-    */
-
-    if (
-      pcScreen === 'boot'
-    ) {
-
+    if (blocked) {
+      clearChatterTimers();
+      clearContextualTimer();
+      clippy.stop?.();
       clippy.hide();
-
       return;
-
     }
 
-
-    /*
-      Installer + Desktop
-      Clippy tampil.
-    */
-
-    clippy.show();
-
+    if (guideCompleted) {
+      clippy.stop?.();
+      clippy.hide();
+    }
   }, [
     clippy,
     pcScreen,
+    pcInstalled,
+    installerOpen,
+    windows?.welcome,
+    guideCompleted,
+    clearChatterTimers,
+    clearContextualTimer,
   ]);
-
 
   /* ====================================
      MOBILE DRAG
-
-     Hanya smartphone yang draggable.
   ==================================== */
 
   React.useEffect(() => {
-
     if (!clippy) {
-      return;
+      return undefined;
     }
 
+    let cleanupListeners = null;
+    let retryTimer = null;
 
-    let cleanupListeners =
-      null;
+    const attachDragEvents = () => {
+      const clippyElement =
+        document.querySelector('.clippy');
 
-    let retryTimer =
-      null;
+      if (!clippyElement) {
+        retryTimer = window.setTimeout(
+          attachDragEvents,
+          100
+        );
+        return;
+      }
 
+      clippyElement.style.pointerEvents = 'auto';
+      clippyElement.style.touchAction = 'none';
 
-    const attachDragEvents =
-      () => {
+      let isDragging = false;
+      let offsetX = 0;
+      let offsetY = 0;
 
-        const clippyElement =
-          document.querySelector(
-            '.clippy'
-          );
-
-
-        /*
-          DOM Clippy bisa muncul sedikit
-          setelah object Clippy ready.
-        */
-
-        if (!clippyElement) {
-
-          retryTimer =
-            window.setTimeout(
-              attachDragEvents,
-              100
-            );
-
+      const handlePointerDown = (event) => {
+        if (window.innerWidth > 600) {
           return;
-
         }
 
-
-        clippyElement.style.pointerEvents =
-          'auto';
-
-        clippyElement.style.touchAction =
-          'none';
-
-
-        let isDragging =
-          false;
-
-        let offsetX =
-          0;
-
-        let offsetY =
-          0;
-
-
-        /* ==============================
-           POINTER DOWN
-        ============================== */
-
-        const handlePointerDown =
-          (
-            event
-          ) => {
-
-            /*
-              Drag hanya mobile.
-            */
-
-            if (
-              window.innerWidth > 600
-            ) {
-
-              return;
-
-            }
-
-
-            isDragging =
-              true;
-
-
-            const rect =
-              clippyElement
-                .getBoundingClientRect();
-
-
-            offsetX =
-              event.clientX -
-              rect.left;
-
-
-            offsetY =
-              event.clientY -
-              rect.top;
-
-
-            clippyElement
-              .setPointerCapture?.(
-                event.pointerId
-              );
-
-
-            event.preventDefault();
-
-          };
-
-
-        /* ==============================
-           POINTER MOVE
-        ============================== */
-
-        const handlePointerMove =
-          (
-            event
-          ) => {
-
-            if (!isDragging) {
-
-              return;
-
-            }
-
-
-            const maxX =
-              Math.max(
-                0,
-
-                window.innerWidth -
-                  clippyElement.offsetWidth
-              );
-
-
-            const maxY =
-              Math.max(
-                0,
-
-                window.innerHeight -
-                  28 -
-                  clippyElement.offsetHeight
-              );
-
-
-            const x =
-              Math.max(
-                0,
-
-                Math.min(
-                  maxX,
-
-                  event.clientX -
-                    offsetX
-                )
-              );
-
-
-            const y =
-              Math.max(
-                0,
-
-                Math.min(
-                  maxY,
-
-                  event.clientY -
-                    offsetY
-                )
-              );
-
-
-            clippy.moveTo(
-              x,
-              y
-            );
-
-          };
-
-
-        /* ==============================
-           POINTER UP
-        ============================== */
-
-        const handlePointerUp =
-          (
-            event
-          ) => {
-
-            if (!isDragging) {
-
-              return;
-
-            }
-
-
-            isDragging =
-              false;
-
-
-            try {
-
-              clippyElement
-                .releasePointerCapture?.(
-                  event.pointerId
-                );
-
-            } catch {
-
-              /*
-                Pointer mungkin sudah
-                dilepas oleh browser.
-              */
-
-            }
-
-          };
-
-
-        /* ==============================
-           POINTER CANCEL
-        ============================== */
-
-        const handlePointerCancel =
-          () => {
-
-            isDragging =
-              false;
-
-          };
-
-
-        /* ==============================
-           LISTENERS
-        ============================== */
-
-        clippyElement.addEventListener(
+        isDragging = true;
+
+        const rect =
+          clippyElement.getBoundingClientRect();
+
+        offsetX = event.clientX - rect.left;
+        offsetY = event.clientY - rect.top;
+
+        clippyElement.setPointerCapture?.(
+          event.pointerId
+        );
+
+        event.preventDefault();
+      };
+
+      const handlePointerMove = (event) => {
+        if (!isDragging) {
+          return;
+        }
+
+        const maxX = Math.max(
+          0,
+          window.innerWidth -
+            clippyElement.offsetWidth
+        );
+
+        const maxY = Math.max(
+          0,
+          window.innerHeight -
+            28 -
+            clippyElement.offsetHeight
+        );
+
+        const x = Math.max(
+          0,
+          Math.min(
+            maxX,
+            event.clientX - offsetX
+          )
+        );
+
+        const y = Math.max(
+          0,
+          Math.min(
+            maxY,
+            event.clientY - offsetY
+          )
+        );
+
+        clippy.moveTo(x, y);
+      };
+
+      const handlePointerUp = (event) => {
+        if (!isDragging) {
+          return;
+        }
+
+        isDragging = false;
+
+        try {
+          clippyElement.releasePointerCapture?.(
+            event.pointerId
+          );
+        } catch {
+          // Pointer may already be released.
+        }
+      };
+
+      const handlePointerCancel = () => {
+        isDragging = false;
+      };
+
+      clippyElement.addEventListener(
+        'pointerdown',
+        handlePointerDown
+      );
+
+      window.addEventListener(
+        'pointermove',
+        handlePointerMove
+      );
+
+      window.addEventListener(
+        'pointerup',
+        handlePointerUp
+      );
+
+      window.addEventListener(
+        'pointercancel',
+        handlePointerCancel
+      );
+
+      cleanupListeners = () => {
+        clippyElement.removeEventListener(
           'pointerdown',
           handlePointerDown
         );
 
-
-        window.addEventListener(
+        window.removeEventListener(
           'pointermove',
           handlePointerMove
         );
 
-
-        window.addEventListener(
+        window.removeEventListener(
           'pointerup',
           handlePointerUp
         );
 
-
-        window.addEventListener(
+        window.removeEventListener(
           'pointercancel',
           handlePointerCancel
         );
-
-
-        cleanupListeners =
-          () => {
-
-            clippyElement
-              .removeEventListener(
-                'pointerdown',
-                handlePointerDown
-              );
-
-
-            window.removeEventListener(
-              'pointermove',
-              handlePointerMove
-            );
-
-
-            window.removeEventListener(
-              'pointerup',
-              handlePointerUp
-            );
-
-
-            window.removeEventListener(
-              'pointercancel',
-              handlePointerCancel
-            );
-
-          };
-
       };
-
+    };
 
     attachDragEvents();
 
-
     return () => {
-
       if (retryTimer) {
-
-        window.clearTimeout(
-          retryTimer
-        );
-
+        window.clearTimeout(retryTimer);
       }
 
-
-      if (cleanupListeners) {
-
-        cleanupListeners();
-
-      }
-
+      cleanupListeners?.();
     };
-
-  }, [
-    clippy,
-  ]);
-
+  }, [clippy]);
 
   /* ====================================
      FIRST VISIT FEATURE TOUR
+
+     Flow:
+     first install -> Welcome -> close Welcome
+     -> mandatory Clippy guide -> hide
+     -> mark guide complete.
   ==================================== */
 
   React.useEffect(() => {
-
     if (
-      !clippy ||
-      pcScreen !== 'desktop' ||
-      !pcInstalled
+      !desktopReady ||
+      guideCompleted ||
+      tourStartedRef.current
     ) {
-
-      return;
-
+      return undefined;
     }
 
+    tourStartedRef.current = true;
+    clearTourTimers();
+    clearChatterTimers();
+    clearContextualTimer();
 
-    /*
-      Jangan mulai desktop tour ketika
-      installer masih terlihat.
-    */
+    clippy.show();
+    moveClippy();
 
-    if (
-      welcomeInstallerVisible ||
-      welcomeInstallerLoadingVisible ||
-      installerVisible
-    ) {
-
-      return;
-
-    }
-
-
-    const hasSeenGuide =
-      localStorage.getItem(
-        'perdana-clippy-guide-seen'
+    const addTourTimer = (callback, delay) => {
+      const timer = window.setTimeout(
+        callback,
+        delay
       );
 
-
-    if (hasSeenGuide) {
-
-      return;
-
-    }
-
-
-    /*
-      Bersihkan timer lama.
-    */
-
-    introTimers.current
-      .forEach(
-        (
-          timer
-        ) => {
-
-          window.clearTimeout(
-            timer
-          );
-
-        }
-      );
-
-
-    introTimers.current =
-      [];
-
-
-    /* ==================================
-       INTRO
-    ================================== */
-
-    introTimers.current.push(
-
-      window.setTimeout(
-        () => {
-
-          moveClippy();
-
-
-          speak(
-            COPY.intro,
-            'Wave'
-          );
-
-        },
-        1200
-      )
-
-    );
-
-
-    /* ==================================
-       PROJECTS
-    ================================== */
-
-    introTimers.current.push(
-
-      window.setTimeout(
-        () => {
-
-          moveClippy(
-            'projects'
-          );
-
-
-          speak(
-            COPY.introProjects
-          );
-
-        },
-        8000
-      )
-
-    );
-
-
-    /* ==================================
-       AI CHAT
-    ================================== */
-
-    introTimers.current.push(
-
-      window.setTimeout(
-        () => {
-
-          moveClippy(
-            'aiAssistant'
-          );
-
-
-          speak(
-            COPY.introAI
-          );
-
-        },
-        16000
-      )
-
-    );
-
-
-    /* ==================================
-       ABOUT
-    ================================== */
-
-    introTimers.current.push(
-
-      window.setTimeout(
-        () => {
-
-          moveClippy(
-            'about'
-          );
-
-
-          speak(
-            COPY.introAbout
-          );
-
-        },
-        24000
-      )
-
-    );
-
-
-    /* ==================================
-       INBOX
-    ================================== */
-
-    introTimers.current.push(
-
-      window.setTimeout(
-        () => {
-
-          moveClippy(
-            'contact'
-          );
-
-
-          speak(
-            COPY.introInbox
-          );
-
-
-          /*
-            Tour selesai.
-          */
-
-          localStorage.setItem(
-            'perdana-clippy-guide-seen',
-            'true'
-          );
-
-        },
-        32000
-      )
-
-    );
-
-
-    return () => {
-
-      introTimers.current
-        .forEach(
-          (
-            timer
-          ) => {
-
-            window.clearTimeout(
-              timer
-            );
-
-          }
-        );
-
-
-      introTimers.current =
-        [];
-
+      tourTimersRef.current.push(timer);
     };
 
+    addTourTimer(() => {
+      if (!clippy) return;
+      clippy.show();
+      moveClippy();
+      speak(COPY.intro, 'Wave');
+    }, 1200);
+
+    addTourTimer(() => {
+      if (!clippy) return;
+      clippy.show();
+      moveClippy('projects');
+      speak(COPY.introProjects);
+    }, 8000);
+
+    addTourTimer(() => {
+      if (!clippy) return;
+      clippy.show();
+      moveClippy('aiAssistant');
+      speak(COPY.introAI);
+    }, 16000);
+
+    addTourTimer(() => {
+      if (!clippy) return;
+      clippy.show();
+      moveClippy('about');
+      speak(COPY.introAbout);
+    }, 24000);
+
+    addTourTimer(() => {
+      if (!clippy) return;
+      clippy.show();
+      moveClippy('contact');
+      speak(COPY.introInbox);
+    }, 32000);
+
+    addTourTimer(() => {
+      if (!clippy) return;
+
+      clippy.stop?.();
+      clippy.hide();
+
+      window.localStorage.setItem(
+        GUIDE_STORAGE_KEY,
+        'true'
+      );
+
+      setGuideCompleted(true);
+    }, 39000);
+
+    return () => {
+      clearTourTimers();
+
+      if (!getStoredGuideState()) {
+        tourStartedRef.current = false;
+      }
+    };
   }, [
     clippy,
-
-    pcScreen,
-
-    pcInstalled,
-
-    welcomeInstallerVisible,
-    welcomeInstallerLoadingVisible,
-    installerVisible,
-
-    speak,
-
+    desktopReady,
+    guideCompleted,
     moveClippy,
+    speak,
+    clearTourTimers,
+    clearChatterTimers,
+    clearContextualTimer,
   ]);
-
-
-  /* ====================================
-     CANCEL FIRST TOUR WHEN USER ACTS
-  ==================================== */
-
-  React.useEffect(() => {
-
-    const userOpenedFeature =
-      Boolean(
-
-        windows?.about ||
-
-        windows?.projects ||
-
-        windows?.aiAssistant ||
-
-        windows?.contact
-
-      );
-
-
-    if (!userOpenedFeature) {
-
-      return;
-
-    }
-
-
-    /*
-      User sudah tahu cara eksplorasi.
-      Stop scripted tour.
-    */
-
-    introTimers.current
-      .forEach(
-        (
-          timer
-        ) => {
-
-          window.clearTimeout(
-            timer
-          );
-
-        }
-      );
-
-
-    introTimers.current =
-      [];
-
-
-    /*
-      Jangan restart scripted tour
-      setelah window ditutup.
-    */
-
-    localStorage.setItem(
-      'perdana-clippy-guide-seen',
-      'true'
-    );
-
-  }, [
-    windows?.about,
-    windows?.projects,
-    windows?.aiAssistant,
-    windows?.contact,
-  ]);
-
 
   /* ====================================
      CENTRAL POSITION MANAGER
-
-     Priority:
-
-     Installer
-     AI Chat
-     Inbox
-     Projects
-     About
-     Home
   ==================================== */
 
   React.useEffect(() => {
-
     if (!clippy) {
-
-      return;
-
+      return undefined;
     }
-
-
-    const installerOpen =
-      Boolean(
-
-        welcomeInstallerVisible ||
-
-        welcomeInstallerLoadingVisible ||
-
-        installerVisible
-
-      );
-
-
-    /* ==================================
-       INSTALLER
-    ================================== */
 
     if (installerOpen) {
-
-      moveClippy(
-        'installer'
-      );
-
-      return;
-
+      return undefined;
     }
 
-
-    /* ==================================
-       AI CHAT
-    ================================== */
-
-    if (
-      windows?.aiAssistant
-    ) {
-
-      moveClippy(
-        'aiAssistant'
-      );
-
-      return;
-
+    if (windows?.aiAssistant) {
+      moveClippy('aiAssistant');
+      return undefined;
     }
 
-
-    /* ==================================
-       INBOX
-    ================================== */
-
-    if (
-      windows?.contact
-    ) {
-
-      moveClippy(
-        'contact'
-      );
-
-      return;
-
+    if (windows?.contact) {
+      moveClippy('contact');
+      return undefined;
     }
 
-
-    /* ==================================
-       PROJECTS
-    ================================== */
-
-    if (
-      windows?.projects
-    ) {
-
-      moveClippy(
-        'projects'
-      );
-
-      return;
-
+    if (windows?.projects) {
+      moveClippy('projects');
+      return undefined;
     }
 
-
-    /* ==================================
-       ABOUT
-    ================================== */
-
-    if (
-      windows?.about
-    ) {
-
-      moveClippy(
-        'about'
-      );
-
-      return;
-
+    if (windows?.about) {
+      moveClippy('about');
+      return undefined;
     }
 
-
-    /* ==================================
-       RETURN HOME
-    ================================== */
-
-    const timer =
-      window.setTimeout(
-        () => {
-
-          moveClippy();
-
-        },
-        250
-      );
-
+    const timer = window.setTimeout(() => {
+      moveClippy();
+    }, 250);
 
     return () => {
-
-      window.clearTimeout(
-        timer
-      );
-
+      window.clearTimeout(timer);
     };
-
   }, [
     clippy,
-
+    installerOpen,
     windows?.about,
     windows?.projects,
     windows?.aiAssistant,
     windows?.contact,
-
-    welcomeInstallerVisible,
-    welcomeInstallerLoadingVisible,
-    installerVisible,
-
     moveClippy,
   ]);
-
 
   /* ====================================
      RESPONSIVE / ORIENTATION CHANGE
   ==================================== */
 
   React.useEffect(() => {
-
     if (!clippy) {
-
-      return;
-
+      return undefined;
     }
 
+    const handleResize = () => {
+      if (installerOpen) {
+        return;
+      }
 
-    const handleResize =
-      () => {
+      if (windows?.aiAssistant) {
+        moveClippy('aiAssistant');
+        return;
+      }
 
-        const installerOpen =
-          Boolean(
+      if (windows?.contact) {
+        moveClippy('contact');
+        return;
+      }
 
-            welcomeInstallerVisible ||
+      if (windows?.projects) {
+        moveClippy('projects');
+        return;
+      }
 
-            welcomeInstallerLoadingVisible ||
+      if (windows?.about) {
+        moveClippy('about');
+        return;
+      }
 
-            installerVisible
-
-          );
-
-
-        if (installerOpen) {
-
-          moveClippy(
-            'installer'
-          );
-
-          return;
-
-        }
-
-
-        if (
-          windows?.aiAssistant
-        ) {
-
-          moveClippy(
-            'aiAssistant'
-          );
-
-          return;
-
-        }
-
-
-        if (
-          windows?.contact
-        ) {
-
-          moveClippy(
-            'contact'
-          );
-
-          return;
-
-        }
-
-
-        if (
-          windows?.projects
-        ) {
-
-          moveClippy(
-            'projects'
-          );
-
-          return;
-
-        }
-
-
-        if (
-          windows?.about
-        ) {
-
-          moveClippy(
-            'about'
-          );
-
-          return;
-
-        }
-
-
-        moveClippy();
-
-      };
-
+      moveClippy();
+    };
 
     window.addEventListener(
       'resize',
       handleResize
     );
 
-
     return () => {
-
       window.removeEventListener(
         'resize',
         handleResize
       );
-
     };
-
   }, [
     clippy,
-
+    installerOpen,
     windows?.about,
     windows?.projects,
     windows?.aiAssistant,
     windows?.contact,
-
-    welcomeInstallerVisible,
-    welcomeInstallerLoadingVisible,
-    installerVisible,
-
     moveClippy,
   ]);
 
+  /* ====================================
+     CONTEXTUAL GUIDE HELPER
+
+     Contextual messages only run AFTER the
+     mandatory first guide is complete.
+  ==================================== */
+
+  const showContextualGuide = React.useCallback(
+    (
+      message,
+      feature,
+      animation = 'Acknowledge'
+    ) => {
+      if (
+        !clippy ||
+        !guideCompleted ||
+        !desktopReady
+      ) {
+        return;
+      }
+
+      clearChatterTimers();
+      clearContextualTimer();
+
+      clippy.show();
+      moveClippy(feature);
+      speak(message, animation);
+
+      contextualHideTimerRef.current =
+        window.setTimeout(() => {
+          clippy.stop?.();
+          clippy.hide();
+          contextualHideTimerRef.current = null;
+        }, CONTEXTUAL_VISIBLE_DURATION);
+    },
+    [
+      clippy,
+      guideCompleted,
+      desktopReady,
+      moveClippy,
+      speak,
+      clearChatterTimers,
+      clearContextualTimer,
+    ]
+  );
 
   /* ====================================
      ABOUT CONTEXTUAL GUIDE
   ==================================== */
 
   React.useEffect(() => {
-
-    if (!clippy) {
-
-      return;
-
-    }
-
-
-    const isOpen =
-      Boolean(
-        windows?.about
-      );
-
+    const isOpen = Boolean(windows?.about);
 
     if (
       isOpen &&
       !previousState.current.about
     ) {
-
-      speak(
-        COPY.about
+      showContextualGuide(
+        COPY.about,
+        'about'
       );
-
     }
 
-
-    previousState.current.about =
-      isOpen;
-
-  }, [
-    clippy,
-    windows?.about,
-    speak,
-  ]);
-
+    previousState.current.about = isOpen;
+  }, [windows?.about, showContextualGuide]);
 
   /* ====================================
      PROJECTS CONTEXTUAL GUIDE
   ==================================== */
 
   React.useEffect(() => {
-
-    if (!clippy) {
-
-      return;
-
-    }
-
-
-    const isOpen =
-      Boolean(
-        windows?.projects
-      );
-
+    const isOpen = Boolean(windows?.projects);
 
     if (
       isOpen &&
       !previousState.current.projects
     ) {
-
-      speak(
-        COPY.projects
+      showContextualGuide(
+        COPY.projects,
+        'projects'
       );
-
     }
 
-
-    previousState.current.projects =
-      isOpen;
-
-  }, [
-    clippy,
-    windows?.projects,
-    speak,
-  ]);
-
+    previousState.current.projects = isOpen;
+  }, [windows?.projects, showContextualGuide]);
 
   /* ====================================
      AI CHAT CONTEXTUAL GUIDE
   ==================================== */
 
   React.useEffect(() => {
-
-    if (!clippy) {
-
-      return;
-
-    }
-
-
-    const isOpen =
-      Boolean(
-        windows?.aiAssistant
-      );
-
+    const isOpen = Boolean(
+      windows?.aiAssistant
+    );
 
     if (
       isOpen &&
-      !previousState
-        .current
-        .aiAssistant
+      !previousState.current.aiAssistant
     ) {
-
-      speak(
-        COPY.aiAssistant
+      showContextualGuide(
+        COPY.aiAssistant,
+        'aiAssistant'
       );
-
     }
 
-
-    previousState
-      .current
-      .aiAssistant =
-        isOpen;
-
+    previousState.current.aiAssistant = isOpen;
   }, [
-    clippy,
     windows?.aiAssistant,
-    speak,
+    showContextualGuide,
   ]);
-
 
   /* ====================================
      INBOX CONTEXTUAL GUIDE
   ==================================== */
 
   React.useEffect(() => {
-
-    if (!clippy) {
-
-      return;
-
-    }
-
-
-    const isOpen =
-      Boolean(
-        windows?.contact
-      );
-
+    const isOpen = Boolean(windows?.contact);
 
     if (
       isOpen &&
       !previousState.current.contact
     ) {
-
-      speak(
-        COPY.contact
+      showContextualGuide(
+        COPY.contact,
+        'contact'
       );
-
     }
 
+    previousState.current.contact = isOpen;
+  }, [windows?.contact, showContextualGuide]);
 
-    previousState.current.contact =
-      isOpen;
+/* ====================================
+   RANDOM IDLE CHATTER
 
-  }, [
-    clippy,
-    windows?.contact,
-    speak,
-  ]);
+   Only after first guide is complete.
+   Wait 10–20s -> show -> speak ->
+   remain visible for 8s -> hide -> repeat.
+==================================== */
+React.useEffect(() => {
+  if (
+    !clippy ||
+    !startGuide ||
+    guideCompleted ||
+    tourStartedRef.current
+  ) {
+    return undefined;
+  }
 
+  tourStartedRef.current = true;
 
+  clearTourTimers();
+  clearChatterTimers();
+  clearContextualTimer();
+
+  // pastikan Clippy benar-benar mulai dari kondisi visible
+  clippy.stop?.();
+  clippy.show();
+  moveClippy();
+
+  const addTourTimer = (callback, delay) => {
+    const timer = window.setTimeout(
+      callback,
+      delay
+    );
+
+    tourTimersRef.current.push(timer);
+  };
+
+  addTourTimer(() => {
+    if (!clippy) return;
+
+    clippy.show();
+    moveClippy();
+    speak(COPY.intro, 'Wave');
+  }, 500);
+
+  addTourTimer(() => {
+    if (!clippy) return;
+
+    clippy.show();
+    moveClippy('projects');
+    speak(COPY.introProjects);
+  }, 8000);
+
+  addTourTimer(() => {
+    if (!clippy) return;
+
+    clippy.show();
+    moveClippy('aiAssistant');
+    speak(COPY.introAI);
+  }, 16000);
+
+  addTourTimer(() => {
+    if (!clippy) return;
+
+    clippy.show();
+    moveClippy('about');
+    speak(COPY.introAbout);
+  }, 24000);
+
+  addTourTimer(() => {
+    if (!clippy) return;
+
+    clippy.show();
+    moveClippy('contact');
+    speak(COPY.introInbox);
+  }, 32000);
+
+  addTourTimer(() => {
+    if (!clippy) return;
+
+    clippy.stop?.();
+    clippy.hide();
+
+    window.localStorage.setItem(
+      GUIDE_STORAGE_KEY,
+      'true'
+    );
+
+    setGuideCompleted(true);
+  }, 39000);
+
+  return () => {
+    clearTourTimers();
+  };
+}, [
+  clippy,
+  startGuide,
+  guideCompleted,
+  moveClippy,
+  speak,
+  clearTourTimers,
+  clearChatterTimers,
+  clearContextualTimer,
+]);
   /* ====================================
-     INSTALLER CONTEXTUAL GUIDE
+     GLOBAL CLEANUP
   ==================================== */
 
   React.useEffect(() => {
-
-    if (!clippy) {
-
-      return;
-
-    }
-
-
-    const isOpen =
-      Boolean(
-
-        welcomeInstallerVisible ||
-
-        welcomeInstallerLoadingVisible ||
-
-        installerVisible
-
-      );
-
-
-    if (
-      isOpen &&
-      !previousState.current.installer
-    ) {
-
-      speak(
-        COPY.installer,
-        'Wave'
-      );
-
-    }
-
-
-    previousState.current.installer =
-      isOpen;
-
-  }, [
-    clippy,
-
-    welcomeInstallerVisible,
-    welcomeInstallerLoadingVisible,
-    installerVisible,
-
-    speak,
-  ]);
-
-
-  /* ====================================
-     RANDOM IDLE CHATTER
-
-     Clippy bicara random ketika user
-     sedang berada di desktop idle.
-
-     Delay setiap message:
-     ±20 sampai 40 detik.
-  ==================================== */
-
-  React.useEffect(() => {
-
-    if (
-      !clippy ||
-      pcScreen !== 'desktop' ||
-      !pcInstalled
-    ) {
-
-      return;
-
-    }
-
-
-    const installerOpen =
-      Boolean(
-
-        welcomeInstallerVisible ||
-
-        welcomeInstallerLoadingVisible ||
-
-        installerVisible
-
-      );
-
-
-    /*
-      Installer punya contextual guide
-      sendiri, jadi idle chatter off.
-    */
-
-    if (installerOpen) {
-
-      return;
-
-    }
-
-
-    let chatterTimer =
-      null;
-
-    let cancelled =
-      false;
-
-
-    const scheduleNextMessage =
-      () => {
-
-        if (cancelled) {
-
-          return;
-
-        }
-
-
-        /*
-          Random:
-          20–40 seconds.
-        */
-
-        const delay =
-          20000 +
-          Math.random() *
-          20000;
-
-
-        chatterTimer =
-          window.setTimeout(
-            () => {
-
-              if (cancelled) {
-
-                return;
-
-              }
-
-
-              /*
-                Jangan potong contextual
-                experience ketika user
-                sedang membuka feature utama.
-              */
-
-              const importantWindowOpen =
-                Boolean(
-
-                  windows?.about ||
-
-                  windows?.projects ||
-
-                  windows?.aiAssistant ||
-
-                  windows?.contact
-
-                );
-
-
-              if (
-                !importantWindowOpen
-              ) {
-
-                speakRandomMessage();
-
-              }
-
-
-              /*
-                Schedule random berikutnya.
-              */
-
-              scheduleNextMessage();
-
-            },
-            delay
-          );
-
-      };
-
-
-    scheduleNextMessage();
-
-
     return () => {
-
-      cancelled =
-        true;
-
-
-      if (chatterTimer) {
-
-        window.clearTimeout(
-          chatterTimer
-        );
-
-      }
-
+      clearTourTimers();
+      clearChatterTimers();
+      clearContextualTimer();
     };
-
   }, [
-    clippy,
-
-    pcScreen,
-    pcInstalled,
-
-    windows?.about,
-    windows?.projects,
-    windows?.aiAssistant,
-    windows?.contact,
-
-    welcomeInstallerVisible,
-    welcomeInstallerLoadingVisible,
-    installerVisible,
-
-    speakRandomMessage,
+    clearTourTimers,
+    clearChatterTimers,
+    clearContextualTimer,
   ]);
-
 
   return null;
 }

@@ -91,6 +91,8 @@ import { Rnd } from 'react-rnd';
 import aiOpenSound from './assets/sounds/ai_assistant_open.wav';
 
 
+
+
 // Fungi baru klik and tap DesktopIcon
 function DesktopIcon({ children, onOpen }) {
   const handleDoubleClick = (e) => {
@@ -505,8 +507,18 @@ useEffect(() => {
     JSON.stringify(nextState)
   );
 };
+ // ==========================================
+  // CLIPPY GUIDE 
+  // ==========================================
+const [startClippyGuide, setStartClippyGuide] = useState(false);
 
-
+const [clippyMounted, setClippyMounted] = useState(() => {
+  return (
+    localStorage.getItem(
+      'perdana-clippy-guide-seen'
+    ) === 'true'
+  );
+});
 
  // ==========================================
   // DYNAMIC WALLPAPER - DINONAKTIFKAN
@@ -986,27 +998,18 @@ const handleAttachmentTooLarge = (file) => {
   return (
     <>
 
-<ClippyAssistant
-  pcScreen={pcScreen}
-  pcInstalled={pcState.installed}
-
-  isMobile={isMobile}
-  isTablet={isTablet}
-
-  windows={windows}
-
-  welcomeInstallerVisible={
-    welcomeInstallerVisible
-  }
-
-  welcomeInstallerLoadingVisible={
-    welcomeInstallerLoadingVisible
-  }
-
-  installerVisible={
-    installerVisible
-  }
-/>
+{clippyMounted && (
+  <ClippyAssistant
+    pcScreen={pcScreen}
+    pcInstalled={pcState.installed}
+    isMobile={isMobile}
+    isTablet={isTablet}
+    windows={windows}
+    welcomeInstallerVisible={welcomeInstallerVisible}
+    welcomeInstallerLoadingVisible={welcomeInstallerLoadingVisible}
+    installerVisible={installerVisible}
+  />
+)}
       {/* CSS Reset untuk layar full screen dan background Windows XP */}
       <style>
         {`
@@ -1637,7 +1640,20 @@ INI ENDING KODE INACTIVE*/}
   <WelcomeModal
     isMobile={isMobile}
     isTablet={isTablet}
-    onClose={() => toggleWindow('welcome', false)}
+
+    onClose={() => {
+      toggleWindow('welcome', false);
+
+      const guideSeen =
+        localStorage.getItem(
+          'perdana-clippy-guide-seen'
+        ) === 'true';
+
+      if (!guideSeen) {
+        setClippyMounted(true);
+      }
+    }}
+
     openWindow={openWindow}
   />
 )}
@@ -1918,6 +1934,8 @@ INI ENDING KODE INACTIVE*/}
         icon={
           <Url1102 variant="16x16_4" />
         }
+
+
 
         isMobile={isMobile}
         isTablet={isTablet}
