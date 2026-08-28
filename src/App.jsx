@@ -41,11 +41,13 @@ import PerdanaBootScreen from './components/boot/PerdanaBootScreen';
 import PerdanaInstallLoading from './components/installer/PerdanaInstallLoading';
 
 import ProjectWindowModal from './components/ProjectWindowModal';
+import NotepadModal from './components/NotepadModal';
 
 import HoloHealthContent from './project/HoloHealthContent';
 import ShipUIContent from './project/ShipUIContent';
 import MayoraContent from './project/MayoraContent';
 import PerdanaComputerProductContent from './project/PerdanaComputerProductContent';
+import PerdanaComputerProductOverview from './project/PerdanaComputerProductOverview';
 
 import { getAIResponse } from "./services/aiService";
 import { Frame, TitleBar, Button, TaskBar, List, Modal, useModal } from '@react95/core';
@@ -78,6 +80,7 @@ import {
   Install,
   Sndrec3210,
   Sndvol32303,
+  Url1102,
   Textchat,
   Computer4,
   FilePin,
@@ -598,6 +601,9 @@ const [windows, setWindows] = useState({
   'ship-ui': false,
    mayora: false,
    'perdana-computer-product': false,
+
+     // Notepad windows
+  'perdana-computer-overview': false,
 });
 
 // Window Porject Modal
@@ -772,6 +778,9 @@ const handleRestart = () => {
   'ship-ui': false,
   mayora: false,
   'perdana-computer-product': false,
+
+  // Notepad windows
+    'perdana-computer-overview': false,
   });
 
   // Reset boot session supaya Welcome muncul lagi
@@ -785,34 +794,47 @@ const handleRestart = () => {
 
 const projectWindows = {
   holohealth: {
-    title: 'HoloHealth.exe',
+    title: 'HoloHealth - Case Studies',
     content: (
       <HoloHealthContent />
     ),
   },
 
   'ship-ui': {
-    title: 'Ship UI.exe',
+    title: 'Shipfaster UI- Case Studies',
     content: (
       <ShipUIContent />
     ),
   },
 
   mayora: {
-    title: 'Mayora.exe',
+    title: 'Mayora - Case Studies',
     content: (
       <MayoraContent />
     ),
   },
 
   'perdana-computer-product': {
-    title: "Perdana's Computer.exe",
+    title: "Perdana's Computer - Case Studies",
     content: (
       <PerdanaComputerProductContent />
     ),
   },
 };
 
+// ==========================================
+// MAPPING NOTEPAD WINDOWS
+// ==========================================
+
+const notepadWindows = {
+  'perdana-computer-overview': {
+    title: "Overview.txt - Notepad",
+
+    content: (
+      <PerdanaComputerProductOverview />
+    ),
+  },
+};
 
 //restore minimize AIsphere AI assistant
 const minimizeAI = () => {
@@ -1621,7 +1643,7 @@ INI ENDING KODE INACTIVE*/}
         title={project.title}
 
         icon={
-          <Folder variant="16x16_4" />
+          <Url1102 variant="16x16_4" />
         }
 
         style={{
@@ -1647,6 +1669,40 @@ INI ENDING KODE INACTIVE*/}
       >
         {project.content}
       </ProjectWindowModal>
+    )
+)}
+
+{/* =========================================================
+    JENDELA NOTEPAD OVERVIEW 
+========================================================= */}
+
+{Object.entries(notepadWindows).map(
+  ([windowName, notepad]) =>
+    windows[windowName] && (
+      <NotepadModal
+        key={windowName}
+
+        title={notepad.title}
+
+        icon={
+          <Notepad2 variant="16x16_4" />
+        }
+
+        isMobile={isMobile}
+        isTablet={isTablet}
+
+        width="55%"
+        height="70%"
+
+        onClose={() =>
+          toggleWindow(
+            windowName,
+            false
+          )
+        }
+      >
+        {notepad.content}
+      </NotepadModal>
     )
 )}
 

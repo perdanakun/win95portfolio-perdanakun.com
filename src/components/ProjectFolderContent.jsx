@@ -222,7 +222,7 @@ export default function ProjectFolderContent({
           name: 'Overview',
           type: 'file',
           iconType: 'file',
-          openWindow: 'perdana-computer-product',
+          openWindow: 'perdana-computer-overview',
         },
         {
           id: 'pc-product-case-studies',
