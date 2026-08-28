@@ -294,6 +294,15 @@ export default function ProjectFolderContent({
        isLocked: true,
        message: 'This folder is still on progress!',
       },
+
+      {
+       id: 'readme-product',
+       name: 'Readme.txt',
+       type: 'file',
+       iconType: 'notepad',
+       isLocked: false,
+       openWindow: 'readme-product',
+      },
       ],
     },
 

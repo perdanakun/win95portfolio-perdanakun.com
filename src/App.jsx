@@ -49,6 +49,8 @@ import MayoraContent from './project/MayoraContent';
 import PerdanaComputerProductContent from './project/PerdanaComputerProductContent';
 import PerdanaComputerProductOverview from './project/PerdanaComputerProductOverview';
 
+import ReadmeProduct from './project/ReadmeProduct';
+
 import { getAIResponse } from "./services/aiService";
 import { Frame, TitleBar, Button, TaskBar, List, Modal, useModal } from '@react95/core';
 
@@ -297,42 +299,45 @@ const [height, setHeight] = useState(() => {
    * TETAP SEPERTI PUNYA KAMU
    * =====================================
    */
-  if (isMobile) {
-    return (
-      <Modal
-        {...props}
-        titleBarOptions={titleBarOptions}
-        onPointerDownCapture={startResize}
-        style={{
-          position: 'fixed',
+if (isMobile) {
+  const maxHeight =
+    window.innerHeight -
+    (mobileLockBottom ? TASKBAR_HEIGHT : 0);
 
-          top: 'auto',
-          left: 0,
-          right: 0,
+  const safeHeight = Math.min(height, maxHeight);
 
-          bottom: mobileLockBottom
-            ? `${TASKBAR_HEIGHT}px`
-            : 0,
+  return (
+    <Modal
+      {...props}
+      titleBarOptions={titleBarOptions}
+      onPointerDownCapture={startResize}
+      style={{
+        position: 'fixed',
 
-          width: mobileWidth,
-          height: `${height}px`,
+        left: 0,
+        right: 0,
 
-          maxWidth: '100vw',
+        // hitung posisi atas secara eksplisit
+        top: `${maxHeight - safeHeight}px`,
 
-          maxHeight: mobileLockBottom
-            ? `calc(100vh - ${TASKBAR_HEIGHT}px)`
-            : '100vh',
+        bottom: 'auto',
 
-          transform: 'none',
-          margin: 0,
+        width: mobileWidth,
+        height: `${safeHeight}px`,
 
-          boxSizing: 'border-box',
-        }}
-      >
-        {children}
-      </Modal>
-    );
-  }
+        maxWidth: '100vw',
+        maxHeight: `${maxHeight}px`,
+
+        transform: 'none',
+        margin: 0,
+
+        boxSizing: 'border-box',
+      }}
+    >
+      {children}
+    </Modal>
+  );
+}
 
 
 
@@ -615,6 +620,7 @@ const [windows, setWindows] = useState({
    'perdana-computer-product': false,
 
      // Notepad windows
+  'readme-product': false,
   'perdana-computer-overview': false,
 });
 
@@ -792,6 +798,7 @@ const handleRestart = () => {
   'perdana-computer-product': false,
 
   // Notepad windows
+  'readme-product': false,
     'perdana-computer-overview': false,
   });
 
@@ -839,7 +846,15 @@ const projectWindows = {
 // ==========================================
 
 const notepadWindows = {
-  'perdana-computer-overview': {
+  'readme-product': {
+    title: "ReadMe.txt - Notepad",
+
+    content: (
+      <ReadmeProduct />
+    ),
+  },
+
+    'perdana-computer-overview': {
     title: "Overview.txt - Notepad",
 
     content: (

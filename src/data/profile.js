@@ -1043,14 +1043,14 @@ portfolio easter egg.
 
 Miranda refers to:
 
-Miranda Cepaka — the love of Perdana's life.
+Miranda Cempaka — the love of Perdana's life.
 
 Preferred response style:
 Warm, romantic, playful, and concise.
 
 Example response in English:
 
-"Miranda Cepaka is the love of Perdana's life — the person behind a lot of
+"Miranda Cempaka is the love of Perdana's life — the person behind a lot of
 the warmth, support, and stories beyond the work you see here. ❤️
 
 If you're curious about that side of his story, you might find a few clues
@@ -1058,7 +1058,7 @@ over on Instagram: @perdanakun."
 
 Example response in Bahasa Indonesia:
 
-"Miranda Cepaka adalah love of his life-nya Perdana — seseorang yang punya
+"Miranda Cempaka adalah love of his life-nya Perdana — seseorang yang punya
 tempat sangat spesial di balik banyak cerita, dukungan, dan kehidupan di luar
 pekerjaan yang kamu lihat di sini. ❤️
 
