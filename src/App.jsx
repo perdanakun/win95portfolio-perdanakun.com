@@ -1384,61 +1384,9 @@ onContinue={() => {
   </DesktopIcon>
 </Rnd>
 
-{/* Contact */}
-<Rnd
-  default={{ x: 24, y: 216, width: 80, height: 80 }}
-  bounds="window"
-  enableResizing={false}
-  disableDragging={false}
->
-  <DesktopIcon onOpen={() => openWindow('contact')}>
-    <div style={desktopIconStyle}>
-      <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <Mapi32801 variant="32x32_4" />
-      </div>
-      <span>Inbox</span>
-    </div>
-  </DesktopIcon>
-</Rnd>
-
-{/* Projects */}
-<Rnd
-  default={{ x: 120, y: 120, width: 80, height: 80 }}
-  bounds="window"
-  enableResizing={false}
-  disableDragging={false}
->
-
-  <DesktopIcon onOpen={() => openWindow('projects')}>
-    <div style={desktopIconStyle}>
-      <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <Folder variant="32x32_4" />
-      </div>
-      <span>My Projects</span>
-    </div>
-  </DesktopIcon>
-</Rnd>
-
-{/* Recycle Bin */}
-<Rnd
-  default={{ x: 24, y: 312, width: 80, height: 80 }}
-  bounds="window"
-  enableResizing={false}
-  disableDragging={false}
->
-  <DesktopIcon onOpen={() => openWindow('recycleBin')}>
-    <div style={desktopIconStyle}>
-      <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <RecycleFull variant="32x32_4" />
-      </div>
-      <span>Recycle Bin</span>
-    </div>
-  </DesktopIcon>
-</Rnd>
-
 {/* AI Chat */}
 <Rnd
-  default={{ x: 120, y: 24, width: 80, height: 80 }}
+  default={{ x: 24, y: 216, width: 80, height: 80 }}
   bounds="window"
   enableResizing={false}
   disableDragging={false}
@@ -1453,14 +1401,47 @@ onContinue={() => {
   </DesktopIcon>
 </Rnd>
 
-{/* Games */}
+{/* My Projects */}
+<Rnd
+  default={{ x: 24, y: 312, width: 80, height: 80 }}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={false}
+>
+  <DesktopIcon onOpen={() => openWindow('projects')}>
+    <div style={desktopIconStyle}>
+      <div style={{ fontSize: '32px', marginBottom: '0' }}>
+        <Folder variant="32x32_4" />
+      </div>
+      <span>My Projects</span>
+    </div>
+  </DesktopIcon>
+</Rnd>
+
+{/* Inbox */}
 <Rnd
   default={{ x: 24, y: 408, width: 80, height: 80 }}
   bounds="window"
   enableResizing={false}
   disableDragging={false}
 >
+  <DesktopIcon onOpen={() => openWindow('contact')}>
+    <div style={desktopIconStyle}>
+      <div style={{ fontSize: '32px', marginBottom: '0' }}>
+        <Mapi32801 variant="32x32_4" />
+      </div>
+      <span>Inbox</span>
+    </div>
+  </DesktopIcon>
+</Rnd>
 
+{/* Games */}
+<Rnd
+  default={{ x: 24, y: 504, width: 80, height: 80 }}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={false}
+>
   <DesktopIcon
     onOpen={() =>
       openAlertDesktop(
@@ -1478,9 +1459,26 @@ onContinue={() => {
   </DesktopIcon>
 </Rnd>
 
+{/* Recycle Bin */}
+<Rnd
+  default={{ x: 24, y: 600, width: 80, height: 80 }}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={false}
+>
+  <DesktopIcon onOpen={() => openWindow('recycleBin')}>
+    <div style={desktopIconStyle}>
+      <div style={{ fontSize: '32px', marginBottom: '0' }}>
+        <RecycleFull variant="32x32_4" />
+      </div>
+      <span>Recycle Bin</span>
+    </div>
+  </DesktopIcon>
+</Rnd>
+
 {/* Writing */}
 <Rnd
-  default={{ x: 120, y: 216, width: 80, height: 80 }}
+  default={{ x: 24, y: 696, width: 80, height: 80 }}
   bounds="window"
   enableResizing={false}
   disableDragging={false}
@@ -1512,6 +1510,7 @@ onContinue={() => {
     </div>
   </DesktopIcon>
 </Rnd>
+
 
 
  {/* --- JENDELA ALERT--- */}
