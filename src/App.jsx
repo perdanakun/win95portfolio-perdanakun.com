@@ -1979,7 +1979,7 @@ INI ENDING KODE INACTIVE*/}
         isMobile={isMobile}
         isTablet={isTablet}
 
-        width="55%"
+        width="50%"
         height="70%"
 
         onClose={() =>
