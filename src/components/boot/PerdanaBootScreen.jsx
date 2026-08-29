@@ -97,6 +97,8 @@ const BIOS_LINES = [
 export default function PerdanaBootScreen({
   onBootComplete,
 }) {
+  const BIOS_DURATION = 1800;
+  const WINDOWS_DURATION = 800;
   const [phase, setPhase] = useState('bios');
 
   const [biosCount, setBiosCount] = useState(0);
@@ -123,7 +125,8 @@ export default function PerdanaBootScreen({
 
     const total = BIOS_LINES.length;
 
-    const interval = 4000 / total;
+const BIOS_DURATION = 1800;
+const interval = BIOS_DURATION / total;
 
     const timer = setInterval(() => {
       setBiosCount((current) => {
@@ -188,9 +191,9 @@ export default function PerdanaBootScreen({
       return;
     }
 
-    const timer = setTimeout(() => {
-      setPhase('windows');
-    }, 4000);
+const timer = setTimeout(() => {
+  setPhase('windows');
+}, BIOS_DURATION);
 
     return () => {
       clearTimeout(timer);
@@ -201,7 +204,7 @@ export default function PerdanaBootScreen({
   /* ==========================================================
      WINDOWS STARTING → COMPLETE
      
-     4 → 6 detik
+     3 + 1.5 detik
      ========================================================== */
 
   useEffect(() => {
@@ -209,9 +212,9 @@ export default function PerdanaBootScreen({
       return;
     }
 
-    const timer = setTimeout(() => {
-      onBootComplete?.();
-    }, 2000);
+const timer = setTimeout(() => {
+  onBootComplete?.();
+}, 800);
 
     return () => {
       clearTimeout(timer);

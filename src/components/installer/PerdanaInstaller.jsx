@@ -1,20 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
 import {
   Button,
   Frame,
 } from '@react95/core';
 
-import InstallerWelcome from './InstallerWelcome';
-import InstallerWelcomeAbout from './InstallerWelcomeAbout';
-import InstallerSystemRequirements from './InstallerSystemRequirements';
-import InstallerTree from './InstallerTree';
-import InstallerContent from './InstallerContent';
-import InstallerLoading from './InstallerLoading';
-import InstallerComplete from './InstallerComplete';
+import { Install } from '@react95/icons';
 
-import installerSteps from '../../data/installerSteps';
+import InstallerLoadingFirstBoot from './InstallerLoadingFirstBoot';
 
+import win95installimg
+  from './win95_install_illustration.png';
+
+
+/* ======================================
+   PERDANA INSTALLER
+   FIRST BOOT
+====================================== */
 
 export default function PerdanaInstaller({
   isMobile,
@@ -23,239 +28,92 @@ export default function PerdanaInstaller({
   onFinish,
 }) {
 
-  // ==========================================
-  // INSTALLER PAGE
-  // ==========================================
+  /* ======================================
+     PAGE
+  ====================================== */
 
-  const [page, setPage] = useState('welcome');
-
-
-  // ==========================================
-  // ABOUT / WIZARD STEP
-  // ==========================================
-
-  const [currentStep, setCurrentStep] = useState(0);
+  const [page, setPage] =
+    useState('about');
 
 
-  // ==========================================
-  // INSTALLATION PROGRESS
-  // ==========================================
+  /* ======================================
+     INSTALLATION PROGRESS
+  ====================================== */
 
-  const [progress, setProgress] = useState(0);
-
-
-  // ==========================================
-  // CURRENT STEP
-  // ==========================================
-
-  const currentInstallerStep =
-    installerSteps[currentStep];
+  const [progress, setProgress] =
+    useState(0);
 
 
-  // ==========================================
-  // NEXT
-  // ==========================================
+  /* ======================================
+     START INSTALLATION
+  ====================================== */
 
-  const handleNext = () => {
+  const handleInstall = () => {
 
-    // -----------------------------
-    // WELCOME → ABOUT
-    // -----------------------------
+    setProgress(0);
 
-    if (page === 'welcome') {
-      setPage('welcomeAbout');
+    setPage('loading');
 
-      return;
-    }
-
-
-    // -----------------------------
-    // ABOUT → REQUIREMENTS
-    // -----------------------------
-
-    if (page === 'welcomeAbout') {
-      setPage('requirements');
-
-      return;
-    }
-
-
-    // -----------------------------
-    // REQUIREMENTS → WIZARD
-    // -----------------------------
-
-    if (page === 'requirements') {
-      setCurrentStep(0);
-      setPage('wizard');
-
-      return;
-    }
-
-
-    // -----------------------------
-    // WIZARD NAVIGATION
-    // -----------------------------
-
-    if (page === 'wizard') {
-
-      const isLastStep =
-        currentStep >= installerSteps.length - 1;
-
-
-      if (!isLastStep) {
-        setCurrentStep((step) => step + 1);
-
-        return;
-      }
-
-
-      // Setelah section terakhir
-      // mulai fake installation
-
-      setProgress(0);
-      setPage('loading');
-
-      return;
-    }
-
-
-    // -----------------------------
-    // COMPLETE → CLOSE
-    // -----------------------------
-
-    if (page === 'complete') {
-      onFinish?.();
-
-      return;
-    }
   };
 
 
-  // ==========================================
-  // BACK
-  // ==========================================
-
-  const handleBack = () => {
-
-    // -----------------------------
-    // ABOUT → WELCOME
-    // -----------------------------
-
-    if (page === 'welcomeAbout') {
-      setPage('welcome');
-
-      return;
-    }
-
-
-    // -----------------------------
-    // REQUIREMENTS → ABOUT
-    // -----------------------------
-
-    if (page === 'requirements') {
-      setPage('welcomeAbout');
-
-      return;
-    }
-
-
-    // -----------------------------
-    // WIZARD → REQUIREMENTS
-    // -----------------------------
-
-    if (page === 'wizard') {
-
-      if (currentStep > 0) {
-        setCurrentStep((step) => step - 1);
-      } else {
-        setPage('requirements');
-      }
-
-      return;
-    }
-  };
-
-
-  // ==========================================
-  // TREE SELECT
-  // ==========================================
-
-  const handleSelectStep = (index) => {
-
-    if (
-      index < 0 ||
-      index >= installerSteps.length
-    ) {
-      return;
-    }
-
-    setCurrentStep(index);
-  };
-
-
-  // ==========================================
-  // CANCEL
-  // ==========================================
+  /* ======================================
+     CANCEL
+  ====================================== */
 
   const handleCancel = () => {
+
     onClose?.();
+
   };
 
-// ==========================================
-// DEBUG INSTALLATION PROGRESS
-// ==========================================
 
-// DEBUG MODE:
-// Progress tidak berjalan otomatis.
-// Loading akan tetap berada di 0%.
+  /* ======================================
+     INSTALLATION PROGRESS
+  ====================================== */
 
-// useEffect(() => {
+  useEffect(() => {
 
-//   if (page !== 'loading') {
-//     return;
-//   }
-
-//   setProgress(0);
-
-// }, [page]);
-
-// ==========================================
-// INSTALLATION PROGRESS
-// ==========================================
-
-useEffect(() => {
-
-  if (page !== 'loading') {
-    return;
-  }
-
-  setProgress(0);
-
-  const interval = setInterval(() => {
-
-    setProgress((current) => {
-
-      if (current >= 100) {
-        clearInterval(interval);
-
-        return 100;
-      }
-
-      return current + 1;
-    });
-
-  }, 30);
+    if (page !== 'loading') {
+      return;
+    }
 
 
-  return () => {
-    clearInterval(interval);
-  };
+    setProgress(0);
 
-}, [page]);
 
-  // ==========================================
-  // LOADING → COMPLETE
-  // ==========================================
+    const interval = setInterval(() => {
+
+      setProgress((current) => {
+
+        if (current >= 100) {
+
+          clearInterval(interval);
+
+          return 100;
+
+        }
+
+
+        return current + 1;
+
+      });
+
+    }, 45);
+
+
+    return () => {
+
+      clearInterval(interval);
+
+    };
+
+  }, [page]);
+
+
+  /* ======================================
+     AUTO FINISH
+  ====================================== */
 
   useEffect(() => {
 
@@ -267,486 +125,802 @@ useEffect(() => {
     }
 
 
-    const timeout = setTimeout(() => {
-      setPage('complete');
-    }, 500);
+    const timeout =
+      setTimeout(() => {
+
+        onFinish?.();
+
+      }, 800);
 
 
     return () => {
+
       clearTimeout(timeout);
+
     };
 
-  }, [page, progress]);
+  }, [
+    page,
+    progress,
+    onFinish,
+  ]);
 
 
-  // ==========================================
-  // RENDER
-  // ==========================================
+  /* ======================================
+     RENDER
+  ====================================== */
 
   return (
-    <>
 
-      {/* ==========================================
-          WELCOME WINDOW
+    <div
+      className="ui-font"
 
-          InstallerWelcome owns its own Frame.
-      ========================================== */}
+      style={{
+        position: 'fixed',
 
-      {page === 'welcome' && (
-        <InstallerWelcome
-          isMobile={isMobile}
-          isTablet={isTablet}
-          onNext={handleNext}
-          onClose={handleCancel}
-        />
-      )}
+        left: '50%',
+
+        top: isMobile
+          ? '4%'
+          : '50%',
+
+        transform: isMobile
+          ? 'translateX(-50%)'
+          : 'translate(-50%, -50%)',
+
+        width: isMobile
+          ? '95vw'
+          : isTablet
+          ? '78vw'
+          : '800px',
+
+        maxWidth:
+          'calc(100vw - 20px)',
+
+        zIndex: 100000,
+
+        boxSizing:
+          'border-box',
+      }}
+    >
+
+      {/* ======================================
+          OUTER WINDOW
+      ====================================== */}
+
+      <Frame
+        style={{
+          width:
+            '100%',
+
+          height: isMobile
+            ? '80vh'
+            : isTablet
+            ? '70vh'
+            : '550px',
+
+          maxHeight:
+            'calc(100vh - 28px)',
+
+          padding:
+            3,
+
+          background:
+            '#c0c0c0',
+
+          boxSizing:
+            'border-box',
+
+          display:
+            'flex',
+
+          flexDirection:
+            'column',
+
+          boxShadow: `
+            inset -1px -1px #000000,
+            inset 1px 1px #ffffff
+          `,
+        }}
+      >
+
+        {/* ======================================
+            TITLE BAR
+        ====================================== */}
+
+        <div
+          className="ui-font"
+
+          style={{
+            flexShrink:
+              0,
+
+            height:
+              22,
+
+            display:
+              'flex',
+
+            alignItems:
+              'center',
+
+            justifyContent:
+              'center',
+
+            padding:
+              '2px 8px 6px 8px',
+
+            background:
+              '#000080',
+
+            color:
+              '#ffffff',
+
+            fontSize:
+              14,
+
+            fontWeight:
+              'bold',
+
+            lineHeight:
+              1,
+
+            boxSizing:
+              'border-box',
+
+            userSelect:
+              'none',
+
+            whiteSpace:
+              'nowrap',
+
+            overflow:
+              'hidden',
+
+            textOverflow:
+              'ellipsis',
+          }}
+        >
+          Perdana&apos;s Computer Setup
+        </div>
 
 
-      {/* ==========================================
-          MAIN INSTALLER WINDOW
-
-          Everything after Welcome lives here.
-      ========================================== */}
-
-      {page !== 'welcome' && (
+        {/* ======================================
+            WINDOW BODY
+        ====================================== */}
 
         <div
           style={{
-            position: 'fixed',
+            flex:
+              '1 1 0',
 
-            left: '50%',
+            minWidth:
+              0,
 
-            top: isMobile
-              ? '4%'
-              : '50%',
+            minHeight:
+              0,
 
-            transform: isMobile
-              ? 'translateX(-50%)'
-              : 'translate(-50%, -50%)',
+            marginTop:
+              3,
 
-            width: isMobile
-              ? '95vw'
-              : isTablet
-              ? '78vw'
-              : '820px',
+            background:
+              '#c0c0c0',
 
-            maxWidth: isMobile
-              ? '95vw'
-              : 'calc(100vw - 20px)',
+            boxSizing:
+              'border-box',
 
-            zIndex: 100000,
+            display:
+              'flex',
+
+            flexDirection:
+              'column',
+
+            overflow:
+              'hidden',
           }}
         >
 
-          {/* ========================================
-              INSTALLER WINDOW
-          ======================================== */}
+          {/* ==================================
+              ABOUT THIS COMPUTER
+          ================================== */}
 
-          <Frame
-            key="perdana-installer"
-            style={{
-              position: 'relative',
+          {page === 'about' && (
 
-              display: 'flex',
-              flexDirection: 'column',
-
-              padding: 3,
-
-              background: '#c0c0c0',
-
-              boxSizing: 'border-box',
-
-              ...(isMobile
-                ? {
-                    width: '100%',
-                    height: '80vh',
-
-                    maxWidth: '100%',
-                    maxHeight: 'calc(100vh - 28px)',
-
-                    margin: 0,
-                  }
-
-                : isTablet
-                ? {
-                    width: '100%',
-                    height: '68vh',
-
-                    maxWidth: '100%',
-                    maxHeight: 'calc(100vh - 28px)',
-
-                    margin: 0,
-                  }
-
-                : {
-                    width: '100%',
-                    height: '540px',
-
-                    maxWidth: '100%',
-                    maxHeight: 'calc(100vh - 28px)',
-
-                    margin: 0,
-                  }),
-            }}
-          >
-
-            {/* ======================================
-                INSTALLER TITLE BAR
-            ====================================== */}
-
-            <div
-              style={{
-                flexShrink: 0,
-
-                height: 20,
-
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-
-                padding: '2px 8px 6px 8px',
-
-                background: '#000080',
-                color: '#ffffff',
-
-                fontWeight: 'bold',
-                fontSize: 12,
-
-                boxSizing: 'border-box',
-
-                userSelect: 'none',
-              }}
-            >
-              Windows 95 Setup Wizard
-            </div>
-
-
-            {/* ======================================
-                INSTALLER BODY
-            ====================================== */}
-
-            <div
-              style={{
-                flex: '1 1 0',
-
-                width: '100%',
-
-                minWidth: 0,
-                minHeight: 0,
-
-                marginTop: 3,
-
-                background: '#c0c0c0',
-
-                boxSizing: 'border-box',
-
-                display: 'flex',
-                flexDirection: 'column',
-
-                overflow: 'hidden',
-              }}
-            >
-
-              {/* ====================================
-                  MAIN CONTENT
-              ==================================== */}
+            <>
 
               <div
                 style={{
-                  flex: '1 1 0',
+                  flex:
+                    '1 1 0',
 
-                  width: '100%',
+                  minWidth:
+                    0,
 
-                  minWidth: 0,
-                  minHeight: 0,
+                  minHeight:
+                    0,
 
-                  boxSizing: 'border-box',
+                  padding:
+                    12,
 
-                  overflow: 'hidden',
+                  boxSizing:
+                    'border-box',
 
-                  display: 'flex',
+                  overflow:
+                    'hidden',
                 }}
               >
 
-                {/* ==================================
-                    WELCOME ABOUT
-                ================================== */}
+                <div
+                  className="installer-about-layout"
 
-                {page === 'welcomeAbout' && (
+                  style={{
+                    width:
+                      '100%',
+
+                    height:
+                      '100%',
+
+                    display:
+                      'flex',
+
+                    minWidth:
+                      0,
+
+                    minHeight:
+                      0,
+
+                    background:
+                      '#ffffff',
+
+                    border:
+                      '2px solid',
+
+                    borderTopColor:
+                      '#808080',
+
+                    borderLeftColor:
+                      '#808080',
+
+                    borderRightColor:
+                      '#eeebeb',
+
+                    borderBottomColor:
+                      '#eeebeb',
+
+                    boxSizing:
+                      'border-box',
+
+                    overflow:
+                      'hidden',
+                  }}
+                >
+
+                  {/* ==============================
+                      LEFT IMAGE
+                  ============================== */}
+
                   <div
+                    className="installer-about-image"
+
                     style={{
-                      width: '100%',
-                      height: '100%',
+                      width:
+                        190,
 
-                      minWidth: 0,
-                      minHeight: 0,
+                      minWidth:
+                        190,
 
-                      padding: 12,
+                      height:
+                        '100%',
 
-                      boxSizing: 'border-box',
+                      flexShrink:
+                        0,
 
-                      overflow: 'auto',
+                      background:
+                        '#54A8A8',
+
+                      display:
+                        'flex',
+
+                      alignItems:
+                        'center',
+
+                      justifyContent:
+                        'center',
+
+                      overflow:
+                        'hidden',
+
+            
+                      boxSizing:
+                        'border-box',
                     }}
                   >
-                    <InstallerWelcomeAbout />
-                  </div>
-                )}
 
+                    <img
+                      src={
+                        win95installimg
+                      }
 
-                {/* ==================================
-                    SYSTEM REQUIREMENTS
-                ================================== */}
+                      alt="Perdana's Computer"
 
-                {page === 'requirements' && (
-                  <div
-                    style={{
-                      width: '100%',
-                      height: '100%',
+                      style={{
+                        width:
+                          '100%',
 
-                      minWidth: 0,
-                      minHeight: 0,
+                        height:
+                          '100%',
 
-                      padding: 12,
+                        display:
+                          'block',
 
-                      boxSizing: 'border-box',
+                        objectFit:
+                          'contain',
 
-                      overflow: 'auto',
-                    }}
-                  >
-                    <InstallerSystemRequirements />
-                  </div>
-                )}
-
-
-                {/* ==================================
-                    ABOUT / CONTENT WIZARD
-                ================================== */}
-
-                {page === 'wizard' && (
-                  <div
-                    style={{
-                      display: 'flex',
-
-                      flex: '1 1 0',
-
-                      width: '100%',
-                      height: '100%',
-
-                      minWidth: 0,
-                      minHeight: 0,
-
-                      boxSizing: 'border-box',
-
-                      overflow: 'hidden',
-                    }}
-                  >
-
-                    {/* LEFT TREE */}
-
-                    <InstallerTree
-                      steps={installerSteps}
-                      currentStep={currentStep}
-                      onSelectStep={handleSelectStep}
+                        objectPosition:
+                          'center',
+                      }}
                     />
 
-
-                    {/* RIGHT CONTENT */}
-
-                    <InstallerContent
-                      step={currentInstallerStep}
-                    />
-
                   </div>
-                )}
 
 
-                {/* ==================================
-                    LOADING
-                ================================== */}
+                  {/* ==============================
+                      RIGHT CONTENT
+                  ============================== */}
 
-                {page === 'loading' && (
-                  <div
+                  <main
+                    className="reading-font installer-about-content"
+
                     style={{
-                      width: '100%',
-                      height: '100%',
+                      flex:
+                        1,
 
-                      minWidth: 0,
-                      minHeight: 0,
+                      minWidth:
+                        0,
 
-                      padding: 12,
+                      minHeight:
+                        0,
 
-                      boxSizing: 'border-box',
+                      padding:
+                        '18px 28px 20px',
 
-                      overflow: 'auto',
+                      boxSizing:
+                        'border-box',
+
+                      overflowY:
+                        'auto',
+
+                      overflowX:
+                        'hidden',
+
+                      color:
+                        '#000000',
+
+                      textAlign:
+                        'left',
                     }}
                   >
-                    <InstallerLoading
-                      progress={progress}
-                    />
-                  </div>
-                )}
+
+                    <h2
+                      className="ui-font"
+
+                      style={{
+                        margin:
+                          0,
+
+                        padding:
+                          '0 0 10px',
+
+                        fontSize:
+                          18,
+
+                        fontWeight:
+                          'bold',
+
+                        lineHeight:
+                          '22px',
+
+                        color:
+                          '#000000',
+
+                        borderBottom:
+                          '1px solid #808080',
+                      }}
+                    >
+                      About this Computer
+                    </h2>
 
 
-                {/* ==================================
-                    COMPLETE
-                ================================== */}
+                    <p
+                      className="reading-font"
 
-                {page === 'complete' && (
-                  <div
-                    style={{
-                      width: '100%',
-                      height: '100%',
+                      style={{
+                        margin:
+                          '18px 0 0',
 
-                      minWidth: 0,
-                      minHeight: 0,
+                        color:
+                          '#000000',
 
-                      padding: 12,
+                        textAlign:
+                          'left',
+                      }}
+                    >
+                      This is Perdana&apos;s personal computer — a place
+                      to explore his work, experience, ideas, and
+                      experiments.
+                    </p>
 
-                      boxSizing: 'border-box',
 
-                      overflow: 'auto',
-                    }}
-                  >
-                    <InstallerComplete />
-                  </div>
-                )}
+                    <p
+                      className="reading-font"
+
+                      style={{
+                        margin:
+                          '12px 0 0',
+
+                        color:
+                          '#000000',
+
+                        textAlign:
+                          'left',
+                      }}
+                    >
+                      Inside, you&apos;ll find work across visual design,
+                      product design, UX, and design engineering.
+                    </p>
+
+
+                    <p
+                      className="reading-font"
+
+                      style={{
+                        margin:
+                          '18px 0 10px',
+
+                        color:
+                          '#000000',
+
+                        textAlign:
+                          'left',
+                      }}
+                    >
+                      Inside Perdana&apos;s Computer, you&apos;ll find:
+                    </p>
+
+
+                    <div
+                      className="reading-font"
+
+                      style={{
+                        display:
+                          'flex',
+
+                        flexDirection:
+                          'column',
+
+                        gap:
+                          8,
+                      }}
+                    >
+
+                      <FeatureLine>
+                        Visual Design &amp; Systems
+                      </FeatureLine>
+
+                      <FeatureLine>
+                        Product Design &amp; UX
+                      </FeatureLine>
+
+                      <FeatureLine>
+                        Design Engineering &amp; Experiments
+                      </FeatureLine>
+
+                    </div>
+
+
+                    <p
+                      className="reading-font"
+
+                      style={{
+                        margin:
+                          '20px 0 0',
+
+                        color:
+                          '#000000',
+                      }}
+                    >
+                      Click <strong> Install </strong> to continue.
+                    </p>
+
+                  </main>
+
+                </div>
 
               </div>
 
 
-              {/* ======================================
-                  DIVIDER
-              ====================================== */}
+              {/* ==============================
+                  ABOUT FOOTER
 
-              <div
+                  NO PROGRESS BAR
+              ============================== */}
+
+              <footer
+                className="ui-font"
+
                 style={{
-                  flexShrink: 0,
+                  flexShrink:
+                    0,
 
-                  borderTop: '1px solid #808080',
+                  minWidth:
+                    0,
 
-                  boxShadow: '0 1px 0 #ffffff',
-                }}
-              />
+                  padding:
+                    '10px 12px 10px',
 
+                  boxSizing:
+                    'border-box',
 
-              {/* ======================================
-                  FOOTER
-              ====================================== */}
+                  background:
+                    '#c0c0c0',
 
-              <div
-                style={{
-                  flexShrink: 0,
+                  color:
+                    '#000000',
 
-                  display: 'flex',
+                  display:
+                    'flex',
 
-                  justifyContent: 'flex-end',
-                  alignItems: 'center',
+                  justifyContent:
+                    'flex-end',
 
-                  gap: 6,
+                  alignItems:
+                    'center',
 
-                  padding: '10px 12px',
-
-                  boxSizing: 'border-box',
+                  gap:
+                    6,
                 }}
               >
 
-                {/* ==================================
-                    BACK
-                ================================== */}
-
                 <Button
-                  disabled={
-                    page === 'loading' ||
-                    page === 'complete'
+                  onClick={
+                    handleCancel
                   }
-                  onClick={handleBack}
+
+                  className="ui-font"
+
+                  style={{
+                    minWidth:
+                      90,
+
+                    boxSizing:
+                      'border-box',
+                  }}
                 >
-                  {'< Back'}
+               <strong><u>C</u>ancel</strong> 
                 </Button>
 
 
-                {/* ==================================
-                    ABOUT → NEXT
-                ================================== */}
+                <Button
+                  onClick={
+                    handleInstall
+                  }
 
-                {page === 'welcomeAbout' && (
-                  <Button onClick={handleNext}>
-                    {'Next >'}
-                  </Button>
-                )}
+                  className="ui-font"
 
+                  style={{
+                    minWidth:
+                      90,
 
-                {/* ==================================
-                    REQUIREMENTS → NEXT
-                ================================== */}
+                    boxSizing:
+                      'border-box',
+                  }}
+                >
 
-                {page === 'requirements' && (
-                  <Button onClick={handleNext}>
-                    {'Next >'}
-                  </Button>
-                )}
+                  <strong>
+                  <u>In</u>stall
+                  </strong>
 
+                </Button>
 
-                {/* ==================================
-                    WIZARD → NEXT / INSTALL
-                ================================== */}
+              </footer>
 
-                {page === 'wizard' && (
-                  <Button onClick={handleNext}>
-                    {currentStep <
-                    installerSteps.length - 1
-                      ? 'Next >'
-                      : 'Install'}
-                  </Button>
-                )}
+            </>
+
+          )}
 
 
-                {/* ==================================
-                    LOADING
-                ================================== */}
+          {/* ==================================
+              INSTALLING
+          ================================== */}
 
-                {page === 'loading' && (
-                  <Button disabled>
-                    Installing...
-                  </Button>
-                )}
+          {page === 'loading' && (
 
+<InstallerLoadingFirstBoot
+  progress={progress}
+  isMobile={isMobile}
+  isTablet={isTablet}
+/>
 
-                {/* ==================================
-                    COMPLETE
-                ================================== */}
-
-                {page === 'complete' && (
-<Button
-  onClick={handleNext}
-  style={{
-    width: 90,
-  }}
->
-  Finish
-</Button>
-                )}
-
-
-                {/* ==================================
-                    CANCEL
-                ================================== */}
-
-{page !== 'loading' && page !== 'complete' && (
-  <Button onClick={handleCancel}>
-    Cancel
-  </Button>
-)}
-
-              </div>
-
-            </div>
-
-          </Frame>
+          )}
 
         </div>
-      )}
 
-    </>
+      </Frame>
+
+
+      {/* ======================================
+          RESPONSIVE
+      ====================================== */}
+
+      <style>
+        {`
+
+          @media (max-width: 600px) {
+
+            .installer-about-layout {
+
+              flex-direction:
+                column !important;
+
+            }
+
+
+            .installer-about-image {
+
+              width:
+                100% !important;
+
+              min-width:
+                0 !important;
+
+              height:
+                145px !important;
+
+              min-height:
+                145px !important;
+
+              border-right:
+                0 !important;
+
+              border-bottom:
+                1px solid #808080;
+
+            }
+
+
+            .installer-about-content {
+
+              padding:
+                16px 18px 20px !important;
+
+            }
+
+          }
+
+        `}
+      </style>
+
+    </div>
+
   );
+
+}
+
+
+/* ======================================
+   FEATURE LINE
+====================================== */
+
+function FeatureLine({
+  children,
+}) {
+
+  return (
+
+    <div
+      className="reading-font"
+
+      style={{
+        display:
+          'flex',
+
+        alignItems:
+          'center',
+
+        gap:
+          9,
+
+        minHeight:
+          20,
+
+        color:
+          '#000000',
+      }}
+    >
+
+      {/* WINDOWS CHECKBOX */}
+
+      <span
+        aria-hidden="true"
+
+        style={{
+          position:
+            'relative',
+
+          width:
+            13,
+
+          height:
+            13,
+
+          flexShrink:
+            0,
+
+          background:
+            '#ffffff',
+
+          borderTop:
+            '0.5px solid #808080',
+
+          borderLeft:
+            '0.5px solid #808080',
+
+          borderRight:
+            '0.5px solid #ffffff',
+
+          borderBottom:
+            '0.5px solid #ffffff',
+
+          boxShadow: `
+            inset 1px 1px 0 #000000,
+            inset -1px -1px 0 #dfdfdf
+          `,
+
+          boxSizing:
+            'border-box',
+        }}
+      >
+
+        <span
+          style={{
+            position:
+              'absolute',
+
+            width:
+              4,
+
+            height:
+              8,
+
+            left:
+              3,
+
+            top:
+              1,
+
+            borderRight:
+              '2px solid #000000',
+
+            borderBottom:
+              '2px solid #000000',
+
+            transform:
+              'rotate(45deg)',
+
+            boxSizing:
+              'border-box',
+          }}
+        />
+
+      </span>
+
+
+      <strong>
+        {children}
+      </strong>
+
+    </div>
+
+  );
+
 }

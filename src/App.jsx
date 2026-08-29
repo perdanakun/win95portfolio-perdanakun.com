@@ -34,6 +34,7 @@ import ImageViewer from './components/ImageViewer';
 import WelcomeInstaller from './components/installer/WelcomeInstaller';
 import WelcomeInstallerLoading from './components/installer/WelcomeInstallerLoading';
 import PerdanaInstaller from './components/installer/PerdanaInstaller';
+
 import BlogContent from './components/BlogContent';
 import BrowserModal from './components/BrowserModal';
 import WelcomeModal from './components/WelcomeModal';
@@ -461,25 +462,6 @@ const [pcScreen, setPcScreen] = useState(() => {
 });
 
 
-  // DEBUG Boot PC
-
-
-useEffect(() => {
-
-  if (pcScreen !== 'boot') {
-    return;
-  }
-
-  const bootTimer = setTimeout(() => {
-    setPcScreen('desktop');
-  }, 6000);
-
-  return () => {
-    clearTimeout(bootTimer);
-  };
-
-}, [pcScreen]);
-
 
 // ==========================================
 // PERDANA PC INSTALLER LIFECYCLE
@@ -708,6 +690,7 @@ useEffect(() => {
 const [welcomeInstallerVisible, setWelcomeInstallerVisible] = useState(false);
 const [welcomeInstallerLoadingVisible, setWelcomeInstallerLoadingVisible] = useState(false);
 const [installerVisible, setInstallerVisible] = useState(false);
+const [desktopInstallerVisible, setDesktopInstallerVisible] = useState(false);
 
 
 // Desktop Icon Installer
@@ -1109,8 +1092,12 @@ const handleAttachmentTooLarge = (file) => {
 
 {/* --- BOOT PERDANA PC --- */}
 
-      {pcScreen === 'boot' && (
-  <PerdanaBootScreen />
+{pcScreen === 'boot' && (
+  <PerdanaBootScreen
+    onBootComplete={() => {
+      setPcScreen('desktop');
+    }}
+  />
 )}
 
       {/* --- CONTAINER DESKTOP UTAMA --- */}
