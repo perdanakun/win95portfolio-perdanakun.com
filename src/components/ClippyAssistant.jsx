@@ -12,19 +12,19 @@ import {
 const COPY = {
 
   intro:
-    "Hi! I'm Clippy. I can help you find your way around Perdana's Computer.",
+    "Hi! I'm Clippy. Here's a quick tour.",
 
   introProjects:
-    "Start with My Projects if you want to see Perdana's work, case studies, and how his practice is expanding from visual design into product design and design engineering.",
+    "My Projects has the work and case studies.",
 
   introAI:
-    "If you'd rather ask than browse, AI Chat can answer questions about Perdana's background, experience, skills, projects, and current direction.",
+    "Prefer asking? AI Chat can help.",
 
   introAbout:
-    "About gives you the quick version — who Perdana is, his background, and what he's currently exploring.",
+    "About is the quick background.",
 
   introInbox:
-    "And if you want to reach him directly, Inbox lets you send a message without leaving the portfolio.",
+    "Inbox is here if you'd like to say hello.",
 
 
   about:
@@ -603,6 +603,109 @@ function getSafePosition({
 
 
 /* ======================================
+   CLIPPY TOUR POSITION
+====================================== */
+
+function getFirstTourPosition() {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
+  const TASKBAR_HEIGHT = 28;
+
+  if (width <= 600) {
+    return {
+      x: Math.max(8, width - 110),
+      y: Math.max(80, height - TASKBAR_HEIGHT - 120),
+    };
+  }
+
+  if (width <= 1024) {
+    return {
+      x: Math.max(16, width - 130),
+      y: Math.max(100, height - TASKBAR_HEIGHT - 140),
+    };
+  }
+
+  return {
+    x: Math.max(24, width - 120),
+    y: Math.max(100, height - TASKBAR_HEIGHT - 150),
+  };
+}
+
+/* ======================================
+   CLIPPY TOUR — DESKTOP ICON POSITION
+
+   Mengikuti layout getDesktopIconPosition()
+   yang digunakan di App.
+====================================== */
+
+function getTourFeaturePosition(
+  feature,
+  isMobile,
+  isTablet
+) {
+  const iconWidth = 80;
+  const iconHeight = 80;
+
+  const featureIndex = {
+    about: 0,
+    installer: 1,
+    aiAssistant: 2,
+    projects: 3,
+    contact: 4,
+  };
+
+  const index = featureIndex[feature];
+
+  if (index === undefined) {
+    return getFirstTourPosition();
+  }
+
+  /* ====================================
+     SMARTPHONE + TABLET
+     2-column desktop icon layout
+  ==================================== */
+
+  if (isMobile || isTablet) {
+    const startX = 16;
+    const startY = 16;
+    const gapX = 12;
+    const gapY = 12;
+    const columns = 2;
+
+    const column = index % columns;
+    const row = Math.floor(index / columns);
+
+    const iconX =
+      startX +
+      column * (iconWidth + gapX);
+
+    const iconY =
+      startY +
+      row * (iconHeight + gapY);
+
+    return {
+      x: iconX + iconWidth + 10,
+      y: iconY + 10,
+    };
+  }
+
+  /* ====================================
+     DESKTOP
+     1-column desktop icon layout
+  ==================================== */
+
+  const iconX = 24;
+  const iconY = 24 + index * 96;
+
+  return {
+    x: iconX + iconWidth + 20,
+    y: iconY + 5,
+  };
+}
+
+
+/* ======================================
    CLIPPY ASSISTANT
 ====================================== */
 
@@ -616,6 +719,11 @@ const RANDOM_MAX_EXTRA_DELAY = 10000;
 const RANDOM_VISIBLE_DURATION = 8000;
 
 const CONTEXTUAL_VISIBLE_DURATION = 8000;
+
+// Clippy.JS queues actions. Keep movement short enough that
+// the balloon appears after Clippy has reached its target.
+const MOVE_DURATION = 650;
+const ANIMATION_DURATION = 900;
 
 function getStoredGuideState() {
   if (typeof window === 'undefined') {
@@ -669,6 +777,13 @@ export default function ClippyAssistant({
       !windows?.welcome
   );
 
+  const contextualWindowOpen = Boolean(
+    windows?.about ||
+      windows?.projects ||
+      windows?.aiAssistant ||
+      windows?.contact
+  );
+
   /* ====================================
      TIMER HELPERS
   ==================================== */
@@ -710,10 +825,12 @@ export default function ClippyAssistant({
         return;
       }
 
-      clippy.stop?.();
-
+      // IMPORTANT: do not call clippy.stop() here.
+      // moveTo(), play(), and speak() are queued by Clippy.JS.
+      // Calling stop() after moveTo() clears the movement queue and
+      // can leave the balloon detached from the visible agent.
       if (animation && clippy.play) {
-        clippy.play(animation);
+        clippy.play(animation, ANIMATION_DURATION);
       }
 
       clippy.speak(message);
@@ -748,7 +865,7 @@ export default function ClippyAssistant({
   ==================================== */
 
   const moveClippy = React.useCallback(
-    (feature = null) => {
+    (feature = null, duration = MOVE_DURATION) => {
       if (!clippy) {
         return;
       }
@@ -761,10 +878,35 @@ export default function ClippyAssistant({
           })
         : getClippyPosition();
 
-      clippy.moveTo(position.x, position.y);
+      clippy.moveTo(position.x, position.y, duration);
     },
     [clippy, isMobile, isTablet]
   );
+
+   /* ====================================
+     FIRST MOVE HELPER
+  ==================================== */
+
+  const moveClippyToTourFeature = React.useCallback(
+  (feature) => {
+    if (!clippy) {
+      return;
+    }
+
+    const position = getTourFeaturePosition(
+      feature,
+      isMobile,
+      isTablet
+    );
+
+    clippy.moveTo(
+      position.x,
+      position.y,
+      MOVE_DURATION
+    );
+  },
+  [clippy, isMobile, isTablet]
+);
 
   /* ====================================
      COMPACT SPEECH BALLOON
@@ -791,10 +933,22 @@ export default function ClippyAssistant({
         z-index: 11 !important;
       }
 
-      .clippy-content {
+      .clippy-balloon,
+      .clippy-balloon *,
+      .clippy-content,
+      .clippy-content *,
+      .clippy-balloon-content,
+      .clippy-balloon-content * {
         font-family: "MS Sans Serif", Arial, sans-serif !important;
         font-size: 11px !important;
-        line-height: 0.95 !important;
+        line-height: 10px !important;
+      }
+
+      .clippy-balloon p,
+      .clippy-content p,
+      .clippy-balloon-content p {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
       }
 
       @media (max-width: 600px) {
@@ -807,8 +961,13 @@ export default function ClippyAssistant({
           cursor: grabbing;
         }
 
-        .clippy-content {
-          line-height: 1.05 !important;
+        .clippy-balloon,
+        .clippy-balloon *,
+        .clippy-content,
+        .clippy-content *,
+        .clippy-balloon-content,
+        .clippy-balloon-content * {
+          line-height: 10px !important;
         }
       }
     `;
@@ -820,6 +979,8 @@ export default function ClippyAssistant({
     };
   }, []);
 
+
+
   /* ====================================
      BASE VISIBILITY GUARD
 
@@ -830,39 +991,34 @@ export default function ClippyAssistant({
        overwritten by this effect while idle.
   ==================================== */
 
-  React.useEffect(() => {
-    if (!clippy) {
-      return;
-    }
+ React.useEffect(() => {
+  if (!clippy) {
+    return;
+  }
 
-    const blocked =
-      pcScreen === 'boot' ||
-      !pcInstalled ||
-      installerOpen ||
-      Boolean(windows?.welcome);
+  const blocked =
+    pcScreen === 'boot' ||
+    !pcInstalled ||
+    installerOpen ||
+    Boolean(windows?.welcome);
 
-    if (blocked) {
-      clearChatterTimers();
-      clearContextualTimer();
-      clippy.stop?.();
-      clippy.hide();
-      return;
-    }
+  if (blocked) {
+    clearChatterTimers();
+    clearContextualTimer();
 
-    if (guideCompleted) {
-      clippy.stop?.();
-      clippy.hide();
-    }
-  }, [
-    clippy,
-    pcScreen,
-    pcInstalled,
-    installerOpen,
-    windows?.welcome,
-    guideCompleted,
-    clearChatterTimers,
-    clearContextualTimer,
-  ]);
+    clippy.stop?.();
+    clippy.hide();
+  }
+
+}, [
+  clippy,
+  pcScreen,
+  pcInstalled,
+  installerOpen,
+  windows?.welcome,
+  clearChatterTimers,
+  clearContextualTimer,
+]);
 
   /* ====================================
      MOBILE DRAG
@@ -1049,8 +1205,17 @@ export default function ClippyAssistant({
     clearChatterTimers();
     clearContextualTimer();
 
-    clippy.show();
-    moveClippy();
+clippy.stop?.();
+clippy.show(true);
+
+const firstPosition = getFirstTourPosition();
+
+// First appearance should already be in the correct place.
+clippy.moveTo(
+  firstPosition.x,
+  firstPosition.y,
+  0
+);
 
     const addTourTimer = (callback, delay) => {
       const timer = window.setTimeout(
@@ -1061,40 +1226,54 @@ export default function ClippyAssistant({
       tourTimersRef.current.push(timer);
     };
 
-    addTourTimer(() => {
-      if (!clippy) return;
-      clippy.show();
-      moveClippy();
-      speak(COPY.intro, 'Wave');
-    }, 1200);
+addTourTimer(() => {
+  if (!clippy) return;
 
-    addTourTimer(() => {
-      if (!clippy) return;
-      clippy.show();
-      moveClippy('projects');
-      speak(COPY.introProjects);
-    }, 8000);
+  clippy.stop?.();
+  clippy.show(true);
 
-    addTourTimer(() => {
-      if (!clippy) return;
-      clippy.show();
-      moveClippy('aiAssistant');
-      speak(COPY.introAI);
-    }, 16000);
+  const firstPosition = getFirstTourPosition();
 
-    addTourTimer(() => {
-      if (!clippy) return;
-      clippy.show();
-      moveClippy('about');
-      speak(COPY.introAbout);
-    }, 24000);
+  clippy.moveTo(
+    firstPosition.x,
+    firstPosition.y,
+    0
+  );
 
-    addTourTimer(() => {
-      if (!clippy) return;
-      clippy.show();
-      moveClippy('contact');
-      speak(COPY.introInbox);
-    }, 32000);
+  speak(COPY.intro, 'Wave');
+}, 500);
+
+addTourTimer(() => {
+  if (!clippy) return;
+
+  clippy.show();
+  moveClippyToTourFeature('projects');
+  speak(COPY.introProjects);
+}, 4000);
+
+addTourTimer(() => {
+  if (!clippy) return;
+
+  clippy.show();
+  moveClippyToTourFeature('aiAssistant');
+  speak(COPY.introAI);
+}, 8000);
+
+addTourTimer(() => {
+  if (!clippy) return;
+
+  clippy.show();
+  moveClippyToTourFeature('about');
+  speak(COPY.introAbout);
+}, 12000);
+
+addTourTimer(() => {
+  if (!clippy) return;
+
+  clippy.show();
+  moveClippyToTourFeature('contact');
+  speak(COPY.introInbox);
+}, 16000);
 
     addTourTimer(() => {
       if (!clippy) return;
@@ -1108,7 +1287,7 @@ export default function ClippyAssistant({
       );
 
       setGuideCompleted(true);
-    }, 39000);
+    }, 20000);
 
     return () => {
       clearTourTimers();
@@ -1122,6 +1301,7 @@ export default function ClippyAssistant({
     desktopReady,
     guideCompleted,
     moveClippy,
+    moveClippyToTourFeature,
     speak,
     clearTourTimers,
     clearChatterTimers,
@@ -1130,6 +1310,10 @@ export default function ClippyAssistant({
 
   /* ====================================
      CENTRAL POSITION MANAGER
+
+     This manager only owns the idle/default position.
+     Feature windows are positioned by contextual guides,
+     and the first visit tour owns its own movement.
   ==================================== */
 
   React.useEffect(() => {
@@ -1137,27 +1321,7 @@ export default function ClippyAssistant({
       return undefined;
     }
 
-    if (installerOpen) {
-      return undefined;
-    }
-
-    if (windows?.aiAssistant) {
-      moveClippy('aiAssistant');
-      return undefined;
-    }
-
-    if (windows?.contact) {
-      moveClippy('contact');
-      return undefined;
-    }
-
-    if (windows?.projects) {
-      moveClippy('projects');
-      return undefined;
-    }
-
-    if (windows?.about) {
-      moveClippy('about');
+    if (installerOpen || !guideCompleted || contextualWindowOpen) {
       return undefined;
     }
 
@@ -1171,10 +1335,8 @@ export default function ClippyAssistant({
   }, [
     clippy,
     installerOpen,
-    windows?.about,
-    windows?.projects,
-    windows?.aiAssistant,
-    windows?.contact,
+    guideCompleted,
+    contextualWindowOpen,
     moveClippy,
   ]);
 
@@ -1188,7 +1350,7 @@ export default function ClippyAssistant({
     }
 
     const handleResize = () => {
-      if (installerOpen) {
+      if (installerOpen || !guideCompleted) {
         return;
       }
 
@@ -1229,6 +1391,7 @@ export default function ClippyAssistant({
   }, [
     clippy,
     installerOpen,
+    guideCompleted,
     windows?.about,
     windows?.projects,
     windows?.aiAssistant,
@@ -1260,7 +1423,10 @@ export default function ClippyAssistant({
       clearChatterTimers();
       clearContextualTimer();
 
-      clippy.show();
+      // Clear any previous idle/random action BEFORE starting the new
+      // contextual sequence. Never stop after moveTo().
+      clippy.stop?.();
+      clippy.show(true);
       moveClippy(feature);
       speak(message, animation);
 
@@ -1374,103 +1540,68 @@ export default function ClippyAssistant({
    Wait 10–20s -> show -> speak ->
    remain visible for 8s -> hide -> repeat.
 ==================================== */
+
 React.useEffect(() => {
   if (
     !clippy ||
-    !startGuide ||
-    guideCompleted ||
-    tourStartedRef.current
+    !guideCompleted ||
+    !desktopReady ||
+    contextualWindowOpen
   ) {
+    clearChatterTimers();
     return undefined;
   }
 
-  tourStartedRef.current = true;
+  const scheduleNextChatter = () => {
+    clearChatterTimers();
 
-  clearTourTimers();
-  clearChatterTimers();
-  clearContextualTimer();
+    const delay =
+      RANDOM_MIN_DELAY +
+      Math.random() * RANDOM_MAX_EXTRA_DELAY;
 
-  // pastikan Clippy benar-benar mulai dari kondisi visible
-  clippy.stop?.();
-  clippy.show();
-  moveClippy();
+    chatterTimerRef.current =
+      window.setTimeout(() => {
+        if (!clippy) {
+          return;
+        }
 
-  const addTourTimer = (callback, delay) => {
-    const timer = window.setTimeout(
-      callback,
-      delay
-    );
+        clippy.stop?.();
+        clippy.show(true);
 
-    tourTimersRef.current.push(timer);
+        moveClippy();
+
+        speakRandomMessage();
+
+        chatterHideTimerRef.current =
+          window.setTimeout(() => {
+            clippy.stop?.();
+            clippy.hide();
+
+            chatterHideTimerRef.current = null;
+
+            // mulai countdown random berikutnya
+            scheduleNextChatter();
+          }, RANDOM_VISIBLE_DURATION);
+
+      }, delay);
   };
 
-  addTourTimer(() => {
-    if (!clippy) return;
-
-    clippy.show();
-    moveClippy();
-    speak(COPY.intro, 'Wave');
-  }, 500);
-
-  addTourTimer(() => {
-    if (!clippy) return;
-
-    clippy.show();
-    moveClippy('projects');
-    speak(COPY.introProjects);
-  }, 8000);
-
-  addTourTimer(() => {
-    if (!clippy) return;
-
-    clippy.show();
-    moveClippy('aiAssistant');
-    speak(COPY.introAI);
-  }, 16000);
-
-  addTourTimer(() => {
-    if (!clippy) return;
-
-    clippy.show();
-    moveClippy('about');
-    speak(COPY.introAbout);
-  }, 24000);
-
-  addTourTimer(() => {
-    if (!clippy) return;
-
-    clippy.show();
-    moveClippy('contact');
-    speak(COPY.introInbox);
-  }, 32000);
-
-  addTourTimer(() => {
-    if (!clippy) return;
-
-    clippy.stop?.();
-    clippy.hide();
-
-    window.localStorage.setItem(
-      GUIDE_STORAGE_KEY,
-      'true'
-    );
-
-    setGuideCompleted(true);
-  }, 39000);
+  scheduleNextChatter();
 
   return () => {
-    clearTourTimers();
+    clearChatterTimers();
   };
 }, [
   clippy,
-  startGuide,
   guideCompleted,
+  desktopReady,
+  contextualWindowOpen,
   moveClippy,
-  speak,
-  clearTourTimers,
+  speakRandomMessage,
   clearChatterTimers,
-  clearContextualTimer,
 ]);
+
+
   /* ====================================
      GLOBAL CLEANUP
   ==================================== */

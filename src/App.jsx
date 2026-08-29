@@ -507,6 +507,44 @@ const [clippyMounted, setClippyMounted] = useState(() => {
   );
 });
 
+// ==========================================
+// RESPONSIVE DESKTOP ICON POSITION
+// ==========================================
+
+const getDesktopIconPosition = (index) => {
+  const iconWidth = 80;
+  const iconHeight = 80;
+
+  // Smartphone + Tablet
+  // 2 kolom
+  if (isMobile || isTablet) {
+    const startX = 16;
+    const startY = 16;
+    const gapX = 12;
+    const gapY = 12;
+    const columns = 2;
+
+    const column = index % columns;
+    const row = Math.floor(index / columns);
+
+    return {
+      x: startX + column * (iconWidth + gapX),
+      y: startY + row * (iconHeight + gapY),
+      width: iconWidth,
+      height: iconHeight,
+    };
+  }
+
+  // Desktop
+  // Tetap 1 kolom seperti layout sekarang
+  return {
+    x: 24,
+    y: 24 + index * 96,
+    width: iconWidth,
+    height: iconHeight,
+  };
+};
+
  // ==========================================
   // DYNAMIC WALLPAPER - DINONAKTIFKAN
   // ==========================================
@@ -1352,10 +1390,10 @@ onContinue={() => {
 )/*}
 {/* About */}
 <Rnd
-  default={{ x: 24, y: 24, width: 80, height: 80 }}
+  default={getDesktopIconPosition(0)}
   bounds="window"
   enableResizing={false}
-  disableDragging={false}
+  disableDragging={isMobile || isTablet}
 >
   <DesktopIcon onOpen={() => openWindow('about')}>
     <div style={desktopIconStyle}>
@@ -1369,10 +1407,10 @@ onContinue={() => {
 
 {/* Installer */}
 <Rnd
-  default={{ x: 24, y: 120, width: 80, height: 80 }}
+  default={getDesktopIconPosition(1)}
   bounds="window"
   enableResizing={false}
-  disableDragging={false}
+  disableDragging={isMobile || isTablet}
 >
   <DesktopIcon onOpen={() => setShowInstallAlert(true)}>
     <div style={desktopIconStyle}>
@@ -1386,10 +1424,10 @@ onContinue={() => {
 
 {/* AI Chat */}
 <Rnd
-  default={{ x: 24, y: 216, width: 80, height: 80 }}
+  default={getDesktopIconPosition(2)}
   bounds="window"
   enableResizing={false}
-  disableDragging={false}
+  disableDragging={isMobile || isTablet}
 >
   <DesktopIcon onOpen={() => openWindow('aiAssistant')}>
     <div style={desktopIconStyle}>
@@ -1403,10 +1441,10 @@ onContinue={() => {
 
 {/* My Projects */}
 <Rnd
-  default={{ x: 24, y: 312, width: 80, height: 80 }}
+  default={getDesktopIconPosition(3)}
   bounds="window"
   enableResizing={false}
-  disableDragging={false}
+  disableDragging={isMobile || isTablet}
 >
   <DesktopIcon onOpen={() => openWindow('projects')}>
     <div style={desktopIconStyle}>
@@ -1420,10 +1458,10 @@ onContinue={() => {
 
 {/* Inbox */}
 <Rnd
-  default={{ x: 24, y: 408, width: 80, height: 80 }}
+  default={getDesktopIconPosition(4)}
   bounds="window"
   enableResizing={false}
-  disableDragging={false}
+  disableDragging={isMobile || isTablet}
 >
   <DesktopIcon onOpen={() => openWindow('contact')}>
     <div style={desktopIconStyle}>
@@ -1437,10 +1475,10 @@ onContinue={() => {
 
 {/* Games */}
 <Rnd
-  default={{ x: 24, y: 504, width: 80, height: 80 }}
+  default={getDesktopIconPosition(5)}
   bounds="window"
   enableResizing={false}
-  disableDragging={false}
+  disableDragging={isMobile || isTablet}
 >
   <DesktopIcon
     onOpen={() =>
@@ -1461,10 +1499,10 @@ onContinue={() => {
 
 {/* Recycle Bin */}
 <Rnd
-  default={{ x: 24, y: 600, width: 80, height: 80 }}
+  default={getDesktopIconPosition(6)}
   bounds="window"
   enableResizing={false}
-  disableDragging={false}
+  disableDragging={isMobile || isTablet}
 >
   <DesktopIcon onOpen={() => openWindow('recycleBin')}>
     <div style={desktopIconStyle}>
@@ -1478,10 +1516,10 @@ onContinue={() => {
 
 {/* Writing */}
 <Rnd
-  default={{ x: 24, y: 696, width: 80, height: 80 }}
+  default={getDesktopIconPosition(7)}
   bounds="window"
   enableResizing={false}
-  disableDragging={false}
+  disableDragging={isMobile || isTablet}
 >
   <DesktopIcon
     onOpen={() =>
@@ -2591,6 +2629,7 @@ const inputStyle = {
   fontSize: '12px',
   outline: 'none'
 };
+
 
 function AppWithClippy() {
   return (

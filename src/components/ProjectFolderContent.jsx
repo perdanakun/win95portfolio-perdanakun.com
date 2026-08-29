@@ -287,8 +287,16 @@ export default function ProjectFolderContent({
           ],
         },
       {
-       id: 'hotel booking',
-       name: 'Hotel Booking',
+       id: 'travel-x',
+       name: 'Travel xxx',
+       type: 'folder',
+       iconType: 'folder',
+       isLocked: true,
+       message: 'This folder is still on progress!',
+      },
+            {
+       id: 'AI-x',
+       name: 'AI xxx',
        type: 'folder',
        iconType: 'folder',
        isLocked: true,
