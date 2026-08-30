@@ -13,6 +13,7 @@ import {
   Shdocvw272,
   Wordpad,
   Url1102,
+  Shell321,
 } from '@react95/icons';
 
 import {
@@ -288,15 +289,31 @@ export default function ProjectFolderContent({
         },
       {
        id: 'travel-x',
-       name: 'Travel xxx',
+       name: 'Travel XXX',
        type: 'folder',
        iconType: 'folder',
-       isLocked: true,
-       message: 'This folder is still on progress!',
+       isLocked: false,
+                 children: [
+                {
+                  id: 'travel-website',
+                  name: 'Test-Travel.exe',
+                  type: 'file',
+                  iconType: 'program',
+                  link: 'https://travelxxx-hotel-compass.vercel.app/',
+                },
+                {
+                  id: 'readme-travelxxx',
+                  name: 'Readme.txt',
+                  type: 'file',
+                  iconType: 'notepad',
+                  isLocked: false,
+                  openWindow: 'readme-travelxxx',
+                },
+              ],
       },
             {
        id: 'AI-x',
-       name: 'AI xxx',
+       name: 'AI-Projects',
        type: 'folder',
        iconType: 'folder',
        isLocked: true,
@@ -305,7 +322,7 @@ export default function ProjectFolderContent({
 
       {
        id: 'readme-product',
-       name: 'Readme.txt',
+       name: 'Workflow',
        type: 'file',
        iconType: 'notepad',
        isLocked: false,
@@ -694,6 +711,13 @@ export default function ProjectFolderContent({
       case 'website':
         return (
           <Url1102
+            variant={size}
+          />
+        );
+
+              case 'program':
+        return (
+          <Shell321
             variant={size}
           />
         );

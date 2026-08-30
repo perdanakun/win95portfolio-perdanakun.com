@@ -7,6 +7,7 @@ import {
   Notepad2,
   Wordpad,
   Url1102,
+  Shell321,
 } from '@react95/icons';
 
 import holohealthIcon from '../assets/images/case-study/holohealthIcon.png';
@@ -106,6 +107,13 @@ case 'holohealth':
     case 'website':
       return (
         <Url1102
+          variant="16x16_4"
+        />
+      );
+
+          case 'program':
+      return (
+        <Shell321
           variant="16x16_4"
         />
       );

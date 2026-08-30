@@ -51,6 +51,7 @@ import PerdanaComputerProductContent from './project/PerdanaComputerProductConte
 import PerdanaComputerProductOverview from './project/PerdanaComputerProductOverview';
 
 import ReadmeProduct from './project/ReadmeProduct';
+import ReadmeTravelXXX from './project/ReadmeTravelXXX';
 
 import { getAIResponse } from "./services/aiService";
 import { Frame, TitleBar, Button, TaskBar, List, Modal, useModal } from '@react95/core';
@@ -641,6 +642,7 @@ const [windows, setWindows] = useState({
 
      // Notepad windows
   'readme-product': false,
+  'readme-travelxxx': false,
   'perdana-computer-overview': false,
 });
 
@@ -820,6 +822,7 @@ const handleRestart = () => {
 
   // Notepad windows
   'readme-product': false,
+  'readme-travelxxx': false,
     'perdana-computer-overview': false,
   });
 
@@ -872,6 +875,14 @@ const notepadWindows = {
 
     content: (
       <ReadmeProduct />
+    ),
+  },
+
+    'readme-travelxxx': {
+    title: "ReadMe.txt - Notepad",
+
+    content: (
+      <ReadmeTravelXXX />
     ),
   },
 

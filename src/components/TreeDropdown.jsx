@@ -13,6 +13,7 @@ import {
   Notepad2,
   Wordpad,
   Shdocvw272,
+  Shell321,
 } from '@react95/icons';
 
 import holohealthIcon from '../assets/images/case-study/holohealthIcon.png';
@@ -380,6 +381,13 @@ export default function TreeDropdown({
       case 'website':
         return (
           <Shdocvw272
+            variant="16x16_4"
+          />
+        );
+
+         case 'program':
+        return (
+          <Shell321
             variant="16x16_4"
           />
         );
