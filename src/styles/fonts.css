@@ -355,6 +355,45 @@
     var(--casestudy-font-reading-letter-spacing);
 }
 
+/* ======================================
+   LIST AND TABLE COPY
+   Case Study
+====================================== */
+
+.casestudy p,
+.casestudy li,
+.casestudy table {
+  font-family: var(--casestudy-font-reading);
+
+  font-size: var(--casestudy-font-reading-size);
+
+  line-height: var(--casestudy-font-reading-line-height);
+
+  letter-spacing: var(--casestudy-font-reading-letter-spacing);
+}
+
+.casestudy th,
+.casestudy td {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+.casestudy pre {
+  font-family: var(--casestudy-font-mono);
+
+  font-size: var(--casestudy-font-mono-size);
+
+  line-height: var(--casestudy-font-mono-line-height);
+
+  letter-spacing: var(--casestudy-font-mono-letter-spacing);
+
+  color: var(--casestudy-text);
+}
+
+
+
 
 /* ======================================
    STRONG

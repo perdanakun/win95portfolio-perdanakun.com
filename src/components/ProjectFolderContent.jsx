@@ -222,7 +222,7 @@ export default function ProjectFolderContent({
           id: 'pc-product-overview',
           name: 'Overview',
           type: 'file',
-          iconType: 'file',
+          iconType: 'documentation',
           openWindow: 'perdana-computer-overview',
         },
         {
@@ -285,6 +285,13 @@ export default function ProjectFolderContent({
                 },
               ],
             },
+        {
+          id: 'pc-product-github',
+          name: 'Github',
+          type: 'file',
+          iconType: 'github',
+          link : 'https://github.com/perdanakun/win95portfolio-perdanakun.com',
+        },
           ],
         },
       {
@@ -303,11 +310,17 @@ export default function ProjectFolderContent({
                 },
                 {
                   id: 'readme-travelxxx',
-                  name: 'Readme.txt',
+                  name: 'Overview-Progress',
                   type: 'file',
                   iconType: 'notepad',
-                  isLocked: false,
                   openWindow: 'readme-travelxxx',
+                },
+                {
+                  id: 'travel-github',
+                  name: 'Github',
+                  type: 'file',
+                  iconType: 'github',
+                  link: 'https://github.com/perdanakun/travelxxx-hotel-booking',
                 },
               ],
       },
@@ -322,7 +335,7 @@ export default function ProjectFolderContent({
 
       {
        id: 'readme-product',
-       name: 'Workflow',
+       name: 'readme.txt',
        type: 'file',
        iconType: 'notepad',
        isLocked: false,
@@ -331,59 +344,61 @@ export default function ProjectFolderContent({
       ],
     },
 
-    {
-      id: 'design-engineering',
-      name: 'Design Engineering',
-      type: 'folder',
-      iconType: 'folder',
-      isLocked: false,
-      message: '',
-      children: [
-        {
-          id: 'perdana-computer-engineering',
-          name: "Perdana's Computer",
-          type: 'folder',
-          iconType: 'folder',
-          isLocked: true,
-          message:
-            'This folder is currently unavailable.',
-          children: [
-            {
-              id: 'pc-engineering-overview',
-              name: 'Overview',
-              type: 'file',
-              iconType: 'caseStudy',
-            },
-            {
-              id: 'pc-architecture',
-              name: 'Architecture',
-              type: 'file',
-              iconType: 'documentation',
-            },
-            {
-              id: 'pc-design-system',
-              name: 'Design System',
-              type: 'file',
-              iconType: 'documentation',
-            },
-            {
-              id: 'pc-interaction',
-              name: 'Interaction',
-              type: 'file',
-              iconType: 'documentation',
-            },
-            {
-              id: 'pc-build',
-              name: 'Build',
-              type: 'file',
-              iconType: 'github',
-              link:
-                'https://github.com/perdanakun/perdanakun.com',
-            },
-          ],
-        },
-      ],
-    },
+      // {
+    //   id: 'design-engineering',
+    //   name: 'Design Engineering',
+    //   type: 'folder',
+    //   iconType: 'folder',
+    //   isLocked: false,
+    //   message: '',
+    //   children: [
+    //     {
+    //       id: 'perdana-computer-engineering',
+    //       name: "Perdana's Computer",
+    //       type: 'folder',
+    //       iconType: 'folder',
+    //       isLocked: true,
+    //       message:
+    //         'This folder is currently unavailable.',
+    //       children: [
+    //         {
+    //           id: 'pc-engineering-overview',
+    //           name: 'Overview',
+    //           type: 'file',
+    //           iconType: 'caseStudy',
+    //         },
+    //         {
+    //           id: 'pc-architecture',
+    //           name: 'Architecture',
+    //           type: 'file',
+    //           iconType: 'documentation',
+    //         },
+    //         {
+    //           id: 'pc-design-system',
+    //           name: 'Design System',
+    //           type: 'file',
+    //           iconType: 'documentation',
+    //         },
+    //         {
+    //           id: 'pc-interaction',
+    //           name: 'Interaction',
+    //           type: 'file',
+    //           iconType: 'documentation',
+    //         },
+    //         {
+    //           id: 'pc-build',
+    //           name: 'Build',
+    //           type: 'file',
+    //           iconType: 'github',
+    //           link:
+    //             'https://github.com/perdanakun/win95portfolio-perdanakun.com',
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // },
+
+
   ];
 
   // =========================================================

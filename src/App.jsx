@@ -879,7 +879,7 @@ const notepadWindows = {
   },
 
     'readme-travelxxx': {
-    title: "ReadMe.txt - Notepad",
+    title: "Overview-Progress - Notepad",
 
     content: (
       <ReadmeTravelXXX />
@@ -887,7 +887,7 @@ const notepadWindows = {
   },
 
     'perdana-computer-overview': {
-    title: "Overview.txt - Notepad",
+    title: "Overview- Perdana's Computer",
 
     content: (
       <PerdanaComputerProductOverview />
