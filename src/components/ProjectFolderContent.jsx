@@ -14,6 +14,8 @@ import {
   Wordpad,
   Url1102,
   Shell321,
+  Wangimg128,
+  Mplayer110,
 } from '@react95/icons';
 
 import {
@@ -30,8 +32,30 @@ import mayoraIcon from '../assets/icons/mayora.svg';
 import figmaIcon from "../assets/icons/figma.svg";
 import githubIcon from "../assets/icons/github.svg";
 import instagramIcon from "../assets/icons/instagram.svg";
+import travelxxxIcon from "../assets/icons/travelxxx.svg";
 
 import LocalTree from './LocalTree';
+
+import researchDiscovery
+  from '../project/travelxxx/01 — Research & Discovery.PNG';
+
+import referenceBoard
+  from '../project/travelxxx/02 — Reference Board.PNG';
+
+import wireframeUizard
+  from '../project/travelxxx/03 — AI-Generated Wireframes (Uizard).PNG';
+
+import generatedDesignSystem
+  from '../project/travelxxx/04 — AI-Generated Base - Design System.PNG';
+
+import generatedFirstDraft
+  from '../project/travelxxx/05 — AI-Generated Base - First Draft.PNG';
+
+import componentArchitecture
+  from '../project/travelxxx/06 — Component Architecture.PNG';
+
+import vscodeRefinement
+  from '../project/travelxxx/07 — Manual Refinement (VS Code).PNG';
 
 
 export default function ProjectFolderContent({
@@ -287,7 +311,7 @@ export default function ProjectFolderContent({
             },
         {
           id: 'pc-product-github',
-          name: 'Github',
+          name: 'Source Code',
           type: 'file',
           iconType: 'github',
           link : 'https://github.com/perdanakun/win95portfolio-perdanakun.com',
@@ -302,22 +326,101 @@ export default function ProjectFolderContent({
        isLocked: false,
                  children: [
                 {
-                  id: 'travel-website',
-                  name: 'Test-Travel.exe',
-                  type: 'file',
-                  iconType: 'program',
-                  link: 'https://travelxxx-hotel-compass.vercel.app/',
-                },
-                {
                   id: 'readme-travelxxx',
-                  name: 'Overview-Progress',
+                  name: 'Overview',
                   type: 'file',
-                  iconType: 'notepad',
+                  iconType: 'documentation',
                   openWindow: 'readme-travelxxx',
                 },
                 {
+                  id: 'travelxxx-documentation',
+                  name: 'Documentation',
+                  type: 'folder',
+                  iconType: 'folder',
+                  isLocked: false,
+                  children: [
+                    {
+                      id: 'prd-travelxxx',
+                      name: 'PRD - Travel XXX',
+                      type: 'file',
+                      iconType: 'notepad',
+                      openWindow: 'prd-travelxxx',
+                    },
+                        {
+                          id: '1-research-discovery',
+                          name: '01. Research & Discovery',
+                          type: 'file',
+                          iconType: 'image',
+                          imageGallery: true,
+                          image: researchDiscovery,
+                        },
+                        {
+                          id: '2-reference-moodboard',
+                          name: '02. Reference Board',
+                          type: 'file',
+                          iconType: 'image',
+                          imageGallery: true,
+                          image: referenceBoard,
+                        },
+                        {
+                          id: '3-wireframe-uizard',
+                          name: '03. AI-Generated Wireframes (Uizard)',
+                          type: 'file',
+                          iconType: 'image',
+                          imageGallery: true,
+                          image: wireframeUizard,
+                        },
+                        {
+                          id: '4-v0-generated-design-system',
+                          name: '04. AI-Generated Design System',
+                          type: 'file',
+                          iconType: 'image',
+                          imageGallery: true,
+                          image: generatedDesignSystem,
+                        },
+                        {
+                          id: '5-v0-generated-first-draft',
+                          name: '05. AI-Generated First Draft',
+                          type: 'file',
+                          iconType: 'image',
+                          imageGallery: true,
+                          image: generatedFirstDraft,
+                        },
+                        {
+                          id: '6-component-architecture',
+                          name: '06. Component Architecture',
+                          type: 'file',
+                          iconType: 'image',
+                          imageGallery: true,
+                          image: componentArchitecture,
+                        },
+                        {
+                          id: '7-vscode-refinement',
+                          name: '07. Manual Refinement (VS Code)',
+                          type: 'file',
+                          iconType: 'image',
+                          imageGallery: true,
+                          image: vscodeRefinement,
+                        },
+                      {
+                        id: 'result-from-static-to-functional',
+                        name: 'Result - From Static to Functional',
+                        type: 'file',
+                        iconType: 'video',
+                          youtubeId: 'zHHarfJBz3I',
+                      },
+                  ],
+                },
+                {
+                  id: 'travel-website',
+                  name: 'Travel-v.0.1',
+                  type: 'file',
+                  iconType: 'travelxxx',
+                  link: 'https://travelxxx-hotel-compass.vercel.app/',
+                },
+                {
                   id: 'travel-github',
-                  name: 'Github',
+                  name: 'Source Code',
                   type: 'file',
                   iconType: 'github',
                   link: 'https://github.com/perdanakun/travelxxx-hotel-booking',
@@ -636,6 +739,28 @@ export default function ProjectFolderContent({
           />
         );
 
+        case 'travelxxx':
+        return (
+          <img
+            src={travelxxxIcon}
+            alt="Travelxxx"
+            style={{
+              width:
+                size === '32x32_4'
+                  ? '32px'
+                  : '16px',
+
+              height:
+                size === '32x32_4'
+                  ? '32px'
+                  : '16px',
+
+              objectFit:
+                'contain',
+            }}
+          />
+        );
+
          case 'mayora':
         return (
           <img
@@ -730,6 +855,21 @@ export default function ProjectFolderContent({
           />
         );
 
+        case 'image':
+        return (
+          <Wangimg128
+            variant={size}
+          />
+        );
+
+        case 'video':
+        return (
+          <Mplayer110
+            variant={size}
+          />
+        );
+
+
               case 'program':
         return (
           <Shell321
@@ -804,6 +944,91 @@ export default function ProjectFolderContent({
       false
     );
   };
+
+ // =========================================================
+// OPEN IMAGE GALLERY
+// =========================================================
+
+const openImageGallery = (
+  file,
+  siblings = []
+) => {
+  if (!file) {
+    return;
+  }
+
+  const galleryItems =
+    Array.isArray(siblings)
+      ? siblings.filter(
+          (item) =>
+            item.type === 'file' &&
+            item.imageGallery
+        )
+      : [];
+
+  if (
+    galleryItems.length === 0
+  ) {
+    return;
+  }
+
+  const startIndex =
+    galleryItems.findIndex(
+      (item) =>
+        item.id === file.id
+    );
+
+  window.dispatchEvent(
+    new CustomEvent(
+      'open-image-gallery',
+      {
+        detail: {
+          items:
+            galleryItems,
+
+          startIndex:
+            startIndex >= 0
+              ? startIndex
+              : 0,
+        },
+      }
+    )
+  );
+
+  setIsDropdownOpen(false);
+};
+
+
+  // =========================================================
+  // OPEN VIDE VIWER
+  // =========================================================
+const openVideoViewer = (
+  file
+) => {
+  if (
+    !file ||
+    !file.youtubeId
+  ) {
+    return;
+  }
+
+
+  window.dispatchEvent(
+    new CustomEvent(
+      'open-video-viewer',
+      {
+        detail: {
+          file,
+        },
+      }
+    )
+  );
+
+
+  setIsDropdownOpen(
+    false
+  );
+};
 
   // =========================================================
   // OPEN FOLDER
@@ -949,69 +1174,22 @@ export default function ProjectFolderContent({
     );
   };
 
-  // =========================================================
-  // FILE CLICK
-  // =========================================================
+// =========================================================
+// FILE CLICK
+// =========================================================
 
-  const handleFileClick = (
-    file
-  ) => {
-    if (!file) {
-      return;
-    }
+const handleFileClick = (
+  file
+) => {
+  if (!file) {
+    return;
+  }
 
-    // -------------------------------------------------------
-    // TOUCH / MOBILE
-    // -------------------------------------------------------
+  // -------------------------------------------------------
+  // TOUCH / MOBILE
+  // -------------------------------------------------------
 
-    if (isTouch) {
-      if (
-        file.openWindow
-      ) {
-        openProjectWindow(
-          file.openWindow
-        );
-
-        return;
-      }
-
-      if (file.link) {
-        openExternalLink(
-          file.link
-        );
-      }
-
-      return;
-    }
-
-    // -------------------------------------------------------
-    // DESKTOP
-    // -------------------------------------------------------
-
-    setSelectedItem({
-      type:
-        'file',
-
-      id:
-        file.id,
-    });
-  };
-
-  // =========================================================
-  // FILE DOUBLE CLICK
-  // =========================================================
-
-  const handleFileDoubleClick = (
-    file
-  ) => {
-    if (!file) {
-      return;
-    }
-
-    if (isTouch) {
-      return;
-    }
-
+  if (isTouch) {
     if (
       file.openWindow
     ) {
@@ -1022,12 +1200,107 @@ export default function ProjectFolderContent({
       return;
     }
 
+    if (
+      file.imageGallery
+    ) {
+      openImageGallery(
+        file,
+        currentChildren
+      );
+
+      return;
+    }
+
+
+if (
+  file.iconType ===
+    'video' &&
+  file.youtubeId
+) {
+  openVideoViewer(
+    file
+  );
+
+  return;
+}
+
     if (file.link) {
       openExternalLink(
         file.link
       );
+
+      return;
     }
-  };
+
+    return;
+  }
+
+  // -------------------------------------------------------
+  // DESKTOP
+  // -------------------------------------------------------
+
+  setSelectedItem({
+    type: 'file',
+    id: file.id,
+  });
+};
+
+// =========================================================
+// FILE DOUBLE CLICK
+// =========================================================
+
+const handleFileDoubleClick = (
+  file
+) => {
+  if (!file) {
+    return;
+  }
+
+  if (isTouch) {
+    return;
+  }
+
+  if (
+    file.openWindow
+  ) {
+    openProjectWindow(
+      file.openWindow
+    );
+
+    return;
+  }
+
+  if (
+    file.imageGallery
+  ) {
+    openImageGallery(
+      file,
+      currentChildren
+    );
+
+    return;
+  }
+
+  if (
+    file.iconType ===
+      'video' &&
+    file.youtubeId
+  ) {
+    openVideoViewer(
+      file
+    );
+
+    return;
+  }
+
+  if (file.link) {
+    openExternalLink(
+      file.link
+    );
+
+    return;
+  }
+};
 
   // =========================================================
   // TREE FOLDER
@@ -1106,48 +1379,46 @@ export default function ProjectFolderContent({
   // BACK
   // =========================================================
 
-  const handleBack = () => {
-    if (!currentFolder) {
-      return;
-    }
+const handleBack = () => {
+  if (!currentFolder) {
+    return;
+  }
 
-    const parentFolder =
-      findParentFolder(
+  const parentFolder =
+    findParentFolder(
+      projects,
+      currentFolder.id
+    );
+
+  setCurrentFolder(
+    parentFolder
+  );
+
+  setSelectedItem(
+    null
+  );
+
+  setIsDropdownOpen(
+    false
+  );
+
+  if (parentFolder) {
+    const parentPath =
+      findFolderPath(
         projects,
-        currentFolder.id
-      );
+        parentFolder.id
+      ) || [];
 
-    setCurrentFolder(
-      parentFolder
+    setExpandedIds(
+      parentPath.map(
+        (folder) =>
+          `folder-${folder.id}`
+      )
     );
-
-    setSelectedItem(
-      null
-    );
-
-    setIsDropdownOpen(
-      false
-    );
-
-    if (parentFolder) {
-      setExpandedIds(
-        (previous) => {
-          const parentTreeId =
-            `folder-${parentFolder.id}`;
-
-          return previous.filter(
-            (id) =>
-              id ===
-              parentTreeId
-          );
-        }
-      );
-    } else {
-      setExpandedIds(
-        []
-      );
-    }
-  };
+  } else {
+    setExpandedIds([]);
+  }
+};
 
   // =========================================================
   // TREE COLLAPSE

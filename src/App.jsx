@@ -30,7 +30,12 @@ import AlertModalEmailFile from './components/AlertModalEmailFile';
 import CameraModal from './components/CameraModal';
 import AiAssistant from "./components/AiAssistant";
 import AiAssistantSphere from "./components/AiAssistantSphere";
+
 import ImageViewer from './components/ImageViewer';
+import ImageGalleryViewer from './components/ImageGalleryViewer';
+import VideoViewer from './components/VideoViewer';
+
+
 import WelcomeInstaller from './components/installer/WelcomeInstaller';
 import WelcomeInstallerLoading from './components/installer/WelcomeInstallerLoading';
 import PerdanaInstaller from './components/installer/PerdanaInstaller';
@@ -52,6 +57,7 @@ import PerdanaComputerProductOverview from './project/PerdanaComputerProductOver
 
 import ReadmeProduct from './project/ReadmeProduct';
 import ReadmeTravelXXX from './project/ReadmeTravelXXX';
+import PRDTravelXXX from './project/PRDTravelXXX';
 
 import { getAIResponse } from "./services/aiService";
 import { Frame, TitleBar, Button, TaskBar, List, Modal, useModal } from '@react95/core';
@@ -89,6 +95,7 @@ import {
   Computer4,
   FilePin,
   Wordpad,
+  Mplayer110,
 } from '@react95/icons';
 import { useState, useEffect, useRef } from 'react';
 import { Rnd } from 'react-rnd';
@@ -643,6 +650,7 @@ const [windows, setWindows] = useState({
      // Notepad windows
   'readme-product': false,
   'readme-travelxxx': false,
+  'prd-travelxxx': false,
   'perdana-computer-overview': false,
 });
 
@@ -823,6 +831,7 @@ const handleRestart = () => {
   // Notepad windows
   'readme-product': false,
   'readme-travelxxx': false,
+  'prd-travelxxx': false,
     'perdana-computer-overview': false,
   });
 
@@ -883,6 +892,14 @@ const notepadWindows = {
 
     content: (
       <ReadmeTravelXXX />
+    ),
+  },
+
+      'prd-travelxxx': {
+    title: "PRD - Travel XXX - Notepad",
+
+    content: (
+      <PRDTravelXXX />
     ),
   },
 
@@ -1003,6 +1020,119 @@ const handleImageLoad = (viewerId, e) => {
   );
 };
 
+// ==========================================
+// IMAGE GALLERY
+// ==========================================
+
+const [
+  imageGallery,
+  setImageGallery,
+] = useState(null);
+
+const [
+  imageGalleryTitle,
+  setImageGalleryTitle,
+] = useState(
+  'Image Gallery'
+);
+
+// ==========================================
+// OPEN IMAGE GALLERY EVENT
+// ==========================================
+
+useEffect(() => {
+  const handleOpenImageGallery = (
+    event
+  ) => {
+    const items =
+      event.detail?.items;
+
+    const startIndex =
+      event.detail?.startIndex ?? 0;
+
+    if (
+      !Array.isArray(items) ||
+      items.length === 0
+    ) {
+      return;
+    }
+
+    const safeIndex =
+      startIndex >= 0 &&
+      startIndex < items.length
+        ? startIndex
+        : 0;
+
+    setImageGallery({
+      items,
+      startIndex:
+        safeIndex,
+    });
+
+    setImageGalleryTitle(
+      items[safeIndex]?.name ||
+        'Image Gallery'
+    );
+  };
+
+  window.addEventListener(
+    'open-image-gallery',
+    handleOpenImageGallery
+  );
+
+  return () => {
+    window.removeEventListener(
+      'open-image-gallery',
+      handleOpenImageGallery
+    );
+  };
+}, []);
+
+const closeImageGallery = () => {
+  setImageGallery(null);
+
+  setImageGalleryTitle(
+    'Image Gallery'
+  );
+};
+
+// ==========================================
+// VIDEO VIEWER
+// ==========================================
+const [
+  activeVideo,
+  setActiveVideo,
+] = useState(null);
+
+
+// Video Viewer Event
+
+useEffect(() => {
+  const handleOpenVideoViewer = (
+    event
+  ) => {
+    const file =
+      event.detail?.file;
+
+    if (!file) {
+      return;
+    }
+
+    setActiveVideo(file);
+  };
+
+  window.addEventListener(
+    'open-video-viewer',
+    handleOpenVideoViewer
+  );
+
+  return () => {
+    window.removeEventListener(
+      'open-video-viewer',
+      handleOpenVideoViewer
+    );
+  };
+}, []);
 
   //Notification allert send email
   const [showContactAlert, setShowContactAlert] = useState(false);
@@ -1925,8 +2055,8 @@ INI ENDING KODE INACTIVE*/}
   isMobile={isMobile}
   isTablet={isTablet}
 
-  mobileHeightRatio={0.4}
-  minHeightRatio={0.4}
+  mobileHeightRatio={0.6}
+  minHeightRatio={0.6}
 
   lockPosition={false}
 
@@ -2491,6 +2621,158 @@ INI ENDING KODE INACTIVE*/}
 ))}
 
 
+{/* =========================================
+    IMAGE GALLERY
+========================================= */}
+
+{imageGallery && (
+  <ResizableModal
+    id="image-gallery"
+
+    isMobile={isMobile}
+    isTablet={isTablet}
+
+    // =========================
+    // SMARTPHONE
+    // =========================
+
+    mobileWidth="100vw"
+    mobileHeightRatio={1}
+    minHeightRatio={0.5}
+
+    // =========================
+    // TABLET
+    // =========================
+
+    tabletWidth="auto"
+    tabletHeight="auto"
+
+    tabletTop="50%"
+    tabletLeft="50%"
+    tabletRight="auto"
+    tabletBottom="auto"
+
+    tabletTransform=
+      "translate(-50%, -50%)"
+
+    // =========================
+    // DESKTOP
+    // =========================
+
+    desktopWidth="auto"
+    desktopHeight="auto"
+
+    desktopTop="50%"
+    desktopLeft="50%"
+    desktopRight="auto"
+    desktopBottom="auto"
+
+    desktopTransform=
+      "translate(-50%, -50%)"
+
+    icon={
+      <Wangimg128
+        variant="16x16_4"
+      />
+    }
+
+    title={
+      imageGalleryTitle
+    }
+
+    titleBarOptions={
+      <>
+        <Modal.Minimize />
+
+        <TitleBar.Close
+          onClick={
+            closeImageGallery
+          }
+        />
+      </>
+    }
+  >
+    <ImageGalleryViewer
+      items={
+        imageGallery.items
+      }
+
+      initialIndex={
+        imageGallery.startIndex
+      }
+
+      onIndexChange={(
+        index,
+        item
+      ) => {
+        setImageGalleryTitle(
+          item?.name ||
+            'Image Gallery'
+        );
+      }}
+    />
+  </ResizableModal>
+)}
+
+{/* =========================================
+    VIDEO VIEWER
+========================================= */}
+{activeVideo && (
+  <ResizableModal
+    id="video-viewer"
+
+    isMobile={isMobile}
+    isTablet={isTablet}
+
+    mobileWidth="100vw"
+    mobileHeightRatio={1}
+    minHeightRatio={0.5}
+
+    tabletWidth="auto"
+    tabletHeight="auto"
+    tabletTop="50%"
+    tabletLeft="50%"
+    tabletRight="auto"
+    tabletBottom="auto"
+    tabletTransform=
+      "translate(-50%, -50%)"
+
+    desktopWidth="auto"
+    desktopHeight="auto"
+    desktopTop="50%"
+    desktopLeft="50%"
+    desktopRight="auto"
+    desktopBottom="auto"
+    desktopTransform=
+      "translate(-50%, -50%)"
+
+    icon={
+      <Mplayer110
+        variant="16x16_4"
+      />
+    }
+
+    title={
+      activeVideo.name
+    }
+
+    titleBarOptions={
+      <>
+        <Modal.Minimize />
+
+        <TitleBar.Close
+          onClick={() =>
+            setActiveVideo(null)
+          }
+        />
+      </>
+    }
+  >
+    <VideoViewer
+      video={activeVideo}
+    />
+  </ResizableModal>
+)}
 
         {/* --- TASKBAR BAWAH BAWAAN REACT95 --- */}
    <TaskBar

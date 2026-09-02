@@ -149,6 +149,17 @@ export default function ReadmeProduct() {
               Solo, without real product stakeholders
             </p>
 
+             <p
+              className="casestudy-heading"
+              style={metaLabelStyle}
+            >
+              Duration
+            </p>
+
+            <p style={metaValueStyle}>
+              30 August 2026 - TBD (ongoing)
+            </p>
+
             <p
               className="casestudy-heading"
               style={metaLabelStyle}
@@ -161,6 +172,7 @@ export default function ReadmeProduct() {
               Engineering workflow
             </p>
 
+            
             <p
               className="casestudy-heading"
               style={metaLabelStyle}
@@ -169,7 +181,7 @@ export default function ReadmeProduct() {
             </p>
 
             <p style={metaValueStyle}>
-              Phase 2+3 — Generative Blueprinting &amp; Code-Prototype Execution
+              Currently in Phase 2+3 (Generative Blueprinting + Code-Prototype Execution)
             </p>
           </div>
         </section>

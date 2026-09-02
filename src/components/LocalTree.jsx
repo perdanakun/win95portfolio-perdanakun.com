@@ -8,6 +8,8 @@ import {
   Wordpad,
   Url1102,
   Shell321,
+  Wangimg128,
+  Mplayer110,
 } from '@react95/icons';
 
 import holohealthIcon from '../assets/images/case-study/holohealthIcon.png';
@@ -16,6 +18,7 @@ import mayoraIcon from '../assets/icons/mayora.svg';
 import figmaIcon from '../assets/icons/figma.svg';
 import githubIcon from '../assets/icons/github.svg';
 import instagramIcon from '../assets/icons/instagram.svg';
+import travelxxx from '../assets/icons/travelxxx.svg';
 
 // =========================================================
 // FILE ICON
@@ -77,6 +80,19 @@ case 'holohealth':
           }}
         />
       );
+      
+      case 'travelxxx':
+      return (
+        <img
+          src={travelxxx}
+          alt=""
+          style={{
+            width: '16px',
+            height: '16px',
+            objectFit: 'contain',
+          }}
+        />
+      );
 
     case 'instagram':
       return (
@@ -107,6 +123,20 @@ case 'holohealth':
     case 'website':
       return (
         <Url1102
+          variant="16x16_4"
+        />
+      );
+
+      case 'image':
+      return (
+        <Wangimg128
+          variant="16x16_4"
+        />
+      );
+
+     case 'video':
+      return (
+        <Mplayer110
           variant="16x16_4"
         />
       );
