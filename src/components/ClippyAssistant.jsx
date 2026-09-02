@@ -15,7 +15,7 @@ const COPY = {
     "Hey! Looks like setup is complete. I'm Clippy. I'll help you find your way around.",
 
   introComputer:
-    "This isn't a traditional portfolio. Think of it as Perdana's computer — projects, experiments, notes, and a few things you probably weren't supposed to click.",
+    "This isn't a traditional portfolio. Think of it as Perdana's computer! projects, experiments, notes, and a few things you probably weren't supposed to click.",
 
   introProjectsPrompt:
     "Let's start with the important part. Open My Projects and I'll show you around.",
@@ -1316,7 +1316,7 @@ export default function ClippyAssistant({
       if (!clippy) return;
 
       clippy.show(true);
-      speak(COPY.introComputer, 'Acknowledge');
+      speak(COPY.introComputer, 'Wave');
     }, 4500);
 
     addTourTimer(() => {
