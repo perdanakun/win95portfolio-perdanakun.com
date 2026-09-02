@@ -11,6 +11,8 @@ import winAfternoon from './assets/images/4afternoon.png';
 import winSunset from './assets/images/5sunset.png';
 import winBlueHour from './assets/images/6bluehour.png';
 
+import didiKempotVideo from './assets/video/didikempot_bakso_sarjana.mp4';
+
 import ClippyAssistant from './components/ClippyAssistant';
   
 
@@ -96,6 +98,7 @@ import {
   FilePin,
   Wordpad,
   Mplayer110,
+  Freecell1,
 } from '@react95/icons';
 import { useState, useEffect, useRef } from 'react';
 import { Rnd } from 'react-rnd';
@@ -547,7 +550,7 @@ const getDesktopIconPosition = (index) => {
   // Tetap 1 kolom seperti layout sekarang
   return {
     x: 24,
-    y: 24 + index * 96,
+    y: 24 + index * 88,
     width: iconWidth,
     height: iconHeight,
   };
@@ -640,6 +643,8 @@ const [windows, setWindows] = useState({
   blog: false,
   browser: false,
   whatsNew: false,
+
+  desktopVideo: false,
 
     // Project windows
   holohealth: false,
@@ -822,6 +827,8 @@ const handleRestart = () => {
     browser: false,
     whatsNew: false,
 
+    desktopVideo: false,
+
 // Project windows
   holohealth: false,
   'ship-ui': false,
@@ -888,7 +895,7 @@ const notepadWindows = {
   },
 
     'readme-travelxxx': {
-    title: "Overview-Progress - Notepad",
+    title: "Workflow - Notepad",
 
     content: (
       <ReadmeTravelXXX />
@@ -896,7 +903,7 @@ const notepadWindows = {
   },
 
       'prd-travelxxx': {
-    title: "PRD - Travel XXX - Notepad",
+    title: "Overview - Notepad",
 
     content: (
       <PRDTravelXXX />
@@ -910,6 +917,20 @@ const notepadWindows = {
       <PerdanaComputerProductOverview />
     ),
   },
+};
+
+
+//Desktop Video Player
+const desktopVideo = {
+  id: 'didi-kempot-bakso-sarjana',
+
+  name: 'Bakso Sarjana.mp4',
+
+  type: 'video',
+
+  sourceType: 'local',
+
+  src: didiKempotVideo,
 };
 
 //restore minimize AIsphere AI assistant
@@ -1541,7 +1562,7 @@ onContinue={() => {
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Computer variant="32x32_4" />
       </div>
-      <span>About</span>
+      <span style={desktopIconLabelStyle}>About</span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1558,7 +1579,7 @@ onContinue={() => {
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Install variant="32x32_4" />
       </div>
-      <span>Installer</span>
+      <span style={desktopIconLabelStyle}>Installer</span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1575,7 +1596,7 @@ onContinue={() => {
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Intl101 variant="32x32_4" />
       </div>
-      <span>AI Chat</span>
+      <span style={desktopIconLabelStyle}>AI Chat</span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1592,7 +1613,7 @@ onContinue={() => {
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Folder variant="32x32_4" />
       </div>
-      <span>My Projects</span>
+      <span style={desktopIconLabelStyle}>My Projects</span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1609,31 +1630,7 @@ onContinue={() => {
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Mapi32801 variant="32x32_4" />
       </div>
-      <span>Inbox</span>
-    </div>
-  </DesktopIcon>
-</Rnd>
-
-{/* Games */}
-<Rnd
-  default={getDesktopIconPosition(5)}
-  bounds="window"
-  enableResizing={false}
-  disableDragging={isMobile || isTablet}
->
-  <DesktopIcon
-    onOpen={() =>
-      openAlertDesktop(
-        "I'm sorry...",
-        "This game module is still under construction. While I'm polishing the design & code for your entertainment, please check back in the next system update."
-      )
-    }
-  >
-    <div style={desktopIconStyle}>
-      <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <MsDos variant="32x32_32" />
-      </div>
-      <span>Games</span>
+      <span style={desktopIconLabelStyle}>Inbox</span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1650,7 +1647,7 @@ onContinue={() => {
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <RecycleFull variant="32x32_4" />
       </div>
-      <span>Recycle Bin</span>
+      <span style={desktopIconLabelStyle}>Recycle Bin</span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1685,12 +1682,76 @@ onContinue={() => {
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Wordpad variant="32x32_4" />
       </div>
-      <span>Writing</span>
+      <span style={desktopIconLabelStyle}>Writing</span>
+    </div>
+  </DesktopIcon>
+</Rnd>
+
+{/* Games */}
+<Rnd
+  default={getDesktopIconPosition(5)}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={isMobile || isTablet}
+>
+  <DesktopIcon
+    onOpen={() =>
+      openAlertDesktop(
+        "I'm sorry...",
+        "This game module is still under construction. While I'm polishing the design & code for your entertainment, please check back in the next system update."
+      )
+    }
+  >
+    <div style={desktopIconStyle}>
+      <div style={{ fontSize: '32px', marginBottom: '0' }}>
+        <Freecell1 variant="32x32_4" />
+      </div>
+      <span style={desktopIconLabelStyle}>Games</span>
     </div>
   </DesktopIcon>
 </Rnd>
 
 
+{/* Desktop Video */}
+
+<Rnd
+  default={getDesktopIconPosition(8)}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={
+    isMobile ||
+    isTablet
+  }
+>
+  <DesktopIcon
+    onOpen={() =>
+      openWindow(
+        'desktopVideo'
+      )
+    }
+  >
+    <div
+      style={
+        desktopIconStyle
+      }
+    >
+      <div
+        style={{
+          fontSize: '32px',
+          marginBottom: '0',
+        }}
+      >
+        <Mplayer110
+          variant="32x32_4"
+        />
+      </div>
+
+      <span style={desktopIconLabelStyle}>
+        Bakso Sarjana.mp4
+      </span>
+    </div>
+  </DesktopIcon>
+</Rnd>
 
  {/* --- JENDELA ALERT--- */}
 {/* Render Alert Modal untuk fitur locked */}
@@ -2774,6 +2835,91 @@ INI ENDING KODE INACTIVE*/}
   </ResizableModal>
 )}
 
+
+
+{/* =========================================================
+    DESKTOP VIDEO
+========================================================= */}
+
+{windows.desktopVideo && (
+  <ResizableModal
+    isMobile={isMobile}
+    isTablet={isTablet}
+
+    // =========================
+    // SMARTPHONE
+    // =========================
+
+    mobileHeightRatio={0.72}
+    minHeightRatio={0.5}
+    mobileWidth="100vw"
+
+    // =========================
+    // TABLET
+    // =========================
+
+    tabletWidth="600px"
+    tabletHeight="auto"
+
+    tabletTop="50%"
+    tabletLeft="50%"
+
+    tabletRight="auto"
+    tabletBottom="auto"
+
+    tabletTransform="translate(-50%, -50%)"
+
+    // =========================
+    // DESKTOP
+    // =========================
+
+    desktopWidth="auto"
+    desktopHeight="auto"
+
+    desktopTop="50%"
+    desktopLeft="50%"
+
+    desktopRight="auto"
+    desktopBottom="auto"
+
+    desktopTransform="translate(-50%, -50%)"
+
+    // =========================
+    // WINDOW
+    // =========================
+
+    icon={
+      <Mplayer110
+        variant="16x16_4"
+      />
+    }
+
+    title="Bakso Sarjana.mp4 - Media Player"
+
+    titleBarOptions={
+      <>
+        <Modal.Minimize />
+
+        <TitleBar.Close
+          onClick={() =>
+            toggleWindow(
+              'desktopVideo',
+              false
+            )
+          }
+        />
+      </>
+    }
+  >
+    <VideoViewer
+      video={
+        desktopVideo
+      }
+    />
+  </ResizableModal>
+)}
+
+
         {/* --- TASKBAR BAWAH BAWAAN REACT95 --- */}
    <TaskBar
   style={{
@@ -2910,6 +3056,12 @@ const desktopIconStyle = {
   fontSize: '12px',
   textShadow: '1px 1px black',
   userSelect: 'none'
+};
+
+const desktopIconLabelStyle = {
+  display: 'block',
+  lineHeight: '20px',
+  marginTop: '4px',
 };
 
 const inputStyle = {

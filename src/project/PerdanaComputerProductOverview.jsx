@@ -87,19 +87,34 @@ export default function PerdanaComputerOverviewContent() {
             margin: '0 0 6px',
           }}
         >
-          Perdana&apos;s Computer
+          Perdana&apos;s Computer - Overview Documents
         </h1>
 
-        <h2
-          className="casestudy-heading"
+        <p
+          className="casestudy-mono-muted"
           style={{
-            fontSize: '18px',
-            lineHeight: '24px',
-            margin: '0 0 20px',
+            margin: '0 0 24px',
           }}
         >
           Turning a Portfolio Into a Product
-        </h2>
+        </p>
+
+        
+        <p style={paragraphStyle}>
+          Perdana&apos;s Computer is an interactive portfolio designed
+          and built as a working product to support my transition from
+          Visual Design into Product Design and Design Engineering.
+        </p>
+
+        <p style={paragraphStyle}>
+          The challenge was not simply to make something different. It
+          was to create a portfolio that could stand out in a crowded
+          hiring process{' '}
+          
+            without making recruiters work harder to understand the
+            candidate.
+         
+        </p>
 
         {/* =========================================================
             PROJECT INFO
@@ -160,22 +175,6 @@ export default function PerdanaComputerOverviewContent() {
             </p>
           </div>
         </section>
-
-        <p style={paragraphStyle}>
-          Perdana&apos;s Computer is an interactive portfolio designed
-          and built as a working product to support my transition from
-          Visual Design into Product Design and Design Engineering.
-        </p>
-
-        <p style={paragraphStyle}>
-          The challenge was not simply to make something different. It
-          was to create a portfolio that could stand out in a crowded
-          hiring process{' '}
-          <strong>
-            without making recruiters work harder to understand the
-            candidate.
-          </strong>
-        </p>
       </header>
 
       {/* =========================================================

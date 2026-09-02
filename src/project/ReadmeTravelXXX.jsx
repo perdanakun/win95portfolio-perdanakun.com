@@ -99,7 +99,7 @@ export default function ReadmeProduct() {
             margin: '0 0 20px',
           }}
         >
-          TravelXXX - Product Design Engineer Workflow
+          AI Native - Product Design Engineer Workflow
         </h1>
 
         <p style={paragraphStyle}>
@@ -113,78 +113,6 @@ export default function ReadmeProduct() {
           understanding the problem, exploring solutions, building them in code,
           and testing something people can actually use.
         </p>
-
-        {/* =========================================================
-            PROJECT INFO
-        ========================================================= */}
-
-        <section
-          style={{
-            ...sectionStyle,
-            paddingBottom: '24px',
-            borderTop: '1px solid #c0c0c0',
-            borderBottom: '1px solid #c0c0c0',
-          }}
-        >
-          <div style={metaGridStyle}>
-            <p
-              className="casestudy-heading"
-              style={metaLabelStyle}
-            >
-              Project
-            </p>
-
-            <p style={metaValueStyle}>
-              Personal / portfolio project
-            </p>
-
-            <p
-              className="casestudy-heading"
-              style={metaLabelStyle}
-            >
-              Setup
-            </p>
-
-            <p style={metaValueStyle}>
-              Solo, without real product stakeholders
-            </p>
-
-             <p
-              className="casestudy-heading"
-              style={metaLabelStyle}
-            >
-              Duration
-            </p>
-
-            <p style={metaValueStyle}>
-              30 August 2026 - TBD (ongoing)
-            </p>
-
-            <p
-              className="casestudy-heading"
-              style={metaLabelStyle}
-            >
-              Purpose
-            </p>
-
-            <p style={metaValueStyle}>
-              Develop and demonstrate an AI-native Product Design + Design
-              Engineering workflow
-            </p>
-
-            
-            <p
-              className="casestudy-heading"
-              style={metaLabelStyle}
-            >
-              Status
-            </p>
-
-            <p style={metaValueStyle}>
-              Currently in Phase 2+3 (Generative Blueprinting + Code-Prototype Execution)
-            </p>
-          </div>
-        </section>
       </header>
 
       {/* =========================================================

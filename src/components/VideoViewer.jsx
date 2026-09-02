@@ -6,9 +6,22 @@ import React, {
 
 import {
   Button,
-   Range,
-   Frame,
+  Range,
+  Frame,
 } from '@react95/core';
+
+import {
+  ClassicPlayIcon,
+  ClassicPauseIcon,
+  ClassicStopIcon,
+  ClassicPreviousIcon,
+  ClassicNextIcon,
+  ClassicRewindIcon,
+  ClassicFastForwardIcon,
+  ClassicVolumeIcon,
+  ClassicMuteIcon,
+  ClassicFullscreenIcon,
+} from './ClassicMediaIcons';
 
 
 export default function VideoViewer({
@@ -18,6 +31,9 @@ export default function VideoViewer({
     useRef(null);
 
   const playerRef =
+    useRef(null);
+
+  const localVideoRef =
     useRef(null);
 
   const timerRef =
@@ -51,11 +67,20 @@ export default function VideoViewer({
 
 
   // =========================================================
-  // VIDEO ID
+  // VIDEO SOURCE
   // =========================================================
 
   const videoId =
-    video?.youtubeId;
+    video?.youtubeId || null;
+
+  const localSrc =
+    video?.src || null;
+
+  const isYouTube =
+    Boolean(videoId);
+
+  const isLocal =
+    Boolean(localSrc);
 
 
   // =========================================================
@@ -70,16 +95,14 @@ export default function VideoViewer({
         seconds
       )
     ) {
-      return '0:00';
+      return '00:00';
     }
-
 
     const safeSeconds =
       Math.max(
         0,
         Math.floor(seconds)
       );
-
 
     const hours =
       Math.floor(
@@ -112,7 +135,12 @@ export default function VideoViewer({
     }
 
 
-    return `${minutes}:${String(
+    return `${String(
+      minutes
+    ).padStart(
+      2,
+      '0'
+    )}:${String(
       remainingSeconds
     ).padStart(
       2,
@@ -122,14 +150,37 @@ export default function VideoViewer({
 
 
   // =========================================================
+  // RESET STATE WHEN VIDEO CHANGES
+  // =========================================================
+
+  useEffect(() => {
+    setIsPlaying(false);
+
+    setCurrentTime(0);
+
+    setDuration(0);
+
+    setVolume(100);
+
+    setIsMuted(false);
+  }, [
+    videoId,
+    localSrc,
+  ]);
+
+
+  // =========================================================
   // UPDATE PLAYER TIME
   // =========================================================
 
-  const updatePlayerTime =
-    () => {
+  const updatePlayerTime = () => {
+    // =========================
+    // YOUTUBE
+    // =========================
+
+    if (isYouTube) {
       const player =
         playerRef.current;
-
 
       if (
         !player ||
@@ -139,13 +190,11 @@ export default function VideoViewer({
         return;
       }
 
-
       const time =
         player.getCurrentTime();
 
       const total =
         player.getDuration();
-
 
       if (
         Number.isFinite(
@@ -157,6 +206,48 @@ export default function VideoViewer({
         );
       }
 
+      if (
+        Number.isFinite(
+          total
+        ) &&
+        total > 0
+      ) {
+        setDuration(
+          total
+        );
+      }
+
+      return;
+    }
+
+
+    // =========================
+    // LOCAL VIDEO
+    // =========================
+
+    if (isLocal) {
+      const player =
+        localVideoRef.current;
+
+      if (!player) {
+        return;
+      }
+
+      const time =
+        player.currentTime;
+
+      const total =
+        player.duration;
+
+      if (
+        Number.isFinite(
+          time
+        )
+      ) {
+        setCurrentTime(
+          time
+        );
+      }
 
       if (
         Number.isFinite(
@@ -168,7 +259,8 @@ export default function VideoViewer({
           total
         );
       }
-    };
+    }
+  };
 
 
   // =========================================================
@@ -177,6 +269,7 @@ export default function VideoViewer({
 
   useEffect(() => {
     if (
+      !isYouTube ||
       !videoId ||
       !playerContainerRef.current
     ) {
@@ -218,8 +311,6 @@ export default function VideoViewer({
               disablekb: 1,
 
               fs: 0,
-
-              modestbranding: 1,
             },
 
             events: {
@@ -229,10 +320,8 @@ export default function VideoViewer({
                 const player =
                   event.target;
 
-
                 const total =
                   player.getDuration();
-
 
                 if (
                   Number.isFinite(
@@ -244,10 +333,8 @@ export default function VideoViewer({
                   );
                 }
 
-
                 const playerVolume =
                   player.getVolume();
-
 
                 if (
                   Number.isFinite(
@@ -259,11 +346,9 @@ export default function VideoViewer({
                   );
                 }
 
-
                 setIsMuted(
                   player.isMuted()
                 );
-
 
                 setCurrentTime(
                   player.getCurrentTime() ||
@@ -278,7 +363,6 @@ export default function VideoViewer({
                 const state =
                   event.data;
 
-
                 if (
                   state ===
                   window.YT
@@ -291,7 +375,6 @@ export default function VideoViewer({
 
                   return;
                 }
-
 
                 if (
                   state ===
@@ -310,7 +393,6 @@ export default function VideoViewer({
 
                   return;
                 }
-
 
                 setIsPlaying(
                   false
@@ -332,15 +414,10 @@ export default function VideoViewer({
     ) {
       createPlayer();
     } else {
-      // =====================================================
-      // LOAD API ONLY ONCE
-      // =====================================================
-
       const existingScript =
         document.querySelector(
           'script[src="https://www.youtube.com/iframe_api"]'
         );
-
 
       if (!existingScript) {
         const script =
@@ -356,10 +433,8 @@ export default function VideoViewer({
         );
       }
 
-
       const previousCallback =
         window.onYouTubeIframeAPIReady;
-
 
       window.onYouTubeIframeAPIReady =
         () => {
@@ -370,7 +445,6 @@ export default function VideoViewer({
             previousCallback();
           }
 
-
           createPlayer();
         };
     }
@@ -379,19 +453,6 @@ export default function VideoViewer({
     return () => {
       isCancelled =
         true;
-
-
-      if (
-        timerRef.current
-      ) {
-        clearInterval(
-          timerRef.current
-        );
-
-        timerRef.current =
-          null;
-      }
-
 
       if (
         playerRef.current &&
@@ -403,17 +464,187 @@ export default function VideoViewer({
           .destroy();
       }
 
-
       playerRef.current =
         null;
     };
   }, [
+    isYouTube,
     videoId,
   ]);
 
 
   // =========================================================
+  // LOCAL VIDEO EVENTS
+  // =========================================================
+
+  useEffect(() => {
+    if (
+      !isLocal ||
+      !localVideoRef.current
+    ) {
+      return;
+    }
+
+    const player =
+      localVideoRef.current;
+
+
+    const handleLoadedMetadata =
+      () => {
+        if (
+          Number.isFinite(
+            player.duration
+          )
+        ) {
+          setDuration(
+            player.duration
+          );
+        }
+
+        setCurrentTime(
+          player.currentTime || 0
+        );
+
+        setVolume(
+          Math.round(
+            player.volume * 100
+          )
+        );
+
+        setIsMuted(
+          player.muted
+        );
+      };
+
+
+    const handlePlay =
+      () => {
+        setIsPlaying(
+          true
+        );
+      };
+
+
+    const handlePause =
+      () => {
+        setIsPlaying(
+          false
+        );
+      };
+
+
+    const handleEnded =
+      () => {
+        setIsPlaying(
+          false
+        );
+
+        setCurrentTime(
+          player.duration || 0
+        );
+      };
+
+
+    const handleTimeUpdate =
+      () => {
+        if (
+          Number.isFinite(
+            player.currentTime
+          )
+        ) {
+          setCurrentTime(
+            player.currentTime
+          );
+        }
+      };
+
+
+    const handleVolumeUpdate =
+      () => {
+        setVolume(
+          Math.round(
+            player.volume * 100
+          )
+        );
+
+        setIsMuted(
+          player.muted
+        );
+      };
+
+
+    player.addEventListener(
+      'loadedmetadata',
+      handleLoadedMetadata
+    );
+
+    player.addEventListener(
+      'play',
+      handlePlay
+    );
+
+    player.addEventListener(
+      'pause',
+      handlePause
+    );
+
+    player.addEventListener(
+      'ended',
+      handleEnded
+    );
+
+    player.addEventListener(
+      'timeupdate',
+      handleTimeUpdate
+    );
+
+    player.addEventListener(
+      'volumechange',
+      handleVolumeUpdate
+    );
+
+
+    return () => {
+      player.removeEventListener(
+        'loadedmetadata',
+        handleLoadedMetadata
+      );
+
+      player.removeEventListener(
+        'play',
+        handlePlay
+      );
+
+      player.removeEventListener(
+        'pause',
+        handlePause
+      );
+
+      player.removeEventListener(
+        'ended',
+        handleEnded
+      );
+
+      player.removeEventListener(
+        'timeupdate',
+        handleTimeUpdate
+      );
+
+      player.removeEventListener(
+        'volumechange',
+        handleVolumeUpdate
+      );
+    };
+  }, [
+    isLocal,
+    localSrc,
+  ]);
+
+
+  // =========================================================
   // TIMER
+  // YOUTUBE NEEDS POLLING
+  // LOCAL VIDEO ALREADY HAS timeupdate
   // =========================================================
 
   useEffect(() => {
@@ -429,12 +660,13 @@ export default function VideoViewer({
     }
 
 
-    if (isPlaying) {
+    if (
+      isPlaying &&
+      isYouTube
+    ) {
       timerRef.current =
         setInterval(
-          () => {
-            updatePlayerTime();
-          },
+          updatePlayerTime,
           250
         );
     }
@@ -454,6 +686,7 @@ export default function VideoViewer({
     };
   }, [
     isPlaying,
+    isYouTube,
   ]);
 
 
@@ -462,98 +695,123 @@ export default function VideoViewer({
   // =========================================================
 
   const togglePlay = () => {
-    const player =
-      playerRef.current;
+    // =========================
+    // YOUTUBE
+    // =========================
+
+    if (isYouTube) {
+      const player =
+        playerRef.current;
+
+      if (!player) {
+        return;
+      }
 
 
-    if (!player) {
-      return;
-    }
+      if (isPlaying) {
+        if (
+          typeof player.pauseVideo ===
+            'function'
+        ) {
+          player.pauseVideo();
+        }
+
+        return;
+      }
 
 
-    if (isPlaying) {
       if (
-        typeof player.pauseVideo ===
-        'function'
+        typeof player.playVideo ===
+          'function'
       ) {
-        player.pauseVideo();
+        player.playVideo();
       }
 
       return;
     }
 
 
-    if (
-      typeof player.playVideo ===
-      'function'
-    ) {
-      player.playVideo();
+    // =========================
+    // LOCAL
+    // =========================
+
+    if (isLocal) {
+      const player =
+        localVideoRef.current;
+
+      if (!player) {
+        return;
+      }
+
+
+      if (player.paused) {
+        player
+          .play()
+          .catch(() => {
+            // Browser may block playback
+          });
+
+        return;
+      }
+
+
+      player.pause();
     }
   };
 
-// =========================================================
-  // STOP VIDEO
-  // =========================================================
-
-const stopVideo = () => {
-  const player =
-    playerRef.current;
-
-  if (!player) {
-    return;
-  }
-
-
-  if (
-    typeof player.pauseVideo ===
-    'function'
-  ) {
-    player.pauseVideo();
-  }
-
-
-  if (
-    typeof player.seekTo ===
-    'function'
-  ) {
-    player.seekTo(
-      0,
-      true
-    );
-  }
-
-
-  setCurrentTime(
-    0
-  );
-
-  setIsPlaying(
-    false
-  );
-};
 
   // =========================================================
-  // RESTART
+  // STOP
   // =========================================================
 
-  const restartVideo = () => {
-    const player =
-      playerRef.current;
+  const stopVideo = () => {
+    // =========================
+    // YOUTUBE
+    // =========================
 
+    if (isYouTube) {
+      const player =
+        playerRef.current;
 
-    if (!player) {
-      return;
+      if (!player) {
+        return;
+      }
+
+      if (
+        typeof player.pauseVideo ===
+          'function'
+      ) {
+        player.pauseVideo();
+      }
+
+      if (
+        typeof player.seekTo ===
+          'function'
+      ) {
+        player.seekTo(
+          0,
+          true
+        );
+      }
     }
 
 
-    if (
-      typeof player.seekTo ===
-      'function'
-    ) {
-      player.seekTo(
-        0,
-        true
-      );
+    // =========================
+    // LOCAL
+    // =========================
+
+    if (isLocal) {
+      const player =
+        localVideoRef.current;
+
+      if (!player) {
+        return;
+      }
+
+      player.pause();
+
+      player.currentTime =
+        0;
     }
 
 
@@ -561,12 +819,164 @@ const stopVideo = () => {
       0
     );
 
+    setIsPlaying(
+      false
+    );
+  };
 
-    if (
-      typeof player.playVideo ===
-      'function'
-    ) {
-      player.playVideo();
+
+  // =========================================================
+  // REWIND 10 SEC
+  // =========================================================
+
+  const rewindVideo = () => {
+    // =========================
+    // YOUTUBE
+    // =========================
+
+    if (isYouTube) {
+      const player =
+        playerRef.current;
+
+      if (
+        !player ||
+        typeof player.getCurrentTime !==
+          'function' ||
+        typeof player.seekTo !==
+          'function'
+      ) {
+        return;
+      }
+
+      const nextTime =
+        Math.max(
+          0,
+          player.getCurrentTime() -
+            10
+        );
+
+      player.seekTo(
+        nextTime,
+        true
+      );
+
+      setCurrentTime(
+        nextTime
+      );
+
+      return;
+    }
+
+
+    // =========================
+    // LOCAL
+    // =========================
+
+    if (isLocal) {
+      const player =
+        localVideoRef.current;
+
+      if (!player) {
+        return;
+      }
+
+      const nextTime =
+        Math.max(
+          0,
+          player.currentTime -
+            10
+        );
+
+      player.currentTime =
+        nextTime;
+
+      setCurrentTime(
+        nextTime
+      );
+    }
+  };
+
+
+  // =========================================================
+  // FORWARD 10 SEC
+  // =========================================================
+
+  const forwardVideo = () => {
+    // =========================
+    // YOUTUBE
+    // =========================
+
+    if (isYouTube) {
+      const player =
+        playerRef.current;
+
+      if (
+        !player ||
+        typeof player.getCurrentTime !==
+          'function' ||
+        typeof player.getDuration !==
+          'function' ||
+        typeof player.seekTo !==
+          'function'
+      ) {
+        return;
+      }
+
+      const total =
+        player.getDuration();
+
+      const nextTime =
+        Math.min(
+          total,
+          player.getCurrentTime() +
+            10
+        );
+
+      player.seekTo(
+        nextTime,
+        true
+      );
+
+      setCurrentTime(
+        nextTime
+      );
+
+      return;
+    }
+
+
+    // =========================
+    // LOCAL
+    // =========================
+
+    if (isLocal) {
+      const player =
+        localVideoRef.current;
+
+      if (!player) {
+        return;
+      }
+
+      const total =
+        Number.isFinite(
+          player.duration
+        )
+          ? player.duration
+          : 0;
+
+      const nextTime =
+        Math.min(
+          total,
+          player.currentTime +
+            10
+        );
+
+      player.currentTime =
+        nextTime;
+
+      setCurrentTime(
+        nextTime
+      );
     }
   };
 
@@ -583,7 +993,6 @@ const stopVideo = () => {
         event.target.value
       );
 
-
     if (
       !Number.isFinite(
         value
@@ -598,23 +1007,44 @@ const stopVideo = () => {
     );
 
 
-    const player =
-      playerRef.current;
+    // =========================
+    // YOUTUBE
+    // =========================
 
+    if (isYouTube) {
+      const player =
+        playerRef.current;
 
-    if (
-      !player ||
-      typeof player.seekTo !==
-        'function'
-    ) {
+      if (
+        player &&
+        typeof player.seekTo ===
+          'function'
+      ) {
+        player.seekTo(
+          value,
+          true
+        );
+      }
+
       return;
     }
 
 
-    player.seekTo(
-      value,
-      true
-    );
+    // =========================
+    // LOCAL
+    // =========================
+
+    if (isLocal) {
+      const player =
+        localVideoRef.current;
+
+      if (!player) {
+        return;
+      }
+
+      player.currentTime =
+        value;
+    }
   };
 
 
@@ -623,52 +1053,73 @@ const stopVideo = () => {
   // =========================================================
 
   const toggleMute = () => {
-    const player =
-      playerRef.current;
+    // =========================
+    // YOUTUBE
+    // =========================
 
+    if (isYouTube) {
+      const player =
+        playerRef.current;
 
-    if (!player) {
-      return;
-    }
-
-
-    if (
-      typeof player.isMuted !==
-        'function'
-    ) {
-      return;
-    }
-
-
-    if (
-      player.isMuted()
-    ) {
       if (
-        typeof player.unMute ===
-        'function'
+        !player ||
+        typeof player.isMuted !==
+          'function'
       ) {
-        player.unMute();
+        return;
+      }
+
+      if (
+        player.isMuted()
+      ) {
+        if (
+          typeof player.unMute ===
+            'function'
+        ) {
+          player.unMute();
+        }
+
+        setIsMuted(
+          false
+        );
+
+        return;
+      }
+
+      if (
+        typeof player.mute ===
+          'function'
+      ) {
+        player.mute();
       }
 
       setIsMuted(
-        false
+        true
       );
 
       return;
     }
 
 
-    if (
-      typeof player.mute ===
-      'function'
-    ) {
-      player.mute();
+    // =========================
+    // LOCAL
+    // =========================
+
+    if (isLocal) {
+      const player =
+        localVideoRef.current;
+
+      if (!player) {
+        return;
+      }
+
+      player.muted =
+        !player.muted;
+
+      setIsMuted(
+        player.muted
+      );
     }
-
-
-    setIsMuted(
-      true
-    );
   };
 
 
@@ -684,7 +1135,6 @@ const stopVideo = () => {
         event.target.value
       );
 
-
     if (
       !Number.isFinite(
         newVolume
@@ -699,60 +1149,109 @@ const stopVideo = () => {
     );
 
 
-    const player =
-      playerRef.current;
+    // =========================
+    // YOUTUBE
+    // =========================
 
+    if (isYouTube) {
+      const player =
+        playerRef.current;
 
-    if (
-      !player ||
-      typeof player.setVolume !==
-        'function'
-    ) {
-      return;
-    }
-
-
-    player.setVolume(
-      newVolume
-    );
-
-
-    if (
-      newVolume <= 0
-    ) {
       if (
-        typeof player.mute ===
-        'function'
+        !player ||
+        typeof player.setVolume !==
+          'function'
       ) {
-        player.mute();
+        return;
       }
 
+      player.setVolume(
+        newVolume
+      );
+
+      if (
+        newVolume <= 0
+      ) {
+        if (
+          typeof player.mute ===
+            'function'
+        ) {
+          player.mute();
+        }
+
+        setIsMuted(
+          true
+        );
+
+        return;
+      }
+
+      if (
+        typeof player.isMuted ===
+          'function' &&
+        player.isMuted()
+      ) {
+        if (
+          typeof player.unMute ===
+            'function'
+        ) {
+          player.unMute();
+        }
+      }
 
       setIsMuted(
-        true
+        false
       );
 
       return;
     }
 
 
-    if (
-      typeof player.isMuted ===
-        'function' &&
-      player.isMuted()
-    ) {
-      if (
-        typeof player.unMute ===
-          'function'
-      ) {
-        player.unMute();
+    // =========================
+    // LOCAL
+    // =========================
+
+    if (isLocal) {
+      const player =
+        localVideoRef.current;
+
+      if (!player) {
+        return;
       }
+
+      player.volume =
+        Math.max(
+          0,
+          Math.min(
+            1,
+            newVolume / 100
+          )
+        );
+
+
+      if (
+        newVolume <= 0
+      ) {
+        player.muted =
+          true;
+
+        setIsMuted(
+          true
+        );
+
+        return;
+      }
+
+
+      if (player.muted) {
+        player.muted =
+          false;
+      }
+
+      setIsMuted(
+        false
+      );
     }
-
-
-    setIsMuted(
-      false
-    );
   };
 
 
@@ -761,38 +1260,58 @@ const stopVideo = () => {
   // =========================================================
 
   const openFullscreen = () => {
-    const iframe =
-      playerRef.current
-        ?.getIframe?.();
+    let element =
+      null;
 
 
-    if (!iframe) {
+    // =========================
+    // YOUTUBE
+    // =========================
+
+    if (isYouTube) {
+      element =
+        playerRef.current
+          ?.getIframe?.();
+    }
+
+
+    // =========================
+    // LOCAL
+    // =========================
+
+    if (isLocal) {
+      element =
+        localVideoRef.current;
+    }
+
+
+    if (!element) {
       return;
     }
 
 
     if (
-      iframe.requestFullscreen
+      element.requestFullscreen
     ) {
-      iframe.requestFullscreen();
+      element.requestFullscreen();
 
       return;
     }
 
 
     if (
-      iframe.webkitRequestFullscreen
+      element.webkitRequestFullscreen
     ) {
-      iframe.webkitRequestFullscreen();
+      element.webkitRequestFullscreen();
 
       return;
     }
 
 
     if (
-      iframe.msRequestFullscreen
+      element.msRequestFullscreen
     ) {
-      iframe.msRequestFullscreen();
+      element.msRequestFullscreen();
     }
   };
 
@@ -801,7 +1320,10 @@ const stopVideo = () => {
   // EMPTY STATE
   // =========================================================
 
-  if (!videoId) {
+  if (
+    !isYouTube &&
+    !isLocal
+  ) {
     return (
       <div
         style={{
@@ -810,8 +1332,7 @@ const stopVideo = () => {
 
           display: 'flex',
 
-          alignItems:
-            'center',
+          alignItems: 'center',
 
           justifyContent:
             'center',
@@ -847,9 +1368,7 @@ const stopVideo = () => {
         height: '100%',
 
         display: 'flex',
-
-        flexDirection:
-          'column',
+        flexDirection: 'column',
 
         minWidth: 0,
         minHeight: 0,
@@ -862,25 +1381,22 @@ const stopVideo = () => {
         fontFamily:
           'MS Sans Serif, sans-serif',
 
-        boxSizing:
-          'border-box',
+        boxSizing: 'border-box',
       }}
     >
 
-      {/* =========================
+      {/* =====================================================
           MENU BAR
-      ========================= */}
+      ===================================================== */}
 
       <div
         style={{
           flexShrink: 0,
 
           display: 'flex',
+          alignItems: 'center',
 
-          gap: '6px',
-
-          padding:
-            '2px 6px',
+          padding: '2px 4px',
 
           backgroundColor:
             '#c0c0c0',
@@ -888,17 +1404,17 @@ const stopVideo = () => {
           borderBottom:
             '1px solid #808080',
 
-          fontSize:
-            '11px',
+          fontSize: '11px',
 
-          userSelect:
-            'none',
+          userSelect: 'none',
+
+          overflow: 'hidden',
         }}
       >
         <span
           style={{
-            padding:
-              '1px 4px',
+            padding: '2px 8px',
+            whiteSpace: 'nowrap',
           }}
         >
           <u>F</u>ile
@@ -906,17 +1422,8 @@ const stopVideo = () => {
 
         <span
           style={{
-            padding:
-              '1px 4px',
-          }}
-        >
-          <u>E</u>dit
-        </span>
-
-        <span
-          style={{
-            padding:
-              '1px 4px',
+            padding: '2px 8px',
+            whiteSpace: 'nowrap',
           }}
         >
           <u>V</u>iew
@@ -924,8 +1431,35 @@ const stopVideo = () => {
 
         <span
           style={{
-            padding:
-              '1px 4px',
+            padding: '2px 8px',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          <u>P</u>lay
+        </span>
+
+        <span
+          style={{
+            padding: '2px 8px',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          <u>N</u>avigate
+        </span>
+
+        <span
+          style={{
+            padding: '2px 8px',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          F<u>a</u>vorites
+        </span>
+
+        <span
+          style={{
+            padding: '2px 8px',
+            whiteSpace: 'nowrap',
           }}
         >
           <u>H</u>elp
@@ -933,9 +1467,9 @@ const stopVideo = () => {
       </div>
 
 
-      {/* =========================
+      {/* =====================================================
           VIDEO AREA
-      ========================= */}
+      ===================================================== */}
 
       <div
         style={{
@@ -944,342 +1478,632 @@ const stopVideo = () => {
           minWidth: 0,
           minHeight: 0,
 
-          margin:
-            '2px',
+          display: 'flex',
 
-          backgroundColor:
-            'black',
-
-          boxShadow:
-            'inset 1px 1px 0px #0a0a0a, inset -1px -1px 0px #dfdfdf',
-
-          display:
-            'flex',
-
-          alignItems:
-            'center',
+          alignItems: 'center',
 
           justifyContent:
             'center',
 
-          overflow:
-            'hidden',
+          margin: '2px',
+
+          backgroundColor:
+            '#000',
+
+          boxShadow:
+            'inset 1px 1px 0 #808080, inset -1px -1px 0 #ffffff',
+
+          overflow: 'hidden',
 
           boxSizing:
             'border-box',
         }}
       >
-{/* =======================
-    4:3 PLAYER WRAPPER
-======================= */}
 
-<div
-  style={{
-    width: '720px',
-    maxWidth: '100%',
+        <div
+          style={{
+            width: '720px',
 
-    aspectRatio: '4 / 3',
+            maxWidth: '100%',
 
-    backgroundColor: '#000',
+            aspectRatio:
+              '16 / 9',
 
-    position: 'relative',
+            maxHeight: '100%',
 
-    overflow: 'hidden',
+            position: 'relative',
 
-    flexShrink: 0,
-  }}
->
-  <div
-    ref={playerContainerRef}
-    style={{
-      position: 'absolute',
+            backgroundColor:
+              '#000',
 
-      inset: 0,
+            overflow: 'hidden',
 
-      width: '100%',
-      height: '100%',
-    }}
-  />
-</div>
+            flexShrink: 0,
+          }}
+        >
+
+          {isYouTube ? (
+            <div
+              ref={
+                playerContainerRef
+              }
+
+              style={{
+                position:
+                  'absolute',
+
+                inset: 0,
+
+                width: '100%',
+                height: '100%',
+              }}
+            />
+          ) : (
+            <video
+              ref={
+                localVideoRef
+              }
+
+              src={
+                localSrc
+              }
+
+              preload="metadata"
+
+              playsInline
+
+              style={{
+                position:
+                  'absolute',
+
+                inset: 0,
+
+                width: '100%',
+                height: '100%',
+
+                objectFit:
+                  'contain',
+
+                backgroundColor:
+                  '#000',
+              }}
+            />
+          )}
+
+        </div>
       </div>
 
 
+      {/* =====================================================
+          PROGRESS
+      ===================================================== */}
 
- {/* =========================
-    PLAYER CONTROLS
-========================= */}
+      <Frame
+        style={{
+          flexShrink: 0,
 
-<Frame
-  style={{
-    flexShrink: 0,
+          padding:
+            '5px 6px 3px',
 
-    display: 'flex',
-    flexDirection: 'column',
+          backgroundColor:
+            '#c0c0c0',
 
-    padding: '24px',
+          boxSizing:
+            'border-box',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
 
-    gap: '8px',
+            alignItems: 'center',
 
-    backgroundColor: '#c0c0c0',
+            gap: '6px',
 
-    boxSizing: 'border-box',
-  }}
->
+            width: '100%',
 
-  {/* =======================
-      TIME DISPLAY
-  ======================= */}
+            minWidth: 0,
+          }}
+        >
+          <span
+            style={{
+              width: '40px',
 
-  <div
-    style={{
-      display: 'flex',
+              flexShrink: 0,
 
-      justifyContent:
-        'space-between',
+              fontSize: '10px',
 
-      alignItems: 'center',
+              textAlign:
+                'right',
 
-      fontFamily:
-        'MS Sans Serif, sans-serif',
+              userSelect:
+                'none',
+            }}
+          >
+            {formatTime(
+              currentTime
+            )}
+          </span>
 
-      fontSize: '11px',
 
-      userSelect: 'none',
-    }}
-  >
-    <span>
-      {formatTime(
-        currentTime
-      )}
-    </span>
+          <Range
+            min="0"
 
-    <span>
-      {formatTime(
-        duration
-      )}
-    </span>
-  </div>
+            max={
+              duration || 0
+            }
 
+            step="0.1"
 
-  {/* =======================
-      PROGRESS
-  ======================= */}
-<div
-    style={{
-      paddingBottom: '4px',
-    }}
-  >
-  <Range
-    min="0"
+            value={
+              Math.min(
+                currentTime,
+                duration || 0
+              )
+            }
 
-    max={
-      duration || 0
-    }
+            onChange={
+              handleSeek
+            }
 
-    step="0.1"
+            aria-label=
+              "Video progress"
 
-    value={
-      Math.min(
-        currentTime,
-        duration || 0
-      )
-    }
+            style={{
+              flex: 1,
 
-    onChange={
-      handleSeek
-    }
+              minWidth: 0,
+            }}
+          />
 
-    aria-label="Video progress"
 
-    style={{
-      width: '100%',
-    }}
-  />
-</div>
+          <span
+            style={{
+              width: '40px',
 
-  {/* =======================
-      BUTTONS
-  ======================= */}
+              flexShrink: 0,
 
-  <div
-    style={{
-      display: 'flex',
+              fontSize: '10px',
 
-      alignItems: 'center',
+              userSelect:
+                'none',
+            }}
+          >
+            {formatTime(
+              duration
+            )}
+          </span>
+        </div>
+      </Frame>
 
-      gap: '4px',
 
-      width: '100%',
-    }}
-  >
+      {/* =====================================================
+          MEDIA CONTROLS
+      ===================================================== */}
 
-    {/* PLAY / PAUSE */}
+      <div
+        style={{
+          flexShrink: 0,
 
-    <Button
-      onClick={
-        togglePlay
-      }
+          minHeight: '48px',
 
-      title={
-        isPlaying
-          ? 'Pause'
-          : 'Play'
-      }
+          display: 'flex',
 
-      style={{
-        width: '34px',
-        minWidth: '34px',
+          alignItems: 'center',
 
-        height: '30px',
+          gap: '3px',
 
-        padding: 0,
+          padding: '4px 6px',
 
-        fontFamily:
-          'Arial, sans-serif',
+          boxSizing:
+            'border-box',
 
-        fontSize: '15px',
+          backgroundColor:
+            '#c0c0c0',
 
-        display: 'flex',
+          borderTop:
+            '1px solid #dfdfdf',
 
-        alignItems: 'center',
+          userSelect: 'none',
+        }}
+      >
 
-        justifyContent:
-          'center',
-      }}
-    >
-      {isPlaying
-        ? 'Ⅱ'
-        : '▶'}
-    </Button>
+        {/* PLAY / PAUSE */}
 
+        <Button
+          onClick={
+            togglePlay
+          }
 
-    {/* STOP */}
+          title={
+            isPlaying
+              ? 'Pause'
+              : 'Play'
+          }
 
-    <Button
-      onClick={
-        stopVideo
-      }
+          style={{
+            width: '32px',
 
-      title="Stop"
+            minWidth:
+              '32px',
 
-      style={{
-        width: '34px',
-        minWidth: '34px',
+            height: '32px',
 
-        height: '30px',
+            padding: 0,
 
-        padding: 0,
+            display: 'flex',
 
-        fontSize: '13px',
+            alignItems:
+              'center',
 
-        display: 'flex',
+            justifyContent:
+              'center',
+          }}
+        >
+          {isPlaying ? (
+            <ClassicPauseIcon
+              size={14}
+            />
+          ) : (
+            <ClassicPlayIcon
+              size={14}
+            />
+          )}
+        </Button>
 
-        alignItems: 'center',
 
-        justifyContent:
-          'center',
-      }}
-    >
-      ■
-    </Button>
+        {/* STOP */}
 
+        <Button
+          onClick={
+            stopVideo
+          }
 
-    {/* MUTE */}
+          title="Stop"
 
-    <Button
-      onClick={
-        toggleMute
-      }
+          style={{
+            width: '32px',
 
-      title={
-        isMuted
-          ? 'Unmute'
-          : 'Mute'
-      }
+            minWidth:
+              '32px',
 
-      style={{
-        width: '44px',
-        minWidth: '44px',
+            height: '32px',
 
-        height: '30px',
+            padding: 0,
 
-        padding: 0,
+            display: 'flex',
 
-        fontFamily:
-          'MS Sans Serif, sans-serif',
+            alignItems:
+              'center',
 
-        fontSize: '10px',
-      }}
-    >
-      {isMuted
-        ? 'Mute'
-        : 'Sound'}
-    </Button>
+            justifyContent:
+              'center',
+          }}
+        >
+          <ClassicStopIcon
+            size={13}
+          />
+        </Button>
 
 
-    {/* VOLUME */}
+        {/* DIVIDER */}
 
-    <Range
-      min="0"
+        <div
+          style={{
+            width: '2px',
 
-      max="100"
+            height: '26px',
 
-      step="1"
+            flexShrink: 0,
 
-      value={
-        isMuted
-          ? 0
-          : volume
-      }
+            margin: '0 8px',
 
-      onChange={
-        handleVolumeChange
-      }
+            borderLeft:
+              '1px solid #808080',
 
-      aria-label="Volume"
+            borderRight:
+              '1px solid #ffffff',
+          }}
+        />
 
-      style={{
-        width: '90px',
 
-        flexShrink: 0,
-      }}
-    />
+        {/* PREVIOUS */}
 
+        <Button
+          disabled
 
-    {/* SPACER */}
+          title="Previous"
 
-    <div
-      style={{
-        flex: 1,
-      }}
-    />
+          style={{
+            width: '30px',
 
+            minWidth:
+              '30px',
 
-    {/* FULLSCREEN */}
+            height: '30px',
 
-    <Button
-      onClick={
-        openFullscreen
-      }
+            padding: 0,
 
-      title="Fullscreen"
+            display: 'flex',
 
-      style={{
-        minWidth: '72px',
+            alignItems:
+              'center',
 
-        height: '30px',
+            justifyContent:
+              'center',
+          }}
+        >
+          <ClassicPreviousIcon
+            size={13}
+          />
+        </Button>
 
-        fontFamily:
-          'MS Sans Serif, sans-serif',
 
-        fontSize: '11px',
-      }}
-    >
-      Fullscreen
-    </Button>
+        {/* REWIND */}
 
-  </div>
-</Frame>
+        <Button
+          onClick={
+            rewindVideo
+          }
+
+          title="Rewind 10 seconds"
+
+          style={{
+            width: '30px',
+
+            minWidth:
+              '30px',
+
+            height: '30px',
+
+            padding: 0,
+
+            display: 'flex',
+
+            alignItems:
+              'center',
+
+            justifyContent:
+              'center',
+          }}
+        >
+          <ClassicRewindIcon
+            size={14}
+          />
+        </Button>
+
+
+        {/* FAST FORWARD */}
+
+        <Button
+          onClick={
+            forwardVideo
+          }
+
+          title="Forward 10 seconds"
+
+          style={{
+            width: '30px',
+
+            minWidth:
+              '30px',
+
+            height: '30px',
+
+            padding: 0,
+
+            display: 'flex',
+
+            alignItems:
+              'center',
+
+            justifyContent:
+              'center',
+          }}
+        >
+          <ClassicFastForwardIcon
+            size={14}
+          />
+        </Button>
+
+
+        {/* NEXT */}
+
+        <Button
+          disabled
+
+          title="Next"
+
+          style={{
+            width: '30px',
+
+            minWidth:
+              '30px',
+
+            height: '30px',
+
+            padding: 0,
+
+            display: 'flex',
+
+            alignItems:
+              'center',
+
+            justifyContent:
+              'center',
+          }}
+        >
+          <ClassicNextIcon
+            size={13}
+          />
+        </Button>
+
+
+        {/* SPACER */}
+
+        <div
+          style={{
+            flex: 1,
+
+            minWidth: '8px',
+          }}
+        />
+
+
+        {/* VOLUME BUTTON */}
+
+        <div
+          onClick={
+            toggleMute
+          }
+
+          title={
+            isMuted
+              ? 'Unmute'
+              : 'Mute'
+          }
+
+          style={{
+            width: '30px',
+
+            minWidth:
+              '30px',
+
+            height: '30px',
+
+            padding: 0,
+
+            display: 'flex',
+
+            alignItems:
+              'center',
+
+            justifyContent:
+              'center',
+
+            cursor: 'pointer',
+          }}
+        >
+          {isMuted ||
+          volume === 0 ? (
+            <ClassicMuteIcon
+              size={16}
+            />
+          ) : (
+            <ClassicVolumeIcon
+              size={16}
+            />
+          )}
+        </div>
+
+
+        {/* VOLUME RANGE */}
+
+        <Range
+          min="0"
+
+          max="100"
+
+          step="1"
+
+          value={
+            isMuted
+              ? 0
+              : volume
+          }
+
+          onChange={
+            handleVolumeChange
+          }
+
+          aria-label="Volume"
+
+          style={{
+            width: '96px',
+
+            flexShrink: 0,
+          }}
+        />
+
+
+        {/* FULLSCREEN */}
+
+        <div
+          onClick={
+            openFullscreen
+          }
+
+          title="Fullscreen"
+
+          style={{
+            width: '30px',
+
+            minWidth:
+              '30px',
+
+            height: '30px',
+
+            marginLeft: '3px',
+
+            padding: 0,
+
+            display: 'flex',
+
+            alignItems:
+              'center',
+
+            justifyContent:
+              'center',
+
+            cursor: 'pointer',
+          }}
+        >
+          <ClassicFullscreenIcon
+            size={13}
+          />
+        </div>
+      </div>
+
+
+      {/* =====================================================
+          STATUS BAR
+      ===================================================== */}
+
+      <div
+        style={{
+          flexShrink: 0,
+
+          minHeight: '20px',
+
+          margin:
+            '0 4px 4px',
+
+          display: 'flex',
+
+          alignItems: 'center',
+
+          padding: '2px 6px',
+
+          boxSizing:
+            'border-box',
+
+          backgroundColor:
+            '#000',
+
+          color: '#c0c0c0',
+
+          boxShadow:
+            'inset 1px 1px 0 #808080, inset -1px -1px 0 #ffffff',
+
+          fontSize: '10px',
+        }}
+      >
+        {isPlaying
+          ? `Playing - ${video?.name || 'Video'}`
+          : currentTime > 0
+            ? 'Paused'
+            : 'Ready'}
+      </div>
     </div>
   );
 }

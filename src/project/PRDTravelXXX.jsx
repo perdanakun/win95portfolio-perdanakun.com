@@ -29,6 +29,29 @@ export default function TravelXXXProductRequirements() {
     marginBottom: '8px',
   };
 
+    const metaGridStyle = {
+    display: 'grid',
+    gridTemplateColumns: '100px minmax(0, 1fr)',
+    columnGap: '16px',
+    rowGap: '14px',
+    marginTop: '20px',
+  };
+
+  const metaLabelStyle = {
+    margin: 0,
+    fontWeight: 700,
+  };
+
+  const metaValueStyle = {
+    margin: 0,
+  };
+
+  const subheadingStyle = {
+    fontSize: '14px',
+    lineHeight: '22px',
+    margin: '20px 0 4px',
+  };
+
   const quoteStyle = {
     margin: '20px 0',
     padding: '12px 16px',
@@ -86,7 +109,7 @@ export default function TravelXXXProductRequirements() {
             margin: '0 0 8px',
           }}
         >
-          Product Requirements
+          TravelXXX - Overview Documents
         </h1>
 
         <p
@@ -105,6 +128,78 @@ export default function TravelXXXProductRequirements() {
           turns into decisions, and decisions turn into what actually gets
           built.
         </p>
+        {/* =========================================================
+            PROJECT INFO
+        ========================================================= */}
+
+        <section
+          style={{
+            ...sectionStyle,
+            paddingBottom: '24px',
+            borderTop: '1px solid #c0c0c0',
+            borderBottom: '1px solid #c0c0c0',
+          }}
+        >
+          <div style={metaGridStyle}>
+            <p
+              className="casestudy-heading"
+              style={metaLabelStyle}
+            >
+              Project
+            </p>
+
+            <p style={metaValueStyle}>
+              Personal / portfolio project
+            </p>
+
+            <p
+              className="casestudy-heading"
+              style={metaLabelStyle}
+            >
+              Setup
+            </p>
+
+            <p style={metaValueStyle}>
+              Solo, without real product stakeholders
+            </p>
+
+             <p
+              className="casestudy-heading"
+              style={metaLabelStyle}
+            >
+              Duration
+            </p>
+
+            <p style={metaValueStyle}>
+              30 August 2026 - TBD (ongoing)
+            </p>
+
+            <p
+              className="casestudy-heading"
+              style={metaLabelStyle}
+            >
+              Purpose
+            </p>
+
+            <p style={metaValueStyle}>
+              Develop and demonstrate an AI-native Product Design + Design
+              Engineering workflow
+            </p>
+
+            
+            <p
+              className="casestudy-heading"
+              style={metaLabelStyle}
+            >
+              Status
+            </p>
+
+            <p style={metaValueStyle}>
+              Currently in Phase 2+3 (Generative Blueprinting + Code-Prototype Execution)
+            </p>
+          </div>
+        </section>
+        
       </header>
 
       {/* =========================================================

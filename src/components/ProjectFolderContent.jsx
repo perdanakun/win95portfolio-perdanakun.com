@@ -326,11 +326,11 @@ export default function ProjectFolderContent({
        isLocked: false,
                  children: [
                 {
-                  id: 'readme-travelxxx',
+                  id: 'prd--travelxxx',
                   name: 'Overview',
                   type: 'file',
                   iconType: 'documentation',
-                  openWindow: 'readme-travelxxx',
+                  openWindow: 'prd-travelxxx',
                 },
                 {
                   id: 'travelxxx-documentation',
@@ -340,11 +340,11 @@ export default function ProjectFolderContent({
                   isLocked: false,
                   children: [
                     {
-                      id: 'prd-travelxxx',
-                      name: 'PRD - Travel XXX',
+                      id: 'readme-travelxxx',
+                      name: 'Workflow',
                       type: 'file',
                       iconType: 'notepad',
-                      openWindow: 'prd-travelxxx',
+                      openWindow: 'readme-travelxxx',
                     },
                         {
                           id: '1-research-discovery',
@@ -413,7 +413,7 @@ export default function ProjectFolderContent({
                 },
                 {
                   id: 'travel-website',
-                  name: 'Travel-v.0.1',
+                  name: 'travel-v1.0-dev',
                   type: 'file',
                   iconType: 'travelxxx',
                   link: 'https://travelxxx-hotel-compass.vercel.app/',
@@ -3006,20 +3006,25 @@ const handleBack = () => {
               display:
                 'grid',
 
-              gridTemplateColumns:
-                isMobile
-                  ? 'repeat(auto-fill, minmax(90px, 1fr))'
-                  : 'repeat(auto-fill, 120px)',
+    gridTemplateColumns:
+      isMobile
+        ? 'repeat(auto-fill, minmax(90px, 1fr))'
+        : 'repeat(auto-fill, 120px)',
 
-              gridAutoRows:
-                isMobile
-                  ? '82px'
-                  : '90px',
+    gridAutoRows:
+      isMobile
+        ? '72px'
+        : '78px',
 
-              gap:
-                isMobile
-                  ? '6px'
-                  : '8px',
+    columnGap:
+      isMobile
+        ? '6px'
+        : '10px',
+
+    rowGap:
+      isMobile
+        ? '4px'
+        : '6px',
 
               alignItems:
                 'start',
