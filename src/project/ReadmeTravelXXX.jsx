@@ -36,28 +36,6 @@ export default function ReadmeProduct() {
     background: '#f5f5f5',
   };
 
-  const metaGridStyle = {
-    display: 'grid',
-    gridTemplateColumns: '100px minmax(0, 1fr)',
-    columnGap: '16px',
-    rowGap: '14px',
-    marginTop: '20px',
-  };
-
-  const metaLabelStyle = {
-    margin: 0,
-    fontWeight: 700,
-  };
-
-  const metaValueStyle = {
-    margin: 0,
-  };
-
-  const subheadingStyle = {
-    fontSize: '14px',
-    lineHeight: '22px',
-    margin: '20px 0 4px',
-  };
 
   const codeBlockStyle = {
     margin: '20px 0',

@@ -12,20 +12,28 @@ import {
 const COPY = {
 
   intro:
-    "Hi! I'm Clippy. Here's a quick tour.",
+    "Hey! Looks like setup is complete. I'm Clippy. I'll help you find your way around.",
+
+  introComputer:
+    "This isn't a traditional portfolio. Think of it as Perdana's computer — projects, experiments, notes, and a few things you probably weren't supposed to click.",
+
+  introProjectsPrompt:
+    "Let's start with the important part. Open My Projects and I'll show you around.",
 
   introProjects:
-    "My Projects has the work and case studies.",
+    "There we go. This is where you'll find the actual work — from visual systems to Product Design and Design Engineering experiments.",
 
   introAI:
-    "Prefer asking? AI Chat can help.",
+    "If you'd rather ask than browse, AI Chat knows its way around this computer.",
 
   introAbout:
-    "About is the quick background.",
+    "About gives you the short version — who Perdana is, where he's coming from, and what he's working toward.",
 
   introInbox:
-    "Inbox is here if you'd like to say hello.",
+    "And if you want to talk to the human behind all this, Inbox is right here.",
 
+  introEnd:
+    "That's enough from me. Explore anything you like. I'll be around if you need me.",
 
   about:
     "You're in About. This is the quickest place to understand who Perdana is, where he comes from, and what he's exploring now.",
@@ -711,13 +719,11 @@ function getTourFeaturePosition(
 
 const GUIDE_STORAGE_KEY = 'perdana-clippy-guide-seen';
 
-// Random Clippy muncul setiap 10–20 detik
+// Desktop Clippy muncul secara berkala, bicara, lalu menghilang lagi.
+// Ritme ini sengaja dibuat seperti Clippy lama: tidak selalu ada di layar.
 const RANDOM_MIN_DELAY = 10000;
 const RANDOM_MAX_EXTRA_DELAY = 10000;
-
-// Setelah muncul, Clippy stay selama 8 detik
 const RANDOM_VISIBLE_DURATION = 8000;
-
 const CONTEXTUAL_VISIBLE_DURATION = 8000;
 
 // Clippy.JS queues actions. Keep movement short enough that
@@ -742,7 +748,6 @@ export default function ClippyAssistant({
   welcomeInstallerVisible,
   welcomeInstallerLoadingVisible,
   installerVisible,
-  startGuide,
 }) {
   const { clippy } = useClippy();
 
@@ -758,10 +763,13 @@ export default function ClippyAssistant({
 
   const lastRandomIndex = React.useRef(-1);
   const tourStartedRef = React.useRef(false);
+  const tourContinuationStartedRef = React.useRef(false);
   const tourTimersRef = React.useRef([]);
   const chatterTimerRef = React.useRef(null);
   const chatterHideTimerRef = React.useRef(null);
   const contextualHideTimerRef = React.useRef(null);
+
+  const [tourPhase, setTourPhase] = React.useState('idle');
 
   const installerOpen = Boolean(
     welcomeInstallerVisible ||
@@ -985,10 +993,8 @@ export default function ClippyAssistant({
      BASE VISIBILITY GUARD
 
      - Boot / installer / Welcome: hidden.
-     - Returning visitor: hidden by default.
-     - First guide controls its own visibility.
-     - Random/contextual appearances are not
-       overwritten by this effect while idle.
+     - First tour controls its own visibility.
+     - After the tour, Desktop Clippy remains visible.
   ==================================== */
 
  React.useEffect(() => {
@@ -1003,8 +1009,15 @@ export default function ClippyAssistant({
     Boolean(windows?.welcome);
 
   if (blocked) {
+    clearTourTimers();
     clearChatterTimers();
     clearContextualTimer();
+
+    if (!guideCompleted) {
+      tourStartedRef.current = false;
+      tourContinuationStartedRef.current = false;
+      setTourPhase('idle');
+    }
 
     clippy.stop?.();
     clippy.hide();
@@ -1016,6 +1029,8 @@ export default function ClippyAssistant({
   pcInstalled,
   installerOpen,
   windows?.welcome,
+  guideCompleted,
+  clearTourTimers,
   clearChatterTimers,
   clearContextualTimer,
 ]);
@@ -1183,12 +1198,78 @@ export default function ClippyAssistant({
   }, [clippy]);
 
   /* ====================================
+     CLICK CLIPPY TO TALK
+
+     Desktop idle Clippy can be clicked while visible.
+     Clicking gives one random line and restarts the hide countdown.
+     We avoid this during the First Tour/contextual response so the
+     scripted onboarding is not interrupted.
+  ==================================== */
+
+  React.useEffect(() => {
+    if (!clippy) {
+      return undefined;
+    }
+
+    let cleanup = null;
+    let retryTimer = null;
+
+    const attachClick = () => {
+      const clippyElement = document.querySelector('.clippy');
+
+      if (!clippyElement) {
+        retryTimer = window.setTimeout(attachClick, 100);
+        return;
+      }
+
+      const handleClick = (event) => {
+        // Desktop interaction only. Mobile Clippy is reserved for
+        // onboarding and contextual responses because screen space is tight.
+        if (isMobile || !guideCompleted || !desktopReady || contextualWindowOpen) {
+          return;
+        }
+
+        event.stopPropagation();
+
+        // Do not reset the appearance/hide lifecycle here.
+        // The click only adds another line while Clippy is already visible.
+        clippy.stop?.();
+        clippy.show(true);
+        speakRandomMessage();
+      };
+
+      clippyElement.addEventListener('click', handleClick);
+      cleanup = () => clippyElement.removeEventListener('click', handleClick);
+    };
+
+    attachClick();
+
+    return () => {
+      if (retryTimer) {
+        window.clearTimeout(retryTimer);
+      }
+      cleanup?.();
+    };
+  }, [
+    clippy,
+    isMobile,
+    guideCompleted,
+    desktopReady,
+    contextualWindowOpen,
+    speakRandomMessage,
+  ]);
+
+  /* ====================================
      FIRST VISIT FEATURE TOUR
 
      Flow:
      first install -> Welcome -> close Welcome
-     -> mandatory Clippy guide -> hide
-     -> mark guide complete.
+     -> Clippy introduction
+     -> ask user to open My Projects
+     -> wait for real interaction
+     -> continue orientation
+     -> mark guide complete
+     -> hand off to persistent Desktop Clippy.
   ==================================== */
 
   React.useEffect(() => {
@@ -1197,25 +1278,23 @@ export default function ClippyAssistant({
       guideCompleted ||
       tourStartedRef.current
     ) {
-      return undefined;
+      return;
     }
 
     tourStartedRef.current = true;
     clearTourTimers();
     clearChatterTimers();
-    clearContextualTimer();
 
-clippy.stop?.();
-clippy.show(true);
+    clippy.stop?.();
+    clippy.show(true);
 
-const firstPosition = getFirstTourPosition();
+    const firstPosition = getFirstTourPosition();
 
-// First appearance should already be in the correct place.
-clippy.moveTo(
-  firstPosition.x,
-  firstPosition.y,
-  0
-);
+    clippy.moveTo(
+      firstPosition.x,
+      firstPosition.y,
+      0
+    );
 
     const addTourTimer = (callback, delay) => {
       const timer = window.setTimeout(
@@ -1226,60 +1305,110 @@ clippy.moveTo(
       tourTimersRef.current.push(timer);
     };
 
-addTourTimer(() => {
-  if (!clippy) return;
+    addTourTimer(() => {
+      if (!clippy) return;
 
-  clippy.stop?.();
-  clippy.show(true);
-
-  const firstPosition = getFirstTourPosition();
-
-  clippy.moveTo(
-    firstPosition.x,
-    firstPosition.y,
-    0
-  );
-
-  speak(COPY.intro, 'Wave');
-}, 500);
-
-addTourTimer(() => {
-  if (!clippy) return;
-
-  clippy.show();
-  moveClippyToTourFeature('projects');
-  speak(COPY.introProjects);
-}, 4000);
-
-addTourTimer(() => {
-  if (!clippy) return;
-
-  clippy.show();
-  moveClippyToTourFeature('aiAssistant');
-  speak(COPY.introAI);
-}, 8000);
-
-addTourTimer(() => {
-  if (!clippy) return;
-
-  clippy.show();
-  moveClippyToTourFeature('about');
-  speak(COPY.introAbout);
-}, 12000);
-
-addTourTimer(() => {
-  if (!clippy) return;
-
-  clippy.show();
-  moveClippyToTourFeature('contact');
-  speak(COPY.introInbox);
-}, 16000);
+      clippy.show(true);
+      speak(COPY.intro, 'Wave');
+    }, 500);
 
     addTourTimer(() => {
       if (!clippy) return;
 
-      clippy.stop?.();
-      clippy.hide();
+      clippy.show(true);
+      speak(COPY.introComputer, 'Acknowledge');
+    }, 4500);
+
+    addTourTimer(() => {
+      if (!clippy) return;
+
+      clippy.show(true);
+      moveClippyToTourFeature('projects');
+      speak(COPY.introProjectsPrompt, 'Wave');
+      setTourPhase('waiting-projects');
+    }, 9500);
+  }, [
+    clippy,
+    desktopReady,
+    guideCompleted,
+    moveClippyToTourFeature,
+    speak,
+    clearTourTimers,
+    clearChatterTimers,
+  ]);
+
+  /* ====================================
+     FIRST TOUR — WAIT FOR MY PROJECTS
+
+     The tour does not continue until the user
+     actually opens My Projects. This gives the
+     onboarding one meaningful interaction without
+     forcing every icon to be clicked.
+  ==================================== */
+
+  React.useEffect(() => {
+    if (
+      !clippy ||
+      guideCompleted ||
+      tourPhase !== 'waiting-projects' ||
+      !windows?.projects ||
+      tourContinuationStartedRef.current
+    ) {
+      return;
+    }
+
+    tourContinuationStartedRef.current = true;
+    clearTourTimers();
+    clearChatterTimers();
+
+    clippy.stop?.();
+    clippy.show(true);
+    moveClippyToTourFeature('projects');
+    speak(COPY.introProjects, 'Acknowledge');
+
+    const addTourTimer = (callback, delay) => {
+      const timer = window.setTimeout(
+        callback,
+        delay
+      );
+
+      tourTimersRef.current.push(timer);
+    };
+
+    addTourTimer(() => {
+      if (!clippy) return;
+
+      clippy.show(true);
+      moveClippyToTourFeature('aiAssistant');
+      speak(COPY.introAI);
+    }, 4500);
+
+    addTourTimer(() => {
+      if (!clippy) return;
+
+      clippy.show(true);
+      moveClippyToTourFeature('about');
+      speak(COPY.introAbout);
+    }, 8500);
+
+    addTourTimer(() => {
+      if (!clippy) return;
+
+      clippy.show(true);
+      moveClippyToTourFeature('contact');
+      speak(COPY.introInbox);
+    }, 12500);
+
+    addTourTimer(() => {
+      if (!clippy) return;
+
+      clippy.show(true);
+      moveClippy();
+      speak(COPY.introEnd, 'Wave');
+    }, 16500);
+
+    addTourTimer(() => {
+      if (!clippy) return;
 
       window.localStorage.setItem(
         GUIDE_STORAGE_KEY,
@@ -1287,25 +1416,23 @@ addTourTimer(() => {
       );
 
       setGuideCompleted(true);
-    }, 20000);
+      setTourPhase('complete');
 
-    return () => {
-      clearTourTimers();
-
-      if (!getStoredGuideState()) {
-        tourStartedRef.current = false;
-      }
-    };
+      // First Tour is complete. Desktop behavior takes over.
+      // Clippy disappears until the next random/contextual appearance.
+      clippy.stop?.();
+      clippy.hide();
+    }, 21500);
   }, [
     clippy,
-    desktopReady,
     guideCompleted,
+    tourPhase,
+    windows?.projects,
     moveClippy,
     moveClippyToTourFeature,
     speak,
     clearTourTimers,
     clearChatterTimers,
-    clearContextualTimer,
   ]);
 
   /* ====================================
@@ -1321,7 +1448,12 @@ addTourTimer(() => {
       return undefined;
     }
 
-    if (installerOpen || !guideCompleted || contextualWindowOpen) {
+    if (
+      !guideCompleted ||
+      !desktopReady ||
+      contextualWindowOpen ||
+      isMobile
+    ) {
       return undefined;
     }
 
@@ -1334,9 +1466,10 @@ addTourTimer(() => {
     };
   }, [
     clippy,
-    installerOpen,
     guideCompleted,
+    desktopReady,
     contextualWindowOpen,
+    isMobile,
     moveClippy,
   ]);
 
@@ -1423,19 +1556,19 @@ addTourTimer(() => {
       clearChatterTimers();
       clearContextualTimer();
 
-      // Clear any previous idle/random action BEFORE starting the new
-      // contextual sequence. Never stop after moveTo().
+      // Contextual response may appear on desktop OR mobile.
+      // It is temporary so it does not permanently occupy screen space.
       clippy.stop?.();
       clippy.show(true);
       moveClippy(feature);
       speak(message, animation);
 
-      contextualHideTimerRef.current =
-        window.setTimeout(() => {
-          clippy.stop?.();
-          clippy.hide();
-          contextualHideTimerRef.current = null;
-        }, CONTEXTUAL_VISIBLE_DURATION);
+      contextualHideTimerRef.current = window.setTimeout(() => {
+        clippy.stop?.();
+        clippy.hide();
+        contextualHideTimerRef.current = null;
+      }, CONTEXTUAL_VISIBLE_DURATION);
+
     },
     [
       clippy,
@@ -1536,9 +1669,12 @@ addTourTimer(() => {
 /* ====================================
    RANDOM IDLE CHATTER
 
-   Only after first guide is complete.
-   Wait 10–20s -> show -> speak ->
-   remain visible for 8s -> hide -> repeat.
+   Desktop only. After the first guide is complete:
+   wait 10–20s -> appear -> speak -> stay 8s -> hide -> repeat.
+
+   On smartphones there is NO idle/Desktop Clippy.
+   Mobile Clippy only appears during the First Tour and
+   contextual responses to opened windows.
 ==================================== */
 
 React.useEffect(() => {
@@ -1546,9 +1682,17 @@ React.useEffect(() => {
     !clippy ||
     !guideCompleted ||
     !desktopReady ||
-    contextualWindowOpen
+    contextualWindowOpen ||
+    isMobile
   ) {
     clearChatterTimers();
+
+    // Once onboarding is over, mobile should not keep an idle Clippy.
+    if (clippy && isMobile && guideCompleted && !contextualWindowOpen) {
+      clippy.stop?.();
+      clippy.hide();
+    }
+
     return undefined;
   }
 
@@ -1559,31 +1703,24 @@ React.useEffect(() => {
       RANDOM_MIN_DELAY +
       Math.random() * RANDOM_MAX_EXTRA_DELAY;
 
-    chatterTimerRef.current =
-      window.setTimeout(() => {
-        if (!clippy) {
-          return;
-        }
+    chatterTimerRef.current = window.setTimeout(() => {
+      if (!clippy) {
+        return;
+      }
 
+      clippy.stop?.();
+      clippy.show(true);
+      moveClippy();
+      speakRandomMessage();
+
+      chatterHideTimerRef.current = window.setTimeout(() => {
         clippy.stop?.();
-        clippy.show(true);
+        clippy.hide();
+        chatterHideTimerRef.current = null;
 
-        moveClippy();
-
-        speakRandomMessage();
-
-        chatterHideTimerRef.current =
-          window.setTimeout(() => {
-            clippy.stop?.();
-            clippy.hide();
-
-            chatterHideTimerRef.current = null;
-
-            // mulai countdown random berikutnya
-            scheduleNextChatter();
-          }, RANDOM_VISIBLE_DURATION);
-
-      }, delay);
+        scheduleNextChatter();
+      }, RANDOM_VISIBLE_DURATION);
+    }, delay);
   };
 
   scheduleNextChatter();
@@ -1596,6 +1733,7 @@ React.useEffect(() => {
   guideCompleted,
   desktopReady,
   contextualWindowOpen,
+  isMobile,
   moveClippy,
   speakRandomMessage,
   clearChatterTimers,

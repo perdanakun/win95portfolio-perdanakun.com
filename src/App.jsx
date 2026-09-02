@@ -505,18 +505,13 @@ useEffect(() => {
     JSON.stringify(nextState)
   );
 };
- // ==========================================
-  // CLIPPY GUIDE 
-  // ==========================================
-const [startClippyGuide, setStartClippyGuide] = useState(false);
-
-const [clippyMounted, setClippyMounted] = useState(() => {
-  return (
-    localStorage.getItem(
-      'perdana-clippy-guide-seen'
-    ) === 'true'
-  );
-});
+// ==========================================
+// CLIPPY LIFECYCLE
+// ==========================================
+// Clippy is mounted as soon as the virtual PC is installed.
+// ClippyAssistant itself keeps Clippy hidden during installer / Welcome,
+// runs the first tour after the first Welcome is closed, and then handles
+// the normal desktop assistant behavior.
 
 // ==========================================
 // RESPONSIVE DESKTOP ICON POSITION
@@ -703,41 +698,13 @@ const openAlertDesktop = (title, message) => {
 const [showInstallAlert, setShowInstallAlert] = useState(false);
 
 // ==========================================
-// WINDOWS BOOT SESSION
+// WELCOME LIFECYCLE
 // ==========================================
-
-useEffect(() => {
-  // Jangan buka Welcome sebelum desktop siap
-  if (pcScreen !== 'desktop') {
-    return;
-  }
-
-  // Kalau PC belum selesai di-install,
-  // installer harus punya prioritas.
-  if (!pcState.installed) {
-    return;
-  }
-
-  const bootSession = sessionStorage.getItem(
-    'perdana-boot-session'
-  );
-
-  // Welcome hanya otomatis sekali
-  // dalam satu browser session / boot session.
-  if (!bootSession) {
-    setWindows(prev => ({
-      ...prev,
-      welcome: true,
-    }));
-
-    sessionStorage.setItem(
-      'perdana-boot-session',
-      'true'
-    );
-  }
-}, [pcScreen, pcState.installed]);
-
-
+// Welcome is event-driven now. It only opens after:
+// 1) the first installation finishes, or
+// 2) Reset Desktop finishes booting.
+// Returning visits go straight to Desktop without Boot or Welcome.
+const [showWelcomeAfterReset, setShowWelcomeAfterReset] = useState(false);
 
 // Perdana PC Installer
 const [welcomeInstallerVisible, setWelcomeInstallerVisible] = useState(false);
@@ -768,6 +735,12 @@ useEffect(() => {
   const installTimer = setTimeout(() => {
     setIsInstalling(false);
     setInstallerVisible(false);
+
+    // First install is complete. Show Welcome before Clippy can start.
+    setWindows(prev => ({
+      ...prev,
+      welcome: true,
+    }));
   }, 3000);
 
   return () => {
@@ -842,10 +815,9 @@ const handleRestart = () => {
     'perdana-computer-overview': false,
   });
 
-  // Reset boot session supaya Welcome muncul lagi
-  sessionStorage.removeItem('perdana-boot-session');
-
-  // Masuk ke boot screen
+  // Reset Desktop explicitly asks for Boot -> Welcome.
+  // This is separate from a normal returning visit.
+  setShowWelcomeAfterReset(true);
   setPcScreen('boot');
 };
 
@@ -1196,7 +1168,7 @@ const handleAttachmentTooLarge = (file) => {
   return (
     <>
 
-{clippyMounted && (
+{pcState.installed && (
   <ClippyAssistant
     pcScreen={pcScreen}
     pcInstalled={pcState.installed}
@@ -1296,6 +1268,16 @@ const handleAttachmentTooLarge = (file) => {
   <PerdanaBootScreen
     onBootComplete={() => {
       setPcScreen('desktop');
+
+      // Boot on first visit continues to the installer.
+      // Boot triggered by Reset Desktop continues to Welcome.
+      if (showWelcomeAfterReset) {
+        setWindows(prev => ({
+          ...prev,
+          welcome: true,
+        }));
+        setShowWelcomeAfterReset(false);
+      }
     }}
   />
 )}
@@ -1883,16 +1865,10 @@ INI ENDING KODE INACTIVE*/}
     isTablet={isTablet}
 
     onClose={() => {
+      // ClippyAssistant watches windows.welcome.
+      // First install + unseen guide -> first tour starts here.
+      // Reset + completed guide -> normal desktop Clippy resumes here.
       toggleWindow('welcome', false);
-
-      const guideSeen =
-        localStorage.getItem(
-          'perdana-clippy-guide-seen'
-        ) === 'true';
-
-      if (!guideSeen) {
-        setClippyMounted(true);
-      }
     }}
 
     openWindow={openWindow}
