@@ -37,6 +37,7 @@ import ImageViewer from './components/ImageViewer';
 import ImageGalleryViewer from './components/ImageGalleryViewer';
 import VideoViewer from './components/VideoViewer';
 
+import PaintHeroContent from './components/PaintHeroContent';
 
 import WelcomeInstaller from './components/installer/WelcomeInstaller';
 import WelcomeInstallerLoading from './components/installer/WelcomeInstallerLoading';
@@ -60,6 +61,8 @@ import PerdanaComputerProductOverview from './project/PerdanaComputerProductOver
 import ReadmeProduct from './project/ReadmeProduct';
 import ReadmeTravelXXX from './project/ReadmeTravelXXX';
 import PRDTravelXXX from './project/PRDTravelXXX';
+
+
 
 import { getAIResponse } from "./services/aiService";
 import { Frame, TitleBar, Button, TaskBar, List, Modal, useModal } from '@react95/core';
@@ -99,6 +102,7 @@ import {
   Wordpad,
   Mplayer110,
   Freecell1,
+  Mspaint,
 } from '@react95/icons';
 import { useState, useEffect, useRef } from 'react';
 import { Rnd } from 'react-rnd';
@@ -639,6 +643,8 @@ const [windows, setWindows] = useState({
   browser: false,
   whatsNew: false,
 
+  paintHero: true,
+
   desktopVideo: false,
 
     // Project windows
@@ -801,6 +807,8 @@ const handleRestart = () => {
     whatsNew: false,
 
     desktopVideo: false,
+
+    paintHero: true,
 
 // Project windows
   holohealth: false,
@@ -1729,7 +1737,39 @@ onContinue={() => {
       </div>
 
       <span style={desktopIconLabelStyle}>
-        Bakso Sarjana.mp4
+        Media Player
+      </span>
+    </div>
+  </DesktopIcon>
+</Rnd>
+
+{/* Paint */}
+<Rnd
+  default={getDesktopIconPosition(9)}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={
+    isMobile ||
+    isTablet
+  }
+>
+  <DesktopIcon
+    onOpen={() =>
+      openWindow('paintHero')
+    }
+  >
+    <div style={desktopIconStyle}>
+      <div
+        style={{
+          fontSize: '32px',
+          marginBottom: '0',
+        }}
+      >
+        <Mspaint variant="32x32_4" />
+      </div>
+
+      <span style={desktopIconLabelStyle}>
+       MS Paint
       </span>
     </div>
   </DesktopIcon>
@@ -1763,6 +1803,45 @@ message={
   }}
 />
 
+
+{/* --- JENDELA PAINT HERO--- */}
+{windows.paintHero &&
+ !windows.welcome &&
+ !isMobile &&
+ !isTablet && (
+  <ResizableModal
+    isMobile={isMobile}
+    isTablet={isTablet}
+
+    desktopWidth="60%"
+    desktopHeight="70%"
+    desktopTop="50%"
+    desktopLeft="50%"
+    desktopRight="auto"
+    desktopBottom="auto"
+    desktopTransform="translate(-50%, -50%)"
+
+    title="untitled - Paint"
+
+    icon={
+      <Wangimg128 variant="16x16_4" />
+    }
+
+    titleBarOptions={
+      <>
+        <Modal.Minimize />
+
+        <TitleBar.Close
+          onClick={() =>
+            toggleWindow('paintHero', false)
+          }
+        />
+      </>
+    }
+  >
+    <PaintHeroContent />
+  </ResizableModal>
+)}
 
 
         {/* --- JENDELA MODAL UNTUK MASING-MASING APLIKASI --- */}
@@ -2993,6 +3072,18 @@ INI ENDING KODE INACTIVE*/}
         }
       >
         Writing
+      </List.Item>
+
+      {/* PAINT */}
+      <List.Item
+        icon={
+          <Mspaint variant="16x16_4" />
+        }
+        onClick={() =>
+          openWindow('paintHero')
+        }
+      >
+        Paint
       </List.Item>
 
       {/* INSTALLER */}
