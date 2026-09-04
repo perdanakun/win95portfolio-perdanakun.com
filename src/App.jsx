@@ -546,10 +546,19 @@ const getDesktopIconPosition = (index) => {
   }
 
   // Desktop
-  // Tetap 1 kolom seperti layout sekarang
+  // Maksimal 7 icon per kolom
+  const startX = 24;
+  const startY = 24;
+  const gapX = 12;
+  const gapY = 12;
+  const maxRows = 7;
+
+  const column = Math.floor(index / maxRows);
+  const row = index % maxRows;
+
   return {
-    x: 24,
-    y: 24 + index * 88,
+    x: startX + column * (iconWidth + gapX),
+    y: startY + row * (iconHeight + gapY),
     width: iconWidth,
     height: iconHeight,
   };
@@ -1574,19 +1583,19 @@ onContinue={() => {
   </DesktopIcon>
 </Rnd>
 
-{/* AI Chat */}
+{/* Inbox */}
 <Rnd
   default={getDesktopIconPosition(2)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
 >
-  <DesktopIcon onOpen={() => openWindow('aiAssistant')}>
+  <DesktopIcon onOpen={() => openWindow('contact')}>
     <div style={desktopIconStyle}>
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <Intl101 variant="32x32_4" />
+        <Mapi32801 variant="32x32_4" />
       </div>
-      <span style={desktopIconLabelStyle}>AI Chat</span>
+      <span style={desktopIconLabelStyle}>Inbox</span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1608,78 +1617,9 @@ onContinue={() => {
   </DesktopIcon>
 </Rnd>
 
-{/* Inbox */}
-<Rnd
-  default={getDesktopIconPosition(4)}
-  bounds="window"
-  enableResizing={false}
-  disableDragging={isMobile || isTablet}
->
-  <DesktopIcon onOpen={() => openWindow('contact')}>
-    <div style={desktopIconStyle}>
-      <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <Mapi32801 variant="32x32_4" />
-      </div>
-      <span style={desktopIconLabelStyle}>Inbox</span>
-    </div>
-  </DesktopIcon>
-</Rnd>
-
-{/* Recycle Bin */}
-<Rnd
-  default={getDesktopIconPosition(6)}
-  bounds="window"
-  enableResizing={false}
-  disableDragging={isMobile || isTablet}
->
-  <DesktopIcon onOpen={() => openWindow('recycleBin')}>
-    <div style={desktopIconStyle}>
-      <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <RecycleFull variant="32x32_4" />
-      </div>
-      <span style={desktopIconLabelStyle}>Recycle Bin</span>
-    </div>
-  </DesktopIcon>
-</Rnd>
-
-{/* Writing */}
-<Rnd
-  default={getDesktopIconPosition(7)}
-  bounds="window"
-  enableResizing={false}
-  disableDragging={isMobile || isTablet}
->
-  <DesktopIcon
-    onOpen={() =>
-      openAlertDesktop(
-        'Feature Locked',
-        <>
-          This module is still under construction. While I'm polishing the
-          design & code, feel free to browse my thoughts on{' '}
-          <a
-            href="https://medium.com/@perdanakun"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: '#000080', textDecoration: 'underline' }}
-          >
-            Medium
-          </a>
-        </>
-      )
-    }
-  >
-    <div style={desktopIconStyle}>
-      <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <Wordpad variant="32x32_4" />
-      </div>
-      <span style={desktopIconLabelStyle}>Writing</span>
-    </div>
-  </DesktopIcon>
-</Rnd>
-
 {/* Games */}
 <Rnd
-  default={getDesktopIconPosition(5)}
+  default={getDesktopIconPosition(4)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1701,44 +1641,53 @@ onContinue={() => {
   </DesktopIcon>
 </Rnd>
 
+{/* Recycle Bin */}
+<Rnd
+  default={getDesktopIconPosition(5)}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={isMobile || isTablet}
+>
+  <DesktopIcon onOpen={() => openWindow('recycleBin')}>
+    <div style={desktopIconStyle}>
+      <div style={{ fontSize: '32px', marginBottom: '0' }}>
+        <RecycleFull variant="32x32_4" />
+      </div>
+      <span style={desktopIconLabelStyle}>Recycle Bin</span>
+    </div>
+  </DesktopIcon>
+</Rnd>
+
+{/* AI Chat */}
+<Rnd
+  default={getDesktopIconPosition(7)}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={isMobile || isTablet}
+>
+  <DesktopIcon onOpen={() => openWindow('aiAssistant')}>
+    <div style={desktopIconStyle}>
+      <div style={{ fontSize: '32px', marginBottom: '0' }}>
+        <Intl101 variant="32x32_4" />
+      </div>
+      <span style={desktopIconLabelStyle}>AI Chat</span>
+    </div>
+  </DesktopIcon>
+</Rnd>
 
 {/* Desktop Video */}
-
 <Rnd
   default={getDesktopIconPosition(8)}
   bounds="window"
   enableResizing={false}
-  disableDragging={
-    isMobile ||
-    isTablet
-  }
+  disableDragging={isMobile || isTablet}
 >
-  <DesktopIcon
-    onOpen={() =>
-      openWindow(
-        'desktopVideo'
-      )
-    }
-  >
-    <div
-      style={
-        desktopIconStyle
-      }
-    >
-      <div
-        style={{
-          fontSize: '32px',
-          marginBottom: '0',
-        }}
-      >
-        <Mplayer110
-          variant="32x32_4"
-        />
+  <DesktopIcon onOpen={() => openWindow('desktopVideo')}>
+    <div style={desktopIconStyle}>
+      <div style={{ fontSize: '32px', marginBottom: '0' }}>
+        <Mplayer110 variant="32x32_4" />
       </div>
-
-      <span style={desktopIconLabelStyle}>
-        Media Player
-      </span>
+      <span style={desktopIconLabelStyle}>Media Player</span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1748,29 +1697,14 @@ onContinue={() => {
   default={getDesktopIconPosition(9)}
   bounds="window"
   enableResizing={false}
-  disableDragging={
-    isMobile ||
-    isTablet
-  }
+  disableDragging={isMobile || isTablet}
 >
-  <DesktopIcon
-    onOpen={() =>
-      openWindow('paintHero')
-    }
-  >
+  <DesktopIcon onOpen={() => openWindow('paintHero')}>
     <div style={desktopIconStyle}>
-      <div
-        style={{
-          fontSize: '32px',
-          marginBottom: '0',
-        }}
-      >
+      <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Mspaint variant="32x32_4" />
       </div>
-
-      <span style={desktopIconLabelStyle}>
-       MS Paint
-      </span>
+      <span style={desktopIconLabelStyle}>MS Paint</span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1844,7 +1778,7 @@ message={
       title="untitled - Paint"
 
       icon={
-        <Wangimg128 variant="16x16_4" />
+        <Mspaint variant="16x16_4" />
       }
 
       titleBarOptions={

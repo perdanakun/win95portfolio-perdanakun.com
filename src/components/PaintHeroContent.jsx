@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Frame } from '@react95/core';
-import { Folder } from '@react95/icons';
 import perdanaWordart from '../assets/images/perdana-wordart.png';
 import perdanaWordartTitle from '../assets/images/perdana-wordart-title.png';
 
+import toolsSprite from '../assets/paint/tools.svg';
 /**
  * PaintHeroContent
  * ----------------
@@ -23,11 +23,11 @@ const LAYOUT = {
   offsetX: -30,
 
   paddingX: 90,
-  paddingTop: 12,
+  paddingTop: 25,
   paddingBottom: 10,
 
   heroMaxHeight: 400,
-  gapAfterHero: 32,
+  gapAfterHero: 10,
 
   contentWidth: 920,
 };
@@ -40,22 +40,26 @@ const COLORS = [
 ];
 
 const TOOL_ITEMS = [
-  { id: 'free-select', label: 'Free-Form Select' },
-  { id: 'select', label: 'Select' },
-  { id: 'eraser', label: 'Eraser / Color Eraser' },
-  { id: 'fill', label: 'Fill With Color' },
-  { id: 'eyedropper', label: 'Pick Color' },
-  { id: 'magnifier', label: 'Magnifier' },
-  { id: 'pencil', label: 'Pencil' },
-  { id: 'brush', label: 'Brush' },
-  { id: 'airbrush', label: 'Airbrush' },
-  { id: 'text', label: 'Text' },
-  { id: 'line', label: 'Line' },
-  { id: 'curve', label: 'Curve' },
-  { id: 'rectangle', label: 'Rectangle' },
-  { id: 'polygon', label: 'Polygon' },
-  { id: 'ellipse', label: 'Ellipse' },
-  { id: 'rounded-rectangle', label: 'Rounded Rectangle' },
+  { id: 'free-select', label: 'Free-Form Select', spriteIndex: 0 },
+  { id: 'select', label: 'Select', spriteIndex: 1 },
+  { id: 'eraser', label: 'Eraser / Color Eraser', spriteIndex: 2 },
+  { id: 'fill', label: 'Fill With Color', spriteIndex: 3 },
+  { id: 'eyedropper', label: 'Pick Color', spriteIndex: 4 },
+  { id: 'magnifier', label: 'Magnifier', spriteIndex: 5 },
+  { id: 'pencil', label: 'Pencil', spriteIndex: 6 },
+  { id: 'brush', label: 'Brush', spriteIndex: 7 },
+  { id: 'airbrush', label: 'Airbrush', spriteIndex: 8 },
+  { id: 'text', label: 'Text', spriteIndex: 9 },
+  { id: 'line', label: 'Line', spriteIndex: 10 },
+  { id: 'curve', label: 'Curve', spriteIndex: 11 },
+  { id: 'rectangle', label: 'Rectangle', spriteIndex: 12 },
+  { id: 'polygon', label: 'Polygon', spriteIndex: 13 },
+  { id: 'ellipse', label: 'Ellipse', spriteIndex: 14 },
+  {
+    id: 'rounded-rectangle',
+    label: 'Rounded Rectangle',
+    spriteIndex: 15,
+  },
 ];
 
 function clearCanvas(ctx, width, height) {
@@ -155,12 +159,12 @@ function PortfolioIntro({
       role: 'Product Designer + Design Engineer',
     },
     {
-      year: '2016–26',
+      year: '2016 - 2026',
       company: 'Conania',
-      role: 'Visual Designer & Design Lead',
+      role: 'Visual and Design Lead',
     },
     {
-      year: '2019–23',
+      year: '2019 - 2023',
       company: 'Sinidikara',
       role: 'Graphic Designer',
     },
@@ -255,7 +259,7 @@ function PortfolioIntro({
           <div
             style={{
               display: 'grid',
-              gap: '8px',
+              gap: '7px',
             }}
           >
             {experience.map((item) => (
@@ -273,7 +277,7 @@ function PortfolioIntro({
                   display: 'grid',
 
                   gridTemplateColumns:
-                    '66px 90px minmax(0, 1fr)',
+                    '74px 90px minmax(0, 1fr)',
 
                   gap: '5px',
 
@@ -422,7 +426,19 @@ function ToolButton({ item, active, onClick }) {
         cursor: 'pointer',
       }}
     >
-      <Folder variant="16x16_4" />
+<span
+  aria-hidden="true"
+  style={{
+    width: 32,
+    height: 32,
+    display: 'block',
+
+    backgroundImage: `url(${toolsSprite})`,
+    backgroundRepeat: 'no-repeat',
+
+    backgroundPosition: `${-8 - item.spriteIndex * 32}px -8px`,
+  }}
+/>
     </Button>
   );
 }
@@ -779,14 +795,15 @@ export default function PaintHeroContent({
             onClick={newCanvas}
             style={menuItemStyle}
           >
-            <u>F</u>ile
+            <u>N</u>ew
           </button>
 
           <button
             type="button"
             style={menuItemStyle}
+            onClick={restoreIntro}
           >
-            <u>E</u>dit
+            <u>R</u>estore
           </button>
 
           <button
@@ -900,47 +917,38 @@ export default function PaintHeroContent({
                 backgroundColor: '#c0c0c0',
               }}
             >
-              {[3, 5, 9].map((size) => (
-                <Button
-                  key={size}
-                  type="button"
-                  active={brushSize === size}
-                  onClick={() => {
-                    setBrushSize(size);
-                    setStatusText(
-                      `Brush size: ${size}`
-                    );
-                  }}
-                  style={{
-                    width: '46px',
-                    minWidth: '46px',
-
-                    height: '18px',
-                    minHeight: '18px',
-
-                    padding: 0,
-
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <span
-                    style={{
-                      display: 'block',
-
-                      width: '25px',
-
-                      height: `${Math.max(
-                        1,
-                        Math.round(size / 2)
-                      )}px`,
-
-                      backgroundColor: '#000',
-                    }}
-                  />
-                </Button>
-              ))}
+ {/*
+  [3, 5, 9].map((size) => (
+    <Button
+      key={size}
+      type="button"
+      active={brushSize === size}
+      onClick={() => {
+        setBrushSize(size);
+        setStatusText(`Brush size: ${size}`);
+      }}
+      style={{
+        width: '46px',
+        minWidth: '46px',
+        height: '18px',
+        minHeight: '18px',
+        padding: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <span
+        style={{
+          display: 'block',
+          width: '25px',
+          height: `${Math.max(1, Math.round(size / 2))}px`,
+          backgroundColor: '#000',
+        }}
+      />
+    </Button>
+  ))
+*/}
             </Frame>
           </div>
 
@@ -1117,8 +1125,9 @@ export default function PaintHeroContent({
               position: 'relative',
 
               backgroundColor: '#e2e2e2',
-                             boxShadow:
+               boxShadow:
                     'inset 2px 2px 0 #808080',
+              
 
               boxSizing: 'border-box',
             }}
@@ -1135,7 +1144,7 @@ export default function PaintHeroContent({
 
                 backgroundColor: color,
 
-                border: '2px solid #eeeeee',
+                border: '1px solid #eeeeee',
 
                 zIndex: 2,
 
@@ -1155,7 +1164,8 @@ export default function PaintHeroContent({
 
                 backgroundColor: secondaryColor,
 
-                border: '2px solid #808080',
+                border: '1px solid #808080',
+                
 
                 zIndex: 1,
 
@@ -1235,37 +1245,6 @@ export default function PaintHeroContent({
               />
             ))}
           </div>
-
-          <div
-            style={{
-              marginLeft: 'auto',
-
-              display: 'flex',
-              alignItems: 'center',
-
-              gap: '5px',
-            }}
-          >
-            <Button
-              onClick={newCanvas}
-              style={{
-                minWidth: '54px',
-                height: '24px',
-              }}
-            >
-              New
-            </Button>
-
-            <Button
-              onClick={restoreIntro}
-              style={{
-                minWidth: '88px',
-                height: '24px',
-              }}
-            >
-              Restore
-            </Button>
-          </div>
         </div>
 
         {/* =====================================================
@@ -1279,20 +1258,22 @@ export default function PaintHeroContent({
             display: 'grid',
 
             gridTemplateColumns:
-              'minmax(0, 1fr) 150px 32px',
+              'minmax(0, 1fr) 40px 32px',
 
             gap: '3px',
 
             padding: '3px 4px',
 
             backgroundColor: '#c0c0c0',
+            borderTop: '1px solid #ffffff',
+            borderBottom: '1px solid #808080',
 
             boxSizing: 'border-box',
           }}
         >
           <Frame
             boxShadow="in"
-            style={statusFrameStyle}
+            style={statusFrameStyle}  
           >
             {statusText}
           </Frame>

@@ -919,74 +919,74 @@ export default function ClippyAssistant({
   /* ====================================
      COMPACT SPEECH BALLOON
   ==================================== */
+React.useEffect(() => {
+  const styleId = 'perdana-clippy-style';
 
-  React.useEffect(() => {
-    const styleId = 'perdana-clippy-style';
+  if (document.getElementById(styleId)) {
+    return undefined;
+  }
 
-    if (document.getElementById(styleId)) {
-      return undefined;
+  const style = document.createElement('style');
+  style.id = styleId;
+
+  style.textContent = `
+    .clippy {
+      pointer-events: auto !important;
+      z-index: 10 !important;
     }
 
-    const style = document.createElement('style');
-    style.id = styleId;
+    .clippy-balloon {
+      font-family: "MS Sans Serif", Arial, sans-serif !important;
+      z-index: 11 !important;
+    }
 
-    style.textContent = `
+    .clippy-balloon-content,
+    .clippy-balloon-content *,
+    .clippy-content,
+    .clippy-content *,
+    .clippy-balloon,
+    .clippy-balloon * {
+      font-family: "MS Sans Serif", Arial, sans-serif !important;
+
+      font-size: 11px !important;
+
+      /* INI JARAK ANTAR BARIS */
+      line-height: 14px !important;
+    }
+
+    .clippy-balloon p,
+    .clippy-content p,
+    .clippy-balloon-content p {
+      margin: 0 !important;
+    }
+
+    @media (max-width: 600px) {
       .clippy {
-        pointer-events: auto !important;
-        z-index: 10 !important;
+        touch-action: none !important;
+        cursor: grab;
       }
 
-      .clippy-balloon {
-        font-family: "MS Sans Serif", Arial, sans-serif !important;
-        z-index: 11 !important;
+      .clippy:active {
+        cursor: grabbing;
       }
 
-      .clippy-balloon,
-      .clippy-balloon *,
+      .clippy-balloon-content,
+      .clippy-balloon-content *,
       .clippy-content,
       .clippy-content *,
-      .clippy-balloon-content,
-      .clippy-balloon-content * {
-        font-family: "MS Sans Serif", Arial, sans-serif !important;
-        font-size: 11px !important;
-        line-height: 10px !important;
+      .clippy-balloon,
+      .clippy-balloon * {
+        line-height: 14px !important;
       }
+    }
+  `;
 
-      .clippy-balloon p,
-      .clippy-content p,
-      .clippy-balloon-content p {
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-      }
+  document.head.appendChild(style);
 
-      @media (max-width: 600px) {
-        .clippy {
-          touch-action: none !important;
-          cursor: grab;
-        }
-
-        .clippy:active {
-          cursor: grabbing;
-        }
-
-        .clippy-balloon,
-        .clippy-balloon *,
-        .clippy-content,
-        .clippy-content *,
-        .clippy-balloon-content,
-        .clippy-balloon-content * {
-          line-height: 10px !important;
-        }
-      }
-    `;
-
-    document.head.appendChild(style);
-
-    return () => {
-      document.getElementById(styleId)?.remove();
-    };
-  }, []);
-
+  return () => {
+    document.getElementById(styleId)?.remove();
+  };
+}, []);
 
 
   /* ====================================
