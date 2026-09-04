@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Frame } from '@react95/core';
 import { Folder } from '@react95/icons';
+import perdanaWordart from '../assets/images/perdana-wordart.png';
+import perdanaWordartTitle from '../assets/images/perdana-wordart-title.png';
 
 /**
  * PaintHeroContent
@@ -15,7 +17,20 @@ import { Folder } from '@react95/icons';
  */
 
 const CANVAS_WIDTH = 1200;
-const CANVAS_HEIGHT = 720;
+const CANVAS_HEIGHT = 530;
+
+const LAYOUT = {
+  offsetX: -30,
+
+  paddingX: 90,
+  paddingTop: 12,
+  paddingBottom: 10,
+
+  heroMaxHeight: 400,
+  gapAfterHero: 32,
+
+  contentWidth: 920,
+};
 
 const COLORS = [
   '#000000', '#808080', '#800000', '#808000', '#008000', '#008080', '#000080', '#800080',
@@ -51,311 +66,313 @@ function clearCanvas(ctx, width, height) {
 }
 
 
-function drawHandwrittenLine(
-  ctx,
-  text,
-  x,
-  y,
-  {
-    fontSize = 62,
-    color = '#000000',
-    rotation = 0,
-  } = {}
-) {
-  ctx.save();
+const HERO_IMAGE_SRC = perdanaWordartTitle;
+function drawHeroImage(ctx, canvas, onDone) {
+  const image = new Image();
 
-  ctx.translate(x, y);
-  ctx.rotate(rotation);
+  image.onload = () => {
+    /*
+     * WordArt dan PortfolioIntro menggunakan
+     * content wrapper yang sama.
+     */
+    const contentWidth =
+      canvas.width - LAYOUT.paddingX * 2;
 
-  ctx.textAlign = 'left';
-  ctx.textBaseline = 'alphabetic';
+    const availableHeroWidth = contentWidth;
 
-  /*
-   * Browser fallback order:
-   * 1. Segoe Print / Comic Sans give us a handwritten shape on Windows.
-   * 2. cursive is the generic fallback.
-   *
-   * The text is rasterized onto the REAL canvas, so Paint's eraser can
-   * remove it exactly like any other drawing.
-   */
-  ctx.font =
-    `700 ${fontSize}px "Segoe Print", "Comic Sans MS", cursive`;
+    const scale = Math.min(
+      availableHeroWidth / image.naturalWidth,
+      LAYOUT.heroMaxHeight / image.naturalHeight
+    );
 
-  ctx.lineJoin = 'round';
-  ctx.lineCap = 'round';
+    const width =
+      image.naturalWidth * scale;
 
-  /*
-   * Pencil feel:
-   * draw the same glyphs several times with tiny offsets and low alpha.
-   * This makes the edges less digitally perfect without using an image.
-   */
-  const strokes = [
-    { dx: 0, dy: 0, alpha: 0.72 },
-    { dx: 0.7, dy: -0.4, alpha: 0.22 },
-    { dx: -0.6, dy: 0.5, alpha: 0.18 },
-  ];
+    const height =
+      image.naturalHeight * scale;
 
-  strokes.forEach(({ dx, dy, alpha }) => {
-    ctx.globalAlpha = alpha;
-    ctx.fillStyle = color;
-    ctx.fillText(text, dx, dy);
-  });
+    /*
+     * Center WordArt di dalam content wrapper,
+     * BUKAN di seluruh canvas.
+     */
+const x =
+  LAYOUT.paddingX +
+  (contentWidth - width) / 2 +
+  LAYOUT.offsetX;
 
-  ctx.restore();
-}
+    const y = LAYOUT.paddingTop;
 
-function drawHandwrittenHero(ctx) {
-  ctx.save();
+    ctx.drawImage(
+      image,
+      x,
+      y,
+      width,
+      height
+    );
 
-  drawHandwrittenLine(
-    ctx,
-    "I'm Perdana,",
-    105,
-    125,
-    {
-      fontSize: 72,
-      color: '#000000',
-      rotation: -0.018,
-    }
-  );
+    /*
+     * Simpan actual rendered height.
+     * PortfolioIntro akan menggunakan nilai
+     * yang sama untuk menentukan posisi content.
+     */
+    onDone?.({
+      width,
+      height,
+      x,
+      y,
+    });
+  };
 
-  drawHandwrittenLine(
-    ctx,
-    'a designer who ships in code',
-    108,
-    236,
-    {
-      fontSize: 58,
-      color: '#000000',
-      rotation: 0.008,
-    }
-  );
+  image.onerror = () => {
+    console.error(
+      `Failed to load hero image: ${HERO_IMAGE_SRC}`
+    );
 
-  /*
-   * Small imperfect underline, also part of the canvas.
-   */
-  ctx.strokeStyle = 'rgba(31, 31, 31, 0.72)';
-  ctx.lineWidth = 3;
-  ctx.lineCap = 'round';
+    onDone?.(null);
+  };
 
-  ctx.beginPath();
-  ctx.moveTo(112, 270);
-  ctx.bezierCurveTo(
-    270, 265,
-    560, 281,
-    845, 271
-  );
-  ctx.stroke();
-
-  ctx.globalAlpha = 0.22;
-  ctx.lineWidth = 1.4;
-
-  ctx.beginPath();
-  ctx.moveTo(116, 274);
-  ctx.bezierCurveTo(
-    300, 270,
-    600, 286,
-    850, 274
-  );
-  ctx.stroke();
-
-  ctx.restore();
+  image.src = HERO_IMAGE_SRC;
 }
 
 /**
  * Clickable quick-scan content rendered as HTML above the real canvas.
  *
- * The main "I'm Perdana..." headline is drawn directly onto the canvas
+ * The WordArt hero PNG is rasterized directly onto the canvas
  * so Pencil / Brush / Eraser can interact with it.
  *
  * Experience/project names remain HTML so they can stay clickable.
  */
+
 function PortfolioIntro({
   onOpenExperience,
   onOpenProject,
+  heroLayout,
 }) {
   const experience = [
     {
-      year: '2026',
-      company: 'Independent',
+      year: 'NOW',
+      company: 'Exploring',
       role: 'Product Designer + Design Engineer',
     },
     {
-      year: '2016-26',
+      year: '2016–26',
       company: 'Conania',
       role: 'Visual Designer & Design Lead',
     },
     {
-      year: '2019-23',
+      year: '2019–23',
       company: 'Sinidikara',
       role: 'Graphic Designer',
     },
   ];
 
-const projects = [
-  {
-    name: 'TravelXXX',
-    url: 'https://travelxxx.perdanakun.com/explore',
-  },
-  {
-    name: "Perdana's Computer",
-    url: 'https://www.perdanakun.com/',
-  },
-  {
-    name: 'Shipfaster UI',
-    windowName: 'ship-ui',
-  },
-  {
-    name: 'HoloHealth',
-    windowName: 'holohealth',
-  },
-];
+  const projects = [
+    {
+      name: 'TravelXXX',
+      url: 'https://travelxxx.perdanakun.com/explore',
+    },
+    {
+      name: "Perdana's Computer",
+      url: 'https://www.perdanakun.com/',
+    },
+    {
+      name: 'Shipfaster UI',
+      windowName: 'ship-ui',
+    },
+    {
+      name: 'HoloHealth',
+      windowName: 'holohealth',
+    },
+  ];
+
+  /*
+   * Content dimulai dari actual bottom WordArt
+   * + whitespace yang kita tentukan.
+   */
+  const heroBottom = heroLayout
+    ? heroLayout.y + heroLayout.height
+    : LAYOUT.paddingTop + LAYOUT.heroMaxHeight;
+
+  const contentTop =
+    heroBottom + LAYOUT.gapAfterHero;
+
+  const contentWidth =
+    CANVAS_WIDTH - LAYOUT.paddingX * 2;
 
   return (
     <div
       style={{
         position: 'absolute',
         inset: 0,
+
         width: `${CANVAS_WIDTH}px`,
         height: `${CANVAS_HEIGHT}px`,
-        padding: '0 88px 56px',
-        boxSizing: 'border-box',
+
         pointerEvents: 'none',
+
         color: '#000',
-        fontFamily: 'MS Sans Serif, Arial, sans-serif',
+
+        fontFamily:
+          'MS Sans Serif, Arial, sans-serif',
+
         userSelect: 'none',
       }}
     >
-      <div
-        style={{
-          width: '100%',
-          maxWidth: '1020px',
-          margin: '0 auto',
-          paddingTop: '350px',
-        }}
-      >
+<div
+  style={{
+    position: 'absolute',
+
+    left: `calc(50% + ${LAYOUT.offsetX}px)`,
+    transform: 'translateX(-50%)',
+
+    top: `${contentTop}px`,
+
+    // Lebar keseluruhan content
+    width: `${LAYOUT.contentWidth}px`,
+
+    display: 'grid',
+
+    // kiri | kanan
+    gridTemplateColumns: '1fr auto',
+
+    alignItems: 'start',
+
+    pointerEvents: 'none',
+  }}
+>
+        {/* ======================================
+            EXPERIENCE
+        ====================================== */}
+
+<section
+  style={{
+    gridColumn: 1,
+    justifySelf: 'start',
+    minWidth: 0,
+  }}
+>
+
+          <div
+            style={{
+              display: 'grid',
+              gap: '8px',
+            }}
+          >
+            {experience.map((item) => (
+              <button
+                key={`${item.year}-${item.company}`}
+                type="button"
+
+                onClick={onOpenExperience}
+
+                style={{
+                  ...introLinkStyle,
+
+                  pointerEvents: 'auto',
+
+                  display: 'grid',
+
+                  gridTemplateColumns:
+                    '66px 90px minmax(0, 1fr)',
+
+                  gap: '5px',
+
+                  width: '100%',
+
+                  alignItems: 'baseline',
+
+                  textAlign: 'left',
+                }}
+              >
+                <span
+                  style={{
+                    color: '#666',
+
+                    fontVariantNumeric:
+                      'tabular-nums',
+                  }}
+                >
+                  {item.year}
+                </span>
+
+                <span
+                  style={{
+                    fontWeight: 700,
+                  }}
+                >
+                  {item.company}
+                </span>
+
+                <span>
+                  {item.role}
+                </span>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* ======================================
+            PROJECTS
+        ====================================== */}
+
+ <section
+  style={{
+    gridColumn: 2,
+    justifySelf: 'end',
+    minWidth: 0,
+  }}
+>
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: '1.4fr 1fr',
-            gap: '72px',
-            alignItems: 'start',
+            gridTemplateColumns: 'repeat(2, max-content)',
+            columnGap: '24px',
+            rowGap: '8px',
+            justifyContent: 'start',
           }}
         >
-          {/* EXPERIENCE */}
-          <section>
-<div
-  style={{
-    height: '24px',
-    marginBottom: '12px',
+            {projects.map((project) => (
+              <button
+                key={project.name}
+                type="button"
 
-    display: 'flex',
-    alignItems: 'center',
+                onClick={() => {
+                  if (project.url) {
+                    window.open(
+                      project.url,
+                      '_blank',
+                      'noopener,noreferrer'
+                    );
 
-    fontWeight: 700,
-    fontSize: '12px',
-  }}
->
-  Experience
-</div>
+                    return;
+                  }
 
-            <div
-              style={{
-                display: 'grid',
-                gap: '12px',
-              }}
-            >
-              {experience.map((item) => (
-                <button
-                  key={`${item.year}-${item.company}`}
-                  type="button"
-                  onClick={onOpenExperience}
-                  style={{
-                    ...introLinkStyle,
-                    pointerEvents: 'auto',
-                    display: 'grid',
-                    gridTemplateColumns:
-                      '58px 100px minmax(0, 1fr)',
-                    gap: '12px',
-                    width: '100%',
-                    alignItems: 'baseline',
-                    textAlign: 'left',
-                  }}
-                >
-                  <span
-                    style={{
-                      color: '#666',
-                      fontVariantNumeric: 'tabular-nums',
-                    }}
-                  >
-                    {item.year}
-                  </span>
+                  if (project.windowName) {
+                    onOpenProject(
+                      project.windowName
+                    );
+                  }
+                }}
 
-                  <span style={{ fontWeight: 700 }}>
-                    {item.company}
-                  </span>
+                style={{
+                  ...introLinkStyle,
 
-                  <span>{item.role}</span>
-                </button>
-              ))}
-            </div>
-          </section>
+                  pointerEvents: 'auto',
 
-          {/* PROJECTS */}
-          <section>
-<div
-  style={{
-    height: '24px',
-    marginBottom: '12px',
+                  width: 'fit-content',
 
-    display: 'flex',
-    alignItems: 'center',
+                  fontWeight: 700,
 
-    fontWeight: 700,
-    fontSize: '12px',
-  }}
->
-  Projects
-</div>
+                  textDecoration:
+                    'underline',
 
-            <div
-              style={{
-                display: 'grid',
-                gap: '12px',
-              }}
-            >
-{projects.map((project) => (
-  <button
-    key={project.name}
-    type="button"
-    onClick={() => {
-      if (project.url) {
-        window.open(
-          project.url,
-          '_blank',
-          'noopener,noreferrer'
-        );
-        return;
-      }
-
-      if (project.windowName) {
-        onOpenProject(project.windowName);
-      }
-    }}
-    style={{
-      ...introLinkStyle,
-      pointerEvents: 'auto',
-      width: 'fit-content',
-      fontWeight: 700,
-      textDecoration: 'underline',
-    }}
-  >
-    {project.name} ↗
-  </button>
-))}
-            </div>
-          </section>
-        </div>
+                }}
+              >
+                {project.name} ↗
+              </button>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );
@@ -380,21 +397,31 @@ function ToolButton({ item, active, onClick }) {
       type="button"
       title={item.label}
       aria-label={item.label}
+      aria-pressed={active}
       onClick={() => onClick(item.id)}
-      active={active}
       style={{
         width: 34,
         minWidth: 34,
         height: 34,
         minHeight: 34,
+
         padding: 0,
+
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+
         boxSizing: 'border-box',
+        backgroundColor: '#c0c0c0',
+
+
+        borderColor: active
+          ? '#808080 #ffffff #ffffff #808080'
+          : '#ffffff #808080 #808080 #ffffff',
+
+        cursor: 'pointer',
       }}
     >
-      {/* Placeholder icon. Replace later. */}
       <Folder variant="16x16_4" />
     </Button>
   );
@@ -403,8 +430,12 @@ function ToolButton({ item, active, onClick }) {
 export default function PaintHeroContent({
   onOpenExperience,
 }) {
+
+  const [heroLayout, setHeroLayout] = useState(null);
+
   const canvasRef = useRef(null);
   const canvasScrollRef = useRef(null);
+  const canvasContainerRef = useRef(null);
 
   const drawingRef = useRef(false);
   const lastPointRef = useRef(null);
@@ -415,6 +446,7 @@ export default function PaintHeroContent({
   const [brushSize, setBrushSize] = useState(5);
 
   const [introVisible, setIntroVisible] = useState(true);
+  const [canvasScale, setCanvasScale] = useState(1);
 
   const [statusText, setStatusText] = useState(
     'For Help, click Help Topics on the Help Menu.'
@@ -438,8 +470,12 @@ export default function PaintHeroContent({
     if (!canvas || !ctx) return;
 
     clearCanvas(ctx, canvas.width, canvas.height);
-    drawHandwrittenHero(ctx);
-    setIntroVisible(true);
+    setIntroVisible(false);
+
+    drawHeroImage(ctx, canvas, (layout) => {
+      setHeroLayout(layout);
+      setIntroVisible(true);
+    });
 
     if (canvasScrollRef.current) {
       canvasScrollRef.current.scrollTo({
@@ -500,9 +536,32 @@ export default function PaintHeroContent({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const container = canvasContainerRef.current;
+    if (!container) return undefined;
+
+    const updateScale = () => {
+      const availableWidth = container.clientWidth;
+      if (!availableWidth) return;
+
+      setCanvasScale(
+        Math.min(1, availableWidth / CANVAS_WIDTH)
+      );
+    };
+
+    updateScale();
+
+    const resizeObserver = new ResizeObserver(updateScale);
+    resizeObserver.observe(container);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
+
   /**
-   * Because the canvas is now rendered at its real CSS pixel size
-   * (1200 x 720), client coordinates map directly to canvas coordinates.
+   * Pointer coordinates are translated from the scaled CSS size back
+   * into the logical 1200 x 720 canvas coordinate system.
    */
   const getCanvasPoint = (event) => {
     const canvas = canvasRef.current;
@@ -617,6 +676,8 @@ export default function PaintHeroContent({
     setStatusText(toolName);
   };
 
+
+
   return (
     <>
       <style>
@@ -656,6 +717,13 @@ export default function PaintHeroContent({
 
           .paint95-canvas-scroll::-webkit-scrollbar-corner {
             background: #c0c0c0 !important;
+          }
+
+          @media (max-width: 700px) {
+            .paint95-canvas-scroll::-webkit-scrollbar {
+              width: 12px !important;
+              height: 12px !important;
+            }
           }
         `}
       </style>
@@ -912,31 +980,47 @@ export default function PaintHeroContent({
               }}
             >
                 <div
-                ref={canvasScrollRef}
-                style={{
+                  ref={canvasScrollRef}
+                  className="paint95-canvas-scroll"
+                  style={{
                     width: '100%',
                     height: '100%',
                     minWidth: 0,
                     minHeight: 0,
-
-                    overflow: 'hidden',
-
-                    backgroundColor: '#ffffff',
+                    overflow: 'auto',
+                    backgroundColor: '#808080',
                     boxSizing: 'border-box',
-                }}
-                >
-                {/* Fixed-size drawing surface.
-                    This is what makes the scrollbars actually work. */}
-                <div
-                  style={{
-                    position: 'relative',
-                    width: `${CANVAS_WIDTH}px`,
-                    height: `${CANVAS_HEIGHT}px`,
-                    minWidth: `${CANVAS_WIDTH}px`,
-                    minHeight: `${CANVAS_HEIGHT}px`,
-                    backgroundColor: '#ffffff',
                   }}
                 >
+                  <div
+                    ref={canvasContainerRef}
+                    style={{
+                      width: '100%',
+                      minHeight: '100%',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'flex-start',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: `${CANVAS_WIDTH * canvasScale}px`,
+                        height: `${CANVAS_HEIGHT * canvasScale}px`,
+                        flexShrink: 0,
+                        position: 'relative',
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: 'relative',
+                          width: `${CANVAS_WIDTH}px`,
+                          height: `${CANVAS_HEIGHT}px`,
+                          transform: `scale(${canvasScale})`,
+                          transformOrigin: 'top left',
+                          backgroundColor: '#ffffff',
+                        }}
+                      >
                   <canvas
                     ref={canvasRef}
 
@@ -983,12 +1067,15 @@ export default function PaintHeroContent({
 
                   {introVisible && (
                     <PortfolioIntro
+                      heroLayout={heroLayout}
                       onOpenExperience={openExperience}
                       onOpenProject={openProjectWindow}
                     />
                   )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
             </Frame>
           </div>
         </div>
@@ -1029,7 +1116,9 @@ export default function PaintHeroContent({
 
               position: 'relative',
 
-              backgroundColor: '#ffffff',
+              backgroundColor: '#e2e2e2',
+                             boxShadow:
+                    'inset 2px 2px 0 #808080',
 
               boxSizing: 'border-box',
             }}
@@ -1046,7 +1135,7 @@ export default function PaintHeroContent({
 
                 backgroundColor: color,
 
-                border: '2px solid #000',
+                border: '2px solid #eeeeee',
 
                 zIndex: 2,
 
@@ -1132,12 +1221,12 @@ export default function PaintHeroContent({
                   padding: 0,
                   margin: 0,
 
-                  border: '1px solid #000',
+                  border: '1px solid #808080',
 
                   backgroundColor: swatch,
 
                   boxShadow:
-                    'inset 1px 1px 0 #fff, inset -1px -1px 0 #808080',
+                    'inset 1.5px 1.5px 0 #000000',
 
                   cursor: 'pointer',
 
@@ -1174,7 +1263,7 @@ export default function PaintHeroContent({
                 height: '24px',
               }}
             >
-              Restore Intro
+              Restore
             </Button>
           </div>
         </div>
@@ -1219,6 +1308,9 @@ export default function PaintHeroContent({
     </>
   );
 }
+
+
+
 
 const menuItemStyle = {
   padding: '2px 5px',

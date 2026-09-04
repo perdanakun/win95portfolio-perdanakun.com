@@ -1804,44 +1804,68 @@ message={
 />
 
 
-{/* --- JENDELA PAINT HERO--- */}
+{/* --- JENDELA PAINT HERO --- */}
 {windows.paintHero &&
- !windows.welcome &&
- !isMobile &&
- !isTablet && (
-  <ResizableModal
-    isMobile={isMobile}
-    isTablet={isTablet}
+  !windows.welcome && (
+    <ResizableModal
+      isMobile={isMobile}
+      isTablet={isTablet}
 
-    desktopWidth="60%"
-    desktopHeight="70%"
-    desktopTop="50%"
-    desktopLeft="50%"
-    desktopRight="auto"
-    desktopBottom="auto"
-    desktopTransform="translate(-50%, -50%)"
+      // =========================
+      // SMARTPHONE
+      // =========================
+      mobileHeightRatio={1}
+      minHeightRatio={0.65}
+      mobileWidth="100vw"
+      mobileLockBottom={true}
 
-    title="untitled - Paint"
+      // =========================
+      // TABLET / iPAD
+      // =========================
+      tabletWidth="90%"
+      tabletHeight="auto"
+      tabletTop="50%"
+      tabletLeft="50%"
+      tabletRight="auto"
+      tabletBottom="auto"
+      tabletTransform="translate(-50%, -50%)"
 
-    icon={
-      <Wangimg128 variant="16x16_4" />
-    }
+      // =========================
+      // DESKTOP
+      // =========================
+      desktopWidth="auto"
+      desktopHeight="70%"
+      desktopTop="50%"
+      desktopLeft="50%"
+      desktopRight="auto"
+      desktopBottom="auto"
+      desktopTransform="translate(-50%, -50%)"
 
-    titleBarOptions={
-      <>
-        <Modal.Minimize />
+      title="untitled - Paint"
 
-        <TitleBar.Close
-          onClick={() =>
-            toggleWindow('paintHero', false)
-          }
-        />
-      </>
-    }
-  >
-    <PaintHeroContent />
-  </ResizableModal>
-)}
+      icon={
+        <Wangimg128 variant="16x16_4" />
+      }
+
+      titleBarOptions={
+        <>
+          <Modal.Minimize />
+
+          <TitleBar.Close
+            onClick={() =>
+              toggleWindow('paintHero', false)
+            }
+          />
+        </>
+      }
+    >
+      <PaintHeroContent
+        isMobile={isMobile}
+        isTablet={isTablet}
+      />
+    </ResizableModal>
+  )}
+
 
 
         {/* --- JENDELA MODAL UNTUK MASING-MASING APLIKASI --- */}
