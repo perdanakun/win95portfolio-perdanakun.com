@@ -551,7 +551,7 @@ const getDesktopIconPosition = (index) => {
   const startY = 24;
   const gapX = 12;
   const gapY = 12;
-  const maxRows = 7;
+  const maxRows = 6;
 
   const column = Math.floor(index / maxRows);
   const row = index % maxRows;
@@ -652,7 +652,7 @@ const [windows, setWindows] = useState({
   browser: false,
   whatsNew: false,
 
-  paintHero: true,
+  paintHero: !isMobile,
 
   desktopVideo: false,
 
@@ -817,7 +817,7 @@ const handleRestart = () => {
 
     desktopVideo: false,
 
-    paintHero: true,
+    paintHero: !isMobile,
 
 // Project windows
   holohealth: false,
@@ -1658,9 +1658,12 @@ onContinue={() => {
   </DesktopIcon>
 </Rnd>
 
+
+
+
 {/* AI Chat */}
 <Rnd
-  default={getDesktopIconPosition(7)}
+  default={getDesktopIconPosition(6)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1677,7 +1680,7 @@ onContinue={() => {
 
 {/* Desktop Video */}
 <Rnd
-  default={getDesktopIconPosition(8)}
+  default={getDesktopIconPosition(7)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1694,7 +1697,7 @@ onContinue={() => {
 
 {/* Paint */}
 <Rnd
-  default={getDesktopIconPosition(9)}
+  default={getDesktopIconPosition(8)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}

@@ -1,56 +1,71 @@
 import React from 'react';
-
-import {
-  useClippy,
-} from '@react95/clippy';
-
+import { useClippy } from '@react95/clippy';
 
 /* ======================================
    GUIDE COPY
 ====================================== */
 
 const COPY = {
+  paintIntro:
+    "Welcome to Perdana's Computer. Perdana made this little piece of art especially for you. Give it a quick scan, and follow the arrows if anything catches your eye.",
 
-  intro:
-    "Hey! Looks like setup is complete. I'm Clippy. I'll help you find your way around.",
+  paintClose:
+    "When you're done, close this window. I'll show you around real quick.",
 
-  introComputer:
-    "This isn't a traditional portfolio. Think of it as Perdana's computer! projects, experiments, notes, and a few things you probably weren't supposed to click.",
+  aiLead:
+    "Nice. Perdana told me there's one thing you should try first.",
 
-  introProjectsPrompt:
-    "Let's start with the important part. Open My Projects and I'll show you around.",
+  aiOpenPrompt:
+    "Open AI Chat. I'll introduce you.",
 
-  introProjects:
-    "There we go. This is where you'll find the actual work — from visual systems to Product Design and Design Engineering experiments.",
+  aiFriend:
+    "This is my friend, perdana.ai. He's a little shy, so he won't say much unless you ask. But he knows Perdana really well.",
 
-  introAI:
-    "If you'd rather ask than browse, AI Chat knows its way around this computer.",
+  aiQuestion:
+    'Try asking him something like, "What is Perdana working on right now?"',
 
-  introAbout:
-    "About gives you the short version — who Perdana is, where he's coming from, and what he's working toward.",
+  aiClose:
+    "Give him a try. When you're done, close AI Chat and I'll show you the rest.",
 
-  introInbox:
-    "And if you want to talk to the human behind all this, Inbox is right here.",
-
-  introEnd:
-    "That's enough from me. Explore anything you like. I'll be around if you need me.",
-
-  about:
-    "You're in About. This is the quickest place to understand who Perdana is, where he comes from, and what he's exploring now.",
+  tourContinue:
+    "Nice. A few more useful places before I get out of your way.",
 
   projects:
-    "This is My Projects. Start here for the actual work — visual systems, product design experiments, and design engineering case studies.",
+    "My Projects is where Perdana keeps the actual work — visual systems, Product Design, and Design Engineering experiments.",
 
-  aiAssistant:
-    "AI Chat is the fastest way to explore the portfolio. Ask about Perdana's experience, skills, projects, background, or current career direction.",
+  about:
+    "About gives you the short version of who Perdana is, where he's coming from, and what he's working toward.",
 
   contact:
-    "Inbox lets you contact Perdana directly from the portfolio, so you don't need to leave the desktop just to send a message.",
+    "And Inbox is the easiest way to reach the human behind this computer.",
 
-  installer:
-    "The Installer is the guided introduction to Perdana's Computer. It walks through the person, the work, and the thinking behind this portfolio experience.",
+  introEnd:
+    "That's enough from me. Explore anything you like. I'll pop in from time to time if I have something useful to say.",
+
+  exploreInstead:
+    "Looks like you've got this. I'll let you explore.",
+
+  interrupted:
+    "Welcome back. Looks like we didn't finish the tour last time. I'll stay out of the way — feel free to explore.",
+
+  mobileWelcome:
+    "Welcome to Perdana's Computer. Perdana asked me to say hi. Everything's ready — have a look around and see what you find.",
+
+  mobileWelcomeBack:
+    "Welcome back. Perdana's Computer is ready whenever you are.",
+
+  contextualAbout:
+    "You're in About. This is the quickest place to understand who Perdana is and what he's exploring now.",
+
+  contextualProjects:
+    "This is My Projects. Start here for the actual work — visual systems, Product Design, and Design Engineering experiments.",
+
+  contextualAI:
+    "Need a shortcut? perdana.ai knows Perdana pretty well. Ask him about the work, experience, projects, or current direction.",
+
+  contextualContact:
+    "Inbox lets you contact Perdana directly without leaving the desktop.",
 };
-
 
 /* ======================================
    RANDOM IDLE MESSAGES
@@ -60,202 +75,111 @@ const RANDOM_MESSAGES = [
   {
     text:
       "Need a hand? Try opening My Projects to see the actual work.",
-
-    animation:
-      'Acknowledge',
+    animation: 'Acknowledge',
   },
-
   {
     text:
-      "AI Chat is useful if you want the short version instead of browsing everything.",
-
-    animation:
-      'Acknowledge',
+      "perdana.ai is useful if you'd rather ask than browse everything.",
+    animation: 'Acknowledge',
   },
-
   {
     text:
       "About is the quickest way to understand who Perdana is and what he's exploring.",
-
-    animation:
-      'Wave',
+    animation: 'Wave',
   },
-
   {
     text:
       "Inbox lets you send Perdana a message without leaving the desktop.",
-
-    animation:
-      'Acknowledge',
+    animation: 'Acknowledge',
   },
-
   {
     text:
       "The Installer isn't just decoration. It's part of the portfolio experience.",
-
-    animation:
-      'Wave',
+    animation: 'Wave',
   },
-
   {
     text:
       "You can open several windows at once. This is a computer, after all.",
-
-    animation:
-      'Acknowledge',
+    animation: 'Acknowledge',
   },
-
   {
     text:
       "Curious what changed recently? Check What's New.",
-
-    animation:
-      'Acknowledge',
+    animation: 'Acknowledge',
   },
-
   {
     text:
       "Some parts of this desktop are useful. Some are here because clicking things is fun.",
-
-    animation:
-      'Wave',
+    animation: 'Wave',
   },
-
   {
     text:
       "Yes, I'm still here.",
-
-    animation:
-      'Wave',
+    animation: 'Wave',
   },
-
   {
     text:
       "I wouldn't ignore the Recycle Bin forever.",
-
-    animation:
-      'Acknowledge',
+    animation: 'Acknowledge',
   },
-
   {
     text:
       "This portfolio works more like a computer than a traditional scrolling website. Feel free to look around.",
-
-    animation:
-      'Acknowledge',
+    animation: 'Acknowledge',
   },
-
   {
     text:
       "If you're looking for case studies, My Projects is probably where you want to go.",
-
-    animation:
-      'Acknowledge',
+    animation: 'Acknowledge',
   },
-
   {
     text:
-      "Not sure where to start? About for the person. My Projects for the work. AI Chat for questions.",
-
-    animation:
-      'Wave',
+      "Not sure where to start? About for the person. My Projects for the work. perdana.ai for questions.",
+    animation: 'Wave',
   },
-
   {
     text:
       "Perdana built this portfolio as an interactive design-in-code experiment.",
-
-    animation:
-      'Acknowledge',
+    animation: 'Acknowledge',
   },
 ];
 
-
 /* ======================================
    DEFAULT RESPONSIVE POSITION
-
-   Posisi sekarang ±30px lebih turun
-   dibanding versi sebelumnya.
 ====================================== */
 
 function getClippyPosition() {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
 
-  const width =
-    window.innerWidth;
-
-  const height =
-    window.innerHeight;
-
-
-  /* ====================================
-     SMARTPHONE
-  ==================================== */
-
+  // SMARTPHONE
   if (width <= 600) {
-
     return {
-
-      x: Math.max(
-        8,
-        width - 115
-      ),
-
-      y: Math.max(
-        100,
-        height - 140
-      ),
-
+      x: Math.max(8, width - 115),
+      y: Math.max(100, height - 140),
     };
-
   }
 
-
-  /* ====================================
-     TABLET
-  ==================================== */
-
+  // TABLET
   if (width <= 1024) {
-
     return {
-
-      x: Math.max(
-        16,
-        width - 145
-      ),
-
-      y: Math.max(
-        120,
-        height - 175
-      ),
-
+      x: Math.max(16, width - 145),
+      y: Math.max(120, height - 175),
     };
-
   }
 
-
-  /* ====================================
-     DESKTOP
-  ==================================== */
-
+  // DESKTOP
   return {
-
-    x: Math.max(
-      24,
-      width - 175
-    ),
-
-    y: Math.max(
-      130,
-      height - 190
-    ),
-
+    x: Math.max(24, width - 175),
+    y: Math.max(130, height - 190),
   };
-
 }
-
 
 /* ======================================
    SAFE POSITION BY FEATURE
+
+   Keep Clippy away from the window being
+   explained as much as the viewport allows.
 ====================================== */
 
 function getSafePosition({
@@ -263,388 +187,151 @@ function getSafePosition({
   isMobile,
   isTablet,
 }) {
-
-  const width =
-    window.innerWidth;
-
-  const height =
-    window.innerHeight;
-
-  const TASKBAR_HEIGHT = 28;
-
-
-  /* ====================================
-     SMARTPHONE
-
-     Window mobile umumnya tumbuh
-     dari bawah, jadi Clippy pergi
-     ke area atas.
-  ==================================== */
-
-  if (isMobile) {
-
-    switch (feature) {
-
-
-      /* ================================
-         AI CHAT
-      ================================ */
-
-      case 'aiAssistant':
-
-        return {
-
-          x: 12,
-
-          y: 100,
-
-        };
-
-
-      /* ================================
-         INBOX
-      ================================ */
-
-      case 'contact':
-
-        return {
-
-          x: 12,
-
-          y: 100,
-
-        };
-
-
-      /* ================================
-         PROJECTS
-      ================================ */
-
-      case 'projects':
-
-        return {
-
-          x: Math.max(
-            12,
-            width - 115
-          ),
-
-          y: 100,
-
-        };
-
-
-      /* ================================
-         ABOUT
-      ================================ */
-
-      case 'about':
-
-        return {
-
-          x: Math.max(
-            12,
-            width - 115
-          ),
-
-          y: 100,
-
-        };
-
-
-      /* ================================
-         INSTALLER
-      ================================ */
-
-      case 'installer':
-
-        return {
-
-          x: Math.max(
-            12,
-            width - 115
-          ),
-
-          y: Math.max(
-            110,
-            height - 145
-          ),
-
-        };
-
-
-      default:
-
-        return getClippyPosition();
-
-    }
-
-  }
-
-
-  /* ====================================
-     TABLET
-  ==================================== */
-
-  if (isTablet) {
-
-    switch (feature) {
-
-
-      /* ================================
-         AI CHAT
-      ================================ */
-
-      case 'aiAssistant':
-
-        return {
-
-          x: 24,
-
-          y: Math.max(
-            130,
-            height - 180
-          ),
-
-        };
-
-
-      /* ================================
-         INBOX
-      ================================ */
-
-      case 'contact':
-
-        return {
-
-          x: 24,
-
-          y: Math.max(
-            130,
-            height - 180
-          ),
-
-        };
-
-
-      /* ================================
-         PROJECTS + ABOUT
-      ================================ */
-
-      case 'projects':
-      case 'about':
-
-        return {
-
-          x: Math.max(
-            20,
-            width - 150
-          ),
-
-          y: Math.max(
-            130,
-            height - 180
-          ),
-
-        };
-
-
-      /* ================================
-         INSTALLER
-      ================================ */
-
-      case 'installer':
-
-        return {
-
-          x: Math.max(
-            20,
-            width - 150
-          ),
-
-          y: Math.max(
-            130,
-            height - 180
-          ),
-
-        };
-
-
-      default:
-
-        return getClippyPosition();
-
-    }
-
-  }
-
-
-  /* ====================================
-     DESKTOP
-  ==================================== */
-
-  switch (feature) {
-
-
-    /* ==================================
-       AI CHAT
-
-       AI window di kanan,
-       jadi Clippy pindah kiri.
-    ================================== */
-
-    case 'aiAssistant':
-
-      return {
-
-        x: 40,
-
-        y: Math.max(
-          150,
-          height - 200
-        ),
-
-      };
-
-
-    /* ==================================
-       INBOX
-
-       Contact centered,
-       Clippy pindah kiri.
-    ================================== */
-
-    case 'contact':
-
-      return {
-
-        x: 40,
-
-        y: Math.max(
-          150,
-          height - 200
-        ),
-
-      };
-
-
-    /* ==================================
-       PROJECTS
-
-       Project centered,
-       Clippy pindah kanan.
-    ================================== */
-
-    case 'projects':
-
-      return {
-
-        x: Math.max(
-          24,
-          width - 180
-        ),
-
-        y: Math.max(
-          150,
-          height - 200
-        ),
-
-      };
-
-
-    /* ==================================
-       ABOUT
-    ================================== */
-
-    case 'about':
-
-      return {
-
-        x: Math.max(
-          24,
-          width - 180
-        ),
-
-        y: Math.max(
-          150,
-          height - 200
-        ),
-
-      };
-
-
-    /* ==================================
-       INSTALLER
-
-       Installer fullscreen,
-       jadi hanya diposisikan ke
-       area yang relatif aman.
-    ================================== */
-
-    case 'installer':
-
-      return {
-
-        x: Math.max(
-          24,
-          width - 180
-        ),
-
-        y: Math.max(
-          130,
-
-          height -
-            TASKBAR_HEIGHT -
-            160
-        ),
-
-      };
-
-
-    default:
-
-      return getClippyPosition();
-
-  }
-
-}
-
-
-/* ======================================
-   CLIPPY TOUR POSITION
-====================================== */
-
-function getFirstTourPosition() {
   const width = window.innerWidth;
   const height = window.innerHeight;
-
   const TASKBAR_HEIGHT = 28;
 
-  if (width <= 600) {
+  /* --------------------------------------
+     SMARTPHONE
+     Only used for the short welcome.
+  -------------------------------------- */
+
+  if (isMobile) {
     return {
-      x: Math.max(8, width - 110),
-      y: Math.max(80, height - TASKBAR_HEIGHT - 120),
+      x: Math.max(8, width - 112),
+      y: Math.max(
+        80,
+        height - TASKBAR_HEIGHT - 125
+      ),
     };
   }
 
-  if (width <= 1024) {
-    return {
-      x: Math.max(16, width - 130),
-      y: Math.max(100, height - TASKBAR_HEIGHT - 140),
-    };
+  /* --------------------------------------
+     TABLET
+  -------------------------------------- */
+
+  if (isTablet) {
+    switch (feature) {
+      case 'aiAssistant':
+        // AI Chat is on the right, so Clippy stays left.
+        return {
+          x: 20,
+          y: Math.max(
+            110,
+            height - TASKBAR_HEIGHT - 155
+          ),
+        };
+
+      case 'contact':
+        return {
+          x: 20,
+          y: Math.max(
+            110,
+            height - TASKBAR_HEIGHT - 155
+          ),
+        };
+
+      case 'projects':
+      case 'about':
+        return {
+          x: Math.max(20, width - 145),
+          y: Math.max(
+            110,
+            height - TASKBAR_HEIGHT - 155
+          ),
+        };
+
+      case 'paintHero':
+        // Paint is large/centered on tablet.
+        // Bottom-left tends to leave the main artwork readable.
+        return {
+          x: 16,
+          y: Math.max(
+            110,
+            height - TASKBAR_HEIGHT - 145
+          ),
+        };
+
+      default:
+        return getClippyPosition();
+    }
   }
 
-  return {
-    x: Math.max(24, width - 120),
-    y: Math.max(100, height - TASKBAR_HEIGHT - 150),
-  };
+  /* --------------------------------------
+     DESKTOP
+  -------------------------------------- */
+
+  switch (feature) {
+    case 'aiAssistant':
+      // AI window lives on the right side.
+      return {
+        x: 40,
+        y: Math.max(
+          150,
+          height - TASKBAR_HEIGHT - 170
+        ),
+      };
+
+    case 'contact':
+      return {
+        x: 40,
+        y: Math.max(
+          150,
+          height - TASKBAR_HEIGHT - 170
+        ),
+      };
+
+    case 'projects':
+    case 'about':
+      return {
+        x: Math.max(24, width - 180),
+        y: Math.max(
+          150,
+          height - TASKBAR_HEIGHT - 170
+        ),
+      };
+
+    case 'paintHero':
+      // Paint is centered. Keep Clippy on the left edge.
+      return {
+        x: 28,
+        y: Math.max(
+          145,
+          height - TASKBAR_HEIGHT - 170
+        ),
+      };
+
+    case 'installer':
+      return {
+        x: Math.max(24, width - 180),
+        y: Math.max(
+          130,
+          height - TASKBAR_HEIGHT - 160
+        ),
+      };
+
+    default:
+      return getClippyPosition();
+  }
 }
 
 /* ======================================
-   CLIPPY TOUR — DESKTOP ICON POSITION
+   TOUR FEATURE POSITION
 
-   Mengikuti layout getDesktopIconPosition()
-   yang digunakan di App.
+   IMPORTANT:
+   This mirrors getDesktopIconPosition()
+   from App.jsx.
+
+   Actual App.jsx icon indexes:
+   0 About
+   1 Installer
+   2 Inbox
+   3 My Projects
+   4 Games
+   5 Recycle Bin
+   6 AI Chat
+   7 Media Player
+   8 MS Paint
 ====================================== */
 
 function getTourFeaturePosition(
@@ -658,21 +345,22 @@ function getTourFeaturePosition(
   const featureIndex = {
     about: 0,
     installer: 1,
-    aiAssistant: 2,
+    contact: 2,
     projects: 3,
-    contact: 4,
+    aiAssistant: 6,
+    paintHero: 8,
   };
 
   const index = featureIndex[feature];
 
   if (index === undefined) {
-    return getFirstTourPosition();
+    return getClippyPosition();
   }
 
-  /* ====================================
+  /* --------------------------------------
      SMARTPHONE + TABLET
-     2-column desktop icon layout
-  ==================================== */
+     App.jsx uses a 2-column icon grid.
+  -------------------------------------- */
 
   if (isMobile || isTablet) {
     const startX = 16;
@@ -694,50 +382,114 @@ function getTourFeaturePosition(
 
     return {
       x: iconX + iconWidth + 10,
-      y: iconY + 10,
+      y: iconY + 8,
     };
   }
 
-  /* ====================================
+  /* --------------------------------------
      DESKTOP
-     1-column desktop icon layout
-  ==================================== */
+     App.jsx uses max 6 rows per column.
+  -------------------------------------- */
 
-  const iconX = 24;
-  const iconY = 24 + index * 96;
+  const startX = 24;
+  const startY = 24;
+  const gapX = 12;
+  const gapY = 12;
+  const maxRows = 6;
+
+  const column = Math.floor(index / maxRows);
+  const row = index % maxRows;
+
+  const iconX =
+    startX +
+    column * (iconWidth + gapX);
+
+  const iconY =
+    startY +
+    row * (iconHeight + gapY);
 
   return {
-    x: iconX + iconWidth + 20,
+    x: iconX + iconWidth + 18,
     y: iconY + 5,
   };
 }
 
-
 /* ======================================
-   CLIPPY ASSISTANT
+   STORAGE / VISIT HELPERS
 ====================================== */
 
-const GUIDE_STORAGE_KEY = 'perdana-clippy-guide-seen';
+const GUIDE_STORAGE_KEY =
+  'perdana-clippy-guide-seen';
 
-// Desktop Clippy muncul secara berkala, bicara, lalu menghilang lagi.
-// Ritme ini sengaja dibuat seperti Clippy lama: tidak selalu ada di layar.
-const RANDOM_MIN_DELAY = 10000;
-const RANDOM_MAX_EXTRA_DELAY = 10000;
-const RANDOM_VISIBLE_DURATION = 8000;
-const CONTEXTUAL_VISIBLE_DURATION = 8000;
+const GUIDE_STARTED_KEY =
+  'perdana-clippy-guide-started';
 
-// Clippy.JS queues actions. Keep movement short enough that
-// the balloon appears after Clippy has reached its target.
-const MOVE_DURATION = 650;
-const ANIMATION_DURATION = 900;
+const GUIDE_STARTED_VISIT_KEY =
+  'perdana-clippy-guide-started-visit';
 
-function getStoredGuideState() {
+/*
+ * One ID per actual page load/module lifetime.
+ * This lets us distinguish:
+ *
+ * - same visit / React re-render
+ * - a genuinely later visit after an unfinished tour
+ */
+const CURRENT_VISIT_ID =
+  typeof window !== 'undefined'
+    ? `${Date.now()}-${Math.random()
+        .toString(36)
+        .slice(2)}`
+    : 'server';
+
+function getStoredBoolean(key) {
   if (typeof window === 'undefined') {
     return false;
   }
 
-  return window.localStorage.getItem(GUIDE_STORAGE_KEY) === 'true';
+  return (
+    window.localStorage.getItem(key) === 'true'
+  );
 }
+
+function getStoredGuideState() {
+  return getStoredBoolean(GUIDE_STORAGE_KEY);
+}
+
+function getStoredGuideStarted() {
+  return getStoredBoolean(GUIDE_STARTED_KEY);
+}
+
+function getStoredStartedVisitId() {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  return window.localStorage.getItem(
+    GUIDE_STARTED_VISIT_KEY
+  );
+}
+
+/* ======================================
+   TIMING
+====================================== */
+
+/*
+ * Normal idle Clippy:
+ * wait 18–30s -> appear -> speak -> stay 8s -> hide.
+ */
+const RANDOM_MIN_DELAY = 18000;
+const RANDOM_MAX_EXTRA_DELAY = 12000;
+const RANDOM_VISIBLE_DURATION = 8000;
+
+const CONTEXTUAL_VISIBLE_DURATION = 8000;
+const MOBILE_GREETING_VISIBLE_DURATION = 7000;
+
+const MOVE_DURATION = 650;
+const ANIMATION_DURATION = 900;
+
+/* ======================================
+   CLIPPY ASSISTANT
+====================================== */
 
 export default function ClippyAssistant({
   pcScreen,
@@ -751,8 +503,38 @@ export default function ClippyAssistant({
 }) {
   const { clippy } = useClippy();
 
-  const [guideCompleted, setGuideCompleted] =
-    React.useState(getStoredGuideState);
+  const initialGuideCompletedRef =
+    React.useRef(getStoredGuideState());
+
+  const initialGuideStartedRef =
+    React.useRef(getStoredGuideStarted());
+
+  const initialStartedVisitRef =
+    React.useRef(getStoredStartedVisitId());
+
+  /*
+   * If a previous page visit started the tour but
+   * never completed it, we do NOT replay the whole
+   * onboarding. We greet briefly and get out of the way.
+   */
+  const interruptedPreviousVisitRef =
+    React.useRef(
+      !initialGuideCompletedRef.current &&
+        initialGuideStartedRef.current &&
+        Boolean(initialStartedVisitRef.current) &&
+        initialStartedVisitRef.current !==
+          CURRENT_VISIT_ID
+    );
+
+  const [
+    guideCompleted,
+    setGuideCompleted,
+  ] = React.useState(
+    initialGuideCompletedRef.current
+  );
+
+  const [tourPhase, setTourPhase] =
+    React.useState('idle');
 
   const previousState = React.useRef({
     about: false,
@@ -761,15 +543,29 @@ export default function ClippyAssistant({
     contact: false,
   });
 
+  const tourPreviousState = React.useRef({
+    about: Boolean(windows?.about),
+    projects: Boolean(windows?.projects),
+    aiAssistant: Boolean(
+      windows?.aiAssistant
+    ),
+    contact: Boolean(windows?.contact),
+  });
+
   const lastRandomIndex = React.useRef(-1);
+
   const tourStartedRef = React.useRef(false);
-  const tourContinuationStartedRef = React.useRef(false);
+  const mobileGreetingStartedRef =
+    React.useRef(false);
+
   const tourTimersRef = React.useRef([]);
   const chatterTimerRef = React.useRef(null);
-  const chatterHideTimerRef = React.useRef(null);
-  const contextualHideTimerRef = React.useRef(null);
-
-  const [tourPhase, setTourPhase] = React.useState('idle');
+  const chatterHideTimerRef =
+    React.useRef(null);
+  const contextualHideTimerRef =
+    React.useRef(null);
+  const mobileHideTimerRef =
+    React.useRef(null);
 
   const installerOpen = Boolean(
     welcomeInstallerVisible ||
@@ -796,49 +592,135 @@ export default function ClippyAssistant({
      TIMER HELPERS
   ==================================== */
 
-  const clearTourTimers = React.useCallback(() => {
-    tourTimersRef.current.forEach((timer) => {
-      window.clearTimeout(timer);
-    });
+  const clearTourTimers =
+    React.useCallback(() => {
+      tourTimersRef.current.forEach((timer) => {
+        window.clearTimeout(timer);
+      });
 
-    tourTimersRef.current = [];
-  }, []);
+      tourTimersRef.current = [];
+    }, []);
 
-  const clearChatterTimers = React.useCallback(() => {
-    if (chatterTimerRef.current) {
-      window.clearTimeout(chatterTimerRef.current);
-      chatterTimerRef.current = null;
-    }
+  const clearChatterTimers =
+    React.useCallback(() => {
+      if (chatterTimerRef.current) {
+        window.clearTimeout(
+          chatterTimerRef.current
+        );
+        chatterTimerRef.current = null;
+      }
 
-    if (chatterHideTimerRef.current) {
-      window.clearTimeout(chatterHideTimerRef.current);
-      chatterHideTimerRef.current = null;
-    }
-  }, []);
+      if (chatterHideTimerRef.current) {
+        window.clearTimeout(
+          chatterHideTimerRef.current
+        );
+        chatterHideTimerRef.current =
+          null;
+      }
+    }, []);
 
-  const clearContextualTimer = React.useCallback(() => {
-    if (contextualHideTimerRef.current) {
-      window.clearTimeout(contextualHideTimerRef.current);
-      contextualHideTimerRef.current = null;
-    }
-  }, []);
+  const clearContextualTimer =
+    React.useCallback(() => {
+      if (contextualHideTimerRef.current) {
+        window.clearTimeout(
+          contextualHideTimerRef.current
+        );
+
+        contextualHideTimerRef.current =
+          null;
+      }
+    }, []);
+
+  const clearMobileTimer =
+    React.useCallback(() => {
+      if (mobileHideTimerRef.current) {
+        window.clearTimeout(
+          mobileHideTimerRef.current
+        );
+
+        mobileHideTimerRef.current =
+          null;
+      }
+    }, []);
+
+  const addTourTimer = React.useCallback(
+    (callback, delay) => {
+      const timer = window.setTimeout(
+        callback,
+        delay
+      );
+
+      tourTimersRef.current.push(timer);
+
+      return timer;
+    },
+    []
+  );
+
+  /* ====================================
+     GUIDE STATE HELPERS
+  ==================================== */
+
+  const markGuideStarted =
+    React.useCallback(() => {
+      if (typeof window === 'undefined') {
+        return;
+      }
+
+      window.localStorage.setItem(
+        GUIDE_STARTED_KEY,
+        'true'
+      );
+
+      window.localStorage.setItem(
+        GUIDE_STARTED_VISIT_KEY,
+        CURRENT_VISIT_ID
+      );
+    }, []);
+
+  const markGuideComplete =
+    React.useCallback(() => {
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(
+          GUIDE_STORAGE_KEY,
+          'true'
+        );
+
+        window.localStorage.removeItem(
+          GUIDE_STARTED_KEY
+        );
+
+        window.localStorage.removeItem(
+          GUIDE_STARTED_VISIT_KEY
+        );
+      }
+
+      setGuideCompleted(true);
+      setTourPhase('complete');
+    }, []);
 
   /* ====================================
      SPEAK HELPERS
   ==================================== */
 
   const speak = React.useCallback(
-    (message, animation = 'Acknowledge') => {
+    (
+      message,
+      animation = 'Acknowledge'
+    ) => {
       if (!clippy) {
         return;
       }
 
-      // IMPORTANT: do not call clippy.stop() here.
-      // moveTo(), play(), and speak() are queued by Clippy.JS.
-      // Calling stop() after moveTo() clears the movement queue and
-      // can leave the balloon detached from the visible agent.
+      /*
+       * Do not call stop() inside this helper.
+       * Clippy.JS queues moveTo(), play(), speak().
+       */
       if (animation && clippy.play) {
-        clippy.play(animation, ANIMATION_DURATION);
+        clippy.play(
+          animation,
+          ANIMATION_DURATION
+        );
       }
 
       clippy.speak(message);
@@ -846,34 +728,41 @@ export default function ClippyAssistant({
     [clippy]
   );
 
-  const speakRandomMessage = React.useCallback(() => {
-    if (!clippy) {
-      return;
-    }
+  const speakRandomMessage =
+    React.useCallback(() => {
+      if (!clippy) {
+        return;
+      }
 
-    let nextIndex = 0;
+      let nextIndex = 0;
 
-    do {
-      nextIndex = Math.floor(
-        Math.random() * RANDOM_MESSAGES.length
+      do {
+        nextIndex = Math.floor(
+          Math.random() *
+            RANDOM_MESSAGES.length
+        );
+      } while (
+        RANDOM_MESSAGES.length > 1 &&
+        nextIndex === lastRandomIndex.current
       );
-    } while (
-      RANDOM_MESSAGES.length > 1 &&
-      nextIndex === lastRandomIndex.current
-    );
 
-    lastRandomIndex.current = nextIndex;
+      lastRandomIndex.current = nextIndex;
 
-    const item = RANDOM_MESSAGES[nextIndex];
-    speak(item.text, item.animation);
-  }, [clippy, speak]);
+      const item =
+        RANDOM_MESSAGES[nextIndex];
+
+      speak(item.text, item.animation);
+    }, [clippy, speak]);
 
   /* ====================================
-     MOVE HELPER
+     MOVE HELPERS
   ==================================== */
 
   const moveClippy = React.useCallback(
-    (feature = null, duration = MOVE_DURATION) => {
+    (
+      feature = null,
+      duration = MOVE_DURATION
+    ) => {
       if (!clippy) {
         return;
       }
@@ -886,395 +775,265 @@ export default function ClippyAssistant({
           })
         : getClippyPosition();
 
-      clippy.moveTo(position.x, position.y, duration);
+      clippy.moveTo(
+        position.x,
+        position.y,
+        duration
+      );
     },
     [clippy, isMobile, isTablet]
   );
 
-   /* ====================================
-     FIRST MOVE HELPER
-  ==================================== */
+  const moveClippyToTourFeature =
+    React.useCallback(
+      (feature) => {
+        if (!clippy) {
+          return;
+        }
 
-  const moveClippyToTourFeature = React.useCallback(
-  (feature) => {
-    if (!clippy) {
-      return;
-    }
+        const position =
+          getTourFeaturePosition(
+            feature,
+            isMobile,
+            isTablet
+          );
 
-    const position = getTourFeaturePosition(
-      feature,
-      isMobile,
-      isTablet
+        clippy.moveTo(
+          position.x,
+          position.y,
+          MOVE_DURATION
+        );
+      },
+      [clippy, isMobile, isTablet]
     );
-
-    clippy.moveTo(
-      position.x,
-      position.y,
-      MOVE_DURATION
-    );
-  },
-  [clippy, isMobile, isTablet]
-);
 
   /* ====================================
      COMPACT SPEECH BALLOON
   ==================================== */
-React.useEffect(() => {
-  const styleId = 'perdana-clippy-style';
 
-  if (document.getElementById(styleId)) {
-    return undefined;
-  }
+  React.useEffect(() => {
+    const styleId =
+      'perdana-clippy-style';
 
-  const style = document.createElement('style');
-  style.id = styleId;
-
-  style.textContent = `
-    .clippy {
-      pointer-events: auto !important;
-      z-index: 10 !important;
+    if (
+      document.getElementById(styleId)
+    ) {
+      return undefined;
     }
 
-    .clippy-balloon {
-      font-family: "MS Sans Serif", Arial, sans-serif !important;
-      z-index: 11 !important;
-    }
+    const style =
+      document.createElement('style');
 
-    .clippy-balloon-content,
-    .clippy-balloon-content *,
-    .clippy-content,
-    .clippy-content *,
-    .clippy-balloon,
-    .clippy-balloon * {
-      font-family: "MS Sans Serif", Arial, sans-serif !important;
+    style.id = styleId;
 
-      font-size: 11px !important;
+    style.textContent = `
+.clippy {
+  pointer-events: auto !important;
+  z-index: 10 !important;
+}
 
-      /* INI JARAK ANTAR BARIS */
-      line-height: 14px !important;
-    }
+.clippy-balloon {
+  z-index: 11 !important;
+}
 
-    .clippy-balloon p,
-    .clippy-content p,
-    .clippy-balloon-content p {
-      margin: 0 !important;
-    }
+.clippy-content {
+  font-family: "MS Sans Serif", "Microsoft Sans Serif", Arial, sans-serif !important;
+  font-size: 11px !important;
+  line-height: 13px !important;
+}
 
-    @media (max-width: 600px) {
-      .clippy {
-        touch-action: none !important;
-        cursor: grab;
+.clippy-balloon div[style*="max-width: 200px"] {
+  height: auto !important;
+  font-family: "Microsoft Sans", "MS Sans Serif", sans-serif !important;
+  font-size: 10pt !important;
+  line-height: 13px !important;
+  letter-spacing: 0 !important;
+}
+ 
+      @media (max-width: 600px) {
+        .clippy {
+          touch-action: manipulation !important;
+        }
+
+        .clippy-balloon-content,
+        .clippy-balloon-content *,
+        .clippy-content,
+        .clippy-content *,
+        .clippy-balloon,
+
       }
+    `;
 
-      .clippy:active {
-        cursor: grabbing;
-      }
+    document.head.appendChild(style);
 
-      .clippy-balloon-content,
-      .clippy-balloon-content *,
-      .clippy-content,
-      .clippy-content *,
-      .clippy-balloon,
-      .clippy-balloon * {
-        line-height: 14px !important;
-      }
-    }
-  `;
-
-  document.head.appendChild(style);
-
-  return () => {
-    document.getElementById(styleId)?.remove();
-  };
-}, []);
-
+    return () => {
+      document
+        .getElementById(styleId)
+        ?.remove();
+    };
+  }, []);
 
   /* ====================================
      BASE VISIBILITY GUARD
 
-     - Boot / installer / Welcome: hidden.
-     - First tour controls its own visibility.
-     - After the tour, Desktop Clippy remains visible.
+     Clippy is always hidden during:
+     - Boot
+     - not installed
+     - Installer
+     - Welcome
+
+     After Welcome closes:
+     - desktop/tablet = first-tour logic
+     - mobile = one short greeting only
   ==================================== */
 
- React.useEffect(() => {
-  if (!clippy) {
-    return;
-  }
+  React.useEffect(() => {
+    if (!clippy) {
+      return;
+    }
 
-  const blocked =
-    pcScreen === 'boot' ||
-    !pcInstalled ||
-    installerOpen ||
-    Boolean(windows?.welcome);
+    const blocked =
+      pcScreen === 'boot' ||
+      !pcInstalled ||
+      installerOpen ||
+      Boolean(windows?.welcome);
 
-  if (blocked) {
+    if (!blocked) {
+      return;
+    }
+
     clearTourTimers();
     clearChatterTimers();
     clearContextualTimer();
-
-    if (!guideCompleted) {
-      tourStartedRef.current = false;
-      tourContinuationStartedRef.current = false;
-      setTourPhase('idle');
-    }
+    clearMobileTimer();
 
     clippy.stop?.();
     clippy.hide();
-  }
-
-}, [
-  clippy,
-  pcScreen,
-  pcInstalled,
-  installerOpen,
-  windows?.welcome,
-  guideCompleted,
-  clearTourTimers,
-  clearChatterTimers,
-  clearContextualTimer,
-]);
-
-  /* ====================================
-     MOBILE DRAG
-  ==================================== */
-
-  React.useEffect(() => {
-    if (!clippy) {
-      return undefined;
-    }
-
-    let cleanupListeners = null;
-    let retryTimer = null;
-
-    const attachDragEvents = () => {
-      const clippyElement =
-        document.querySelector('.clippy');
-
-      if (!clippyElement) {
-        retryTimer = window.setTimeout(
-          attachDragEvents,
-          100
-        );
-        return;
-      }
-
-      clippyElement.style.pointerEvents = 'auto';
-      clippyElement.style.touchAction = 'none';
-
-      let isDragging = false;
-      let offsetX = 0;
-      let offsetY = 0;
-
-      const handlePointerDown = (event) => {
-        if (window.innerWidth > 600) {
-          return;
-        }
-
-        isDragging = true;
-
-        const rect =
-          clippyElement.getBoundingClientRect();
-
-        offsetX = event.clientX - rect.left;
-        offsetY = event.clientY - rect.top;
-
-        clippyElement.setPointerCapture?.(
-          event.pointerId
-        );
-
-        event.preventDefault();
-      };
-
-      const handlePointerMove = (event) => {
-        if (!isDragging) {
-          return;
-        }
-
-        const maxX = Math.max(
-          0,
-          window.innerWidth -
-            clippyElement.offsetWidth
-        );
-
-        const maxY = Math.max(
-          0,
-          window.innerHeight -
-            28 -
-            clippyElement.offsetHeight
-        );
-
-        const x = Math.max(
-          0,
-          Math.min(
-            maxX,
-            event.clientX - offsetX
-          )
-        );
-
-        const y = Math.max(
-          0,
-          Math.min(
-            maxY,
-            event.clientY - offsetY
-          )
-        );
-
-        clippy.moveTo(x, y);
-      };
-
-      const handlePointerUp = (event) => {
-        if (!isDragging) {
-          return;
-        }
-
-        isDragging = false;
-
-        try {
-          clippyElement.releasePointerCapture?.(
-            event.pointerId
-          );
-        } catch {
-          // Pointer may already be released.
-        }
-      };
-
-      const handlePointerCancel = () => {
-        isDragging = false;
-      };
-
-      clippyElement.addEventListener(
-        'pointerdown',
-        handlePointerDown
-      );
-
-      window.addEventListener(
-        'pointermove',
-        handlePointerMove
-      );
-
-      window.addEventListener(
-        'pointerup',
-        handlePointerUp
-      );
-
-      window.addEventListener(
-        'pointercancel',
-        handlePointerCancel
-      );
-
-      cleanupListeners = () => {
-        clippyElement.removeEventListener(
-          'pointerdown',
-          handlePointerDown
-        );
-
-        window.removeEventListener(
-          'pointermove',
-          handlePointerMove
-        );
-
-        window.removeEventListener(
-          'pointerup',
-          handlePointerUp
-        );
-
-        window.removeEventListener(
-          'pointercancel',
-          handlePointerCancel
-        );
-      };
-    };
-
-    attachDragEvents();
-
-    return () => {
-      if (retryTimer) {
-        window.clearTimeout(retryTimer);
-      }
-
-      cleanupListeners?.();
-    };
-  }, [clippy]);
-
-  /* ====================================
-     CLICK CLIPPY TO TALK
-
-     Desktop idle Clippy can be clicked while visible.
-     Clicking gives one random line and restarts the hide countdown.
-     We avoid this during the First Tour/contextual response so the
-     scripted onboarding is not interrupted.
-  ==================================== */
-
-  React.useEffect(() => {
-    if (!clippy) {
-      return undefined;
-    }
-
-    let cleanup = null;
-    let retryTimer = null;
-
-    const attachClick = () => {
-      const clippyElement = document.querySelector('.clippy');
-
-      if (!clippyElement) {
-        retryTimer = window.setTimeout(attachClick, 100);
-        return;
-      }
-
-      const handleClick = (event) => {
-        // Desktop interaction only. Mobile Clippy is reserved for
-        // onboarding and contextual responses because screen space is tight.
-        if (isMobile || !guideCompleted || !desktopReady || contextualWindowOpen) {
-          return;
-        }
-
-        event.stopPropagation();
-
-        // Do not reset the appearance/hide lifecycle here.
-        // The click only adds another line while Clippy is already visible.
-        clippy.stop?.();
-        clippy.show(true);
-        speakRandomMessage();
-      };
-
-      clippyElement.addEventListener('click', handleClick);
-      cleanup = () => clippyElement.removeEventListener('click', handleClick);
-    };
-
-    attachClick();
-
-    return () => {
-      if (retryTimer) {
-        window.clearTimeout(retryTimer);
-      }
-      cleanup?.();
-    };
   }, [
     clippy,
-    isMobile,
-    guideCompleted,
-    desktopReady,
-    contextualWindowOpen,
-    speakRandomMessage,
+    pcScreen,
+    pcInstalled,
+    installerOpen,
+    windows?.welcome,
+    clearTourTimers,
+    clearChatterTimers,
+    clearContextualTimer,
+    clearMobileTimer,
   ]);
 
   /* ====================================
-     FIRST VISIT FEATURE TOUR
+     MOBILE — WELCOME ONLY
 
-     Flow:
-     first install -> Welcome -> close Welcome
-     -> Clippy introduction
-     -> ask user to open My Projects
-     -> wait for real interaction
-     -> continue orientation
-     -> mark guide complete
-     -> hand off to persistent Desktop Clippy.
+     First install:
+       Welcome closes
+       -> one short welcome
+       -> mark guide complete
+       -> hide
+
+     Returning visit:
+       Desktop opens
+       -> one short "welcome back"
+       -> hide
+
+     No mobile tour.
+     No mobile contextual guide.
+     No mobile idle chatter.
   ==================================== */
 
   React.useEffect(() => {
     if (
+      !clippy ||
       !desktopReady ||
+      !isMobile ||
+      mobileGreetingStartedRef.current
+    ) {
+      return undefined;
+    }
+
+    mobileGreetingStartedRef.current = true;
+
+    clearTourTimers();
+    clearChatterTimers();
+    clearContextualTimer();
+    clearMobileTimer();
+
+    const firstMobileGreeting =
+      !guideCompleted;
+
+    clippy.stop?.();
+    clippy.show(true);
+
+    const position = getSafePosition({
+      feature: null,
+      isMobile: true,
+      isTablet: false,
+    });
+
+    clippy.moveTo(
+      position.x,
+      position.y,
+      0
+    );
+
+    speak(
+      firstMobileGreeting
+        ? COPY.mobileWelcome
+        : COPY.mobileWelcomeBack,
+      'Wave'
+    );
+
+    if (firstMobileGreeting) {
+      markGuideStarted();
+      markGuideComplete();
+    }
+
+    mobileHideTimerRef.current =
+      window.setTimeout(() => {
+        clippy.stop?.();
+        clippy.hide();
+        mobileHideTimerRef.current =
+          null;
+      }, MOBILE_GREETING_VISIBLE_DURATION);
+
+    return () => {
+      clearMobileTimer();
+    };
+  }, [
+    clippy,
+    desktopReady,
+    isMobile,
+    guideCompleted,
+    speak,
+    markGuideStarted,
+    markGuideComplete,
+    clearTourTimers,
+    clearChatterTimers,
+    clearContextualTimer,
+    clearMobileTimer,
+  ]);
+
+  /* ====================================
+     DESKTOP / TABLET FIRST VISIT
+
+     Preferred flow:
+       Welcome closes
+       -> Paint is already open
+       -> Clippy frames Paint as Perdana's art
+       -> ask visitor to close Paint when done
+       -> wait for real close interaction
+       -> AI Chat next
+
+     If a previous visit abandoned the tour:
+       brief welcome-back
+       -> complete guide
+       -> do not replay onboarding
+  ==================================== */
+
+  React.useEffect(() => {
+    if (
+      !clippy ||
+      !desktopReady ||
+      isMobile ||
       guideCompleted ||
       tourStartedRef.current
     ) {
@@ -1282,173 +1041,524 @@ React.useEffect(() => {
     }
 
     tourStartedRef.current = true;
+
     clearTourTimers();
     clearChatterTimers();
+    clearContextualTimer();
+
+    /*
+     * Previous visit started but never finished:
+     * do not restart the tutorial from Paint.
+     */
+    if (
+      interruptedPreviousVisitRef.current
+    ) {
+      clippy.stop?.();
+      clippy.show(true);
+      moveClippy();
+
+      speak(COPY.interrupted, 'Wave');
+
+      /*
+       * Prevent contextual effects from firing
+       * immediately for an already-open window
+       * when guideCompleted flips to true.
+       */
+      previousState.current = {
+        about: Boolean(windows?.about),
+        projects: Boolean(
+          windows?.projects
+        ),
+        aiAssistant: Boolean(
+          windows?.aiAssistant
+        ),
+        contact: Boolean(
+          windows?.contact
+        ),
+      };
+
+      markGuideComplete();
+
+      addTourTimer(() => {
+        clippy.stop?.();
+        clippy.hide();
+      }, 7000);
+
+      return;
+    }
+
+    markGuideStarted();
 
     clippy.stop?.();
     clippy.show(true);
 
-    const firstPosition = getFirstTourPosition();
+    /*
+     * The expected App.jsx behavior is:
+     * desktop/tablet auto-open Paint after Welcome.
+     *
+     * If Paint is already closed for any reason,
+     * skip straight to the AI step instead of
+     * blocking the visitor.
+     */
+    if (!windows?.paintHero) {
+      setTourPhase('after-paint');
+      return;
+    }
 
-    clippy.moveTo(
-      firstPosition.x,
-      firstPosition.y,
-      0
-    );
+    setTourPhase('waiting-paint-close');
 
-    const addTourTimer = (callback, delay) => {
-      const timer = window.setTimeout(
-        callback,
-        delay
-      );
-
-      tourTimersRef.current.push(timer);
-    };
-
-    addTourTimer(() => {
-      if (!clippy) return;
-
-      clippy.show(true);
-      speak(COPY.intro, 'Wave');
-    }, 500);
+    moveClippy('paintHero');
 
     addTourTimer(() => {
       if (!clippy) return;
 
       clippy.show(true);
-      speak(COPY.introComputer, 'Wave');
-    }, 4500);
+      moveClippy('paintHero');
+      speak(COPY.paintIntro, 'Wave');
+    }, 850);
 
     addTourTimer(() => {
       if (!clippy) return;
 
       clippy.show(true);
-      moveClippyToTourFeature('projects');
-      speak(COPY.introProjectsPrompt, 'Wave');
-      setTourPhase('waiting-projects');
-    }, 9500);
+      moveClippy('paintHero');
+      speak(COPY.paintClose);
+    }, 7200);
   }, [
     clippy,
     desktopReady,
+    isMobile,
     guideCompleted,
-    moveClippyToTourFeature,
+    windows?.paintHero,
+    windows?.about,
+    windows?.projects,
+    windows?.aiAssistant,
+    windows?.contact,
+    moveClippy,
     speak,
+    markGuideStarted,
+    markGuideComplete,
+    addTourTimer,
     clearTourTimers,
     clearChatterTimers,
+    clearContextualTimer,
   ]);
 
   /* ====================================
-     FIRST TOUR — WAIT FOR MY PROJECTS
-
-     The tour does not continue until the user
-     actually opens My Projects. This gives the
-     onboarding one meaningful interaction without
-     forcing every icon to be clicked.
+     PAINT CLOSED -> AI CHAT
   ==================================== */
 
   React.useEffect(() => {
     if (
       !clippy ||
       guideCompleted ||
-      tourPhase !== 'waiting-projects' ||
-      !windows?.projects ||
-      tourContinuationStartedRef.current
+      isMobile
     ) {
       return;
     }
 
-    tourContinuationStartedRef.current = true;
+    const shouldStartAI =
+      tourPhase === 'after-paint' ||
+      (tourPhase ===
+        'waiting-paint-close' &&
+        !windows?.paintHero);
+
+    if (!shouldStartAI) {
+      return;
+    }
+
     clearTourTimers();
-    clearChatterTimers();
 
     clippy.stop?.();
     clippy.show(true);
-    moveClippyToTourFeature('projects');
-    speak(COPY.introProjects, 'Acknowledge');
+    moveClippy();
 
-    const addTourTimer = (callback, delay) => {
-      const timer = window.setTimeout(
-        callback,
-        delay
-      );
+    speak(COPY.aiLead, 'Acknowledge');
 
-      tourTimersRef.current.push(timer);
-    };
+    setTourPhase('leading-to-ai');
 
     addTourTimer(() => {
       if (!clippy) return;
 
-      clippy.show(true);
-      moveClippyToTourFeature('aiAssistant');
-      speak(COPY.introAI);
-    }, 4500);
-
-    addTourTimer(() => {
-      if (!clippy) return;
-
-      clippy.show(true);
-      moveClippyToTourFeature('about');
-      speak(COPY.introAbout);
-    }, 8500);
-
-    addTourTimer(() => {
-      if (!clippy) return;
-
-      clippy.show(true);
-      moveClippyToTourFeature('contact');
-      speak(COPY.introInbox);
-    }, 12500);
-
-    addTourTimer(() => {
-      if (!clippy) return;
-
-      clippy.show(true);
-      moveClippy();
-      speak(COPY.introEnd, 'Wave');
-    }, 16500);
-
-    addTourTimer(() => {
-      if (!clippy) return;
-
-      window.localStorage.setItem(
-        GUIDE_STORAGE_KEY,
-        'true'
-      );
-
-      setGuideCompleted(true);
-      setTourPhase('complete');
-
-      // First Tour is complete. Desktop behavior takes over.
-      // Clippy disappears until the next random/contextual appearance.
       clippy.stop?.();
-      clippy.hide();
-    }, 21500);
+      clippy.show(true);
+
+      /*
+       * Point at the REAL AI Chat icon position
+       * from App.jsx (index 6).
+       */
+      moveClippyToTourFeature(
+        'aiAssistant'
+      );
+
+      speak(COPY.aiOpenPrompt, 'Wave');
+
+      setTourPhase('waiting-ai-open');
+    }, 3300);
   }, [
     clippy,
     guideCompleted,
+    isMobile,
     tourPhase,
-    windows?.projects,
+    windows?.paintHero,
     moveClippy,
     moveClippyToTourFeature,
     speak,
+    addTourTimer,
+    clearTourTimers,
+  ]);
+
+  /* ====================================
+     AI CHAT OPENED
+
+     AI Chat window is on the RIGHT.
+     Clippy moves to a safe LEFT position.
+  ==================================== */
+
+  React.useEffect(() => {
+    if (
+      !clippy ||
+      guideCompleted ||
+      isMobile ||
+      tourPhase !== 'waiting-ai-open' ||
+      !windows?.aiAssistant
+    ) {
+      return;
+    }
+
+    clearTourTimers();
+
+    clippy.stop?.();
+    clippy.show(true);
+
+    // Window is on the right -> Clippy goes left.
+    moveClippy('aiAssistant');
+
+    speak(COPY.aiFriend, 'Acknowledge');
+
+    setTourPhase('waiting-ai-close');
+
+    addTourTimer(() => {
+      if (!clippy) return;
+
+      clippy.show(true);
+      moveClippy('aiAssistant');
+      speak(COPY.aiQuestion);
+    }, 5600);
+
+    addTourTimer(() => {
+      if (!clippy) return;
+
+      clippy.show(true);
+      moveClippy('aiAssistant');
+      speak(COPY.aiClose);
+    }, 10300);
+  }, [
+    clippy,
+    guideCompleted,
+    isMobile,
+    tourPhase,
+    windows?.aiAssistant,
+    moveClippy,
+    speak,
+    addTourTimer,
+    clearTourTimers,
+  ]);
+
+  /* ====================================
+     AI CHAT CLOSED -> SHORT ORIENTATION
+  ==================================== */
+
+  React.useEffect(() => {
+    if (
+      !clippy ||
+      guideCompleted ||
+      isMobile ||
+      tourPhase !== 'waiting-ai-close' ||
+      windows?.aiAssistant
+    ) {
+      return;
+    }
+
+    clearTourTimers();
+
+    clippy.stop?.();
+    clippy.show(true);
+    moveClippy();
+
+    speak(
+      COPY.tourContinue,
+      'Acknowledge'
+    );
+
+    setTourPhase('orientation');
+  }, [
+    clippy,
+    guideCompleted,
+    isMobile,
+    tourPhase,
+    windows?.aiAssistant,
+    moveClippy,
+    speak,
+    clearTourTimers,
+  ]);
+
+  /* ====================================
+     SHORT ORIENTATION
+
+     No more forced clicks.
+     Clippy simply points out:
+       My Projects -> About -> Inbox -> End
+
+     The visitor can interrupt by opening
+     something else; divergence logic below
+     will gracefully end the scripted tour.
+  ==================================== */
+
+  React.useEffect(() => {
+    if (
+      !clippy ||
+      guideCompleted ||
+      isMobile ||
+      tourPhase !== 'orientation'
+    ) {
+      return;
+    }
+
+    clearTourTimers();
+
+    addTourTimer(() => {
+      if (!clippy) return;
+
+      clippy.stop?.();
+      clippy.show(true);
+
+      moveClippyToTourFeature('projects');
+
+      speak(
+        COPY.projects,
+        'Acknowledge'
+      );
+    }, 2600);
+
+    addTourTimer(() => {
+      if (!clippy) return;
+
+      clippy.stop?.();
+      clippy.show(true);
+
+      moveClippyToTourFeature('about');
+
+      speak(COPY.about);
+    }, 7200);
+
+    addTourTimer(() => {
+      if (!clippy) return;
+
+      clippy.stop?.();
+      clippy.show(true);
+
+      moveClippyToTourFeature('contact');
+
+      speak(COPY.contact);
+    }, 11600);
+
+    addTourTimer(() => {
+      if (!clippy) return;
+
+      clippy.stop?.();
+      clippy.show(true);
+
+      moveClippy();
+
+      speak(COPY.introEnd, 'Wave');
+    }, 15800);
+
+    addTourTimer(() => {
+      if (!clippy) return;
+
+      previousState.current = {
+        about: Boolean(windows?.about),
+        projects: Boolean(
+          windows?.projects
+        ),
+        aiAssistant: Boolean(
+          windows?.aiAssistant
+        ),
+        contact: Boolean(
+          windows?.contact
+        ),
+      };
+
+      markGuideComplete();
+
+      clippy.stop?.();
+      clippy.hide();
+    }, 21600);
+
+    return () => {
+      /*
+       * Intentionally do not clear timers here
+       * just because the effect is re-evaluated.
+       * Other lifecycle actions explicitly call
+       * clearTourTimers() when they need to stop
+       * the tour.
+       */
+    };
+  }, [
+    clippy,
+    guideCompleted,
+    isMobile,
+    tourPhase,
+    windows?.about,
+    windows?.projects,
+    windows?.aiAssistant,
+    windows?.contact,
+    moveClippy,
+    moveClippyToTourFeature,
+    speak,
+    addTourTimer,
+    clearTourTimers,
+    markGuideComplete,
+  ]);
+
+  /* ====================================
+     TOUR DIVERGENCE
+
+     Clippy knows the preferred path,
+     but never traps the visitor inside it.
+
+     If the visitor opens something other
+     than the requested next step, gracefully
+     end the scripted tour and let them explore.
+  ==================================== */
+
+  React.useEffect(() => {
+    const current = {
+      about: Boolean(windows?.about),
+      projects: Boolean(
+        windows?.projects
+      ),
+      aiAssistant: Boolean(
+        windows?.aiAssistant
+      ),
+      contact: Boolean(
+        windows?.contact
+      ),
+    };
+
+    const newlyOpened = {
+      about:
+        current.about &&
+        !tourPreviousState.current.about,
+
+      projects:
+        current.projects &&
+        !tourPreviousState.current.projects,
+
+      aiAssistant:
+        current.aiAssistant &&
+        !tourPreviousState.current
+          .aiAssistant,
+
+      contact:
+        current.contact &&
+        !tourPreviousState.current.contact,
+    };
+
+    const openedFeature = Object.keys(
+      newlyOpened
+    ).find((key) => newlyOpened[key]);
+
+    tourPreviousState.current = current;
+
+    if (
+      !clippy ||
+      guideCompleted ||
+      isMobile ||
+      !openedFeature
+    ) {
+      return;
+    }
+
+    let isExpectedAction = false;
+
+    if (
+      tourPhase === 'waiting-ai-open' &&
+      openedFeature === 'aiAssistant'
+    ) {
+      isExpectedAction = true;
+    }
+
+    if (isExpectedAction) {
+      return;
+    }
+
+    const shouldGracefullyExit =
+      tourPhase ===
+        'waiting-paint-close' ||
+      tourPhase === 'leading-to-ai' ||
+      tourPhase === 'waiting-ai-open' ||
+      tourPhase === 'waiting-ai-close' ||
+      tourPhase === 'orientation';
+
+    if (!shouldGracefullyExit) {
+      return;
+    }
+
+    clearTourTimers();
+    clearChatterTimers();
+    clearContextualTimer();
+
+    clippy.stop?.();
+    clippy.show(true);
+    moveClippy();
+
+    speak(
+      COPY.exploreInstead,
+      'Acknowledge'
+    );
+
+    /*
+     * Treat the current open window as already
+     * acknowledged so contextual guidance does
+     * not immediately repeat itself.
+     */
+    previousState.current = current;
+
+    markGuideComplete();
+
+    addTourTimer(() => {
+      clippy.stop?.();
+      clippy.hide();
+    }, 5200);
+  }, [
+    clippy,
+    guideCompleted,
+    isMobile,
+    tourPhase,
+    windows?.about,
+    windows?.projects,
+    windows?.aiAssistant,
+    windows?.contact,
+    moveClippy,
+    speak,
+    addTourTimer,
+    markGuideComplete,
     clearTourTimers,
     clearChatterTimers,
+    clearContextualTimer,
   ]);
 
   /* ====================================
      CENTRAL POSITION MANAGER
 
-     This manager only owns the idle/default position.
-     Feature windows are positioned by contextual guides,
-     and the first visit tour owns its own movement.
+     Normal desktop/tablet idle position only.
   ==================================== */
 
   React.useEffect(() => {
-    if (!clippy) {
-      return undefined;
-    }
-
     if (
+      !clippy ||
       !guideCompleted ||
       !desktopReady ||
       contextualWindowOpen ||
@@ -1483,7 +1593,11 @@ React.useEffect(() => {
     }
 
     const handleResize = () => {
-      if (installerOpen || !guideCompleted) {
+      if (
+        installerOpen ||
+        !guideCompleted ||
+        isMobile
+      ) {
         return;
       }
 
@@ -1525,6 +1639,7 @@ React.useEffect(() => {
     clippy,
     installerOpen,
     guideCompleted,
+    isMobile,
     windows?.about,
     windows?.projects,
     windows?.aiAssistant,
@@ -1535,91 +1650,106 @@ React.useEffect(() => {
   /* ====================================
      CONTEXTUAL GUIDE HELPER
 
-     Contextual messages only run AFTER the
-     mandatory first guide is complete.
+     Desktop/tablet only.
+     Mobile is welcome-only.
   ==================================== */
 
-  const showContextualGuide = React.useCallback(
-    (
-      message,
-      feature,
-      animation = 'Acknowledge'
-    ) => {
-      if (
-        !clippy ||
-        !guideCompleted ||
-        !desktopReady
-      ) {
-        return;
-      }
+  const showContextualGuide =
+    React.useCallback(
+      (
+        message,
+        feature,
+        animation = 'Acknowledge'
+      ) => {
+        if (
+          !clippy ||
+          !guideCompleted ||
+          !desktopReady ||
+          isMobile
+        ) {
+          return;
+        }
 
-      clearChatterTimers();
-      clearContextualTimer();
+        clearChatterTimers();
+        clearContextualTimer();
 
-      // Contextual response may appear on desktop OR mobile.
-      // It is temporary so it does not permanently occupy screen space.
-      clippy.stop?.();
-      clippy.show(true);
-      moveClippy(feature);
-      speak(message, animation);
-
-      contextualHideTimerRef.current = window.setTimeout(() => {
         clippy.stop?.();
-        clippy.hide();
-        contextualHideTimerRef.current = null;
-      }, CONTEXTUAL_VISIBLE_DURATION);
+        clippy.show(true);
 
-    },
-    [
-      clippy,
-      guideCompleted,
-      desktopReady,
-      moveClippy,
-      speak,
-      clearChatterTimers,
-      clearContextualTimer,
-    ]
-  );
+        moveClippy(feature);
+        speak(message, animation);
+
+        contextualHideTimerRef.current =
+          window.setTimeout(() => {
+            clippy.stop?.();
+            clippy.hide();
+
+            contextualHideTimerRef.current =
+              null;
+          }, CONTEXTUAL_VISIBLE_DURATION);
+      },
+      [
+        clippy,
+        guideCompleted,
+        desktopReady,
+        isMobile,
+        moveClippy,
+        speak,
+        clearChatterTimers,
+        clearContextualTimer,
+      ]
+    );
 
   /* ====================================
      ABOUT CONTEXTUAL GUIDE
   ==================================== */
 
   React.useEffect(() => {
-    const isOpen = Boolean(windows?.about);
+    const isOpen = Boolean(
+      windows?.about
+    );
 
     if (
       isOpen &&
       !previousState.current.about
     ) {
       showContextualGuide(
-        COPY.about,
+        COPY.contextualAbout,
         'about'
       );
     }
 
     previousState.current.about = isOpen;
-  }, [windows?.about, showContextualGuide]);
+  }, [
+    windows?.about,
+    showContextualGuide,
+  ]);
 
   /* ====================================
      PROJECTS CONTEXTUAL GUIDE
   ==================================== */
 
   React.useEffect(() => {
-    const isOpen = Boolean(windows?.projects);
+    const isOpen = Boolean(
+      windows?.projects
+    );
 
     if (
       isOpen &&
       !previousState.current.projects
     ) {
       showContextualGuide(
-        COPY.projects,
+        COPY.contextualProjects,
         'projects'
       );
     }
 
-    previousState.current.projects = isOpen;
-  }, [windows?.projects, showContextualGuide]);
+    previousState.current.projects =
+      isOpen;
+  }, [
+    windows?.projects,
+    showContextualGuide,
+  ]);
 
   /* ====================================
      AI CHAT CONTEXTUAL GUIDE
@@ -1632,15 +1762,17 @@ React.useEffect(() => {
 
     if (
       isOpen &&
-      !previousState.current.aiAssistant
+      !previousState.current
+        .aiAssistant
     ) {
       showContextualGuide(
-        COPY.aiAssistant,
+        COPY.contextualAI,
         'aiAssistant'
       );
     }
 
-    previousState.current.aiAssistant = isOpen;
+    previousState.current.aiAssistant =
+      isOpen;
   }, [
     windows?.aiAssistant,
     showContextualGuide,
@@ -1651,94 +1783,204 @@ React.useEffect(() => {
   ==================================== */
 
   React.useEffect(() => {
-    const isOpen = Boolean(windows?.contact);
+    const isOpen = Boolean(
+      windows?.contact
+    );
 
     if (
       isOpen &&
       !previousState.current.contact
     ) {
       showContextualGuide(
-        COPY.contact,
+        COPY.contextualContact,
         'contact'
       );
     }
 
-    previousState.current.contact = isOpen;
-  }, [windows?.contact, showContextualGuide]);
+    previousState.current.contact =
+      isOpen;
+  }, [
+    windows?.contact,
+    showContextualGuide,
+  ]);
 
-/* ====================================
-   RANDOM IDLE CHATTER
+  /* ====================================
+     CLICK CLIPPY TO TALK
 
-   Desktop only. After the first guide is complete:
-   wait 10–20s -> appear -> speak -> stay 8s -> hide -> repeat.
+     Desktop/tablet idle Clippy only.
+     Disabled during:
+       - mobile
+       - first tour
+       - contextual window
+  ==================================== */
 
-   On smartphones there is NO idle/Desktop Clippy.
-   Mobile Clippy only appears during the First Tour and
-   contextual responses to opened windows.
-==================================== */
-
-React.useEffect(() => {
-  if (
-    !clippy ||
-    !guideCompleted ||
-    !desktopReady ||
-    contextualWindowOpen ||
-    isMobile
-  ) {
-    clearChatterTimers();
-
-    // Once onboarding is over, mobile should not keep an idle Clippy.
-    if (clippy && isMobile && guideCompleted && !contextualWindowOpen) {
-      clippy.stop?.();
-      clippy.hide();
+  React.useEffect(() => {
+    if (!clippy) {
+      return undefined;
     }
 
-    return undefined;
-  }
+    let cleanup = null;
+    let retryTimer = null;
 
-  const scheduleNextChatter = () => {
-    clearChatterTimers();
+    const attachClick = () => {
+      const clippyElement =
+        document.querySelector('.clippy');
 
-    const delay =
-      RANDOM_MIN_DELAY +
-      Math.random() * RANDOM_MAX_EXTRA_DELAY;
-
-    chatterTimerRef.current = window.setTimeout(() => {
-      if (!clippy) {
+      if (!clippyElement) {
+        retryTimer = window.setTimeout(
+          attachClick,
+          100
+        );
         return;
       }
 
-      clippy.stop?.();
-      clippy.show(true);
-      moveClippy();
-      speakRandomMessage();
+      const handleClick = (event) => {
+        if (
+          isMobile ||
+          !guideCompleted ||
+          !desktopReady ||
+          contextualWindowOpen
+        ) {
+          return;
+        }
 
-      chatterHideTimerRef.current = window.setTimeout(() => {
+        event.stopPropagation();
+
+        /*
+         * Clicking only adds a line while
+         * Clippy is already on screen.
+         */
         clippy.stop?.();
-        clippy.hide();
-        chatterHideTimerRef.current = null;
+        clippy.show(true);
+        speakRandomMessage();
+      };
 
-        scheduleNextChatter();
-      }, RANDOM_VISIBLE_DURATION);
-    }, delay);
-  };
+      clippyElement.addEventListener(
+        'click',
+        handleClick
+      );
 
-  scheduleNextChatter();
+      cleanup = () => {
+        clippyElement.removeEventListener(
+          'click',
+          handleClick
+        );
+      };
+    };
 
-  return () => {
-    clearChatterTimers();
-  };
-}, [
-  clippy,
-  guideCompleted,
-  desktopReady,
-  contextualWindowOpen,
-  isMobile,
-  moveClippy,
-  speakRandomMessage,
-  clearChatterTimers,
-]);
+    attachClick();
 
+    return () => {
+      if (retryTimer) {
+        window.clearTimeout(retryTimer);
+      }
+
+      cleanup?.();
+    };
+  }, [
+    clippy,
+    isMobile,
+    guideCompleted,
+    desktopReady,
+    contextualWindowOpen,
+    speakRandomMessage,
+  ]);
+
+  /* ====================================
+     RANDOM IDLE CHATTER
+
+     Desktop + tablet only.
+
+     After guide complete:
+     wait 18–30s
+     -> appear
+     -> speak
+     -> stay 8s
+     -> hide
+     -> repeat
+
+     Mobile has NO idle Clippy.
+  ==================================== */
+
+  React.useEffect(() => {
+    if (
+      !clippy ||
+      !guideCompleted ||
+      !desktopReady ||
+      contextualWindowOpen ||
+      isMobile
+    ) {
+      clearChatterTimers();
+
+      if (
+        clippy &&
+        isMobile &&
+        guideCompleted
+      ) {
+        /*
+         * Don't fight the mobile greeting timer.
+         * It owns visibility while the greeting
+         * is active.
+         */
+        if (
+          !mobileHideTimerRef.current
+        ) {
+          clippy.stop?.();
+          clippy.hide();
+        }
+      }
+
+      return undefined;
+    }
+
+    const scheduleNextChatter = () => {
+      clearChatterTimers();
+
+      const delay =
+        RANDOM_MIN_DELAY +
+        Math.random() *
+          RANDOM_MAX_EXTRA_DELAY;
+
+      chatterTimerRef.current =
+        window.setTimeout(() => {
+          if (!clippy) {
+            return;
+          }
+
+          clippy.stop?.();
+          clippy.show(true);
+
+          moveClippy();
+          speakRandomMessage();
+
+          chatterHideTimerRef.current =
+            window.setTimeout(() => {
+              clippy.stop?.();
+              clippy.hide();
+
+              chatterHideTimerRef.current =
+                null;
+
+              scheduleNextChatter();
+            }, RANDOM_VISIBLE_DURATION);
+        }, delay);
+    };
+
+    scheduleNextChatter();
+
+    return () => {
+      clearChatterTimers();
+    };
+  }, [
+    clippy,
+    guideCompleted,
+    desktopReady,
+    contextualWindowOpen,
+    isMobile,
+    moveClippy,
+    speakRandomMessage,
+    clearChatterTimers,
+  ]);
 
   /* ====================================
      GLOBAL CLEANUP
@@ -1749,11 +1991,13 @@ React.useEffect(() => {
       clearTourTimers();
       clearChatterTimers();
       clearContextualTimer();
+      clearMobileTimer();
     };
   }, [
     clearTourTimers,
     clearChatterTimers,
     clearContextualTimer,
+    clearMobileTimer,
   ]);
 
   return null;
