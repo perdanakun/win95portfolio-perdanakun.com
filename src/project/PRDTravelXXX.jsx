@@ -1,4 +1,5 @@
 import React from 'react';
+import theProblemTravelXXX from './travelxxx/theproblem-travelxxx.png';
 
 export default function TravelXXXProductRequirements() {
   const sectionStyle = {
@@ -202,19 +203,30 @@ export default function TravelXXXProductRequirements() {
         
       </header>
 
-      {/* =========================================================
-          THE PROBLEM
-      ========================================================= */}
+{/* =========================================================
+    THE PROBLEM
+========================================================= */}
 
-      <section style={sectionStyle}>
-        <h2
-          className="casestudy-heading"
-          style={headingStyle}
-        >
-          The Problem
-        </h2>
+<section style={sectionStyle}>
+  <img
+    src={theProblemTravelXXX}
+    alt="Travelers comparing hotel prices across multiple OTA browser tabs"
+    style={{
+      width: '100%',
+      height: 'auto',
+      display: 'block',
+      margin: '0 0 24px',
+    }}
+  />
 
-        <div style={contentIndentStyle}>
+  <h2
+    className="casestudy-heading"
+    style={headingStyle}
+  >
+    The Problem
+  </h2>
+
+  <div style={contentIndentStyle}>
           <p style={paragraphStyle}>
             Travelers comparing hotels on an OTA constantly lose confidence in
             what they&apos;re paying — prices shift between browsing and

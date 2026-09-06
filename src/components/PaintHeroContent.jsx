@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button, Frame } from '@react95/core';
 import perdanaWordart from '../assets/images/perdana-wordart.png';
 import perdanaWordartTitle from '../assets/images/perdana-wordart-title.png';
+import perdanaWordartDrawing from '../assets/images/perdana-wordart-drawing.png';
 
 import toolsSprite from '../assets/paint/tools.svg';
 /**
@@ -10,9 +11,9 @@ import toolsSprite from '../assets/paint/tools.svg';
  * Windows 95 Paint-inspired content.
  *
  * IMPORTANT
- * - Toolbar icons intentionally use <Folder /> as placeholders.
- * - The canvas viewport uses REAL scrolling (overflow: auto).
- * - Canvas keeps a fixed drawing size, so it does not stretch to the window.
+ * - Toolbar icons use the JS Paint tools.svg sprite sheet.
+ * - The canvas keeps a fixed logical drawing size but visually scales with the window.
+ * - Canvas scaling follows both available width and height while preserving aspect ratio.
  * - Uses React95 <Button /> and <Frame /> for native-looking controls.
  */
 
@@ -27,9 +28,9 @@ const LAYOUT = {
   paddingBottom: 10,
 
   heroMaxHeight: 400,
-  gapAfterHero: 10,
+  gapAfterHero: 0,
 
-  contentWidth: 920,
+  contentWidth: 800,
 };
 
 const COLORS = [
@@ -70,7 +71,7 @@ function clearCanvas(ctx, width, height) {
 }
 
 
-const HERO_IMAGE_SRC = perdanaWordartTitle;
+const HERO_IMAGE_SRC = perdanaWordartDrawing;
 function drawHeroImage(ctx, canvas, onDone) {
   const image = new Image();
 
@@ -159,12 +160,12 @@ function PortfolioIntro({
       role: 'Product Designer + Design Engineer',
     },
     {
-      year: '2016 - 2026',
+      year: '2026 - 2016',
       company: 'Conania',
       role: 'Visual and Design Lead',
     },
     {
-      year: '2019 - 2023',
+      year: '2023 - 2019',
       company: 'Sinidikara',
       role: 'Graphic Designer',
     },
@@ -172,12 +173,12 @@ function PortfolioIntro({
 
   const projects = [
     {
-      name: 'TravelXXX',
-      url: 'https://travelxxx.perdanakun.com/explore',
-    },
-    {
       name: "Perdana's Computer",
       url: 'https://www.perdanakun.com/',
+    },
+    {
+      name: 'TravelXXX',
+      url: 'https://travelxxx.perdanakun.com/explore',
     },
     {
       name: 'Shipfaster UI',
@@ -404,10 +405,10 @@ function ToolButton({ item, active, onClick }) {
       aria-pressed={active}
       onClick={() => onClick(item.id)}
       style={{
-        width: 34,
-        minWidth: 34,
-        height: 34,
-        minHeight: 34,
+        width: 24,
+        minWidth: 24,
+        height: 24,
+        minHeight: 24,
 
         padding: 0,
 
@@ -429,14 +430,16 @@ function ToolButton({ item, active, onClick }) {
 <span
   aria-hidden="true"
   style={{
-    width: 32,
-    height: 32,
+    width: 24,
+    height: 24,
     display: 'block',
 
     backgroundImage: `url(${toolsSprite})`,
     backgroundRepeat: 'no-repeat',
 
-    backgroundPosition: `${-8 - item.spriteIndex * 32}px -8px`,
+    // Each icon in tools.svg sits on a 32px horizontal step.
+    // The 24x24 viewport crops around the original ~16x16 artwork.
+    backgroundPosition: `${-12 - item.spriteIndex * 32}px -12px`,
   }}
 />
     </Button>
@@ -558,10 +561,21 @@ export default function PaintHeroContent({
 
     const updateScale = () => {
       const availableWidth = container.clientWidth;
-      if (!availableWidth) return;
+      const availableHeight = container.clientHeight;
 
+      if (!availableWidth || !availableHeight) return;
+
+      const widthScale = availableWidth / CANVAS_WIDTH;
+      const heightScale = availableHeight / CANVAS_HEIGHT;
+
+      // Logical drawing size stays fixed.
+      // The portfolio composition keeps its normal size and only shrinks when the Paint frame is too small.
       setCanvasScale(
-        Math.min(1, availableWidth / CANVAS_WIDTH)
+        Math.min(
+          1,
+          widthScale,
+          heightScale
+        )
       );
     };
 
@@ -577,7 +591,7 @@ export default function PaintHeroContent({
 
   /**
    * Pointer coordinates are translated from the scaled CSS size back
-   * into the logical 1200 x 720 canvas coordinate system.
+   * into the logical CANVAS_WIDTH x CANVAS_HEIGHT coordinate system.
    */
   const getCanvasPoint = (event) => {
     const canvas = canvasRef.current;
@@ -855,8 +869,8 @@ export default function PaintHeroContent({
           {/* LEFT TOOLBOX */}
           <div
             style={{
-              width: '78px',
-              minWidth: '78px',
+              width: '58px',
+              minWidth: '58px',
 
               flexShrink: 0,
 
@@ -877,9 +891,9 @@ export default function PaintHeroContent({
                 display: 'grid',
 
                 gridTemplateColumns:
-                  'repeat(2, 34px)',
+                  'repeat(2, 24px)',
 
-                gridAutoRows: '34px',
+                gridAutoRows: '24px',
 
                 gap: '2px',
               }}
@@ -1004,11 +1018,14 @@ export default function PaintHeroContent({
                     ref={canvasContainerRef}
                     style={{
                       width: '100%',
-                      minHeight: '100%',
+                      height: '100%',
+                      minHeight: 0,
+                      position: 'relative',
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'flex-start',
                       overflow: 'hidden',
+                      backgroundColor: 'transparent',
                     }}
                   >
                     <div
@@ -1093,15 +1110,15 @@ export default function PaintHeroContent({
         ====================================================== */}
         <div
           style={{
-            minHeight: '58px',
-            flex: '0 0 58px',
+            minHeight: '38px',
+            flex: '0 0 38px',
 
             display: 'flex',
             alignItems: 'center',
 
-            gap: '8px',
+            gap: '5px',
 
-            padding: '6px 8px',
+            padding: '4px 6px',
 
             backgroundColor: '#c0c0c0',
 
@@ -1117,10 +1134,10 @@ export default function PaintHeroContent({
           <Frame
             boxShadow="in"
             style={{
-              width: '48px',
-              minWidth: '48px',
+              width: '36px',
+              minWidth: '36px',
 
-              height: '42px',
+              height: '30px',
 
               position: 'relative',
 
@@ -1136,11 +1153,11 @@ export default function PaintHeroContent({
               style={{
                 position: 'absolute',
 
-                left: '5px',
-                top: '5px',
+                left: '3px',
+                top: '3px',
 
-                width: '22px',
-                height: '22px',
+                width: '16px',
+                height: '16px',
 
                 backgroundColor: color,
 
@@ -1156,11 +1173,11 @@ export default function PaintHeroContent({
               style={{
                 position: 'absolute',
 
-                right: '5px',
-                bottom: '5px',
+                right: '3px',
+                bottom: '3px',
 
-                width: '22px',
-                height: '22px',
+                width: '16px',
+                height: '16px',
 
                 backgroundColor: secondaryColor,
 
@@ -1180,12 +1197,12 @@ export default function PaintHeroContent({
               display: 'grid',
 
               gridTemplateColumns:
-                'repeat(14, 18px)',
+                'repeat(14, 14px)',
 
               gridTemplateRows:
-                'repeat(2, 18px)',
+                'repeat(2, 14px)',
 
-              gap: '2px',
+              gap: '1px',
 
               flexShrink: 0,
             }}
@@ -1225,8 +1242,8 @@ export default function PaintHeroContent({
                 }}
 
                 style={{
-                  width: '18px',
-                  height: '18px',
+                  width: '14px',
+                  height: '14px',
 
                   padding: 0,
                   margin: 0,

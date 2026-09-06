@@ -333,6 +333,17 @@ export default function ProjectFolderContent({
                   openWindow: 'prd-travelxxx',
                 },
                 {
+                  id: 'travel-website',
+                  name: 'TravelXXX-dev',
+                  type: 'file',
+                  iconType: 'travelxxx',
+
+                  openWindow: 'travelxxx-preview',
+
+                  previewUrl:
+                    'https://travelxxx-hotel-compass.vercel.app/',
+                },
+                {
                   id: 'travelxxx-documentation',
                   name: 'Documentation',
                   type: 'folder',
@@ -412,13 +423,6 @@ export default function ProjectFolderContent({
                   ],
                 },
                 {
-                  id: 'travel-website',
-                  name: 'travel-v1.0-dev',
-                  type: 'file',
-                  iconType: 'travelxxx',
-                  link: 'https://travelxxx-hotel-compass.vercel.app/',
-                },
-                {
                   id: 'travel-github',
                   name: 'Source Code',
                   type: 'file',
@@ -426,14 +430,6 @@ export default function ProjectFolderContent({
                   link: 'https://github.com/perdanakun/travelxxx-hotel-booking',
                 },
               ],
-      },
-            {
-       id: 'AI-x',
-       name: 'AI-Projects',
-       type: 'folder',
-       iconType: 'folder',
-       isLocked: true,
-       message: 'This folder is still on progress!',
       },
 
       {

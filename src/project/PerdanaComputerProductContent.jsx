@@ -38,37 +38,37 @@ import perdanaComputer
 const caseStudyNavigation = [
   {
     id: 'hero',
-    number: '00',
+
     title: 'Overview',
   },
   {
     id: 'ground-problem',
-    number: '01',
+
     title: 'Ground the Problem',
   },
   {
     id: 'define-direction',
-    number: '02',
+
     title: 'Define Direction',
   },
   {
     id: 'prototype-build',
-    number: '03',
+
     title: 'Prototype & Build',
   },
   {
     id: 'validate',
-    number: '04',
+
     title: 'Validate',
   },
   {
     id: 'outcome',
-    number: '05',
+
     title: 'Outcome',
   },
   {
     id: 'reflection',
-    number: '06',
+
     title: 'Reflection',
   },
 ];

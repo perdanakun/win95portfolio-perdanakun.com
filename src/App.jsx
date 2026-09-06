@@ -62,6 +62,8 @@ import ReadmeProduct from './project/ReadmeProduct';
 import ReadmeTravelXXX from './project/ReadmeTravelXXX';
 import PRDTravelXXX from './project/PRDTravelXXX';
 
+import MobileWebPreview from './components/MobileWebPreview';
+
 
 
 import { getAIResponse } from "./services/aiService";
@@ -661,6 +663,7 @@ const [windows, setWindows] = useState({
   'ship-ui': false,
    mayora: false,
    'perdana-computer-product': false,
+   'travelxxx-preview': false,
 
      // Notepad windows
   'readme-product': false,
@@ -824,6 +827,7 @@ const handleRestart = () => {
   'ship-ui': false,
   mayora: false,
   'perdana-computer-product': false,
+  'travelxxx-preview': false,
 
   // Notepad windows
   'readme-product': false,
@@ -1752,7 +1756,7 @@ message={
       // SMARTPHONE
       // =========================
       mobileHeightRatio={1}
-      minHeightRatio={0.65}
+      minHeightRatio={0.4}
       mobileWidth="100vw"
       mobileLockBottom={true}
 
@@ -1771,7 +1775,7 @@ message={
       // DESKTOP
       // =========================
       desktopWidth="auto"
-      desktopHeight="70%"
+      desktopHeight="65%"
       desktopTop="50%"
       desktopLeft="50%"
       desktopRight="auto"
@@ -2932,6 +2936,72 @@ INI ENDING KODE INACTIVE*/}
         desktopVideo
       }
     />
+  </ResizableModal>
+)}
+
+
+{/* =========================================================
+    MOBILE PREVIEW PROJCTS
+========================================================= */}
+
+
+
+{windows['travelxxx-preview'] && (
+  <ResizableModal
+    isMobile={isMobile}
+    isTablet={isTablet}
+
+    // Smartphone visitor
+    mobileHeightRatio={1}
+    minHeightRatio={0.6}
+    mobileWidth="100vw"
+
+    // Tablet
+    tabletWidth="70%"
+    tabletHeight="85%"
+    tabletTop="50%"
+    tabletLeft="50%"
+    tabletRight="auto"
+    tabletBottom="auto"
+    tabletTransform="translate(-50%, -50%)"
+
+// Desktop
+desktopWidth="520px"
+desktopHeight="92%"
+desktopTop="50%"
+desktopLeft="auto"
+desktopRight="12px"
+desktopBottom="auto"
+desktopTransform="translateY(-50%)"
+
+    title="TravelXXX - Mobile Preview"
+
+    icon={
+      <Globe variant="16x16_4" />
+    }
+
+    titleBarOptions={
+      <>
+        <Modal.Minimize />
+
+        <TitleBar.Close
+          onClick={() =>
+            toggleWindow(
+              'travelxxx-preview',
+              false
+            )
+          }
+        />
+      </>
+    }
+  >
+<MobileWebPreview
+  url="https://travelxxx-hotel-compass.vercel.app/"
+  liveUrl="https://travelxxx.perdanakun.com/"
+  title="TravelXXX"
+  width={480}
+  height={956}
+/>
   </ResizableModal>
 )}
 
