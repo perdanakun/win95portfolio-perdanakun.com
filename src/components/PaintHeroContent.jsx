@@ -71,7 +71,7 @@ function clearCanvas(ctx, width, height) {
 }
 
 
-const HERO_IMAGE_SRC = perdanaWordartDrawing;
+const HERO_IMAGE_SRC = perdanaWordart;
 function drawHeroImage(ctx, canvas, onDone) {
   const image = new Image();
 

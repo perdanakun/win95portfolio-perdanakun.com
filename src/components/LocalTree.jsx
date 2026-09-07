@@ -1,16 +1,27 @@
 import React, { useEffect, useState, useRef } from 'react';
 import {
+  Back,
   FileText,
   Folder,
   FolderOpen,
-  Shdocvw272,
+  Notepad1,
   Notepad2,
+  Shdocvw272,
   Wordpad,
   Url1102,
   Shell321,
   Wangimg128,
   Mplayer110,
+  Shell3212,
+  Shdocvw260,
+  Intl101,
+  Explorer101,
+  Mapi32801,
+  Textchat,
+  User1,
+  Mspaint,
 } from '@react95/icons';
+
 
 import holohealthIcon from '../assets/images/case-study/holohealthIcon.png';
 import shipfasterIcon from '../assets/icons/shipfaster.svg';
@@ -119,31 +130,51 @@ case 'holohealth':
           }}
         />
       );
-
-    case 'website':
+case 'website':
       return (
         <Url1102
           variant="16x16_4"
         />
       );
 
-      case 'image':
+    case 'image':
       return (
         <Wangimg128
           variant="16x16_4"
         />
       );
 
-     case 'video':
+    case 'video':
       return (
         <Mplayer110
           variant="16x16_4"
         />
       );
 
-          case 'program':
+    case 'program':
       return (
         <Shell321
+          variant="16x16_4"
+        />
+      );
+
+    case 'readme':
+      return (
+        <Notepad1
+          variant="16x16_4"
+        />
+      );
+
+    case 'folder-product':
+      return (
+        <Shdocvw260
+          variant="16x16_4"
+        />
+      );
+
+    case 'caseStudy':
+      return (
+        <Notepad2
           variant="16x16_4"
         />
       );
@@ -155,9 +186,51 @@ case 'holohealth':
         />
       );
 
-    case 'caseStudy':
+    case 'installer':
       return (
-        <Notepad2
+        <Shell3212
+          variant="16x16_4"
+        />
+      );
+
+    case 'welcome':
+      return (
+        <Textchat
+          variant="16x16_4"
+        />
+      );
+
+    case 'clippy':
+      return (
+        <User1
+          variant="16x16_4"
+        />
+      );
+
+    case 'project-folder':
+      return (
+        <Explorer101
+          variant="16x16_4"
+        />
+      );
+
+    case 'contact':
+      return (
+        <Mapi32801
+          variant="16x16_4"
+        />
+      );
+
+    case 'paint':
+      return (
+        <Mspaint
+          variant="16x16_4"
+        />
+      );
+
+    case 'ai-chat':
+      return (
+        <Intl101
           variant="16x16_4"
         />
       );

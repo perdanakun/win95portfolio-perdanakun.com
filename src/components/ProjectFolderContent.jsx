@@ -9,6 +9,7 @@ import {
   FileText,
   Folder,
   FolderOpen,
+  Notepad1,
   Notepad2,
   Shdocvw272,
   Wordpad,
@@ -16,6 +17,14 @@ import {
   Shell321,
   Wangimg128,
   Mplayer110,
+  Shell3212,
+  Shdocvw260,
+  Intl101,
+  Explorer101,
+  Mapi32801,
+  Textchat,
+  User1,
+  Mspaint,
 } from '@react95/icons';
 
 import {
@@ -138,100 +147,10 @@ export default function ProjectFolderContent({
 
   const projects = [
     {
-      id: 'visual-design',
-      name: 'Visual Design',
-      type: 'folder',
-      iconType: 'folder',
-      isLocked: false,
-      message: '',
-      children: [
-        {
-          id: 'holohealth',
-          name: 'HoloHealth',
-          type: 'folder',
-          iconType: 'folder',
-          isLocked: false,
-          message: '',
-          children: [
-             {
-              id: 'holohealth-case-study',
-              name: 'Case Studies',
-              type: 'file',
-              iconType: 'website',
-              openWindow: 'holohealth',
-            },
-            {
-              id: 'holohealth-icon-system',
-              name: 'Holoealth',
-              type: 'file',
-              iconType: 'holohealth',
-              link: 'https://holo.health/',
-            },
-          ],
-        },
-
-        {
-          id: 'ship-ui',
-          name: 'Ship UI',
-          type: 'folder',
-          iconType: 'folder',
-          isLocked: false,
-          children: [
-             {
-              id: 'ship-ui-case-study',
-              name: 'Case Studies',
-              type: 'file',
-              iconType: 'website',
-              openWindow: 'ship-ui',
-            },
-            {
-              id: 'ship-ui-live-preview',
-              name: 'Live Preview',
-              type: 'file',
-              iconType: 'figma',
-              openWindow: 'ship-ui-figma',
-            },
-            {
-              id: 'ship-ui-icon-system',
-              name: 'Shipfaster UI',
-              type: 'file',
-              iconType: 'shipfaster',
-              link: 'https://www.shipfasterui.com/',
-            },
-          ],
-        },
-
-        {
-          id: 'mayora',
-          name: 'Mayora',
-          type: 'folder',
-          iconType: 'folder',
-          isLocked: false,
-          children: [
-             {
-              id: 'mayora-case-study',
-              name: 'Case Studies',
-              type: 'file',
-              iconType: 'website',
-              openWindow: 'mayora',
-            },
-            {
-              id: 'mayora-icon-system',
-              name: 'Mayora Official',
-              type: 'file',
-              iconType: 'mayora',
-              link: 'https://www.instagram.com/mayoraofficial/',
-            },
-          ],
-        },
-      ],
-    },
-
-    {
       id: 'product-design',
       name: 'Product Design',
       type: 'folder',
-      iconType: 'folder',
+      iconType: 'folder-product',
       isLocked: false,
       message: '',
       children: [
@@ -244,14 +163,14 @@ export default function ProjectFolderContent({
           children: [
         {
           id: 'pc-product-overview',
-          name: 'Overview',
+          name: 'Start Here',
           type: 'file',
           iconType: 'documentation',
           openWindow: 'perdana-computer-overview',
         },
         {
           id: 'pc-product-case-studies',
-          name: 'Case Studies',
+          name: 'Case Study',
           type: 'file',
           iconType: 'website',
           openWindow: 'perdana-computer-product',
@@ -262,50 +181,56 @@ export default function ProjectFolderContent({
               name: 'Features',
               type: 'folder',
               iconType: 'folder',
-              isLocked: true,
-              message: 'This folder is still on progress!',
+              isLocked: false,
               children: [
+                {
+                  id: 'prd--travelxxx',
+                  name: 'Start',
+                  type: 'file',
+                  iconType: 'notepad',
+                  isLocked: true,
+                },
                 {
                   id: 'pc-installer',
                   name: 'Installer',
                   type: 'file',
-                  iconType: 'documentation',
+                  iconType: 'installer',
                 },
                 {
                   id: 'pc-project-folder',
                   name: 'Project Folder',
                   type: 'file',
-                  iconType: 'documentation',
+                  iconType: 'project-folder',
                 },
                 {
                   id: 'pc-ai-chat',
                   name: 'AI Chat',
                   type: 'file',
-                  iconType: 'documentation',
+                  iconType: 'ai-chat',
                 },
                 {
                   id: 'pc-contact',
                   name: 'Contact',
                   type: 'file',
-                  iconType: 'documentation',
-                },
-                {
-                  id: 'pc-writing',
-                  name: 'Writing',
-                  type: 'file',
-                  iconType: 'documentation',
+                  iconType: 'contact',
                 },
                 {
                   id: 'pc-did-you-know',
                   name: 'Did You Know?',
                   type: 'file',
-                  iconType: 'documentation',
+                  iconType: 'welcome',
                 },
                 {
-                  id: 'pc-gimmicks',
-                  name: 'Gimmicks & Easter Eggs',
+                  id: 'pc-paint',
+                  name: 'MS Paint',
                   type: 'file',
-                  iconType: 'caseStudy',
+                  iconType: 'paint',
+                },
+                {
+                  id: 'pc-gclippy',
+                  name: 'Clippy Guide',
+                  type: 'file',
+                  iconType: 'clippy',
                 },
               ],
             },
@@ -434,12 +359,102 @@ export default function ProjectFolderContent({
 
       {
        id: 'readme-product',
-       name: 'readme.txt',
+       name: 'README.txt',
        type: 'file',
        iconType: 'notepad',
        isLocked: false,
        openWindow: 'readme-product',
       },
+      ],
+    },
+
+    {
+      id: 'visual-design',
+      name: 'Visual Design',
+      type: 'folder',
+      iconType: 'folder',
+      isLocked: false,
+      message: '',
+      children: [
+        {
+          id: 'holohealth',
+          name: 'HoloHealth',
+          type: 'folder',
+          iconType: 'folder',
+          isLocked: false,
+          message: '',
+          children: [
+             {
+              id: 'holohealth-case-study',
+              name: 'Case Study',
+              type: 'file',
+              iconType: 'website',
+              openWindow: 'holohealth',
+            },
+            {
+              id: 'holohealth-icon-system',
+              name: 'Holoealth',
+              type: 'file',
+              iconType: 'holohealth',
+              link: 'https://holo.health/',
+            },
+          ],
+        },
+
+        {
+          id: 'ship-ui',
+          name: 'Ship UI',
+          type: 'folder',
+          iconType: 'folder',
+          isLocked: false,
+          children: [
+             {
+              id: 'ship-ui-case-study',
+              name: 'Case Study',
+              type: 'file',
+              iconType: 'website',
+              openWindow: 'ship-ui',
+            },
+            {
+              id: 'ship-ui-live-preview',
+              name: 'Live Preview',
+              type: 'file',
+              iconType: 'figma',
+              openWindow: 'ship-ui-figma',
+            },
+            {
+              id: 'ship-ui-icon-system',
+              name: 'Shipfaster UI',
+              type: 'file',
+              iconType: 'shipfaster',
+              link: 'https://www.shipfasterui.com/',
+            },
+          ],
+        },
+
+        {
+          id: 'mayora',
+          name: 'Mayora',
+          type: 'folder',
+          iconType: 'folder',
+          isLocked: false,
+          children: [
+             {
+              id: 'mayora-case-study',
+              name: 'Case Study',
+              type: 'file',
+              iconType: 'website',
+              openWindow: 'mayora',
+            },
+            {
+              id: 'mayora-icon-system',
+              name: 'Mayora Official',
+              type: 'file',
+              iconType: 'mayora',
+              link: 'https://www.instagram.com/mayoraofficial/',
+            },
+          ],
+        },
       ],
     },
 
@@ -685,6 +700,8 @@ export default function ProjectFolderContent({
     );
   };
 
+  
+
   const renderFileIcon = (
     type,
     size = '16x16_4'
@@ -873,6 +890,20 @@ export default function ProjectFolderContent({
           />
         );
 
+      case 'readme':
+        return (
+          <Notepad1
+            variant={size}
+          />
+        );
+
+       case 'folder-product':
+        return (
+          <Shdocvw260
+            variant={size}
+          />
+        );    
+
       case 'caseStudy':
         return (
           <Notepad2
@@ -887,6 +918,59 @@ export default function ProjectFolderContent({
           />
         );
 
+      case 'installer':
+        return (
+          <Shell3212
+            variant={size}
+          />
+        );
+
+      case 'welcome':
+        return (
+          <Textchat
+            variant={size}
+          />
+        );
+
+      case 'clippy':
+        return (
+          <User1
+            variant={size}
+          />
+        ); 
+
+      case 'project-folder':
+        return (
+          <Explorer101
+            variant={size}
+          />
+        ); 
+        
+
+      case 'contact':
+        return (
+          <Mapi32801
+            variant={size}
+          />
+        );
+
+
+      case 'paint':
+        return (
+          <Mspaint
+            variant={size}
+          />
+        );
+
+c
+
+        case 'ai-chat':
+        return (
+          <Intl101
+            variant={size}
+          />
+        );
+        
       default:
         return (
           <FileText
