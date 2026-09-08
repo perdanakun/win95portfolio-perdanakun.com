@@ -1606,7 +1606,7 @@ onContinue={() => {
 
 {/* My Projects */}
 <Rnd
-  default={getDesktopIconPosition(3)}
+  default={getDesktopIconPosition(7)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1684,7 +1684,7 @@ onContinue={() => {
 
 {/* Desktop Video */}
 <Rnd
-  default={getDesktopIconPosition(7)}
+  default={getDesktopIconPosition(3)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}

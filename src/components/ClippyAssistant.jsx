@@ -346,7 +346,7 @@ function getTourFeaturePosition(
     about: 0,
     installer: 1,
     contact: 2,
-    projects: 3,
+    projects: 7,
     aiAssistant: 6,
     paintHero: 8,
   };

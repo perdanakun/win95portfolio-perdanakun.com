@@ -145,318 +145,379 @@ export default function ProjectFolderContent({
   // PROJECT DATA
   // =========================================================
 
-  const projects = [
-    {
-      id: 'product-design',
-      name: 'Product Design',
-      type: 'folder',
-      iconType: 'folder-product',
-      isLocked: false,
-      message: '',
-      children: [
-        {
-          id: 'perdana-computer-product',
-          name: "Perdana's Computer",
-          type: 'folder',
-          iconType: 'folder',
-          isLocked: false,
-          children: [
-        {
-          id: 'pc-product-overview',
-          name: 'Start Here',
-          type: 'file',
-          iconType: 'documentation',
-          openWindow: 'perdana-computer-overview',
-        },
-        {
-          id: 'pc-product-case-studies',
-          name: 'Case Study',
-          type: 'file',
-          iconType: 'website',
-          openWindow: 'perdana-computer-product',
-        },
-            
-            {
-              id: 'pc-features',
-              name: 'Features',
-              type: 'folder',
-              iconType: 'folder',
-              isLocked: false,
-              children: [
-                {
-                  id: 'prd--travelxxx',
-                  name: 'Start',
-                  type: 'file',
-                  iconType: 'notepad',
-                  isLocked: true,
-                },
-                {
-                  id: 'pc-installer',
-                  name: 'Installer',
-                  type: 'file',
-                  iconType: 'installer',
-                },
-                {
-                  id: 'pc-project-folder',
-                  name: 'Project Folder',
-                  type: 'file',
-                  iconType: 'project-folder',
-                },
-                {
-                  id: 'pc-ai-chat',
-                  name: 'AI Chat',
-                  type: 'file',
-                  iconType: 'ai-chat',
-                },
-                {
-                  id: 'pc-contact',
-                  name: 'Contact',
-                  type: 'file',
-                  iconType: 'contact',
-                },
-                {
-                  id: 'pc-did-you-know',
-                  name: 'Did You Know?',
-                  type: 'file',
-                  iconType: 'welcome',
-                },
-                {
-                  id: 'pc-paint',
-                  name: 'MS Paint',
-                  type: 'file',
-                  iconType: 'paint',
-                },
-                {
-                  id: 'pc-gclippy',
-                  name: 'Clippy Guide',
-                  type: 'file',
-                  iconType: 'clippy',
-                },
-              ],
-            },
-        {
-          id: 'pc-product-github',
-          name: 'Source Code',
-          type: 'file',
-          iconType: 'github',
-          link : 'https://github.com/perdanakun/win95portfolio-perdanakun.com',
-        },
-          ],
-        },
+const projects = [
+  // =========================================================
+  // PERDANA'S COMPUTER
+  // =========================================================
+
+  {
+    id: 'perdana-computer-product',
+    name: "Perdana's Computer",
+    type: 'folder',
+    iconType: 'folder',
+    isLocked: false,
+
+    children: [
       {
-       id: 'travel-x',
-       name: 'Travel XXX',
-       type: 'folder',
-       iconType: 'folder',
-       isLocked: false,
-                 children: [
-                {
-                  id: 'prd--travelxxx',
-                  name: 'Overview',
-                  type: 'file',
-                  iconType: 'documentation',
-                  openWindow: 'prd-travelxxx',
-                },
-                {
-                  id: 'travel-website',
-                  name: 'TravelXXX-dev',
-                  type: 'file',
-                  iconType: 'travelxxx',
-
-                  openWindow: 'travelxxx-preview',
-
-                  previewUrl:
-                    'https://travelxxx-hotel-compass.vercel.app/',
-                },
-                {
-                  id: 'travelxxx-documentation',
-                  name: 'Documentation',
-                  type: 'folder',
-                  iconType: 'folder',
-                  isLocked: false,
-                  children: [
-                    {
-                      id: 'readme-travelxxx',
-                      name: 'Workflow',
-                      type: 'file',
-                      iconType: 'notepad',
-                      openWindow: 'readme-travelxxx',
-                    },
-                        {
-                          id: '1-research-discovery',
-                          name: '01. Research & Discovery',
-                          type: 'file',
-                          iconType: 'image',
-                          imageGallery: true,
-                          image: researchDiscovery,
-                        },
-                        {
-                          id: '2-reference-moodboard',
-                          name: '02. Reference Board',
-                          type: 'file',
-                          iconType: 'image',
-                          imageGallery: true,
-                          image: referenceBoard,
-                        },
-                        {
-                          id: '3-wireframe-uizard',
-                          name: '03. AI-Generated Wireframes (Uizard)',
-                          type: 'file',
-                          iconType: 'image',
-                          imageGallery: true,
-                          image: wireframeUizard,
-                        },
-                        {
-                          id: '4-v0-generated-design-system',
-                          name: '04. AI-Generated Design System',
-                          type: 'file',
-                          iconType: 'image',
-                          imageGallery: true,
-                          image: generatedDesignSystem,
-                        },
-                        {
-                          id: '5-v0-generated-first-draft',
-                          name: '05. AI-Generated First Draft',
-                          type: 'file',
-                          iconType: 'image',
-                          imageGallery: true,
-                          image: generatedFirstDraft,
-                        },
-                        {
-                          id: '6-component-architecture',
-                          name: '06. Component Architecture',
-                          type: 'file',
-                          iconType: 'image',
-                          imageGallery: true,
-                          image: componentArchitecture,
-                        },
-                        {
-                          id: '7-vscode-refinement',
-                          name: '07. Manual Refinement (VS Code)',
-                          type: 'file',
-                          iconType: 'image',
-                          imageGallery: true,
-                          image: vscodeRefinement,
-                        },
-                      {
-                        id: 'result-from-static-to-functional',
-                        name: 'Result - From Static to Functional',
-                        type: 'file',
-                        iconType: 'video',
-                          youtubeId: 'zHHarfJBz3I',
-                      },
-                  ],
-                },
-                {
-                  id: 'travel-github',
-                  name: 'Source Code',
-                  type: 'file',
-                  iconType: 'github',
-                  link: 'https://github.com/perdanakun/travelxxx-hotel-booking',
-                },
-              ],
+        id: 'pc-product-overview',
+        name: 'Start Here',
+        type: 'file',
+        iconType: 'documentation',
+        openWindow: 'perdana-computer-overview',
       },
 
       {
-       id: 'readme-product',
-       name: 'README.txt',
-       type: 'file',
-       iconType: 'notepad',
-       isLocked: false,
-       openWindow: 'readme-product',
+        id: 'pc-product-case-studies',
+        name: 'Case Study',
+        type: 'file',
+        iconType: 'website',
+        openWindow: 'perdana-computer-product',
       },
-      ],
-    },
 
-    {
-      id: 'visual-design',
-      name: 'Visual Design',
-      type: 'folder',
-      iconType: 'folder',
-      isLocked: false,
-      message: '',
-      children: [
-        {
-          id: 'holohealth',
-          name: 'HoloHealth',
-          type: 'folder',
-          iconType: 'folder',
-          isLocked: false,
-          message: '',
-          children: [
-             {
-              id: 'holohealth-case-study',
-              name: 'Case Study',
-              type: 'file',
-              iconType: 'website',
-              openWindow: 'holohealth',
-            },
-            {
-              id: 'holohealth-icon-system',
-              name: 'Holoealth',
-              type: 'file',
-              iconType: 'holohealth',
-              link: 'https://holo.health/',
-            },
-          ],
-        },
+      // =====================================================
+      // FEATURES
+      // =====================================================
 
-        {
-          id: 'ship-ui',
-          name: 'Ship UI',
-          type: 'folder',
-          iconType: 'folder',
-          isLocked: false,
-          children: [
-             {
-              id: 'ship-ui-case-study',
-              name: 'Case Study',
-              type: 'file',
-              iconType: 'website',
-              openWindow: 'ship-ui',
-            },
-            {
-              id: 'ship-ui-live-preview',
-              name: 'Live Preview',
-              type: 'file',
-              iconType: 'figma',
-              openWindow: 'ship-ui-figma',
-            },
-            {
-              id: 'ship-ui-icon-system',
-              name: 'Shipfaster UI',
-              type: 'file',
-              iconType: 'shipfaster',
-              link: 'https://www.shipfasterui.com/',
-            },
-          ],
-        },
+      {
+        id: 'pc-features',
+        name: 'Features',
+        type: 'folder',
+        iconType: 'folder',
+        isLocked: false,
 
-        {
-          id: 'mayora',
-          name: 'Mayora',
-          type: 'folder',
-          iconType: 'folder',
-          isLocked: false,
-          children: [
-             {
-              id: 'mayora-case-study',
-              name: 'Case Study',
-              type: 'file',
-              iconType: 'website',
-              openWindow: 'mayora',
-            },
-            {
-              id: 'mayora-icon-system',
-              name: 'Mayora Official',
-              type: 'file',
-              iconType: 'mayora',
-              link: 'https://www.instagram.com/mayoraofficial/',
-            },
-          ],
-        },
-      ],
-    },
+        children: [
+          {
+            id: 'pc-installer',
+            name: 'Installer',
+            type: 'file',
+            iconType: 'installer',
+
+            // nanti aktifkan:
+            // openWindow: 'pc-feature-installer',
+          },
+
+          {
+            id: 'pc-project-explorer',
+            name: 'Project Explorer',
+            type: 'file',
+            iconType: 'project-folder',
+
+            // nanti aktifkan:
+            // openWindow: 'pc-feature-project-explorer',
+          },
+
+          {
+            id: 'pc-ai-chat',
+            name: 'AI Chat',
+            type: 'file',
+            iconType: 'ai-chat',
+
+            // nanti aktifkan:
+            // openWindow: 'pc-feature-ai-chat',
+          },
+
+          {
+            id: 'pc-inbox',
+            name: 'Inbox',
+            type: 'file',
+            iconType: 'contact',
+
+            // nanti aktifkan:
+            // openWindow: 'pc-feature-inbox',
+          },
+
+          {
+            id: 'pc-writing',
+            name: 'Writing',
+            type: 'file',
+            iconType: 'documentation',
+
+            // nanti aktifkan:
+            // openWindow: 'pc-feature-writing',
+          },
+
+          {
+            id: 'pc-did-you-know',
+            name: 'Did You Know?',
+            type: 'file',
+            iconType: 'welcome',
+
+            // nanti aktifkan:
+            // openWindow: 'pc-feature-did-you-know',
+          },
+
+          {
+            id: 'pc-gimmicks',
+            name: 'Gimmicks & Easter Eggs',
+            type: 'file',
+            iconType: 'paint',
+
+            // nanti aktifkan:
+            // openWindow: 'pc-feature-gimmicks',
+          },
+        ],
+      },
+
+      {
+        id: 'pc-product-github',
+        name: 'Source Code',
+        type: 'file',
+        iconType: 'github',
+        link:
+          'https://github.com/perdanakun/win95portfolio-perdanakun.com',
+      },
+    ],
+  },
+
+  // =========================================================
+  // TRAVEL XXX
+  // =========================================================
+
+  {
+    id: 'travel-x',
+    name: 'Travel XXX',
+    type: 'folder',
+    iconType: 'folder',
+    isLocked: false,
+
+    children: [
+      {
+        id: 'prd--travelxxx',
+        name: 'Start Here',
+        type: 'file',
+        iconType: 'documentation',
+        openWindow: 'prd-travelxxx',
+      },
+
+      {
+        id: 'travel-website',
+        name: 'Live Prototype',
+        type: 'file',
+        iconType: 'travelxxx',
+
+        openWindow: 'travelxxx-preview',
+
+        previewUrl:
+          'https://travelxxx-hotel-compass.vercel.app/',
+      },
+
+      // =====================================================
+      // DOCUMENTATION
+      // =====================================================
+
+      {
+        id: 'travelxxx-documentation',
+        name: 'Documentation',
+        type: 'folder',
+        iconType: 'folder',
+        isLocked: false,
+
+        children: [
+          {
+            id: 'readme-travelxxx',
+            name: 'Workflow',
+            type: 'file',
+            iconType: 'notepad',
+            openWindow: 'readme-travelxxx',
+          },
+
+          {
+            id: '1-research-discovery',
+            name: '01. Research & Discovery',
+            type: 'file',
+            iconType: 'image',
+            imageGallery: true,
+            image: researchDiscovery,
+          },
+
+          {
+            id: '2-reference-moodboard',
+            name: '02. Reference Board',
+            type: 'file',
+            iconType: 'image',
+            imageGallery: true,
+            image: referenceBoard,
+          },
+
+          {
+            id: '3-wireframe-uizard',
+            name: '03. AI-Generated Wireframes (Uizard)',
+            type: 'file',
+            iconType: 'image',
+            imageGallery: true,
+            image: wireframeUizard,
+          },
+
+          {
+            id: '4-v0-generated-design-system',
+            name: '04. AI-Generated Design System',
+            type: 'file',
+            iconType: 'image',
+            imageGallery: true,
+            image: generatedDesignSystem,
+          },
+
+          {
+            id: '5-v0-generated-first-draft',
+            name: '05. AI-Generated First Draft',
+            type: 'file',
+            iconType: 'image',
+            imageGallery: true,
+            image: generatedFirstDraft,
+          },
+
+          {
+            id: '6-component-architecture',
+            name: '06. Component Architecture',
+            type: 'file',
+            iconType: 'image',
+            imageGallery: true,
+            image: componentArchitecture,
+          },
+
+          {
+            id: '7-vscode-refinement',
+            name: '07. Manual Refinement (VS Code)',
+            type: 'file',
+            iconType: 'image',
+            imageGallery: true,
+            image: vscodeRefinement,
+          },
+
+          {
+            id: 'result-from-static-to-functional',
+            name: 'Result - From Static to Functional',
+            type: 'file',
+            iconType: 'video',
+            youtubeId: 'zHHarfJBz3I',
+          },
+        ],
+      },
+
+      {
+        id: 'travel-github',
+        name: 'Source Code',
+        type: 'file',
+        iconType: 'github',
+        link:
+          'https://github.com/perdanakun/travelxxx-hotel-booking',
+      },
+    ],
+  },
+
+  
+  // =========================================================
+  // SHIP UI
+  // =========================================================
+
+  {
+    id: 'ship-ui',
+    name: 'Shipfaster UI',
+    type: 'folder',
+    iconType: 'folder',
+    isLocked: false,
+
+    children: [
+      {
+        id: 'ship-ui-case-study',
+        name: 'Case Study',
+        type: 'file',
+        iconType: 'website',
+        openWindow: 'ship-ui',
+      },
+
+      {
+        id: 'ship-ui-live-preview',
+        name: 'Live Preview',
+        type: 'file',
+        iconType: 'figma',
+        openWindow: 'ship-ui-figma',
+      },
+
+      {
+        id: 'ship-ui-icon-system',
+        name: 'Shipfaster UI',
+        type: 'file',
+        iconType: 'shipfaster',
+        link: 'https://www.shipfasterui.com/',
+      },
+    ],
+  },
+
+
+  // =========================================================
+  // HOLOHEALTH
+  // =========================================================
+
+  {
+    id: 'holohealth',
+    name: 'HoloHealth',
+    type: 'folder',
+    iconType: 'folder',
+    isLocked: false,
+
+    children: [
+      {
+        id: 'holohealth-case-study',
+        name: 'Case Study',
+        type: 'file',
+        iconType: 'website',
+        openWindow: 'holohealth',
+      },
+
+      {
+        id: 'holohealth-icon-system',
+        name: 'HoloHealth',
+        type: 'file',
+        iconType: 'holohealth',
+        link: 'https://holo.health/',
+      },
+    ],
+  },
+  // =========================================================
+  // MAYORA
+  // =========================================================
+
+  {
+    id: 'mayora',
+    name: 'Mayora',
+    type: 'folder',
+    iconType: 'folder',
+    isLocked: false,
+
+    children: [
+      {
+        id: 'mayora-case-study',
+        name: 'Case Study',
+        type: 'file',
+        iconType: 'website',
+        openWindow: 'mayora',
+      },
+
+      {
+        id: 'mayora-icon-system',
+        name: 'Mayora Official',
+        type: 'file',
+        iconType: 'mayora',
+        link:
+          'https://www.instagram.com/mayoraofficial/',
+      },
+    ],
+  },
+
+  // =========================================================
+  // HOW I WORK
+  // =========================================================
+
+  {
+    id: 'readme-product',
+    name: 'How I Work.txt',
+    type: 'file',
+    iconType: 'notepad',
+    isLocked: false,
+    openWindow: 'readme-product',
+  },
+
 
       // {
     //   id: 'design-engineering',

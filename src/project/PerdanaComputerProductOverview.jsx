@@ -1,9 +1,11 @@
 import React from 'react';
 
+import overviewImage from './perdanacomputer/perdanda_overview.png';
+
 export default function PerdanaComputerOverviewContent() {
   const sectionStyle = {
     marginTop: '0',
-    marginBottom: '24px',
+    marginBottom: '28px',
   };
 
   const headingStyle = {
@@ -12,25 +14,23 @@ export default function PerdanaComputerOverviewContent() {
     margin: '0 0 12px',
   };
 
-  const contentIndentStyle = {
-    paddingLeft: '20px',
-  };
-
   const paragraphStyle = {
     margin: '0 0 16px',
+    lineHeight: '1.55',
   };
 
   const listStyle = {
-    margin: '4px 0 16px',
+    margin: '8px 0 16px',
     paddingLeft: '22px',
   };
 
   const listItemStyle = {
-    marginBottom: '8px',
+    marginBottom: '10px',
+    lineHeight: '1.5',
   };
 
   const quoteStyle = {
-    margin: '20px 0',
+    margin: '16px 0 20px',
     padding: '12px 16px',
     borderLeft: '4px solid #808080',
     background: '#f5f5f5',
@@ -51,12 +51,14 @@ export default function PerdanaComputerOverviewContent() {
 
   const metaValueStyle = {
     margin: 0,
+    lineHeight: '1.45',
   };
 
-  const subheadingStyle = {
-    fontSize: '14px',
-    lineHeight: '22px',
-    margin: '20px 0 4px',
+  const calloutStyle = {
+    margin: '16px 0 20px',
+    padding: '12px 14px',
+    background: '#f2f2f2',
+    border: '1px solid #c0c0c0',
   };
 
   return (
@@ -70,15 +72,7 @@ export default function PerdanaComputerOverviewContent() {
         boxSizing: 'border-box',
       }}
     >
-      {/* =========================================================
-          HERO
-      ========================================================= */}
-
-      <header
-        style={{
-          marginBottom: '32px',
-        }}
-      >
+      <header style={{ marginBottom: '32px' }}>
         <h1
           className="casestudy-heading"
           style={{
@@ -87,38 +81,49 @@ export default function PerdanaComputerOverviewContent() {
             margin: '0 0 6px',
           }}
         >
-          Perdana&apos;s Computer - Overview Documents
+          Perdana&apos;s Computer — Overview
         </h1>
 
         <p
           className="casestudy-mono-muted"
-          style={{
-            margin: '0 0 24px',
-          }}
+          style={{ margin: '0 0 24px' }}
         >
-          Turning a Portfolio Into a Product
+          I&apos;m making the ugliest portfolio ever.
         </p>
 
+        <p style={paragraphStyle}>
+          Perdana&apos;s Computer is the portfolio I built for my transition
+          from 10 years in Visual Design into Product Design.
+        </p>
+
+        <p style={paragraphStyle}>
+          The idea started from a simple observation: a lot of portfolios
+          today are polished, modern, and functional, but after seeing so many
+          of them, they can also start to feel very similar.
+        </p>
+
+        <p style={paragraphStyle}>
+          I did not want to make something different just for the sake of
+          being different. I wanted to see whether a portfolio could be easier
+          to explore, more memorable, and still help a busy recruiter quickly
+          understand the person behind the work.
+        </p>
         
-        <p style={paragraphStyle}>
-          Perdana&apos;s Computer is an interactive portfolio designed
-          and built as a working product to support my transition from
-          Visual Design into Product Design and Design Engineering.
-        </p>
-
-        <p style={paragraphStyle}>
-          The challenge was not simply to make something different. It
-          was to create a portfolio that could stand out in a crowded
-          hiring process{' '}
-          
-            without making recruiters work harder to understand the
-            candidate.
-         
-        </p>
-
-        {/* =========================================================
-            PROJECT INFO
-        ========================================================= */}
+        <div
+  style={{
+    margin: '24px 0 28px',
+  }}
+>
+  <img
+    src={overviewImage}
+    alt="Illustration showing repetitive portfolio experiences contrasted with the interactive Perdana's Computer portfolio"
+    style={{
+      display: 'block',
+      width: '100%',
+      height: 'auto',
+    }}
+  />
+</div>
 
         <section
           style={{
@@ -129,299 +134,211 @@ export default function PerdanaComputerOverviewContent() {
           }}
         >
           <div style={metaGridStyle}>
-            <p
-              className="casestudy-heading"
-              style={metaLabelStyle}
-            >
-              Role
-            </p>
+            <p className="casestudy-heading" style={metaLabelStyle}>Role</p>
+            <p style={metaValueStyle}>Solo Product Designer &amp; Builder</p>
 
+            <p className="casestudy-heading" style={metaLabelStyle}>Duration</p>
+            <p style={metaValueStyle}>August 2026 — ongoing</p>
+
+            <p className="casestudy-heading" style={metaLabelStyle}>Scope</p>
             <p style={metaValueStyle}>
-              Solo Product Designer &amp; Design Engineer
+              Product thinking · UX · UI · Interaction · Prototyping ·
+              Development · Testing · Iteration
             </p>
 
-            <p
-              className="casestudy-heading"
-              style={metaLabelStyle}
-            >
-              Duration
-            </p>
-
-            <p style={metaValueStyle}>
-              7–26 August 2026
-            </p>
-
-            <p
-              className="casestudy-heading"
-              style={metaLabelStyle}
-            >
-              Scope
-            </p>
-
-            <p style={metaValueStyle}>
-              Discovery · UX · UI · Interaction Design · Development ·
-              Testing · Iteration
-            </p>
-
-            <p
-              className="casestudy-heading"
-              style={metaLabelStyle}
-            >
-              Status
-            </p>
-
-            <p style={metaValueStyle}>
-              Initial release · Ongoing iteration
-            </p>
+            <p className="casestudy-heading" style={metaLabelStyle}>Status</p>
+            <p style={metaValueStyle}>Shipped · Still being tested and iterated</p>
           </div>
         </section>
       </header>
 
-      {/* =========================================================
-          PROBLEM
-      ========================================================= */}
-
       <section style={sectionStyle}>
-        <h2
-          className="casestudy-heading"
-          style={headingStyle}
-        >
-          The Problem
+        <h2 className="casestudy-heading" style={headingStyle}>
+          The Hypothesis
         </h2>
 
-        <div style={contentIndentStyle}>
-          <p style={paragraphStyle}>
-            As a career pivoter, a conventional portfolio could show
-            what I had done before, but it gave me limited room to
-            demonstrate how I think, solve problems, design
-            interactions, and turn those decisions into something
-            functional.
-          </p>
+        <p style={paragraphStyle}>
+          Recruiters, hiring managers, and design leads often have limited
+          time to explore a portfolio. That makes it difficult for them to
+          quickly understand not only what a designer has made, but how they
+          think, what they can build, and who they are behind the work.
+        </p>
 
-          <p
-            className="casestudy-mono-muted"
-            style={{
-              margin: '20px 0 8px',
-            }}
-          >
-            THE HYPOTHESIS
+        <blockquote style={quoteStyle}>
+          <p style={{ margin: 0, fontWeight: 700, lineHeight: '1.5' }}>
+            If I can make that information easier to explore through multiple
+            paths, visitors should be able to understand my capabilities with
+            less effort and be more likely to start a conversation.
           </p>
-
-          <blockquote style={quoteStyle}>
-            <p
-              style={{
-                margin: 0,
-                fontWeight: 700,
-              }}
-            >
-              Could the portfolio itself become part of the evidence?
-            </p>
-          </blockquote>
-        </div>
+        </blockquote>
       </section>
 
-      {/* =========================================================
-          APPROACH
-      ========================================================= */}
-
       <section style={sectionStyle}>
-        <h2
-          className="casestudy-heading"
-          style={headingStyle}
-        >
-          The Approach
+        <h2 className="casestudy-heading" style={headingStyle}>
+          How Might I
         </h2>
 
-        <div style={contentIndentStyle}>
-          <p style={paragraphStyle}>
-            I used a Windows 95-inspired desktop as the product
-            environment, borrowing familiar concepts such as folders,
-            windows, files, and a taskbar rather than inventing an
-            entirely new navigation model.
+        <blockquote style={quoteStyle}>
+          <p style={{ margin: 0, fontWeight: 700, lineHeight: '1.5' }}>
+            How might I help recruiters and hiring managers quickly understand
+            who I am, what I can do, and how I think, while letting them
+            explore the portfolio in the way that works best for them?
           </p>
-
-          <p style={paragraphStyle}>
-            From there, the portfolio grew into a functional system:
-          </p>
-
-          <ul style={listStyle}>
-            <li style={listItemStyle}>
-              <strong>Project Explorer</strong> for browsing work and
-              case studies
-            </li>
-
-            <li style={listItemStyle}>
-              <strong>AI Chat</strong> as a shortcut for visitors with
-              limited time
-            </li>
-
-            <li style={listItemStyle}>
-              <strong>Inbox</strong> for contacting me directly from the
-              website
-            </li>
-
-            <li style={listItemStyle}>
-              <strong>Installer &amp; Welcome flows</strong> for
-              introducing the person behind the work
-            </li>
-
-            <li style={listItemStyle}>
-              <strong>Working desktop interactions</strong> built in
-              React
-            </li>
-          </ul>
-
-          <p style={paragraphStyle}>
-            The process moved quickly from basic Figma flows into code,
-            using the working product itself as part of the prototyping
-            process.
-          </p>
-        </div>
+        </blockquote>
       </section>
 
-      {/* =========================================================
-          TESTING
-      ========================================================= */}
-
       <section style={sectionStyle}>
-        <h2
-          className="casestudy-heading"
-          style={headingStyle}
-        >
-          Testing &amp; Iteration
+        <h2 className="casestudy-heading" style={headingStyle}>
+          What Success Means
         </h2>
 
-        <div style={contentIndentStyle}>
-          <p style={paragraphStyle}>
-            I used repeated task-based usability testing with one
-            participant to catch friction while features were being
-            built.
+        <p style={paragraphStyle}>
+          The goal is not to treat “getting hired” as the conversion.
+        </p>
+
+        <p style={paragraphStyle}>
+          For this first version, the objective is smaller and more useful:
+          can this portfolio help the right recruiter, hiring manager, or
+          design lead understand my background well enough to start a
+          conversation?
+        </p>
+
+        <div style={calloutStyle}>
+          <p className="casestudy-mono" style={{ margin: 0, fontWeight: 700 }}>
+            Primary success signal: a relevant conversation or interview.
           </p>
-
-          <p style={paragraphStyle}>
-            The tests surfaced several concrete problems:
-          </p>
-
-          <div
-            style={{
-              marginTop: '20px',
-            }}
-          >
-            <h3
-              className="casestudy-heading"
-              style={{
-                ...subheadingStyle,
-                marginTop: 0,
-              }}
-            >
-              Project navigation
-            </h3>
-
-            <p style={paragraphStyle}>
-              Deeper folder structures made it difficult to understand
-              the current location, leading to the addition of a folder
-              tree and clearer path controls.
-            </p>
-
-            <h3
-              className="casestudy-heading"
-              style={subheadingStyle}
-            >
-              Mobile interaction
-            </h3>
-
-            <p style={paragraphStyle}>
-              Desktop-style double-click behavior did not translate
-              naturally to touch, highlighting where the Windows
-              metaphor needed to adapt rather than be copied literally.
-            </p>
-
-            <h3
-              className="casestudy-heading"
-              style={subheadingStyle}
-            >
-              AI Chat
-            </h3>
-
-            <p style={paragraphStyle}>
-              Users naturally expected a real conversation, but the
-              first template-based implementation could not meet that
-              expectation. The feature was rebuilt around Gemini and
-              structured portfolio data.
-            </p>
-
-            <h3
-              className="casestudy-heading"
-              style={subheadingStyle}
-            >
-              Contact flow
-            </h3>
-
-            <p style={paragraphStyle}>
-              Required email validation created enough friction for the
-              participant to abandon the task, revealing a trade-off
-              between message completion and my need for a reply
-              address.
-            </p>
-          </div>
         </div>
+
+        <p style={paragraphStyle}>
+          With a background that is not purely Product Design, reaching that
+          stage would already mean the portfolio is doing its job.
+        </p>
       </section>
 
-      {/* =========================================================
-          SHIPPED
-      ========================================================= */}
+      <section style={sectionStyle}>
+        <h2 className="casestudy-heading" style={headingStyle}>
+          Product Direction
+        </h2>
+
+        <p style={paragraphStyle}>
+          From the hypothesis, two early product decisions became important.
+        </p>
+
+        <ul style={listStyle}>
+          <li style={listItemStyle}>
+            <strong>Give visitors more than one way to understand me.</strong>{' '}
+            Some people will browse projects, some will read, and some may
+            prefer asking directly.
+          </li>
+
+          <li style={listItemStyle}>
+            <strong>Make the portfolio intentionally memorable.</strong>{' '}
+            Instead of another polished portfolio template, I used an
+            imperfect, old-school computer interface inspired by Windows.
+          </li>
+        </ul>
+
+        <p style={paragraphStyle}>
+          The “ugly” direction is intentional. It came from the observation
+          that many contemporary portfolios feel highly polished but visually
+          similar. I wanted to test whether imperfection, nostalgia, and
+          interaction could create stronger recall without making the work
+          harder to access.
+        </p>
+      </section>
 
       <section style={sectionStyle}>
-        <h2
-          className="casestudy-heading"
-          style={headingStyle}
-        >
+        <h2 className="casestudy-heading" style={headingStyle}>
+          The Product
+        </h2>
+
+        <p style={paragraphStyle}>
+          The result is a working portfolio built as a small product rather
+          than a single scrolling page.
+        </p>
+
+        <ul style={listStyle}>
+          <li style={listItemStyle}>
+            <strong>Project Explorer</strong> — lets visitors scan and move
+            between projects without leaving the desktop.
+          </li>
+
+          <li style={listItemStyle}>
+            <strong>AI Chat</strong> — gives busy visitors a conversational
+            shortcut to ask about my background, projects, skills, and career
+            transition.
+          </li>
+
+          <li style={listItemStyle}>
+            <strong>Installer</strong> — introduces who I am and what the
+            portfolio contains during the first visit, while returning
+            visitors can go directly to the desktop.
+          </li>
+
+          <li style={listItemStyle}>
+            <strong>Inbox</strong> — lets someone start a conversation from
+            inside the portfolio.
+          </li>
+
+          <li style={listItemStyle}>
+            <strong>Writing</strong> — documents the process publicly and
+            creates another path for people to discover the work.
+          </li>
+
+          <li style={listItemStyle}>
+            <strong>Small guides, gimmicks, and easter eggs</strong> — add
+            context, personality, and reasons to keep exploring without
+            blocking the main portfolio experience.
+          </li>
+        </ul>
+
+        <p style={paragraphStyle}>
+          Each feature is documented separately inside the Features folder,
+          including the problem behind it, the decision I made, how it works,
+          and what changed when there was something worth iterating.
+        </p>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 className="casestudy-heading" style={headingStyle}>
           What Shipped
         </h2>
 
-        <div style={contentIndentStyle}>
-          <p style={paragraphStyle}>
-            In roughly three weeks, the project moved from an initial
-            hypothesis and basic wireframe into a working React
-            portfolio with:
-          </p>
+        <p style={paragraphStyle}>
+          The project moved from a rough idea and basic flows into a working
+          React portfolio that I continue to use as both a portfolio and a
+          learning environment.
+        </p>
 
-          <p
-            className="casestudy-mono"
-            style={{
-              margin: '20px 0',
-              padding: '10px 12px',
-              background: '#f2f2f2',
-              border: '1px solid #c0c0c0',
-            }}
-          >
-            React · React95 · JavaScript · Gemini API · Resend ·
-            localStorage
-          </p>
+        <p
+          className="casestudy-mono"
+          style={{
+            margin: '20px 0',
+            padding: '10px 12px',
+            background: '#f2f2f2',
+            border: '1px solid #c0c0c0',
+          }}
+        >
+          React · React95 · JavaScript · Gemini API · Resend · localStorage
+        </p>
 
-          <p style={paragraphStyle}>
-            The result is not a finished experiment.
-          </p>
+        <p style={paragraphStyle}>
+          The biggest hypothesis is still unproven. The portfolio needs more
+          use by its real target audience: recruiters, hiring managers, and
+          design leads.
+        </p>
 
-          <p style={paragraphStyle}>
-            The product still needs testing with its real target
-            audience — recruiters, hiring managers, and design leads —
-            and its most important business hypothesis has not yet been
-            proven:
+        <blockquote style={quoteStyle}>
+          <p style={{ margin: 0, fontWeight: 700, lineHeight: '1.5' }}>
+            Can this portfolio help the right person understand who I am,
+            what I can do, and how I think well enough to start the next
+            conversation?
           </p>
+        </blockquote>
 
-          <blockquote style={quoteStyle}>
-            <p
-              style={{
-                margin: 0,
-                fontWeight: 700,
-              }}
-            >
-              Can this portfolio help the right person understand my
-              capabilities well enough to start the next conversation?
-            </p>
-          </blockquote>
-        </div>
+        <p style={paragraphStyle}>
+          That is what I am testing next.
+        </p>
       </section>
     </article>
   );
