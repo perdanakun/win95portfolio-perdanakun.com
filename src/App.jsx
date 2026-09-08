@@ -57,6 +57,7 @@ import ShipUIContent from './project/ShipUIContent';
 import MayoraContent from './project/MayoraContent';
 import PerdanaComputerProductContent from './project/PerdanaComputerProductContent';
 import PerdanaComputerProductOverview from './project/PerdanaComputerProductOverview';
+import TravelXXXFigmaContent from './project/TravelXXXFigmaContent.jsx';
 
 import ReadmeProduct from './project/ReadmeProduct';
 import ReadmeTravelXXX from './project/ReadmeTravelXXX';
@@ -664,6 +665,7 @@ const [windows, setWindows] = useState({
    mayora: false,
    'perdana-computer-product': false,
    'travelxxx-preview': false,
+   'travelxxx-figma': false,
 
      // Notepad windows
   'readme-product': false,
@@ -828,6 +830,7 @@ const handleRestart = () => {
   mayora: false,
   'perdana-computer-product': false,
   'travelxxx-preview': false,
+  'travelxxx-figma': false,
 
   // Notepad windows
   'readme-product': false,
@@ -870,6 +873,13 @@ const projectWindows = {
     title: "Perdana's Computer - Case Studies",
     content: (
       <PerdanaComputerProductContent />
+    ),
+  },
+
+    'travelxxx-figma': {
+    title: 'TravelXXX - Case Study',
+    content: (
+      <TravelXXXFigmaContent />
     ),
   },
 };

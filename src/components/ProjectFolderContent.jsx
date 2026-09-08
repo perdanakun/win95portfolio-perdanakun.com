@@ -146,6 +146,153 @@ export default function ProjectFolderContent({
   // =========================================================
 
 const projects = [
+
+
+  // =========================================================
+  // TRAVEL XXX
+  // =========================================================
+
+  {
+    id: 'travel-x',
+    name: 'Travel XXX',
+    type: 'folder',
+    iconType: 'folder',
+    isLocked: false,
+
+    children: [
+      {
+        id: 'prd--travelxxx',
+        name: 'Start Here',
+        type: 'file',
+        iconType: 'documentation',
+        openWindow: 'prd-travelxxx',
+      },
+      {
+        id: 'travelxxx-figma-case-studies',
+        name: 'Case Study',
+        type: 'file',
+        iconType: 'website',
+        openWindow: 'travelxxx-figma',
+      },
+
+      {
+        id: 'travel-website',
+        name: 'Live Prototype',
+        type: 'file',
+        iconType: 'travelxxx',
+
+        openWindow: 'travelxxx-preview',
+
+        previewUrl:
+          'https://travelxxx-hotel-compass.vercel.app/',
+      },
+
+      // =====================================================
+      // DOCUMENTATION
+      // =====================================================
+
+      {
+        id: 'travelxxx-documentation',
+        name: 'Documentation',
+        type: 'folder',
+        iconType: 'folder',
+        isLocked: false,
+
+        children: [
+          {
+            id: 'readme-travelxxx',
+            name: 'Workflow',
+            type: 'file',
+            iconType: 'notepad',
+            openWindow: 'readme-travelxxx',
+          },
+
+          {
+            id: '1-research-discovery',
+            name: '01. Research & Discovery',
+            type: 'file',
+            iconType: 'image',
+            imageGallery: true,
+            image: researchDiscovery,
+          },
+
+          {
+            id: '2-reference-moodboard',
+            name: '02. Reference Board',
+            type: 'file',
+            iconType: 'image',
+            imageGallery: true,
+            image: referenceBoard,
+          },
+
+          {
+            id: '3-wireframe-uizard',
+            name: '03. AI-Generated Wireframes (Uizard)',
+            type: 'file',
+            iconType: 'image',
+            imageGallery: true,
+            image: wireframeUizard,
+          },
+
+          {
+            id: '4-v0-generated-design-system',
+            name: '04. AI-Generated Design System',
+            type: 'file',
+            iconType: 'image',
+            imageGallery: true,
+            image: generatedDesignSystem,
+          },
+
+          {
+            id: '5-v0-generated-first-draft',
+            name: '05. AI-Generated First Draft',
+            type: 'file',
+            iconType: 'image',
+            imageGallery: true,
+            image: generatedFirstDraft,
+          },
+
+          {
+            id: '6-component-architecture',
+            name: '06. Component Architecture',
+            type: 'file',
+            iconType: 'image',
+            imageGallery: true,
+            image: componentArchitecture,
+          },
+
+          {
+            id: '7-vscode-refinement',
+            name: '07. Manual Refinement (VS Code)',
+            type: 'file',
+            iconType: 'image',
+            imageGallery: true,
+            image: vscodeRefinement,
+          },
+
+          {
+            id: 'result-from-static-to-functional',
+            name: 'Result - From Static to Functional',
+            type: 'file',
+            iconType: 'video',
+            youtubeId: 'zHHarfJBz3I',
+          },
+        ],
+      },
+
+      {
+        id: 'travel-github',
+        name: 'Source Code',
+        type: 'file',
+        iconType: 'github',
+        link:
+          'https://github.com/perdanakun/travelxxx-hotel-booking',
+      },
+    ],
+  },
+
+  
+  
   // =========================================================
   // PERDANA'S COMPUTER
   // =========================================================
@@ -269,143 +416,6 @@ const projects = [
     ],
   },
 
-  // =========================================================
-  // TRAVEL XXX
-  // =========================================================
-
-  {
-    id: 'travel-x',
-    name: 'Travel XXX',
-    type: 'folder',
-    iconType: 'folder',
-    isLocked: false,
-
-    children: [
-      {
-        id: 'prd--travelxxx',
-        name: 'Start Here',
-        type: 'file',
-        iconType: 'documentation',
-        openWindow: 'prd-travelxxx',
-      },
-
-      {
-        id: 'travel-website',
-        name: 'Live Prototype',
-        type: 'file',
-        iconType: 'travelxxx',
-
-        openWindow: 'travelxxx-preview',
-
-        previewUrl:
-          'https://travelxxx-hotel-compass.vercel.app/',
-      },
-
-      // =====================================================
-      // DOCUMENTATION
-      // =====================================================
-
-      {
-        id: 'travelxxx-documentation',
-        name: 'Documentation',
-        type: 'folder',
-        iconType: 'folder',
-        isLocked: false,
-
-        children: [
-          {
-            id: 'readme-travelxxx',
-            name: 'Workflow',
-            type: 'file',
-            iconType: 'notepad',
-            openWindow: 'readme-travelxxx',
-          },
-
-          {
-            id: '1-research-discovery',
-            name: '01. Research & Discovery',
-            type: 'file',
-            iconType: 'image',
-            imageGallery: true,
-            image: researchDiscovery,
-          },
-
-          {
-            id: '2-reference-moodboard',
-            name: '02. Reference Board',
-            type: 'file',
-            iconType: 'image',
-            imageGallery: true,
-            image: referenceBoard,
-          },
-
-          {
-            id: '3-wireframe-uizard',
-            name: '03. AI-Generated Wireframes (Uizard)',
-            type: 'file',
-            iconType: 'image',
-            imageGallery: true,
-            image: wireframeUizard,
-          },
-
-          {
-            id: '4-v0-generated-design-system',
-            name: '04. AI-Generated Design System',
-            type: 'file',
-            iconType: 'image',
-            imageGallery: true,
-            image: generatedDesignSystem,
-          },
-
-          {
-            id: '5-v0-generated-first-draft',
-            name: '05. AI-Generated First Draft',
-            type: 'file',
-            iconType: 'image',
-            imageGallery: true,
-            image: generatedFirstDraft,
-          },
-
-          {
-            id: '6-component-architecture',
-            name: '06. Component Architecture',
-            type: 'file',
-            iconType: 'image',
-            imageGallery: true,
-            image: componentArchitecture,
-          },
-
-          {
-            id: '7-vscode-refinement',
-            name: '07. Manual Refinement (VS Code)',
-            type: 'file',
-            iconType: 'image',
-            imageGallery: true,
-            image: vscodeRefinement,
-          },
-
-          {
-            id: 'result-from-static-to-functional',
-            name: 'Result - From Static to Functional',
-            type: 'file',
-            iconType: 'video',
-            youtubeId: 'zHHarfJBz3I',
-          },
-        ],
-      },
-
-      {
-        id: 'travel-github',
-        name: 'Source Code',
-        type: 'file',
-        iconType: 'github',
-        link:
-          'https://github.com/perdanakun/travelxxx-hotel-booking',
-      },
-    ],
-  },
-
-  
   // =========================================================
   // SHIP UI
   // =========================================================

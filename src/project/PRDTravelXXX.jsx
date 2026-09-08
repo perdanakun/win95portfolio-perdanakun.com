@@ -437,6 +437,84 @@ export default function TravelXXXProductRequirements() {
           </p>
         </div>
       </section>
+
+{/* =========================================================
+    FULL CASE STUDY CTA
+========================================================= */}
+
+<section
+  style={{
+    marginTop: '48px',
+    padding: '32px',
+    background: '#000080',
+    color: '#ffffff',
+    textAlign: 'center',
+    border: '2px solid #000000',
+    boxShadow:
+      'inset 1px 1px 0 #ffffff, inset -1px -1px 0 #404040',
+  }}
+>
+  <p
+    style={{
+      margin: '0 0 8px',
+      fontSize: '12px',
+      lineHeight: '18px',
+      textTransform: 'uppercase',
+      letterSpacing: '0.08em',
+      opacity: 0.75,
+    }}
+  >
+    TravelXXX — Full Case Study
+  </p>
+
+  <h2
+    className="casestudy-heading"
+    style={{
+      margin: '0 0 12px',
+      fontSize: '24px',
+      lineHeight: '30px',
+      color: '#ffffff',
+    }}
+  >
+    Want the full story?
+  </h2>
+
+  <p
+    style={{
+      maxWidth: '520px',
+      margin: '0 auto 24px',
+      fontSize: '14px',
+      lineHeight: '21px',
+      color: '#ffffff',
+    }}
+  >
+    See how the project moved from an early hypothesis to research,
+    product decisions, prototypes, and what I learned along the way.
+  </p>
+
+  <a
+    href="https://www.figma.com/proto/y0tYg3S2CwfQ2ErjS4GYC4/TRAVELXXX?content-scaling=fixed&kind=proto&node-id=1-2&page-id=0%3A1&scaling=contain&t=g98QX1Ra4SMb9nPb-1"
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{
+      display: 'inline-block',
+      padding: '11px 20px',
+      background: '#c0c0c0',
+      color: '#000000',
+      border: 'none',
+      boxShadow:
+        'inset 2px 2px 0 #ffffff, inset -2px -2px 0 #808080',
+      fontFamily: '"MS Sans Serif", Arial, sans-serif',
+      fontSize: '13px',
+      fontWeight: 700,
+      textDecoration: 'none',
+      cursor: 'pointer',
+    }}
+  >
+    View Full Case Study →
+  </a>
+</section>
+
     </article>
   );
 }
