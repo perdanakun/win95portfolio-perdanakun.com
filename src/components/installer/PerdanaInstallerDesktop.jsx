@@ -6,6 +6,8 @@ import {
 } from '@react95/core';
 
 import InstallerWelcome from './InstallerWelcome';
+import WelcomeInstaller from './WelcomeInstaller';
+import WelcomeInstallerLoading from './WelcomeInstallerLoading';
 import InstallerWelcomeAbout from './InstallerWelcomeAbout';
 import InstallerSystemRequirements from './InstallerSystemRequirements';
 import InstallerTree from './InstallerTree';
@@ -59,11 +61,11 @@ export default function PerdanaInstallerDesktop({
   const handleNext = () => {
 
     // -----------------------------
-    // WELCOME → ABOUT
+    // YES / NO WELCOME → PREPARING LOADING
     // -----------------------------
 
     if (page === 'welcome') {
-      setPage('welcomeAbout');
+      setPage('welcomeLoading');
 
       return;
     }
@@ -138,11 +140,11 @@ export default function PerdanaInstallerDesktop({
   const handleBack = () => {
 
     // -----------------------------
-    // ABOUT → WELCOME
+    // ABOUT → WINDOWS 95 WELCOME
     // -----------------------------
 
     if (page === 'welcomeAbout') {
-      setPage('welcome');
+      setPage('windowsWelcome');
 
       return;
     }
@@ -303,12 +305,45 @@ useEffect(() => {
 
 
       {/* ==========================================
-          MAIN INSTALLER WINDOW
+          PREPARING LOADING
 
-          Everything after Welcome lives here.
+          Shown after the user clicks Yes in InstallerWelcome.
+          When loading completes, show WelcomeInstaller.
       ========================================== */}
 
-      {page !== 'welcome' && (
+      {page === 'welcomeLoading' && (
+        <WelcomeInstallerLoading
+          isMobile={isMobile}
+          isTablet={isTablet}
+          onComplete={() => setPage('windowsWelcome')}
+        />
+      )}
+
+
+      {/* ==========================================
+          WINDOWS 95 WELCOME
+
+          Shown after the preparing/loading screen.
+          Continue moves into the original full installer flow.
+      ========================================== */}
+
+      {page === 'windowsWelcome' && (
+        <WelcomeInstaller
+          isMobile={isMobile}
+          isTablet={isTablet}
+          onContinue={() => setPage('welcomeAbout')}
+          onClose={handleCancel}
+        />
+      )}
+
+
+      {/* ==========================================
+          MAIN INSTALLER WINDOW
+
+          Everything after WelcomeInstaller lives here.
+      ========================================== */}
+
+      {page !== 'welcome' && page !== 'welcomeLoading' && page !== 'windowsWelcome' && (
 
         <div
           style={{

@@ -26,7 +26,6 @@ import RecycleBin from './components/RecycleBin';
 import AboutContent from './components/AboutContent';
 import AlertModal from './components/AlertModal';
 import AlertModalDesktop from './components/AlertModalDesktop'
-import AlertModalInstall from './components/AlertModalInstall';
 import AlertModalFailed from './components/AlertModalFailed';
 import AlertModalEmailFile from './components/AlertModalEmailFile';
 import CameraModal from './components/CameraModal';
@@ -39,15 +38,12 @@ import VideoViewer from './components/VideoViewer';
 
 import PaintHeroContent from './components/PaintHeroContent';
 
-import WelcomeInstaller from './components/installer/WelcomeInstaller';
-import WelcomeInstallerLoading from './components/installer/WelcomeInstallerLoading';
-import PerdanaInstaller from './components/installer/PerdanaInstaller';
+import PerdanaInstallerDesktop from './components/installer/PerdanaInstallerDesktop';
 
 import BlogContent from './components/BlogContent';
 import BrowserModal from './components/BrowserModal';
 import WelcomeModal from './components/WelcomeModal';
 import PerdanaBootScreen from './components/boot/PerdanaBootScreen';
-import PerdanaInstallLoading from './components/installer/PerdanaInstallLoading';
 
 import ProjectWindowModal from './components/ProjectWindowModal';
 import NotepadModal from './components/NotepadModal';
@@ -471,12 +467,19 @@ function App() {
 
 const [pcState, setPcState] = useState(getPCState);
 
+// CURRENT ENTRY FLOW:
+// Every visit starts with the Boot screen, then goes straight to Desktop.
+// The Installer remains optional and can only be launched from the Desktop icon.
+const BOOT_STORAGE_KEY = 'perdana-boot-seen';
 const [pcScreen, setPcScreen] = useState(() => {
-  const state = getPCState();
+  try {
+    const hasSeenBoot =
+      localStorage.getItem(BOOT_STORAGE_KEY) === 'true';
 
-  return state.installed
-    ? 'desktop'
-    : 'boot';
+    return hasSeenBoot ? 'desktop' : 'boot';
+  } catch {
+    return 'boot';
+  }
 });
 
 
@@ -485,20 +488,10 @@ const [pcScreen, setPcScreen] = useState(() => {
 // PERDANA PC INSTALLER LIFECYCLE
 // ==========================================
 
-useEffect(() => {
-  // Jangan cek installer sebelum boot selesai
-  if (pcScreen !== 'desktop') {
-    return;
-  }
-
-  // Kalau sudah pernah install, jangan munculkan otomatis
-  if (pcState.installed) {
-    return;
-  }
-
-  // First boot → tampilkan Welcome Installer terlebih dahulu
-  setWelcomeInstallerVisible(true);
-}, [pcScreen, pcState.installed]);
+// TEMP UX EXPERIMENT:
+// Automatic first-visit installer is disabled.
+// Everyone lands directly on Desktop.
+// Keep the installer components/state below dormant for easy rollback.
 
 
 
@@ -641,6 +634,12 @@ useEffect(() => {
   };
 }, []);
 
+// ==========================================
+// PAINT HERO — DEFAULT DESKTOP LANDING
+// ==========================================
+// Paint Hero opens on every page load after Boot on desktop/tablet.
+// Smartphones still land on a clean Desktop without auto-opening Paint.
+
   // Menyimpan status true (terbuka) atau false (tertutup) untuk setiap aplikasi/jendela
 const [windows, setWindows] = useState({
   welcome: false,
@@ -714,59 +713,26 @@ const openAlertDesktop = (title, message) => {
   setAlertDesktop({ show: true, title, message });
 };
 
-// Alert Installer
-const [showInstallAlert, setShowInstallAlert] = useState(false);
-
 // ==========================================
 // WELCOME LIFECYCLE
 // ==========================================
-// Welcome is event-driven now. It only opens after:
-// 1) the first installation finishes, or
-// 2) Reset Desktop finishes booting.
-// Returning visits go straight to Desktop without Boot or Welcome.
+
+// Menandai bahwa Boot dipanggil dari Reset Desktop.
+// Kalau true, setelah Boot selesai tampilkan Welcome.
 const [showWelcomeAfterReset, setShowWelcomeAfterReset] = useState(false);
 
-// Perdana PC Installer
-const [welcomeInstallerVisible, setWelcomeInstallerVisible] = useState(false);
-const [welcomeInstallerLoadingVisible, setWelcomeInstallerLoadingVisible] = useState(false);
-const [installerVisible, setInstallerVisible] = useState(false);
+// ==========================================
+// DESKTOP INSTALLER — ORIGINAL FULL FLOW
+// ==========================================
+// Installer launched from Desktop / Start Menu.
+// PerdanaInstallerDesktop owns the entire old flow:
+// InstallerWelcome → WelcomeAbout → System Requirements
+// → Tree + Content → Loading → Complete.
 const [desktopInstallerVisible, setDesktopInstallerVisible] = useState(false);
 
-
-// Desktop Icon Installer
 const openInstaller = () => {
-  setWelcomeInstallerVisible(true);
-  setInstallerVisible(false);
+  setDesktopInstallerVisible(true);
 };
-
-
-
-
-// ==========================================
-// PERDANA INSTALLER LOADING
-// ==========================================
-const [isInstalling, setIsInstalling] = useState(false);
-
-useEffect(() => {
-  if (!isInstalling) {
-    return;
-  }
-
-  const installTimer = setTimeout(() => {
-    setIsInstalling(false);
-    setInstallerVisible(false);
-
-    // First install is complete. Show Welcome before Clippy can start.
-    setWindows(prev => ({
-      ...prev,
-      welcome: true,
-    }));
-  }, 3000);
-
-  return () => {
-    clearTimeout(installTimer);
-  };
-}, [isInstalling]);
 
 // Muted Desktop Feature
 const [isMuted, setIsMuted] = useState(false);
@@ -822,6 +788,7 @@ const handleRestart = () => {
 
     desktopVideo: false,
 
+    // Reset behaves like a fresh startup: Boot -> Desktop + Paint Hero.
     paintHero: !isMobile,
 
 // Project windows
@@ -839,10 +806,11 @@ const handleRestart = () => {
     'perdana-computer-overview': false,
   });
 
-  // Reset Desktop explicitly asks for Boot -> Welcome.
-  // This is separate from a normal returning visit.
-  setShowWelcomeAfterReset(true);
-  setPcScreen('boot');
+// Manual Reset Desktop:
+// Boot → Welcome → Desktop
+setDesktopInstallerVisible(false);
+setShowWelcomeAfterReset(true);
+setPcScreen('boot');
 };
 
 // Mapping Content Project
@@ -1199,18 +1167,18 @@ const handleAttachmentTooLarge = (file) => {
   return (
     <>
 
-{pcState.installed && (
-  <ClippyAssistant
-    pcScreen={pcScreen}
-    pcInstalled={pcState.installed}
-    isMobile={isMobile}
-    isTablet={isTablet}
-    windows={windows}
-    welcomeInstallerVisible={welcomeInstallerVisible}
-    welcomeInstallerLoadingVisible={welcomeInstallerLoadingVisible}
-    installerVisible={installerVisible}
-  />
-)}
+      {/* ==========================================
+          CLIPPY — LIGHTWEIGHT ASSISTANT
+          No first tour. Random + contextual only.
+      ========================================== */}
+      <ClippyAssistant
+        pcScreen={pcScreen}
+        isMobile={isMobile}
+        isTablet={isTablet}
+        windows={windows}
+        desktopInstallerVisible={desktopInstallerVisible}
+      />
+
       {/* CSS Reset untuk layar full screen dan background Windows XP */}
       <style>
         {`
@@ -1294,19 +1262,28 @@ const handleAttachmentTooLarge = (file) => {
       </style>
 
 {/* --- BOOT PERDANA PC --- */}
-
 {pcScreen === 'boot' && (
   <PerdanaBootScreen
     onBootComplete={() => {
+      try {
+        localStorage.setItem(
+          BOOT_STORAGE_KEY,
+          'true'
+        );
+      } catch {
+        // ignore storage error
+      }
+
       setPcScreen('desktop');
 
-      // Boot on first visit continues to the installer.
-      // Boot triggered by Reset Desktop continues to Welcome.
+      // Kalau Boot berasal dari Reset Desktop,
+      // tampilkan Welcome setelah Boot selesai.
       if (showWelcomeAfterReset) {
         setWindows(prev => ({
           ...prev,
           welcome: true,
         }));
+
         setShowWelcomeAfterReset(false);
       }
     }}
@@ -1314,24 +1291,11 @@ const handleAttachmentTooLarge = (file) => {
 )}
 
       {/* --- CONTAINER DESKTOP UTAMA --- */}
-{/* =========================
-    WINDOWS 95 INSTALL LOADING
-========================= */}
-{pcScreen === 'desktop' && isInstalling && (
-  <PerdanaInstallLoading 
-  winBackground={winBackground}
-  />
-)}
-{/* =========================
-    WINDOWS 95 INSTALL FLOW
-========================= */}
 
-{pcScreen === 'desktop' && (
-  welcomeInstallerVisible ||
-  welcomeInstallerLoadingVisible ||
-  installerVisible
-) ? (
-
+{/* =========================
+    ORIGINAL FULL INSTALLER FLOW
+========================= */}
+{pcScreen === 'desktop' && desktopInstallerVisible ? (
   <div
     style={{
       position: 'fixed',
@@ -1348,15 +1312,10 @@ const handleAttachmentTooLarge = (file) => {
       zIndex: 99999,
     }}
   >
-
-    {/* =========================
-        FADING BACKGROUND
-    ========================= */}
     <div
       style={{
         position: 'absolute',
         inset: 0,
-
         background: `
           linear-gradient(
             to bottom,
@@ -1368,7 +1327,6 @@ const handleAttachmentTooLarge = (file) => {
             rgba(0, 0, 0, 0.9) 100%
           )
         `,
-
         pointerEvents: 'none',
         zIndex: 1,
       }}
@@ -1378,149 +1336,30 @@ const handleAttachmentTooLarge = (file) => {
       style={{
         position: 'relative',
         zIndex: 3,
-
         width: '100%',
         height: '100%',
-
         boxSizing: 'border-box',
       }}
     >
+      <PerdanaInstallerDesktop
+        isMobile={isMobile}
+        isTablet={isTablet}
+        onClose={() => {
+          setDesktopInstallerVisible(false);
+        }}
+        onFinish={() => {
+          const nextState = {
+            ...pcState,
+            installed: true,
+          };
 
-      {/* =========================
-          WELCOME INSTALLER
-      ========================= */}
-      {welcomeInstallerVisible && (
-<WelcomeInstaller
-  isMobile={isMobile}
-  isTablet={isTablet}
+          savePCState(nextState);
 
-onContinue={() => {
-  setWelcomeInstallerVisible(false);
-  setWelcomeInstallerLoadingVisible(true);
-}}
-
-
-  onClose={() => {
-    setWelcomeInstallerVisible(false);
-  }}
-/>
-      )}
-
-      {/* =========================
-    WELCOME INSTALLER LOADING
-========================= */}
-
-{welcomeInstallerLoadingVisible && (
-  <WelcomeInstallerLoading
-    isMobile={isMobile}
-    isTablet={isTablet}
-
-    onComplete={() => {
-      setWelcomeInstallerLoadingVisible(false);
-      setInstallerVisible(true);
-    }}
-  />
-)}
-
-
-      {/* =========================
-          PERDANA INSTALLER
-      ========================= */}
-      {installerVisible && (
-        <PerdanaInstaller
-          isMobile={isMobile}
-          isTablet={isTablet}
-
-          onClose={() => {
-            setInstallerVisible(false);
-          }}
-
-          onFinish={() => {
-            const nextState = {
-              ...pcState,
-              installed: true,
-            };
-
-            savePCState(nextState);
-
-            setIsInstalling(true);
-          }}
-        />
-      )}
-
-{/* =========================
-    INSTALLATION NOTE
-========================= */}
-{(
-  welcomeInstallerVisible ||
-  welcomeInstallerLoadingVisible ||
-  installerVisible
-) && (
-
-  <div
-    style={{
-      position: 'absolute',
-
-      left: '50%',
-      bottom: isMobile
-        ? '6%'
-        : isTablet
-        ? '4%'
-        : '3%',
-
-      transform: 'translateX(-50%)',
-
-      width: isMobile
-        ? '90%'
-        : isTablet
-        ? '75%'
-        : '100%',
-
-      maxWidth: isMobile
-        ? '360px'
-        : isTablet
-        ? '600px'
-        : 'none',
-
-      padding: '0 16px',
-
-      color: '#dadada',
-
-      fontFamily:
-        '"MS Sans Serif", Arial, sans-serif',
-
-      fontSize: isMobile
-        ? 9
-        : isTablet
-        ? 10
-        : 11,
-
-      fontWeight: 'normal',
-
-      textShadow: '1px 1px 0 #000',
-
-      textAlign: 'center',
-
-      lineHeight: isMobile
-        ? 1.4
-        : isTablet
-        ? 1.4
-        : 1.3,
-
-      boxSizing: 'border-box',
-
-      userSelect: 'none',
-      pointerEvents: 'none',
-
-      zIndex: 10001,
-    }}
-  >
-    This setup runs automatically the first time you visit.
-    <br />
-    Once you're in, you can launch it again from the desktop.
-  </div>
-)}
-
+          // The old installer already handles Loading + Complete internally.
+          // Finish closes Setup and returns to Desktop.
+          setDesktopInstallerVisible(false);
+        }}
+      />
     </div>
   </div>
 ) : pcScreen === 'desktop' ? (
@@ -1587,7 +1426,7 @@ onContinue={() => {
   enableResizing={false}
   disableDragging={isMobile || isTablet}
 >
-  <DesktopIcon onOpen={() => setShowInstallAlert(true)}>
+  <DesktopIcon onOpen={openInstaller}>
     <div style={desktopIconStyle}>
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Install variant="32x32_4" />
@@ -1734,26 +1573,6 @@ onContinue={() => {
   message={alertDesktop.message}
   onClose={() => setAlertDesktop({ ...alertDesktop, show: false })}
 />
-
-<AlertModalInstall
-  show={showInstallAlert}
-title="Perdana Installer"
-message={
-<>
-  Perdana's Computer is already installed.{" "}
-  <strong>Do you want to install it again</strong> and explore the profile from the beginning?
-</>
-}
-
-
-
-  onClose={() => setShowInstallAlert(false)}
-  onConfirm={() => {
-    setShowInstallAlert(false);
-    openInstaller();
-  }}
-/>
-
 
 {/* --- JENDELA PAINT HERO --- */}
 {windows.paintHero &&
@@ -3130,7 +2949,7 @@ desktopTransform="translateY(-50%)"
       {/* INSTALLER */}
       <List.Item
         icon={<Computer variant="16x16_4" />}
-        onClick={() => setShowInstallAlert(true)}
+        onClick={openInstaller}
       >
         Installer
       </List.Item>
