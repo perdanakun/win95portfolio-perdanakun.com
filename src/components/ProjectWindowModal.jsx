@@ -1,5 +1,6 @@
 import React, {
   useCallback,
+  useEffect,
   useRef,
   useState,
 } from 'react';
@@ -12,8 +13,6 @@ import {
 
 import {
   Folder,
-  ArrowLeft,
-  ArrowRight,
   User4,
   Refresh,
 
@@ -31,7 +30,6 @@ import {
   Ie,
 
 } from '@react95/icons';
-
 export default function ProjectWindowModal({
   title = 'Project.exe',
   icon = null,
@@ -41,16 +39,8 @@ export default function ProjectWindowModal({
 
   onClose,
 
-  // =========================================================
-  // BROWSER
-  // =========================================================
-
   url = 'https://www.perdanakun.com/',
   statusText = 'Done',
-
-  // =========================================================
-  // NORMAL WINDOW
-  // =========================================================
 
   width = '60%',
   height = '70%',
@@ -59,6 +49,20 @@ export default function ProjectWindowModal({
   left = '50%',
 
   transform = 'translate(-50%, -50%)',
+
+  // CASE STUDY / BROWSER NAVIGATION
+
+  onBack,
+  onForward,
+
+  canGoBack = false,
+  canGoForward = false,
+
+  lockContent = false,
+
+  // OPTIONAL GENERIC SLIDER NAVIGATION
+  // Used by case studies or any paged project content.
+  slideNavigation = null,
 
   children,
 }) {
@@ -85,6 +89,47 @@ export default function ProjectWindowModal({
   // =========================================================
 
   const [address, setAddress] = useState(url);
+
+  useEffect(() => {
+    setAddress(url);
+  }, [url]);
+
+  // =========================================================
+  // GENERIC SLIDE NAVIGATION
+  // =========================================================
+
+  const hasSlideNavigation =
+    Boolean(slideNavigation);
+
+  const currentPage =
+    slideNavigation?.currentPage ?? 1;
+
+  const totalPages =
+    slideNavigation?.totalPages ?? 1;
+
+  const effectiveOnBack =
+    slideNavigation?.onPrevious ??
+    onBack;
+
+  const effectiveOnForward =
+    slideNavigation?.onNext ??
+    onForward;
+
+  const effectiveCanGoBack =
+    hasSlideNavigation
+      ? (
+          slideNavigation?.canGoPrevious ??
+          currentPage > 1
+        )
+      : canGoBack;
+
+  const effectiveCanGoForward =
+    hasSlideNavigation
+      ? (
+          slideNavigation?.canGoNext ??
+          currentPage < totalPages
+        )
+      : canGoForward;
 
   // =========================================================
   // WINDOW STYLE
@@ -335,6 +380,9 @@ const ToolbarButton = ({
   width = 64,
   iconVariant,
   isMobile = false,
+
+  disabled = false,
+  onClick,
 }) => {
   const [isHovered, setIsHovered] =
     useState(false);
@@ -360,7 +408,24 @@ const ToolbarButton = ({
       type="button"
       aria-label={label}
 
+      disabled={disabled}
+
+      onClick={() => {
+        if (
+          disabled ||
+          typeof onClick !== 'function'
+        ) {
+          return;
+        }
+
+        onClick();
+      }}
+
       onMouseEnter={() => {
+        if (disabled) {
+          return;
+        }
+
         setIsHovered(true);
       }}
 
@@ -370,10 +435,18 @@ const ToolbarButton = ({
       }}
 
       onMouseDown={() => {
+        if (disabled) {
+          return;
+        }
+
         setIsPressed(true);
       }}
 
       onMouseUp={() => {
+        if (disabled) {
+          return;
+        }
+
         setIsPressed(false);
       }}
 
@@ -440,11 +513,25 @@ const ToolbarButton = ({
         style={{
           width: iconSize,
           height: iconSize,
+
+          opacity: disabled
+            ? 0.45
+            : 1,
+
+          filter: disabled
+            ? 'grayscale(1)'
+            : 'none',
         }}
       />
 
       {!isMobile && (
-        <span>
+        <span
+          style={{
+            opacity: disabled
+              ? 0.55
+              : 1,
+          }}
+        >
           {label}
         </span>
       )}
@@ -654,6 +741,13 @@ const ToolbarButton = ({
     icon={Progman44}
     width={64}
     isMobile={isMobile}
+
+    onClick={effectiveOnBack}
+    disabled={
+      typeof effectiveOnBack === 'function'
+        ? !effectiveCanGoBack
+        : false
+    }
   />
 
   <ToolbarButton
@@ -661,6 +755,13 @@ const ToolbarButton = ({
     icon={Progman45}
     width={64}
     isMobile={isMobile}
+
+    onClick={effectiveOnForward}
+    disabled={
+      typeof effectiveOnForward === 'function'
+        ? !effectiveCanGoForward
+        : false
+    }
   />
 
   <ToolbarButton
@@ -669,6 +770,7 @@ const ToolbarButton = ({
     iconVariant="32x32_4"
     width={64}
     isMobile={isMobile}
+    disabled={hasSlideNavigation}
   />
 
   <ToolbarButton
@@ -677,6 +779,7 @@ const ToolbarButton = ({
     iconVariant="16x16_4"
     width={64}
     isMobile={isMobile}
+    disabled={hasSlideNavigation}
   />
 
   <ToolbarButton
@@ -685,6 +788,7 @@ const ToolbarButton = ({
     iconVariant="16x16_8"
     width={64}
     isMobile={isMobile}
+    disabled={hasSlideNavigation}
   />
 
   {/* =================================================
@@ -723,6 +827,7 @@ const ToolbarButton = ({
         icon={Websrch}
         iconVariant="16x16_4"
         isMobile={isMobile}
+          disabled={hasSlideNavigation}
       />
 
       <ToolbarButton
@@ -731,6 +836,7 @@ const ToolbarButton = ({
         icon={Fave}
         iconVariant="16x16_4"
         isMobile={isMobile}
+          disabled={hasSlideNavigation}
       />
 
       <ToolbarButton
@@ -739,6 +845,7 @@ const ToolbarButton = ({
         iconVariant="16x16_4"
         width={64}
         isMobile={isMobile}
+          disabled={hasSlideNavigation}
       />
 
       <ToolbarButton
@@ -747,6 +854,7 @@ const ToolbarButton = ({
         iconVariant="16x16_4"
         width={68}
         isMobile={isMobile}
+          disabled={hasSlideNavigation}
       />
     </>
   )}
@@ -788,6 +896,7 @@ const ToolbarButton = ({
         iconVariant="16x16_4"
         width={64}
         isMobile={isMobile}
+          disabled={hasSlideNavigation}
       />
 
       <ToolbarButton
@@ -796,6 +905,7 @@ const ToolbarButton = ({
         iconVariant="16x16_4"
         width={72}
         isMobile={isMobile}
+          disabled={hasSlideNavigation}
       />
 
     </>
@@ -988,6 +1098,8 @@ const ToolbarButton = ({
 
             flexDirection: 'column',
 
+            position: 'relative',
+
             overflow: 'hidden',
           }}
         >
@@ -1010,7 +1122,9 @@ const ToolbarButton = ({
 
               boxSizing: 'border-box',
 
-              overflowY: 'auto',
+              overflowY: lockContent
+                ? 'hidden'
+                : 'auto',
 
               overflowX: 'hidden',
 
@@ -1021,7 +1135,9 @@ const ToolbarButton = ({
 
               textAlign: 'left',
 
-              touchAction: 'pan-y',
+              touchAction: lockContent
+                ? 'none'
+                : 'pan-y',
 
               WebkitOverflowScrolling:
                 'touch',
@@ -1031,6 +1147,227 @@ const ToolbarButton = ({
           >
             {children}
           </main>
+
+ {/* =================================================
+    OPTIONAL SLIDE NAVIGATION OVERLAY
+    Modern controls that belong to the content,
+    not to the Windows 95 shell.
+================================================= */}
+
+{hasSlideNavigation && (
+  <>
+    {/* PREVIOUS */}
+
+    {effectiveCanGoBack && (
+      <button
+        type="button"
+        aria-label="Previous slide"
+        onClick={effectiveOnBack}
+ style={{
+  position: 'absolute',
+
+  left: isMobile
+    ? '10px'
+    : '18px',
+
+  top: '50%',
+
+  transform:
+    'translateY(-50%)',
+
+  width: isMobile
+    ? '32px'
+    : '40px',
+
+  height: isMobile
+    ? '40px'
+    : '48px',
+
+  padding: 0,
+
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  // NO BUTTON SHAPE
+  border: 'none',
+  outline: 'none',
+  background: 'transparent',
+  boxShadow: 'none',
+
+  color: '#000000',
+
+  fontFamily:
+    'Arial, sans-serif',
+
+  fontSize: isMobile
+    ? '32px'
+    : '40px',
+
+  fontWeight: 300,
+
+  lineHeight: 1,
+
+  cursor: 'pointer',
+
+  zIndex: 20,
+
+  userSelect: 'none',
+
+  WebkitTapHighlightColor:
+    'transparent',
+}}
+      >
+        ‹
+      </button>
+    )}
+
+    {/* NEXT */}
+
+    {effectiveCanGoForward && (
+      <button
+        type="button"
+        aria-label="Next slide"
+        onClick={effectiveOnForward}
+style={{
+  position: 'absolute',
+
+  right: isMobile
+    ? '10px'
+    : '18px',
+
+  top: '50%',
+
+  transform:
+    'translateY(-50%)',
+
+  width: isMobile
+    ? '32px'
+    : '40px',
+
+  height: isMobile
+    ? '40px'
+    : '48px',
+
+  padding: 0,
+
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  // NO BUTTON SHAPE
+  border: 'none',
+  outline: 'none',
+  background: 'transparent',
+  boxShadow: 'none',
+
+  color: '#000000',
+
+  fontFamily:
+    'Arial, sans-serif',
+
+  fontSize: isMobile
+    ? '32px'
+    : '40px',
+
+  fontWeight: 300,
+
+  lineHeight: 1,
+
+  cursor: 'pointer',
+
+  zIndex: 20,
+
+  userSelect: 'none',
+
+  WebkitTapHighlightColor:
+    'transparent',
+}}
+      >
+        ›
+      </button>
+    )}
+
+    {/* PAGE COUNTER */}
+
+    <div
+      aria-label={`Slide ${currentPage} of ${totalPages}`}
+      style={{
+        position: 'absolute',
+
+        left: '50%',
+
+        bottom: isMobile
+          ? '10px'
+          : '16px',
+
+        transform:
+          'translateX(-50%)',
+
+        minWidth: isMobile
+          ? '52px'
+          : '60px',
+
+        height: isMobile
+          ? '24px'
+          : '28px',
+
+        padding: isMobile
+          ? '0 9px'
+          : '0 11px',
+
+        boxSizing:
+          'border-box',
+
+        display: 'flex',
+
+        alignItems: 'center',
+        justifyContent: 'center',
+
+        borderRadius: '999px',
+
+        background:
+          'rgba(0, 0, 0, 0.55)',
+
+        color: '#ffffff',
+
+        fontFamily:
+          'Arial, sans-serif',
+
+        fontSize: isMobile
+          ? '11px'
+          : '12px',
+
+        fontWeight: 500,
+
+        letterSpacing:
+          '0.2px',
+
+        lineHeight: 1,
+
+        whiteSpace: 'nowrap',
+
+        userSelect: 'none',
+
+        pointerEvents: 'none',
+
+        zIndex: 20,
+
+        backdropFilter:
+          'blur(4px)',
+
+        WebkitBackdropFilter:
+          'blur(4px)',
+
+
+      }}
+    >
+      {currentPage}
+      {' / '}
+      {totalPages}
+    </div>
+  </>
+)}
         </div>
       </div>
     </Modal>

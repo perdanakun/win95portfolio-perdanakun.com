@@ -10,11 +10,14 @@ import winMidday from './assets/images/3midday.png';
 import winAfternoon from './assets/images/4afternoon.png';
 import winSunset from './assets/images/5sunset.png';
 import winBlueHour from './assets/images/6bluehour.png';
+import winampIcon16 from './assets/icons/winamp2-16x16.png';
+import winampIcon32  from './assets/icons/winamp2-32x32.png';
 
 import didiKempotVideo from './assets/video/didikempot_bakso_sarjana.mp4';
+import WinampPlayer from './components/WinampPlayer';
 
 import ClippyAssistant from './components/ClippyAssistant';
-  
+
 
 import AiAssistantContentModal from './components/AiAssistantContentModal';
 import ProjectFolderContent from './components/ProjectFolderContent';
@@ -54,6 +57,10 @@ import MayoraContent from './project/MayoraContent';
 import PerdanaComputerProductContent from './project/PerdanaComputerProductContent';
 import PerdanaComputerProductOverview from './project/PerdanaComputerProductOverview';
 import TravelXXXFigmaContent from './project/TravelXXXFigmaContent.jsx';
+
+import CaseStudyViewer from './components/CaseStudyViewer';
+import TravelXXXCaseStudyContent from './project/TravelXXXCaseStudyContent';
+import PerdanaComputerVisualCaseStudyContent from './project/PerdanaComputerVisualCaseStudyContent';
 
 import ReadmeProduct from './project/ReadmeProduct';
 import ReadmeTravelXXX from './project/ReadmeTravelXXX';
@@ -547,7 +554,7 @@ const getDesktopIconPosition = (index) => {
   const startY = 24;
   const gapX = 12;
   const gapY = 12;
-  const maxRows = 6;
+  const maxRows = 7;
 
   const column = Math.floor(index / maxRows);
   const row = index % maxRows;
@@ -646,7 +653,7 @@ const [windows, setWindows] = useState({
   about: false,
   projects: false,
   contact: false,
-  csGame: false,
+  winamp: false,
   aiAssistant: false,
   recycleBin: false,
   imageViewer: false,
@@ -663,14 +670,39 @@ const [windows, setWindows] = useState({
   'ship-ui': false,
    mayora: false,
    'perdana-computer-product': false,
+   'perdana-computer-visual-case-study': false,
    'travelxxx-preview': false,
-   'travelxxx-figma': false,
+   'travelxxx-case-study': false,
 
      // Notepad windows
   'readme-product': false,
   'readme-travelxxx': false,
   'prd-travelxxx': false,
   'perdana-computer-overview': false,
+});
+
+// Travelxxx Porject Modal SLIDER
+const [
+  travelXXXSlideState,
+  setTravelXXXSlideState,
+] = useState({
+  currentSlide: 0,
+  slideNumber: 1,
+  totalSlides: 19,
+  canGoBack: false,
+  canGoForward: true,
+});
+
+
+const [
+  perdanaComputerSlideState,
+  setPerdanaComputerSlideState,
+] = useState({
+  currentSlide: 0,
+  slideNumber: 1,
+  totalSlides: 1,
+  canGoBack: false,
+  canGoForward: false,
 });
 
 // Window Porject Modal
@@ -778,7 +810,7 @@ const handleRestart = () => {
     about: false,
     projects: false,
     contact: false,
-    csGame: false,
+    winamp: false,
     aiAssistant: false,
     recycleBin: false,
     imageViewer: false,
@@ -796,8 +828,9 @@ const handleRestart = () => {
   'ship-ui': false,
   mayora: false,
   'perdana-computer-product': false,
+  'perdana-computer-visual-case-study': false,
   'travelxxx-preview': false,
-  'travelxxx-figma': false,
+  'travelxxx-case-study': false,
 
   // Notepad windows
   'readme-product': false,
@@ -844,12 +877,103 @@ const projectWindows = {
     ),
   },
 
-    'travelxxx-figma': {
-    title: 'TravelXXX - Case Study',
-    content: (
-      <TravelXXXFigmaContent />
-    ),
+    'perdana-computer-visual-case-study': {
+  title:
+    "Perdana's Computer - Visual Case Study",
+
+  url:
+    'perdanakun.com',
+
+  lockContent:
+    true,
+
+  slideNavigation: {
+    currentPage:
+      perdanaComputerSlideState.slideNumber,
+
+    totalPages:
+      perdanaComputerSlideState.totalSlides,
+
+    canGoPrevious:
+      perdanaComputerSlideState.canGoBack,
+
+    canGoNext:
+      perdanaComputerSlideState.canGoForward,
+
+    onPrevious: () => {
+      window.dispatchEvent(
+        new CustomEvent(
+          'perdana-computer-case-study-prev'
+        )
+      );
+    },
+
+    onNext: () => {
+      window.dispatchEvent(
+        new CustomEvent(
+          'perdana-computer-case-study-next'
+        )
+      );
+    },
   },
+
+  content: (
+    <PerdanaComputerVisualCaseStudyContent
+      onSlideChange={
+        setPerdanaComputerSlideState
+      }
+    />
+  ),
+},
+
+    'travelxxx-case-study': {
+      title:
+        'TravelXXX - Case Study',
+
+      url:
+        'travelxxx.perdanakun.com',
+
+      lockContent:
+        true,
+
+      slideNavigation: {
+        currentPage:
+          travelXXXSlideState.slideNumber,
+
+        totalPages:
+          travelXXXSlideState.totalSlides,
+
+        canGoPrevious:
+          travelXXXSlideState.canGoBack,
+
+        canGoNext:
+          travelXXXSlideState.canGoForward,
+
+        onPrevious: () => {
+          window.dispatchEvent(
+            new CustomEvent(
+              'travelxxx-case-study-prev'
+            )
+          );
+        },
+
+        onNext: () => {
+          window.dispatchEvent(
+            new CustomEvent(
+              'travelxxx-case-study-next'
+            )
+          );
+        },
+      },
+
+      content: (
+        <TravelXXXCaseStudyContent
+          onSlideChange={
+            setTravelXXXSlideState
+          }
+        />
+      ),
+    },
 };
 
 // ==========================================
@@ -1421,7 +1545,7 @@ const handleAttachmentTooLarge = (file) => {
 
 {/* Installer */}
 <Rnd
-  default={getDesktopIconPosition(1)}
+  default={getDesktopIconPosition(7)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1438,7 +1562,7 @@ const handleAttachmentTooLarge = (file) => {
 
 {/* Inbox */}
 <Rnd
-  default={getDesktopIconPosition(2)}
+  default={getDesktopIconPosition(1)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1455,7 +1579,7 @@ const handleAttachmentTooLarge = (file) => {
 
 {/* My Projects */}
 <Rnd
-  default={getDesktopIconPosition(7)}
+  default={getDesktopIconPosition(2)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1469,27 +1593,44 @@ const handleAttachmentTooLarge = (file) => {
     </div>
   </DesktopIcon>
 </Rnd>
-
-{/* Games */}
+{/* Winamp */}
 <Rnd
-  default={getDesktopIconPosition(4)}
+  default={getDesktopIconPosition(3)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
 >
   <DesktopIcon
     onOpen={() =>
-      openAlertDesktop(
-        "I'm sorry...",
-        "This game module is still under construction. While I'm polishing the design & code for your entertainment, please check back in the next system update."
-      )
+      openWindow('winamp')
     }
   >
     <div style={desktopIconStyle}>
-      <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <Freecell1 variant="32x32_4" />
+      <div
+        style={{
+          fontSize: '32px',
+          marginBottom: '0',
+        }}
+      >
+        <img
+          src={winampIcon32}
+          alt=""
+          draggable={false}
+          style={{
+            width: '32px',
+            height: '32px',
+
+            display: 'inline-block',
+            verticalAlign: 'middle',
+
+            imageRendering: 'pixelated',
+          }}
+        />
       </div>
-      <span style={desktopIconLabelStyle}>Games</span>
+
+      <span style={desktopIconLabelStyle}>
+        Winamp
+      </span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1516,7 +1657,7 @@ const handleAttachmentTooLarge = (file) => {
 
 {/* AI Chat */}
 <Rnd
-  default={getDesktopIconPosition(6)}
+  default={getDesktopIconPosition(8)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1533,7 +1674,7 @@ const handleAttachmentTooLarge = (file) => {
 
 {/* Desktop Video */}
 <Rnd
-  default={getDesktopIconPosition(3)}
+  default={getDesktopIconPosition(4)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1550,7 +1691,7 @@ const handleAttachmentTooLarge = (file) => {
 
 {/* Paint */}
 <Rnd
-  default={getDesktopIconPosition(8)}
+  default={getDesktopIconPosition(6)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1636,6 +1777,20 @@ const handleAttachmentTooLarge = (file) => {
     </ResizableModal>
   )}
 
+   {/* --- JENDELA MODAL WINAMP --- */}
+    {windows.winamp && (
+      <WinampPlayer
+        isMobile={isMobile}
+        isTablet={isTablet}
+
+        onClose={() =>
+          toggleWindow(
+            'winamp',
+            false
+          )
+        }
+      />
+    )}
 
 
         {/* --- JENDELA MODAL UNTUK MASING-MASING APLIKASI --- */}
@@ -1978,8 +2133,8 @@ INI ENDING KODE INACTIVE*/}
   tabletBottom="auto"
   tabletTransform="translate(-50%, -50%)"
 
-  desktopWidth="40%"
-  desktopHeight="50%"
+  desktopWidth="47%"
+  desktopHeight="65%"
   desktopTop="50%"
   desktopLeft="50%"
   desktopRight="auto"
@@ -2013,29 +2168,52 @@ INI ENDING KODE INACTIVE*/}
 {/* =========================================================
     JENDELA PROJECT INSIDE
 ========================================================= */}
+
 {Object.entries(projectWindows).map(
-  ([windowName, project]) =>
-    windows[windowName] && (
+  ([windowName, project]) => {
+    if (!windows[windowName]) {
+      return null;
+    }
+
+    return (
       <ProjectWindowModal
         key={windowName}
 
         title={project.title}
 
         icon={
-          <Url1102 variant="16x16_4" />
+          <Url1102
+            variant="16x16_4"
+          />
         }
-
-
 
         isMobile={isMobile}
         isTablet={isTablet}
 
-        width="60%"
-        height="80%"
-        
-       
-              
-        
+        width={
+          project.width ||
+          '80%'
+        }
+
+        height={
+          project.height ||
+          '90%'
+        }
+
+        url={
+          project.url ||
+          'https://www.perdanakun.com/'
+        }
+
+        lockContent={
+          project.lockContent ||
+          false
+        }
+
+        slideNavigation={
+          project.slideNavigation ||
+          null
+        }
 
         onClose={() =>
           toggleWindow(
@@ -2046,7 +2224,8 @@ INI ENDING KODE INACTIVE*/}
       >
         {project.content}
       </ProjectWindowModal>
-    )
+    );
+  }
 )}
 
 {/* =========================================================
@@ -2068,8 +2247,8 @@ INI ENDING KODE INACTIVE*/}
         isMobile={isMobile}
         isTablet={isTablet}
 
-        width="50%"
-        height="70%"
+        width="60%"
+        height="80%"
 
         onClose={() =>
           toggleWindow(
@@ -2569,7 +2748,7 @@ INI ENDING KODE INACTIVE*/}
     // DESKTOP
     // =========================
 
-    desktopWidth="auto"
+    desktopWidth="70%"
     desktopHeight="auto"
 
     desktopTop="50%"

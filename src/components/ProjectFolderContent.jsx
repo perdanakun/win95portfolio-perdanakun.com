@@ -25,6 +25,7 @@ import {
   Textchat,
   User1,
   Mspaint,
+  Mshtml32529,
 } from '@react95/icons';
 
 import {
@@ -172,7 +173,7 @@ const projects = [
         name: 'Case Study',
         type: 'file',
         iconType: 'website',
-        openWindow: 'travelxxx-figma',
+        openWindow: 'travelxxx-case-study',
       },
 
       {
@@ -180,12 +181,10 @@ const projects = [
         name: 'Live Prototype',
         type: 'file',
         iconType: 'travelxxx',
-
-        openWindow: 'travelxxx-preview',
-
-        previewUrl:
-          'https://travelxxx-hotel-compass.vercel.app/',
+        link:
+          'https://travelxxx.perdanakun.com/',
       },
+
 
       // =====================================================
       // DOCUMENTATION
@@ -299,7 +298,7 @@ const projects = [
 
   {
     id: 'perdana-computer-product',
-    name: "Perdana's Computer",
+    name: "My Computer",
     type: 'folder',
     iconType: 'folder',
     isLocked: false,
@@ -312,12 +311,23 @@ const projects = [
         iconType: 'documentation',
         openWindow: 'perdana-computer-overview',
       },
-
+      {
+        id:
+          'perdana-computer-visual-case-study',
+        name:
+          'Presentation',
+        type:
+          'file',
+        iconType:
+          'website',
+        openWindow:
+          'perdana-computer-visual-case-study',
+      },
       {
         id: 'pc-product-case-studies',
         name: 'Case Study',
         type: 'file',
-        iconType: 'website',
+        iconType: 'webdocs',
         openWindow: 'perdana-computer-product',
       },
 
@@ -1032,8 +1042,14 @@ const projects = [
             variant={size}
           />
         );
+              case 'webdocs':
+        return (
+          <Mshtml32529
+            variant={size}
+          />
+        );
 
-c
+
 
         case 'ai-chat':
         return (
@@ -3035,10 +3051,10 @@ const handleBack = () => {
           <div
             style={{
               width:
-                '180px',
+                '200px',
 
               minWidth:
-                '180px',
+                '200px',
 
               backgroundColor:
                 '#ffffff',

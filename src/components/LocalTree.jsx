@@ -20,6 +20,7 @@ import {
   Textchat,
   User1,
   Mspaint,
+  Mshtml32547,
 } from '@react95/icons';
 
 
@@ -235,6 +236,13 @@ case 'website':
         />
       );
 
+    case 'webdocs':
+      return (
+        <Mshtml32547
+          variant="16x16_4"
+        />
+      );
+      
     default:
       return (
         <FileText
