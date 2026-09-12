@@ -8,6 +8,8 @@ import Webamp from 'webamp';
 export default function WinampPlayer({
   onClose,
 
+  isMinimized = false,
+
   isMobile = false,
   isTablet = false,
 }) {
@@ -26,7 +28,7 @@ export default function WinampPlayer({
       initialTracks: [
         {
           metaData: {
-            artist: 'Dewa',
+            artist: 'Mahadewa',
             title: 'Mistikus Cinta',
           },
 
@@ -39,31 +41,23 @@ export default function WinampPlayer({
     webampRef.current =
       webamp;
 
-    webamp.renderInto(
-      containerRef.current
-    );
+    const renderPromise =
+      webamp.renderInto(
+        containerRef.current
+      );
 
-    return () => {
-      if (
-        webampRef.current &&
-        typeof webampRef.current.dispose ===
-          'function'
-      ) {
-        webampRef.current.dispose();
+    Promise.resolve(
+      renderPromise
+    ).then(() => {
+      const root =
+        containerRef.current
+          ?.firstElementChild;
+
+      if (root) {
+        root.style.pointerEvents =
+          'auto';
       }
-
-      webampRef.current =
-        null;
-    };
-  }, []);
-
-  useEffect(() => {
-    const webamp =
-      webampRef.current;
-
-    if (!webamp) {
-      return;
-    }
+    });
 
     if (
       typeof webamp.onClose ===
@@ -78,38 +72,65 @@ export default function WinampPlayer({
         }
       });
     }
-  }, [onClose]);
 
-  // =========================================================
-  // RESPONSIVE SCALE
-  // =========================================================
+    return () => {
+      if (
+        webampRef.current &&
+        typeof webampRef.current
+          .dispose === 'function'
+      ) {
+        webampRef.current.dispose();
+      }
+
+      webampRef.current =
+        null;
+    };
+  }, [
+    onClose,
+  ]);
 
   const scale =
     isMobile
-      ? 0.82
+      ? 0.9
       : isTablet
-        ? 1.05
-        : 1.35;
+        ? 1
+        : 1.2;
 
-return (
-  <div
-    ref={containerRef}
-    style={{
-      position: 'fixed',
-      inset: 0,
+  return (
+    <div
+      style={{
+        position: 'fixed',
 
-      pointerEvents: 'auto',
+        inset: 0,
 
-      zIndex: 9999,
+        zIndex: 9999,
 
-      transform: isMobile
-        ? 'scale(0.9)'
-        : isTablet
-          ? 'scale(1.1)'
-          : 'scale(1.2)',
+        pointerEvents: 'none',
 
-      transformOrigin: 'center center',
-    }}
-  />
-);
+        visibility:
+          isMinimized
+            ? 'hidden'
+            : 'visible',
+      }}
+    >
+      <div
+        ref={containerRef}
+
+        style={{
+          position: 'relative',
+
+          width: '100%',
+          height: '100%',
+
+          pointerEvents: 'none',
+
+          transform:
+            `scale(${scale})`,
+
+          transformOrigin:
+            'center center',
+        }}
+      />
+    </div>
+  );
 }

@@ -3,7 +3,7 @@ import '@react95/core/themes/win95.css';
 import '@react95/icons/icons.css';
 import './styles/fonts.css';
 import installerBackground from './assets/images/win95_install.jpg';
-import winBackground from './assets/images/win_background2.jpg';
+import winBackground from './assets/images/wallpaper_xp.jpg';
 import winDawn from './assets/images/1dawn.png';
 import winMorning from './assets/images/2morning.png';
 import winMidday from './assets/images/3midday.png';
@@ -523,13 +523,13 @@ const [pcScreen, setPcScreen] = useState(() => {
 // ==========================================
 // RESPONSIVE DESKTOP ICON POSITION
 // ==========================================
-
 const getDesktopIconPosition = (index) => {
   const iconWidth = 80;
   const iconHeight = 80;
 
+  // =========================
   // Smartphone + Tablet
-  // 2 kolom
+  // =========================
   if (isMobile || isTablet) {
     const startX = 16;
     const startY = 16;
@@ -548,14 +548,27 @@ const getDesktopIconPosition = (index) => {
     };
   }
 
+  // =========================
   // Desktop
-  // Maksimal 7 icon per kolom
+  // =========================
   const startX = 24;
   const startY = 24;
   const gapX = 12;
   const gapY = 12;
-  const maxRows = 7;
 
+  // Tinggi layar yang benar-benar tersedia
+  const availableHeight = window.innerHeight - startY;
+
+  // Hitung berapa icon yang bisa masuk secara vertikal
+  const maxRows = Math.max(
+    1,
+    Math.floor(
+      (availableHeight + gapY) /
+      (iconHeight + gapY)
+    )
+  );
+
+  // Otomatis menentukan kolom berdasarkan jumlah row
   const column = Math.floor(index / maxRows);
   const row = index % maxRows;
 
@@ -566,6 +579,7 @@ const getDesktopIconPosition = (index) => {
     height: iconHeight,
   };
 };
+
 
  // ==========================================
   // DYNAMIC WALLPAPER - DINONAKTIFKAN
@@ -1545,7 +1559,7 @@ const handleAttachmentTooLarge = (file) => {
 
 {/* Installer */}
 <Rnd
-  default={getDesktopIconPosition(7)}
+  default={getDesktopIconPosition(1)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1562,7 +1576,7 @@ const handleAttachmentTooLarge = (file) => {
 
 {/* Inbox */}
 <Rnd
-  default={getDesktopIconPosition(1)}
+  default={getDesktopIconPosition(2)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1579,7 +1593,7 @@ const handleAttachmentTooLarge = (file) => {
 
 {/* My Projects */}
 <Rnd
-  default={getDesktopIconPosition(2)}
+  default={getDesktopIconPosition(3)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1593,71 +1607,10 @@ const handleAttachmentTooLarge = (file) => {
     </div>
   </DesktopIcon>
 </Rnd>
-{/* Winamp */}
-<Rnd
-  default={getDesktopIconPosition(3)}
-  bounds="window"
-  enableResizing={false}
-  disableDragging={isMobile || isTablet}
->
-  <DesktopIcon
-    onOpen={() =>
-      openWindow('winamp')
-    }
-  >
-    <div style={desktopIconStyle}>
-      <div
-        style={{
-          fontSize: '32px',
-          marginBottom: '0',
-        }}
-      >
-        <img
-          src={winampIcon32}
-          alt=""
-          draggable={false}
-          style={{
-            width: '32px',
-            height: '32px',
-
-            display: 'inline-block',
-            verticalAlign: 'middle',
-
-            imageRendering: 'pixelated',
-          }}
-        />
-      </div>
-
-      <span style={desktopIconLabelStyle}>
-        Winamp
-      </span>
-    </div>
-  </DesktopIcon>
-</Rnd>
-
-{/* Recycle Bin */}
-<Rnd
-  default={getDesktopIconPosition(5)}
-  bounds="window"
-  enableResizing={false}
-  disableDragging={isMobile || isTablet}
->
-  <DesktopIcon onOpen={() => openWindow('recycleBin')}>
-    <div style={desktopIconStyle}>
-      <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <RecycleFull variant="32x32_4" />
-      </div>
-      <span style={desktopIconLabelStyle}>Recycle Bin</span>
-    </div>
-  </DesktopIcon>
-</Rnd>
-
-
-
 
 {/* AI Chat */}
 <Rnd
-  default={getDesktopIconPosition(8)}
+  default={getDesktopIconPosition(4)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1672,26 +1625,9 @@ const handleAttachmentTooLarge = (file) => {
   </DesktopIcon>
 </Rnd>
 
-{/* Desktop Video */}
+{/* MS Paint */}
 <Rnd
-  default={getDesktopIconPosition(4)}
-  bounds="window"
-  enableResizing={false}
-  disableDragging={isMobile || isTablet}
->
-  <DesktopIcon onOpen={() => openWindow('desktopVideo')}>
-    <div style={desktopIconStyle}>
-      <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <Mplayer110 variant="32x32_4" />
-      </div>
-      <span style={desktopIconLabelStyle}>Media Player</span>
-    </div>
-  </DesktopIcon>
-</Rnd>
-
-{/* Paint */}
-<Rnd
-  default={getDesktopIconPosition(6)}
+  default={getDesktopIconPosition(5)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1702,6 +1638,76 @@ const handleAttachmentTooLarge = (file) => {
         <Mspaint variant="32x32_4" />
       </div>
       <span style={desktopIconLabelStyle}>MS Paint</span>
+    </div>
+  </DesktopIcon>
+</Rnd>
+
+{/* Recycle Bin */}
+<Rnd
+  default={getDesktopIconPosition(6)}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={isMobile || isTablet}
+>
+  <DesktopIcon onOpen={() => openWindow('recycleBin')}>
+    <div style={desktopIconStyle}>
+      <div style={{ fontSize: '32px', marginBottom: '0' }}>
+        <RecycleFull variant="32x32_4" />
+      </div>
+      <span style={desktopIconLabelStyle}>Recycle Bin</span>
+    </div>
+  </DesktopIcon>
+</Rnd>
+
+{/* Winamp */}
+<Rnd
+  default={getDesktopIconPosition(7)}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={isMobile || isTablet}
+>
+  <DesktopIcon onOpen={() => openWindow('winamp')}>
+    <div style={desktopIconStyle}>
+      <div
+        style={{
+          fontSize: '32px',
+          marginBottom: '0',
+        }}
+      >
+        <img
+          src={winampIcon32}
+          alt=""
+          draggable={false}
+          style={{
+            width: '32px',
+            height: '32px',
+            display: 'inline-block',
+            verticalAlign: 'middle',
+            imageRendering: 'pixelated',
+          }}
+        />
+      </div>
+
+      <span style={desktopIconLabelStyle}>
+        Winamp
+      </span>
+    </div>
+  </DesktopIcon>
+</Rnd>
+
+{/* Media Player */}
+<Rnd
+  default={getDesktopIconPosition(8)}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={isMobile || isTablet}
+>
+  <DesktopIcon onOpen={() => openWindow('desktopVideo')}>
+    <div style={desktopIconStyle}>
+      <div style={{ fontSize: '32px', marginBottom: '0' }}>
+        <Mplayer110 variant="32x32_4" />
+      </div>
+      <span style={desktopIconLabelStyle}>Media Player</span>
     </div>
   </DesktopIcon>
 </Rnd>
