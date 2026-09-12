@@ -134,8 +134,8 @@ const RANDOM_MESSAGES = [
 ====================================== */
 
 // Desktop/tablet idle Clippy:
-// wait 18–30s -> appear -> speak -> stay 8s -> hide -> repeat.
-const RANDOM_MIN_DELAY = 5000;
+// wait-> appear -> speak -> stay 8s -> hide -> repeat.
+const RANDOM_MIN_DELAY = 1000;
 const RANDOM_MAX_EXTRA_DELAY = 5000;
 const RANDOM_VISIBLE_DURATION = 8000;
 const CONTEXTUAL_VISIBLE_DURATION = 8000;
@@ -267,6 +267,13 @@ export default function ClippyAssistant({
 }) {
   const { clippy } = useClippy();
 
+  React.useEffect(() => {
+  if (!clippy?._balloon) return;
+
+  // 0 = semua kata muncul hampir langsung
+  clippy._balloon.WORD_SPEAK_TIME = 100;
+}, [clippy]);
+
   const lastRandomIndex = React.useRef(-1);
 
   // Initialize with the current state so windows that are already open on
@@ -338,18 +345,19 @@ export default function ClippyAssistant({
      SPEAK / MOVE HELPERS
   ==================================== */
 
-  const speak = React.useCallback(
-    (message, animation = 'Acknowledge') => {
-      if (!clippy) return;
+const speak = React.useCallback(
+  (message, animation = 'Acknowledge') => {
+    if (!clippy) return;
 
-      if (animation && clippy.play) {
-        clippy.play(animation, ANIMATION_DURATION);
-      }
+    if (animation && clippy.play) {
+      clippy.play(animation, ANIMATION_DURATION);
+    }
 
-      clippy.speak(message);
-    },
-    [clippy]
-  );
+    // true = tahan balloon sampai kita hide sendiri
+    clippy.speak(message, true);
+  },
+  [clippy]
+);
 
   const moveClippy = React.useCallback(
     (feature = null, duration = MOVE_DURATION) => {

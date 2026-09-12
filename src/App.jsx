@@ -3,7 +3,7 @@ import '@react95/core/themes/win95.css';
 import '@react95/icons/icons.css';
 import './styles/fonts.css';
 import installerBackground from './assets/images/win95_install.jpg';
-import winBackground from './assets/images/wallpaper_xp.jpg';
+import winBackground from './assets/images/windows_cloud.jpeg';
 import winDawn from './assets/images/1dawn.png';
 import winMorning from './assets/images/2morning.png';
 import winMidday from './assets/images/3midday.png';
@@ -118,34 +118,45 @@ import aiOpenSound from './assets/sounds/ai_assistant_open.wav';
 
 
 // Fungi baru klik and tap DesktopIcon
-function DesktopIcon({ children, onOpen }) {
-  const handleDoubleClick = (e) => {
-    if (e.pointerType === 'touch' || e.pointerType === 'pen') {
-      return;
-    }
-
+function DesktopIcon({
+  children,
+  onOpen,
+  onSelect,
+}) {
+  const handlePointerUp = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    onOpen();
-  };
-
-  const handlePointerUp = (e) => {
+    // Smartphone / tablet / pen:
+    // 1 tap langsung buka
     if (
       e.pointerType === 'touch' ||
       e.pointerType === 'pen'
     ) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      onOpen();
+      onOpen?.();
+      return;
     }
+
+    // Desktop mouse:
+    // 1 click hanya select
+    if (e.pointerType === 'mouse') {
+      onSelect?.();
+    }
+  };
+
+  const handleDoubleClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Desktop mouse:
+    // double click buka
+    onOpen?.();
   };
 
   return (
     <div
-      onDoubleClick={handleDoubleClick}
       onPointerUp={handlePointerUp}
+      onDoubleClick={handleDoubleClick}
       style={{
         width: '100%',
         height: '100%',
@@ -520,6 +531,10 @@ const [pcScreen, setPcScreen] = useState(() => {
 // runs the first tour after the first Welcome is closed, and then handles
 // the normal desktop assistant behavior.
 
+
+// Desktop Icon Select
+const [selectedDesktopIcon, setSelectedDesktopIcon] = useState(null);
+
 // ==========================================
 // RESPONSIVE DESKTOP ICON POSITION
 // ==========================================
@@ -835,7 +850,7 @@ const handleRestart = () => {
     desktopVideo: false,
 
     // Reset behaves like a fresh startup: Boot -> Desktop + Paint Hero.
-    paintHero: !isMobile,
+    paintHero: false,
 
 // Project windows
   holohealth: false,
@@ -1501,15 +1516,16 @@ const handleAttachmentTooLarge = (file) => {
     </div>
   </div>
 ) : pcScreen === 'desktop' ? (
-  <main
-    aria-label="Perdana's Computer — portfolio of Perdana Kurniawan Arta"
-    style={{
-      position: 'relative',
-      width: '100%',
-      height: '100%',
-      overflow: 'hidden',
-    }}
-  >
+<main
+  aria-label="Perdana's Computer — portfolio of Perdana Kurniawan Arta"
+  onClick={() => setSelectedDesktopIcon(null)}
+  style={{
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden',
+  }}
+>
 
 
   <header
@@ -1547,12 +1563,26 @@ const handleAttachmentTooLarge = (file) => {
   enableResizing={false}
   disableDragging={isMobile || isTablet}
 >
-  <DesktopIcon onOpen={() => openWindow('about')}>
+  <DesktopIcon
+    selected={selectedDesktopIcon === 'about'}
+    onSelect={() => setSelectedDesktopIcon('about')}
+    onOpen={() => openWindow('about')}
+  >
     <div style={desktopIconStyle}>
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Computer variant="32x32_4" />
       </div>
-      <span style={desktopIconLabelStyle}>About</span>
+
+      <span
+        style={{
+          ...desktopIconLabelStyle,
+          ...(selectedDesktopIcon === 'about'
+            ? desktopIconLabelSelectedStyle
+            : {}),
+        }}
+      >
+        About
+      </span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1564,12 +1594,26 @@ const handleAttachmentTooLarge = (file) => {
   enableResizing={false}
   disableDragging={isMobile || isTablet}
 >
-  <DesktopIcon onOpen={openInstaller}>
+  <DesktopIcon
+    selected={selectedDesktopIcon === 'installer'}
+    onSelect={() => setSelectedDesktopIcon('installer')}
+    onOpen={openInstaller}
+  >
     <div style={desktopIconStyle}>
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Install variant="32x32_4" />
       </div>
-      <span style={desktopIconLabelStyle}>Installer</span>
+
+      <span
+        style={{
+          ...desktopIconLabelStyle,
+          ...(selectedDesktopIcon === 'installer'
+            ? desktopIconLabelSelectedStyle
+            : {}),
+        }}
+      >
+        Installer
+      </span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1581,12 +1625,26 @@ const handleAttachmentTooLarge = (file) => {
   enableResizing={false}
   disableDragging={isMobile || isTablet}
 >
-  <DesktopIcon onOpen={() => openWindow('contact')}>
+  <DesktopIcon
+    selected={selectedDesktopIcon === 'inbox'}
+    onSelect={() => setSelectedDesktopIcon('inbox')}
+    onOpen={() => openWindow('contact')}
+  >
     <div style={desktopIconStyle}>
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Mapi32801 variant="32x32_4" />
       </div>
-      <span style={desktopIconLabelStyle}>Inbox</span>
+
+      <span
+        style={{
+          ...desktopIconLabelStyle,
+          ...(selectedDesktopIcon === 'inbox'
+            ? desktopIconLabelSelectedStyle
+            : {}),
+        }}
+      >
+        Inbox
+      </span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1598,12 +1656,26 @@ const handleAttachmentTooLarge = (file) => {
   enableResizing={false}
   disableDragging={isMobile || isTablet}
 >
-  <DesktopIcon onOpen={() => openWindow('projects')}>
+  <DesktopIcon
+    selected={selectedDesktopIcon === 'projects'}
+    onSelect={() => setSelectedDesktopIcon('projects')}
+    onOpen={() => openWindow('projects')}
+  >
     <div style={desktopIconStyle}>
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Folder variant="32x32_4" />
       </div>
-      <span style={desktopIconLabelStyle}>My Projects</span>
+
+      <span
+        style={{
+          ...desktopIconLabelStyle,
+          ...(selectedDesktopIcon === 'projects'
+            ? desktopIconLabelSelectedStyle
+            : {}),
+        }}
+      >
+        My Projects
+      </span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1615,12 +1687,26 @@ const handleAttachmentTooLarge = (file) => {
   enableResizing={false}
   disableDragging={isMobile || isTablet}
 >
-  <DesktopIcon onOpen={() => openWindow('aiAssistant')}>
+  <DesktopIcon
+    selected={selectedDesktopIcon === 'aiAssistant'}
+    onSelect={() => setSelectedDesktopIcon('aiAssistant')}
+    onOpen={() => openWindow('aiAssistant')}
+  >
     <div style={desktopIconStyle}>
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Intl101 variant="32x32_4" />
       </div>
-      <span style={desktopIconLabelStyle}>AI Chat</span>
+
+      <span
+        style={{
+          ...desktopIconLabelStyle,
+          ...(selectedDesktopIcon === 'aiAssistant'
+            ? desktopIconLabelSelectedStyle
+            : {}),
+        }}
+      >
+        AI Chat
+      </span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1632,12 +1718,26 @@ const handleAttachmentTooLarge = (file) => {
   enableResizing={false}
   disableDragging={isMobile || isTablet}
 >
-  <DesktopIcon onOpen={() => openWindow('paintHero')}>
+  <DesktopIcon
+    selected={selectedDesktopIcon === 'paintHero'}
+    onSelect={() => setSelectedDesktopIcon('paintHero')}
+    onOpen={() => openWindow('paintHero')}
+  >
     <div style={desktopIconStyle}>
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Mspaint variant="32x32_4" />
       </div>
-      <span style={desktopIconLabelStyle}>MS Paint</span>
+
+      <span
+        style={{
+          ...desktopIconLabelStyle,
+          ...(selectedDesktopIcon === 'paintHero'
+            ? desktopIconLabelSelectedStyle
+            : {}),
+        }}
+      >
+        MS Paint
+      </span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1649,12 +1749,26 @@ const handleAttachmentTooLarge = (file) => {
   enableResizing={false}
   disableDragging={isMobile || isTablet}
 >
-  <DesktopIcon onOpen={() => openWindow('recycleBin')}>
+  <DesktopIcon
+    selected={selectedDesktopIcon === 'recycleBin'}
+    onSelect={() => setSelectedDesktopIcon('recycleBin')}
+    onOpen={() => openWindow('recycleBin')}
+  >
     <div style={desktopIconStyle}>
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <RecycleFull variant="32x32_4" />
       </div>
-      <span style={desktopIconLabelStyle}>Recycle Bin</span>
+
+      <span
+        style={{
+          ...desktopIconLabelStyle,
+          ...(selectedDesktopIcon === 'recycleBin'
+            ? desktopIconLabelSelectedStyle
+            : {}),
+        }}
+      >
+        Recycle Bin
+      </span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1666,7 +1780,11 @@ const handleAttachmentTooLarge = (file) => {
   enableResizing={false}
   disableDragging={isMobile || isTablet}
 >
-  <DesktopIcon onOpen={() => openWindow('winamp')}>
+  <DesktopIcon
+    selected={selectedDesktopIcon === 'winamp'}
+    onSelect={() => setSelectedDesktopIcon('winamp')}
+    onOpen={() => openWindow('winamp')}
+  >
     <div style={desktopIconStyle}>
       <div
         style={{
@@ -1688,7 +1806,14 @@ const handleAttachmentTooLarge = (file) => {
         />
       </div>
 
-      <span style={desktopIconLabelStyle}>
+      <span
+        style={{
+          ...desktopIconLabelStyle,
+          ...(selectedDesktopIcon === 'winamp'
+            ? desktopIconLabelSelectedStyle
+            : {}),
+        }}
+      >
         Winamp
       </span>
     </div>
@@ -1702,12 +1827,26 @@ const handleAttachmentTooLarge = (file) => {
   enableResizing={false}
   disableDragging={isMobile || isTablet}
 >
-  <DesktopIcon onOpen={() => openWindow('desktopVideo')}>
+  <DesktopIcon
+    selected={selectedDesktopIcon === 'desktopVideo'}
+    onSelect={() => setSelectedDesktopIcon('desktopVideo')}
+    onOpen={() => openWindow('desktopVideo')}
+  >
     <div style={desktopIconStyle}>
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
         <Mplayer110 variant="32x32_4" />
       </div>
-      <span style={desktopIconLabelStyle}>Media Player</span>
+
+      <span
+        style={{
+          ...desktopIconLabelStyle,
+          ...(selectedDesktopIcon === 'desktopVideo'
+            ? desktopIconLabelSelectedStyle
+            : {}),
+        }}
+      >
+        Media Player
+      </span>
     </div>
   </DesktopIcon>
 </Rnd>
@@ -1751,12 +1890,12 @@ const handleAttachmentTooLarge = (file) => {
       // DESKTOP
       // =========================
       desktopWidth="auto"
-      desktopHeight="65%"
+      desktopHeight="55%"
       desktopTop="50%"
       desktopLeft="50%"
       desktopRight="auto"
       desktopBottom="auto"
-      desktopTransform="translate(-50%, -50%)"
+      desktopTransform="translate(-55%, -55%)"
 
       title="untitled - Paint"
 
@@ -2310,13 +2449,13 @@ INI ENDING KODE INACTIVE*/}
     desktopLeft="50%"
     desktopRight="auto"
     desktopBottom="auto"
-    desktopTransform="translate(-50%, -50%)"
+    desktopTransform="translate(-90%, -70%)"
 
     icon={
       <Mapi32801 variant="16x16_4" />
     }
 
-    title="Contact.exe"
+    title="Mail"
 
     titleBarOptions={
       <>
@@ -3174,6 +3313,19 @@ const desktopIconLabelStyle = {
   display: 'block',
   lineHeight: '20px',
   marginTop: '4px',
+  color: 'black',
+  textShadow: 'none',
+};
+
+const desktopIconLabelSelectedStyle = {
+  backgroundColor: '#000080',
+  color: '#ffffff',
+  textShadow: 'none',
+
+  outline: '1px dotted #ffffff',
+  outlineOffset: '-1px',
+
+  padding: '1px 2px',
 };
 
 const inputStyle = {
