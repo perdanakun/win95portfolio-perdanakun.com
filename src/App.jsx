@@ -534,65 +534,135 @@ const [pcScreen, setPcScreen] = useState(() => {
 
 // Desktop Icon Select
 const [selectedDesktopIcon, setSelectedDesktopIcon] = useState(null);
-
 // ==========================================
 // RESPONSIVE DESKTOP ICON POSITION
 // ==========================================
+
 const getDesktopIconPosition = (index) => {
   const iconWidth = 80;
   const iconHeight = 80;
 
+  const gapX = 12;
+  const gapY = 12;
+
+
   // =========================
-  // Smartphone + Tablet
+  // SMARTPHONE + TABLET
+  // Tetap seperti sekarang
   // =========================
+
   if (isMobile || isTablet) {
     const startX = 16;
     const startY = 16;
-    const gapX = 12;
-    const gapY = 12;
+
     const columns = 2;
 
-    const column = index % columns;
-    const row = Math.floor(index / columns);
+    const column =
+      index % columns;
+
+    const row =
+      Math.floor(
+        index / columns
+      );
 
     return {
-      x: startX + column * (iconWidth + gapX),
-      y: startY + row * (iconHeight + gapY),
+      x:
+        startX +
+        column *
+          (iconWidth + gapX),
+
+      y:
+        startY +
+        row *
+          (iconHeight + gapY),
+
       width: iconWidth,
       height: iconHeight,
     };
   }
 
-  // =========================
-  // Desktop
-  // =========================
-  const startX = 24;
-  const startY = 24;
-  const gapX = 12;
-  const gapY = 12;
+// =========================
+// DESKTOP
+// =========================
 
-  // Tinggi layar yang benar-benar tersedia
-  const availableHeight = window.innerHeight - startY;
+const startX = 24;
+const startY = 24;
 
-  // Hitung berapa icon yang bisa masuk secara vertikal
-  const maxRows = Math.max(
+const desktopIconCount = 9;
+const columns = 2;
+
+const TASKBAR_HEIGHT = 28;
+const CLIPPY_BOTTOM_OFFSET = 170;
+const SAFE_GAP_ABOVE_CLIPPY = 32;
+
+const clippyTop =
+  window.innerHeight -
+  TASKBAR_HEIGHT -
+  CLIPPY_BOTTOM_OFFSET;
+
+const availableHeight =
+  clippyTop -
+  startY -
+  SAFE_GAP_ABOVE_CLIPPY;
+
+const maxSafeRows =
+  Math.max(
     1,
     Math.floor(
       (availableHeight + gapY) /
-      (iconHeight + gapY)
+        (iconHeight + gapY)
     )
   );
 
-  // Otomatis menentukan kolom berdasarkan jumlah row
-  const column = Math.floor(index / maxRows);
-  const row = index % maxRows;
+/*
+ * DESKTOP = ROW-FIRST
+ *
+ * 0  1
+ * 2  3
+ * 4  5
+ * 6  7
+ * 8
+ */
 
-  return {
-    x: startX + column * (iconWidth + gapX),
-    y: startY + row * (iconHeight + gapY),
-    width: iconWidth,
-    height: iconHeight,
-  };
+const column =
+  index % columns;
+
+const row =
+  Math.floor(
+    index / columns
+  );
+
+/*
+ * Safety fallback:
+ * kalau layar terlalu pendek,
+ * pindahkan overflow ke kolom berikutnya.
+ */
+
+const safeColumn =
+  row >= maxSafeRows
+    ? column +
+      Math.floor(
+        row / maxSafeRows
+      ) * columns
+    : column;
+
+const safeRow =
+  row % maxSafeRows;
+
+return {
+  x:
+    startX +
+    safeColumn *
+      (iconWidth + gapX),
+
+  y:
+    startY +
+    safeRow *
+      (iconHeight + gapY),
+
+  width: iconWidth,
+  height: iconHeight,
+};
 };
 
 
@@ -683,27 +753,33 @@ const [windows, setWindows] = useState({
   projects: false,
   contact: false,
   winamp: false,
-  aiAssistant: false,
+
+  // DEFAULT LANDING WINDOW
+  // Desktop + Tablet = open
+  // Smartphone = closed
+  aiAssistant: !isMobile,
+
   recycleBin: false,
   imageViewer: false,
   blog: false,
   browser: false,
   whatsNew: false,
 
-  paintHero: !isMobile,
+  // Paint sekarang manual saja
+  paintHero: false,
 
   desktopVideo: false,
 
-    // Project windows
+  // Project windows
   holohealth: false,
   'ship-ui': false,
-   mayora: false,
-   'perdana-computer-product': false,
-   'perdana-computer-visual-case-study': false,
-   'travelxxx-preview': false,
-   'travelxxx-case-study': false,
+  mayora: false,
+  'perdana-computer-product': false,
+  'perdana-computer-visual-case-study': false,
+  'travelxxx-preview': false,
+  'travelxxx-case-study': false,
 
-     // Notepad windows
+  // Notepad windows
   'readme-product': false,
   'readme-travelxxx': false,
   'prd-travelxxx': false,
@@ -1317,6 +1393,34 @@ const handleAttachmentTooLarge = (file) => {
   setShowAttachmentAlert(true);
 };
 
+// ==========================================
+// CLIPPY — CHECK IF ANY WINDOW IS OPEN
+// ==========================================
+const hasBlockingDesktopWindow = Boolean(
+  // Semua windows KECUALI AI Chat
+  Object.entries(windows).some(
+    ([key, value]) =>
+      key !== 'aiAssistant' &&
+      Boolean(value)
+  ) ||
+
+  desktopInstallerVisible ||
+
+  imageViewers.length > 0 ||
+  imageGallery ||
+  activeVideo ||
+
+  alertDesktop.show ||
+  showContactAlert ||
+  showContactErrorAlert ||
+  showAttachmentAlert ||
+
+  showCamera ||
+
+  aiAssistantV2Visible
+);
+
+
   return (
     <>
 
@@ -1324,13 +1428,14 @@ const handleAttachmentTooLarge = (file) => {
           CLIPPY — LIGHTWEIGHT ASSISTANT
           No first tour. Random + contextual only.
       ========================================== */}
-      <ClippyAssistant
-        pcScreen={pcScreen}
-        isMobile={isMobile}
-        isTablet={isTablet}
-        windows={windows}
-        desktopInstallerVisible={desktopInstallerVisible}
-      />
+<ClippyAssistant
+  pcScreen={pcScreen}
+  isMobile={isMobile}
+  isTablet={isTablet}
+  windows={windows}
+  desktopInstallerVisible={desktopInstallerVisible}
+  hasBlockingDesktopWindow={hasBlockingDesktopWindow}
+/>
 
       {/* CSS Reset untuk layar full screen dan background Windows XP */}
       <style>
@@ -1378,22 +1483,6 @@ const handleAttachmentTooLarge = (file) => {
             transform: scale(0.75);
             transform-origin: left center;
           }
-
-.clippy {
-  pointer-events: auto !important;
-  cursor: pointer;
-}
-
-@media (max-width: 600px) {
-  .clippy {
-    touch-action: none !important;
-    cursor: grab;
-  }
-
-  .clippy:active {
-    cursor: grabbing;
-  }
-}
         }
 
 
@@ -1551,11 +1640,7 @@ const handleAttachmentTooLarge = (file) => {
   {/* THUMBNAIL DESKTOP */}
 
 {/* --- THUMBNAIL AI SPHERE --- */}
-{/*aiSphereVisible && (
-  <AiAssistantSphere
-    onClick={openAiAssistantV2}
-  />
-)/*}
+
 {/* About */}
 <Rnd
   default={getDesktopIconPosition(0)}
@@ -1586,6 +1671,7 @@ const handleAttachmentTooLarge = (file) => {
     </div>
   </DesktopIcon>
 </Rnd>
+
 
 {/* Installer */}
 <Rnd
@@ -1618,71 +1704,10 @@ const handleAttachmentTooLarge = (file) => {
   </DesktopIcon>
 </Rnd>
 
-{/* Inbox */}
-<Rnd
-  default={getDesktopIconPosition(2)}
-  bounds="window"
-  enableResizing={false}
-  disableDragging={isMobile || isTablet}
->
-  <DesktopIcon
-    selected={selectedDesktopIcon === 'inbox'}
-    onSelect={() => setSelectedDesktopIcon('inbox')}
-    onOpen={() => openWindow('contact')}
-  >
-    <div style={desktopIconStyle}>
-      <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <Mapi32801 variant="32x32_4" />
-      </div>
-
-      <span
-        style={{
-          ...desktopIconLabelStyle,
-          ...(selectedDesktopIcon === 'inbox'
-            ? desktopIconLabelSelectedStyle
-            : {}),
-        }}
-      >
-        Inbox
-      </span>
-    </div>
-  </DesktopIcon>
-</Rnd>
-
-{/* My Projects */}
-<Rnd
-  default={getDesktopIconPosition(3)}
-  bounds="window"
-  enableResizing={false}
-  disableDragging={isMobile || isTablet}
->
-  <DesktopIcon
-    selected={selectedDesktopIcon === 'projects'}
-    onSelect={() => setSelectedDesktopIcon('projects')}
-    onOpen={() => openWindow('projects')}
-  >
-    <div style={desktopIconStyle}>
-      <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <Folder variant="32x32_4" />
-      </div>
-
-      <span
-        style={{
-          ...desktopIconLabelStyle,
-          ...(selectedDesktopIcon === 'projects'
-            ? desktopIconLabelSelectedStyle
-            : {}),
-        }}
-      >
-        My Projects
-      </span>
-    </div>
-  </DesktopIcon>
-</Rnd>
 
 {/* AI Chat */}
 <Rnd
-  default={getDesktopIconPosition(4)}
+  default={getDesktopIconPosition(2)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1711,71 +1736,41 @@ const handleAttachmentTooLarge = (file) => {
   </DesktopIcon>
 </Rnd>
 
-{/* MS Paint */}
+{/* Inbox */}
 <Rnd
-  default={getDesktopIconPosition(5)}
+  default={getDesktopIconPosition(3)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
 >
   <DesktopIcon
-    selected={selectedDesktopIcon === 'paintHero'}
-    onSelect={() => setSelectedDesktopIcon('paintHero')}
-    onOpen={() => openWindow('paintHero')}
+    selected={selectedDesktopIcon === 'inbox'}
+    onSelect={() => setSelectedDesktopIcon('inbox')}
+    onOpen={() => openWindow('contact')}
   >
     <div style={desktopIconStyle}>
       <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <Mspaint variant="32x32_4" />
+        <Mapi32801 variant="32x32_4" />
       </div>
 
       <span
         style={{
           ...desktopIconLabelStyle,
-          ...(selectedDesktopIcon === 'paintHero'
+          ...(selectedDesktopIcon === 'inbox'
             ? desktopIconLabelSelectedStyle
             : {}),
         }}
       >
-        MS Paint
+        Inbox
       </span>
     </div>
   </DesktopIcon>
 </Rnd>
 
-{/* Recycle Bin */}
-<Rnd
-  default={getDesktopIconPosition(6)}
-  bounds="window"
-  enableResizing={false}
-  disableDragging={isMobile || isTablet}
->
-  <DesktopIcon
-    selected={selectedDesktopIcon === 'recycleBin'}
-    onSelect={() => setSelectedDesktopIcon('recycleBin')}
-    onOpen={() => openWindow('recycleBin')}
-  >
-    <div style={desktopIconStyle}>
-      <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <RecycleFull variant="32x32_4" />
-      </div>
-
-      <span
-        style={{
-          ...desktopIconLabelStyle,
-          ...(selectedDesktopIcon === 'recycleBin'
-            ? desktopIconLabelSelectedStyle
-            : {}),
-        }}
-      >
-        Recycle Bin
-      </span>
-    </div>
-  </DesktopIcon>
-</Rnd>
 
 {/* Winamp */}
 <Rnd
-  default={getDesktopIconPosition(7)}
+  default={getDesktopIconPosition(4)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1820,9 +1815,74 @@ const handleAttachmentTooLarge = (file) => {
   </DesktopIcon>
 </Rnd>
 
+
+{/* My Projects */}
+<Rnd
+  default={getDesktopIconPosition(5)}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={isMobile || isTablet}
+>
+  <DesktopIcon
+    selected={selectedDesktopIcon === 'projects'}
+    onSelect={() => setSelectedDesktopIcon('projects')}
+    onOpen={() => openWindow('projects')}
+  >
+    <div style={desktopIconStyle}>
+      <div style={{ fontSize: '32px', marginBottom: '0' }}>
+        <Folder variant="32x32_4" />
+      </div>
+
+      <span
+        style={{
+          ...desktopIconLabelStyle,
+          ...(selectedDesktopIcon === 'projects'
+            ? desktopIconLabelSelectedStyle
+            : {}),
+        }}
+      >
+        My Projects
+      </span>
+    </div>
+  </DesktopIcon>
+</Rnd>
+
+
+{/* Recycle Bin */}
+<Rnd
+  default={getDesktopIconPosition(6)}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={isMobile || isTablet}
+>
+  <DesktopIcon
+    selected={selectedDesktopIcon === 'recycleBin'}
+    onSelect={() => setSelectedDesktopIcon('recycleBin')}
+    onOpen={() => openWindow('recycleBin')}
+  >
+    <div style={desktopIconStyle}>
+      <div style={{ fontSize: '32px', marginBottom: '0' }}>
+        <RecycleFull variant="32x32_4" />
+      </div>
+
+      <span
+        style={{
+          ...desktopIconLabelStyle,
+          ...(selectedDesktopIcon === 'recycleBin'
+            ? desktopIconLabelSelectedStyle
+            : {}),
+        }}
+      >
+        Recycle Bin
+      </span>
+    </div>
+  </DesktopIcon>
+</Rnd>
+
+
 {/* Media Player */}
 <Rnd
-  default={getDesktopIconPosition(8)}
+  default={getDesktopIconPosition(7)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1846,6 +1906,38 @@ const handleAttachmentTooLarge = (file) => {
         }}
       >
         Media Player
+      </span>
+    </div>
+  </DesktopIcon>
+</Rnd>
+
+
+{/* MS Paint */}
+<Rnd
+  default={getDesktopIconPosition(8)}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={isMobile || isTablet}
+>
+  <DesktopIcon
+    selected={selectedDesktopIcon === 'paintHero'}
+    onSelect={() => setSelectedDesktopIcon('paintHero')}
+    onOpen={() => openWindow('paintHero')}
+  >
+    <div style={desktopIconStyle}>
+      <div style={{ fontSize: '32px', marginBottom: '0' }}>
+        <Mspaint variant="32x32_4" />
+      </div>
+
+      <span
+        style={{
+          ...desktopIconLabelStyle,
+          ...(selectedDesktopIcon === 'paintHero'
+            ? desktopIconLabelSelectedStyle
+            : {}),
+        }}
+      >
+        MS Paint
       </span>
     </div>
   </DesktopIcon>

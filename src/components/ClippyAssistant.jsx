@@ -1,57 +1,6 @@
 import React from 'react';
 import { useClippy } from '@react95/clippy';
 
-/* ======================================
-   CONTEXTUAL COPY
-====================================== */
-
-const CONTEXTUAL_MESSAGES = {
-  about: {
-    text:
-      "You're in About. This is the quickest place to understand who Perdana is and what he's exploring now.",
-    animation: 'Wave',
-  },
-  projects: {
-    text:
-      "This is My Projects. Start here for the actual work — visual systems, Product Design, and Design Engineering experiments.",
-    animation: 'Acknowledge',
-  },
-  aiAssistant: {
-    text:
-      'Need a shortcut? perdana.ai knows Perdana pretty well. Ask about the work, experience, projects, or current direction.',
-    animation: 'Acknowledge',
-  },
-  contact: {
-    text:
-      'Inbox lets you contact Perdana directly without leaving the desktop.',
-    animation: 'Acknowledge',
-  },
-  blog: {
-    text:
-      "This is Writing. It's where Perdana documents the thinking, experiments, and things he learns along the way.",
-    animation: 'Wave',
-  },
-  whatsNew: {
-    text:
-      "What's New keeps track of recent changes to this little computer.",
-    animation: 'Acknowledge',
-  },
-  recycleBin: {
-    text:
-      "You opened the Recycle Bin. I knew curiosity would get you eventually.",
-    animation: 'Wave',
-  },
-  desktopVideo: {
-    text:
-      'Media Player is here because not every part of a portfolio needs to be serious.',
-    animation: 'Acknowledge',
-  },
-  paintHero: {
-    text:
-      "MS Paint is Perdana's quick visual introduction. Very polished portfolios are overrated anyway.",
-    animation: 'Wave',
-  },
-};
 
 /* ======================================
    RANDOM IDLE MESSAGES
@@ -61,201 +10,244 @@ const RANDOM_MESSAGES = [
   {
     text:
       'Need a hand? Try opening My Projects to see the actual work.',
-    animation: 'Acknowledge',
   },
   {
     text:
       "perdana.ai is useful if you'd rather ask than browse everything.",
-    animation: 'Acknowledge',
   },
   {
     text:
       "About is the quickest way to understand who Perdana is and what he's exploring.",
-    animation: 'Wave',
   },
   {
     text:
       'Inbox lets you send Perdana a message without leaving the desktop.',
-    animation: 'Acknowledge',
   },
   {
     text:
       "The Installer isn't just decoration. It's part of the portfolio experience.",
-    animation: 'Wave',
   },
   {
     text:
       'You can open several windows at once. This is a computer, after all.',
-    animation: 'Acknowledge',
   },
   {
     text:
       "Curious what changed recently? Check What's New.",
-    animation: 'Acknowledge',
   },
   {
     text:
       'Some parts of this desktop are useful. Some are here because clicking things is fun.',
-    animation: 'Wave',
   },
   {
-    text: "Yes, I'm still here.",
-    animation: 'Wave',
+    text:
+      "Yes, I'm still here.",
   },
   {
     text:
       "I wouldn't ignore the Recycle Bin forever.",
-    animation: 'Acknowledge',
   },
   {
     text:
       'This portfolio works more like a computer than a traditional scrolling website. Feel free to look around.',
-    animation: 'Acknowledge',
   },
   {
     text:
       "If you're looking for case studies, My Projects is probably where you want to go.",
-    animation: 'Acknowledge',
   },
   {
     text:
       'Not sure where to start? About for the person. My Projects for the work. perdana.ai for questions.',
-    animation: 'Wave',
   },
   {
     text:
       'Perdana built this portfolio as an interactive design-in-code experiment.',
-    animation: 'Acknowledge',
   },
 ];
+
 
 /* ======================================
    TIMING
 ====================================== */
 
-// Desktop/tablet idle Clippy:
-// wait-> appear -> speak -> stay 8s -> hide -> repeat.
-const RANDOM_MIN_DELAY = 1000;
-const RANDOM_MAX_EXTRA_DELAY = 5000;
-const RANDOM_VISIBLE_DURATION = 8000;
-const CONTEXTUAL_VISIBLE_DURATION = 8000;
+/*
+ * FIRST APPEAR
+ * → 1.2 sec
+ *
+ * INITIAL ENTRANCE
+ * → right → left
+ * → 800 ms
+ *
+ * NORMAL AI POSITION CHANGE
+ * → 650 ms
+ *
+ * MESSAGE
+ * → ±5.5–7.5 sec
+ *
+ * NEXT CHATTER
+ * → random 4–6 sec
+ */
 
+const FIRST_APPEAR_DELAY = 1200;
+
+const RANDOM_MIN_DELAY = 4000;
+const RANDOM_MAX_EXTRA_DELAY = 2000;
+
+const MIN_MESSAGE_VISIBLE = 5500;
+const MAX_MESSAGE_VISIBLE = 7500;
+
+const INITIAL_MOVE_DURATION = 800;
 const MOVE_DURATION = 650;
-const ANIMATION_DURATION = 900;
+
+const INITIAL_MOVE_START_DELAY = 60;
+const SPEECH_AFTER_MOVE_DELAY = 120;
+const NORMAL_SPEECH_DELAY = 120;
+
 const TASKBAR_HEIGHT = 28;
 
+
 /* ======================================
-   POSITION HELPERS
+   MESSAGE DURATION
 ====================================== */
 
-function getClippyPosition() {
-  const width = window.innerWidth;
-  const height = window.innerHeight;
+function getMessageVisibleDuration(text) {
+  const wordCount =
+    text
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .length;
+
+  const calculated =
+    3600 +
+    wordCount * 180;
+
+  return Math.min(
+    MAX_MESSAGE_VISIBLE,
+    Math.max(
+      MIN_MESSAGE_VISIBLE,
+      calculated
+    )
+  );
+}
+
+
+/* ======================================
+   CLIPPY POSITION
+====================================== */
+
+function getClippyPosition({
+  aiChatOpen = false,
+  isTablet = false,
+} = {}) {
+  const width =
+    window.innerWidth;
+
+  const height =
+    window.innerHeight;
+
+
+  // =====================================
+  // SMARTPHONE
+  // =====================================
 
   if (width <= 600) {
     return {
-      x: Math.max(8, width - 112),
-      y: Math.max(80, height - TASKBAR_HEIGHT - 125),
+      x: Math.max(
+        8,
+        width - 108
+      ),
+
+      y: Math.max(
+        80,
+        height -
+          TASKBAR_HEIGHT -
+          110
+      ),
     };
   }
+
+
+  // =====================================
+  // AI CHAT OPEN
+  // → LEFT BOTTOM
+  // =====================================
+
+  if (aiChatOpen) {
+    if (isTablet) {
+      return {
+        x: 12,
+
+        y: Math.max(
+          90,
+          height -
+            TASKBAR_HEIGHT -
+            112
+        ),
+      };
+    }
+
+
+    return {
+      x: 12,
+
+      y: Math.max(
+        90,
+        height -
+          TASKBAR_HEIGHT -
+          110
+      ),
+    };
+  }
+
+
+  // =====================================
+  // AI CHAT CLOSED
+  // TABLET → RIGHT BOTTOM
+  // =====================================
 
   if (width <= 1024) {
     return {
-      x: Math.max(16, width - 145),
-      y: Math.max(110, height - TASKBAR_HEIGHT - 155),
+      x: Math.max(
+        8,
+        width - 110
+      ),
+
+      y: Math.max(
+        90,
+        height -
+          TASKBAR_HEIGHT -
+          112
+      ),
     };
   }
 
+
+  // =====================================
+  // DESKTOP → RIGHT BOTTOM
+  //
+  // ±10px dari kanan
+  // ±10px dari atas taskbar.
+  // =====================================
+
   return {
-    x: Math.max(24, width - 175),
-    y: Math.max(130, height - TASKBAR_HEIGHT - 170),
+    x: Math.max(
+      8,
+      width - 110
+    ),
+
+    y: Math.max(
+      90,
+      height -
+        TASKBAR_HEIGHT -
+        110
+    ),
   };
 }
 
-function getSafePosition({
-  feature,
-  isMobile,
-  isTablet,
-}) {
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-
-  if (isMobile) {
-    // Mobile only shows contextual Clippy briefly.
-    // Keep him near the lower-right corner.
-    return {
-      x: Math.max(8, width - 112),
-      y: Math.max(80, height - TASKBAR_HEIGHT - 125),
-    };
-  }
-
-  if (isTablet) {
-    switch (feature) {
-      case 'aiAssistant':
-      case 'contact':
-        return {
-          x: 20,
-          y: Math.max(110, height - TASKBAR_HEIGHT - 155),
-        };
-
-      case 'paintHero':
-        return {
-          x: 16,
-          y: Math.max(110, height - TASKBAR_HEIGHT - 145),
-        };
-
-      case 'projects':
-      case 'about':
-      case 'blog':
-      case 'whatsNew':
-      case 'recycleBin':
-      case 'desktopVideo':
-      default:
-        return {
-          x: Math.max(20, width - 145),
-          y: Math.max(110, height - TASKBAR_HEIGHT - 155),
-        };
-    }
-  }
-
-  switch (feature) {
-    case 'aiAssistant':
-    case 'contact':
-      return {
-        x: 40,
-        y: Math.max(150, height - TASKBAR_HEIGHT - 170),
-      };
-
-    case 'paintHero':
-      return {
-        x: 28,
-        y: Math.max(145, height - TASKBAR_HEIGHT - 170),
-      };
-
-    case 'projects':
-    case 'about':
-    case 'blog':
-    case 'whatsNew':
-    case 'recycleBin':
-    case 'desktopVideo':
-    default:
-      return {
-        x: Math.max(24, width - 180),
-        y: Math.max(130, height - TASKBAR_HEIGHT - 160),
-      };
-  }
-}
 
 /* ======================================
    CLIPPY ASSISTANT
-
-   UX MODE:
-   - NO first tour
-   - NO guided sequence
-   - NO click-to-talk
-   - random idle on desktop/tablet only
-   - contextual speech when selected windows open
-   - hidden during Boot / Installer / Welcome
 ====================================== */
 
 export default function ClippyAssistant({
@@ -264,188 +256,399 @@ export default function ClippyAssistant({
   isTablet,
   windows,
   desktopInstallerVisible,
+  hasBlockingDesktopWindow = false,
 }) {
-  const { clippy } = useClippy();
+  const { clippy } =
+    useClippy();
+
+
+  /* ======================================
+     BALLOON SPEED
+  ====================================== */
 
   React.useEffect(() => {
-  if (!clippy?._balloon) return;
-
-  // 0 = semua kata muncul hampir langsung
-  clippy._balloon.WORD_SPEAK_TIME = 100;
-}, [clippy]);
-
-  const lastRandomIndex = React.useRef(-1);
-
-  // Initialize with the current state so windows that are already open on
-  // initial render (especially Paint Hero) do not trigger contextual speech.
-  const previousState = React.useRef({
-    about: Boolean(windows?.about),
-    projects: Boolean(windows?.projects),
-    aiAssistant: Boolean(windows?.aiAssistant),
-    contact: Boolean(windows?.contact),
-    blog: Boolean(windows?.blog),
-    whatsNew: Boolean(windows?.whatsNew),
-    recycleBin: Boolean(windows?.recycleBin),
-    desktopVideo: Boolean(windows?.desktopVideo),
-    paintHero: Boolean(windows?.paintHero),
-  });
-
-  const chatterTimerRef = React.useRef(null);
-  const chatterHideTimerRef = React.useRef(null);
-  const contextualHideTimerRef = React.useRef(null);
-
-  const installerOpen = Boolean(
-    desktopInstallerVisible
-  );
-
-  const desktopReady = Boolean(
-    clippy &&
-      pcScreen === 'desktop' &&
-      !installerOpen &&
-      !windows?.welcome
-  );
-
-  // Pause idle chatter while these primary windows are open.
-  // Paint is intentionally excluded because it auto-opens on desktop/tablet.
-  const contextualWindowOpen = Boolean(
-    windows?.about ||
-      windows?.projects ||
-      windows?.aiAssistant ||
-      windows?.contact ||
-      windows?.blog ||
-      windows?.whatsNew ||
-      windows?.recycleBin ||
-      windows?.desktopVideo
-  );
-
-  /* ====================================
-     TIMER HELPERS
-  ==================================== */
-
-  const clearChatterTimers = React.useCallback(() => {
-    if (chatterTimerRef.current) {
-      window.clearTimeout(chatterTimerRef.current);
-      chatterTimerRef.current = null;
+    if (!clippy?._balloon) {
+      return;
     }
 
-    if (chatterHideTimerRef.current) {
-      window.clearTimeout(chatterHideTimerRef.current);
-      chatterHideTimerRef.current = null;
-    }
-  }, []);
+    clippy._balloon.WORD_SPEAK_TIME =
+      80;
+  }, [clippy]);
 
-  const clearContextualTimer = React.useCallback(() => {
-    if (contextualHideTimerRef.current) {
-      window.clearTimeout(contextualHideTimerRef.current);
-      contextualHideTimerRef.current = null;
-    }
-  }, []);
 
-  /* ====================================
-     SPEAK / MOVE HELPERS
-  ==================================== */
+  /* ======================================
+     REFS
+  ====================================== */
 
-const speak = React.useCallback(
-  (message, animation = 'Acknowledge') => {
-    if (!clippy) return;
+  const lastRandomIndex =
+    React.useRef(-1);
 
-    if (animation && clippy.play) {
-      clippy.play(animation, ANIMATION_DURATION);
-    }
+  const appearTimerRef =
+    React.useRef(null);
 
-    // true = tahan balloon sampai kita hide sendiri
-    clippy.speak(message, true);
-  },
-  [clippy]
-);
+  const moveStartTimerRef =
+    React.useRef(null);
 
-  const moveClippy = React.useCallback(
-    (feature = null, duration = MOVE_DURATION) => {
-      if (!clippy) return;
+  const speechTimerRef =
+    React.useRef(null);
 
-      const position = feature
-        ? getSafePosition({
-            feature,
-            isMobile,
-            isTablet,
-          })
-        : getClippyPosition();
+  const restoreSpeechTimerRef =
+    React.useRef(null);
 
-      clippy.moveTo(
-        position.x,
-        position.y,
-        duration
-      );
-    },
-    [clippy, isMobile, isTablet]
-  );
+  const hideTimerRef =
+    React.useRef(null);
 
-  const speakRandomMessage = React.useCallback(() => {
-    if (!clippy) return;
 
-    let nextIndex = 0;
+  const isClippyVisibleRef =
+    React.useRef(false);
 
-    do {
-      nextIndex = Math.floor(
-        Math.random() * RANDOM_MESSAGES.length
-      );
-    } while (
-      RANDOM_MESSAGES.length > 1 &&
-      nextIndex === lastRandomIndex.current
+
+  const currentMessageRef =
+    React.useRef(null);
+
+
+  /*
+   * First entrance hanya sekali
+   * selama component hidup.
+   *
+   * Jadi repeat chatter tidak terus:
+   * kanan → kiri → kanan → kiri.
+   */
+  const hasPlayedInitialEntranceRef =
+    React.useRef(false);
+
+
+  /*
+   * Mencegah timeout lifecycle lama
+   * bekerja setelah state berubah.
+   */
+  const lifecycleIdRef =
+    React.useRef(0);
+
+
+  /*
+   * Position state disimpan via ref.
+   *
+   * AI Chat berubah tidak menyebabkan
+   * main chatter lifecycle restart.
+   */
+  const aiChatOpenRef =
+    React.useRef(
+      Boolean(
+        windows?.aiAssistant
+      )
     );
 
-    lastRandomIndex.current = nextIndex;
+  const isTabletRef =
+    React.useRef(isTablet);
 
-    const item = RANDOM_MESSAGES[nextIndex];
-    speak(item.text, item.animation);
-  }, [clippy, speak]);
 
-  const showContextualMessage = React.useCallback(
-    (feature) => {
-      if (!clippy || !desktopReady) return;
+  /* ======================================
+     AI CHAT STATE
+  ====================================== */
 
-      const item = CONTEXTUAL_MESSAGES[feature];
-      if (!item) return;
+  const aiChatOpen =
+    Boolean(
+      windows?.aiAssistant
+    );
 
-      clearChatterTimers();
-      clearContextualTimer();
-
-      clippy.stop?.();
-      clippy.show(true);
-      moveClippy(feature, isMobile ? 0 : MOVE_DURATION);
-      speak(item.text, item.animation);
-
-      contextualHideTimerRef.current =
-        window.setTimeout(() => {
-          clippy.stop?.();
-          clippy.hide();
-          contextualHideTimerRef.current = null;
-        }, CONTEXTUAL_VISIBLE_DURATION);
-    },
-    [
-      clippy,
-      desktopReady,
-      isMobile,
-      moveClippy,
-      speak,
-      clearChatterTimers,
-      clearContextualTimer,
-    ]
-  );
-
-  /* ====================================
-     COMPACT SPEECH BALLOON
-  ==================================== */
 
   React.useEffect(() => {
-    const styleId = 'perdana-clippy-style';
+    aiChatOpenRef.current =
+      aiChatOpen;
+  }, [aiChatOpen]);
 
-    if (document.getElementById(styleId)) {
+
+  React.useEffect(() => {
+    isTabletRef.current =
+      isTablet;
+  }, [isTablet]);
+
+
+  /* ======================================
+     BLOCKING WINDOWS
+  ====================================== */
+
+  /*
+   * AI Assistant sengaja EXCLUDED.
+   *
+   * AI Chat boleh coexist dengan Clippy.
+   */
+
+  const hasOtherWindowOpen =
+    Boolean(
+      windows &&
+        Object.entries(
+          windows
+        ).some(
+          ([key, value]) =>
+            key !== 'aiAssistant' &&
+            Boolean(value)
+        )
+    );
+
+
+  const blockingWindowOpen =
+    Boolean(
+      hasOtherWindowOpen ||
+        hasBlockingDesktopWindow
+    );
+
+
+  /* ======================================
+     DESKTOP READY
+  ====================================== */
+
+  const desktopReady =
+    Boolean(
+      clippy &&
+        pcScreen === 'desktop' &&
+        !desktopInstallerVisible &&
+        !windows?.welcome
+    );
+
+
+  /* ======================================
+     FINAL PERMISSION
+  ====================================== */
+
+  const clippyAllowed =
+    Boolean(
+      desktopReady &&
+        !blockingWindowOpen &&
+        !isMobile
+    );
+
+
+  /* ======================================
+     CLEAR TIMERS
+  ====================================== */
+
+  const clearTimers =
+    React.useCallback(() => {
+      if (
+        appearTimerRef.current
+      ) {
+        window.clearTimeout(
+          appearTimerRef.current
+        );
+
+        appearTimerRef.current =
+          null;
+      }
+
+
+      if (
+        moveStartTimerRef.current
+      ) {
+        window.clearTimeout(
+          moveStartTimerRef.current
+        );
+
+        moveStartTimerRef.current =
+          null;
+      }
+
+
+      if (
+        speechTimerRef.current
+      ) {
+        window.clearTimeout(
+          speechTimerRef.current
+        );
+
+        speechTimerRef.current =
+          null;
+      }
+
+
+      if (
+        restoreSpeechTimerRef.current
+      ) {
+        window.clearTimeout(
+          restoreSpeechTimerRef.current
+        );
+
+        restoreSpeechTimerRef.current =
+          null;
+      }
+
+
+      if (
+        hideTimerRef.current
+      ) {
+        window.clearTimeout(
+          hideTimerRef.current
+        );
+
+        hideTimerRef.current =
+          null;
+      }
+    }, []);
+
+
+  /* ======================================
+     POSITION HELPERS
+  ====================================== */
+
+  const moveClippy =
+    React.useCallback(
+      (
+        duration = MOVE_DURATION,
+        aiChatOverride = null
+      ) => {
+        if (!clippy) {
+          return;
+        }
+
+
+        const currentAiState =
+          aiChatOverride !== null
+            ? aiChatOverride
+            : aiChatOpenRef.current;
+
+
+        const position =
+          getClippyPosition({
+            aiChatOpen:
+              currentAiState,
+
+            isTablet:
+              isTabletRef.current,
+          });
+
+
+        clippy.moveTo(
+          position.x,
+          position.y,
+          duration
+        );
+      },
+
+      [clippy]
+    );
+
+
+  /*
+   * Position langsung tanpa animation.
+   *
+   * false = right bottom
+   * true  = left bottom
+   */
+
+  const setClippyPosition =
+    React.useCallback(
+      (aiChatState) => {
+        if (!clippy) {
+          return;
+        }
+
+
+        const position =
+          getClippyPosition({
+            aiChatOpen:
+              aiChatState,
+
+            isTablet:
+              isTabletRef.current,
+          });
+
+
+        clippy.moveTo(
+          position.x,
+          position.y,
+          0
+        );
+      },
+
+      [clippy]
+    );
+
+
+  /* ======================================
+     RANDOM MESSAGE
+  ====================================== */
+
+  const getRandomMessage =
+    React.useCallback(() => {
+      let nextIndex = 0;
+
+
+      do {
+        nextIndex =
+          Math.floor(
+            Math.random() *
+              RANDOM_MESSAGES.length
+          );
+      } while (
+        RANDOM_MESSAGES.length > 1 &&
+        nextIndex ===
+          lastRandomIndex.current
+      );
+
+
+      lastRandomIndex.current =
+        nextIndex;
+
+
+      return RANDOM_MESSAGES[
+        nextIndex
+      ];
+    }, []);
+
+
+  /* ======================================
+     FORCE HIDE
+  ====================================== */
+
+  const hideClippy =
+    React.useCallback(() => {
+      if (!clippy) {
+        return;
+      }
+
+
+      clippy.stop?.();
+
+      clippy.hide?.();
+
+
+      isClippyVisibleRef.current =
+        false;
+
+
+      currentMessageRef.current =
+        null;
+    }, [clippy]);
+
+
+  /* ======================================
+     CSS
+  ====================================== */
+
+  React.useEffect(() => {
+    const styleId =
+      'perdana-clippy-style';
+
+
+    if (
+      document.getElementById(
+        styleId
+      )
+    ) {
       return undefined;
     }
 
-    const style = document.createElement('style');
-    style.id = styleId;
+
+    const style =
+      document.createElement(
+        'style'
+      );
+
+
+    style.id =
+      styleId;
+
 
     style.textContent = `
       .clippy {
@@ -454,198 +657,629 @@ const speak = React.useCallback(
       }
 
       .clippy-balloon {
+        pointer-events: none !important;
         z-index: 11 !important;
       }
 
       .clippy-content {
-        font-family: "MS Sans Serif", "Microsoft Sans Serif", Arial, sans-serif !important;
+        font-family:
+          "MS Sans Serif",
+          "Microsoft Sans Serif",
+          Arial,
+          sans-serif !important;
+
         font-size: 11px !important;
         line-height: 13px !important;
       }
 
       .clippy-balloon div[style*="max-width: 200px"] {
         height: auto !important;
-        font-family: "Microsoft Sans", "MS Sans Serif", sans-serif !important;
+
+        font-family:
+          "Microsoft Sans",
+          "MS Sans Serif",
+          sans-serif !important;
+
         font-size: 10pt !important;
         line-height: 13px !important;
+
         letter-spacing: 0 !important;
       }
     `;
 
-    document.head.appendChild(style);
+
+    document.head.appendChild(
+      style
+    );
+
 
     return () => {
       document
-        .getElementById(styleId)
+        .getElementById(
+          styleId
+        )
         ?.remove();
     };
   }, []);
 
-  /* ====================================
-     GLOBAL VISIBILITY GUARD
 
-     Always hide Clippy during:
-     - Boot
-     - Installer
-     - Welcome after Reset
-  ==================================== */
+  /* ======================================
+     MAIN CHATTER LIFECYCLE
+  ====================================== */
 
   React.useEffect(() => {
-    if (!clippy) return;
+    const lifecycleId =
+      ++lifecycleIdRef.current;
 
-    if (desktopReady) return;
 
-    clearChatterTimers();
-    clearContextualTimer();
+    clearTimers();
 
-    clippy.stop?.();
-    clippy.hide();
+
+    /* ==================================
+       NOT ALLOWED
+    ================================== */
+
+    if (
+      !clippy ||
+      !clippyAllowed
+    ) {
+      hideClippy();
+
+      return undefined;
+    }
+
+
+    let firstAppearance =
+      true;
+
+
+    /* ==================================
+       VALIDITY
+    ================================== */
+
+    const lifecycleStillValid =
+      () =>
+        lifecycleIdRef.current ===
+          lifecycleId &&
+        clippyAllowed;
+
+
+    /* ==================================
+       SCHEDULE
+    ================================== */
+
+    const scheduleNextAppearance =
+      () => {
+        if (
+          !lifecycleStillValid()
+        ) {
+          return;
+        }
+
+
+        const delay =
+          firstAppearance
+            ? FIRST_APPEAR_DELAY
+            : RANDOM_MIN_DELAY +
+              Math.random() *
+                RANDOM_MAX_EXTRA_DELAY;
+
+
+        appearTimerRef.current =
+          window.setTimeout(
+            () => {
+              appearTimerRef.current =
+                null;
+
+              showClippy();
+            },
+
+            delay
+          );
+      };
+
+
+    /* ==================================
+       SHOW
+    ================================== */
+
+    const showClippy =
+      () => {
+        if (
+          !lifecycleStillValid()
+        ) {
+          return;
+        }
+
+
+        clippy.stop?.();
+
+
+        /*
+         * Apakah ini entrance pertama
+         * dan AI Chat sedang open?
+         */
+
+        const shouldPlayEntrance =
+          !hasPlayedInitialEntranceRef.current &&
+          aiChatOpenRef.current;
+
+
+        /*
+         * Pilih message SEKALI.
+         */
+
+        const item =
+          getRandomMessage();
+
+
+        currentMessageRef.current =
+          item.text;
+
+
+        const messageDuration =
+          getMessageVisibleDuration(
+            item.text
+          );
+
+
+        /* =================================
+           INITIAL AI CHAT ENTRANCE
+
+           RIGHT
+             ↓
+           SHOW
+             ↓
+           MOVE LEFT
+             ↓
+           SPEAK
+        ================================= */
+
+        if (shouldPlayEntrance) {
+          /*
+           * Mulai dari RIGHT BOTTOM,
+           * walaupun AI Chat sedang open.
+           */
+
+          setClippyPosition(false);
+
+
+          clippy.show(true);
+
+
+          isClippyVisibleRef.current =
+            true;
+
+
+          hasPlayedInitialEntranceRef.current =
+            true;
+
+
+          /*
+           * Sedikit jeda supaya initial
+           * right position sudah ter-render.
+           */
+
+          moveStartTimerRef.current =
+            window.setTimeout(
+              () => {
+                moveStartTimerRef.current =
+                  null;
+
+
+                if (
+                  !lifecycleStillValid() ||
+                  !isClippyVisibleRef.current
+                ) {
+                  return;
+                }
+
+
+                /*
+                 * RIGHT → LEFT
+                 */
+
+                moveClippy(
+                  INITIAL_MOVE_DURATION,
+                  true
+                );
+              },
+
+              INITIAL_MOVE_START_DELAY
+            );
+
+
+          /*
+           * Balloon muncul setelah
+           * movement selesai.
+           */
+
+          const speechDelay =
+            INITIAL_MOVE_START_DELAY +
+            INITIAL_MOVE_DURATION +
+            SPEECH_AFTER_MOVE_DELAY;
+
+
+          speechTimerRef.current =
+            window.setTimeout(
+              () => {
+                speechTimerRef.current =
+                  null;
+
+
+                if (
+                  !lifecycleStillValid() ||
+                  !isClippyVisibleRef.current
+                ) {
+                  return;
+                }
+
+
+                clippy.speak(
+                  item.text,
+                  true
+                );
+              },
+
+              speechDelay
+            );
+
+
+          /*
+           * Hide dihitung setelah speech.
+           */
+
+          hideTimerRef.current =
+            window.setTimeout(
+              () => {
+                hideTimerRef.current =
+                  null;
+
+
+                if (
+                  !lifecycleStillValid()
+                ) {
+                  return;
+                }
+
+
+                clippy.stop?.();
+
+                clippy.hide?.();
+
+
+                isClippyVisibleRef.current =
+                  false;
+
+
+                currentMessageRef.current =
+                  null;
+
+
+                firstAppearance =
+                  false;
+
+
+                scheduleNextAppearance();
+              },
+
+              speechDelay +
+                messageDuration
+            );
+
+
+          return;
+        }
+
+
+        /* =================================
+           NORMAL APPEARANCE
+
+           Langsung muncul pada posisi
+           yang benar.
+        ================================= */
+
+        setClippyPosition(
+          aiChatOpenRef.current
+        );
+
+
+        clippy.show(true);
+
+
+        isClippyVisibleRef.current =
+          true;
+
+
+        speechTimerRef.current =
+          window.setTimeout(
+            () => {
+              speechTimerRef.current =
+                null;
+
+
+              if (
+                !lifecycleStillValid() ||
+                !isClippyVisibleRef.current
+              ) {
+                return;
+              }
+
+
+              clippy.speak(
+                item.text,
+                true
+              );
+            },
+
+            NORMAL_SPEECH_DELAY
+          );
+
+
+        hideTimerRef.current =
+          window.setTimeout(
+            () => {
+              hideTimerRef.current =
+                null;
+
+
+              if (
+                !lifecycleStillValid()
+              ) {
+                return;
+              }
+
+
+              clippy.stop?.();
+
+              clippy.hide?.();
+
+
+              isClippyVisibleRef.current =
+                false;
+
+
+              currentMessageRef.current =
+                null;
+
+
+              firstAppearance =
+                false;
+
+
+              scheduleNextAppearance();
+            },
+
+            NORMAL_SPEECH_DELAY +
+              messageDuration
+          );
+      };
+
+
+    /* ==================================
+       START
+    ================================== */
+
+    scheduleNextAppearance();
+
+
+    /* ==================================
+       CLEANUP
+    ================================== */
+
+    return () => {
+      lifecycleIdRef.current += 1;
+
+      clearTimers();
+    };
   }, [
     clippy,
-    desktopReady,
-    clearChatterTimers,
-    clearContextualTimer,
+    clippyAllowed,
+    clearTimers,
+    hideClippy,
+    moveClippy,
+    setClippyPosition,
+    getRandomMessage,
   ]);
 
-  /* ====================================
-     CONTEXTUAL WINDOW OPEN
 
-     Detect false -> true only.
-     Initial Paint Hero does not trigger because
-     previousState starts from current App state.
-  ==================================== */
+  /* ======================================
+     AI CHAT POSITION CHANGE
 
-  React.useEffect(() => {
-    const current = {
-      about: Boolean(windows?.about),
-      projects: Boolean(windows?.projects),
-      aiAssistant: Boolean(windows?.aiAssistant),
-      contact: Boolean(windows?.contact),
-      blog: Boolean(windows?.blog),
-      whatsNew: Boolean(windows?.whatsNew),
-      recycleBin: Boolean(windows?.recycleBin),
-      desktopVideo: Boolean(windows?.desktopVideo),
-      paintHero: Boolean(windows?.paintHero),
-    };
+     OPEN  → MOVE LEFT
+     CLOSE → MOVE RIGHT
 
-    const newlyOpened = Object.keys(current).find(
-      (key) =>
-        current[key] &&
-        !previousState.current[key]
-    );
-
-    previousState.current = current;
-
-    if (!newlyOpened) return;
-
-    showContextualMessage(newlyOpened);
-  }, [
-    windows?.about,
-    windows?.projects,
-    windows?.aiAssistant,
-    windows?.contact,
-    windows?.blog,
-    windows?.whatsNew,
-    windows?.recycleBin,
-    windows?.desktopVideo,
-    windows?.paintHero,
-    showContextualMessage,
-  ]);
-
-  /* ====================================
-     RANDOM IDLE CHATTER
-
-     Desktop/tablet only.
-     Mobile random Clippy stays OFF.
-  ==================================== */
+     Tidak restart main lifecycle.
+  ====================================== */
 
   React.useEffect(() => {
     if (
       !clippy ||
       !desktopReady ||
-      contextualWindowOpen ||
-      isMobile
+      blockingWindowOpen ||
+      !isClippyVisibleRef.current
     ) {
-      clearChatterTimers();
       return undefined;
     }
 
-    const scheduleNextChatter = () => {
-      clearChatterTimers();
 
-      const delay =
-        RANDOM_MIN_DELAY +
-        Math.random() * RANDOM_MAX_EXTRA_DELAY;
+    /*
+     * Initial entrance punya movement
+     * sendiri.
+     *
+     * Jangan ganggu entrance pertama
+     * sebelum selesai.
+     */
 
-      chatterTimerRef.current =
-        window.setTimeout(() => {
-          if (!clippy) return;
+    if (
+      !hasPlayedInitialEntranceRef.current
+    ) {
+      return undefined;
+    }
 
-          clippy.stop?.();
-          clippy.show(true);
-          moveClippy();
-          speakRandomMessage();
 
-          chatterHideTimerRef.current =
-            window.setTimeout(() => {
-              clippy.stop?.();
-              clippy.hide();
-              chatterHideTimerRef.current = null;
+    /*
+     * Kalau ada pending speech,
+     * hentikan timer.
+     *
+     * Kita restore setelah movement.
+     */
 
-              scheduleNextChatter();
-            }, RANDOM_VISIBLE_DURATION);
-        }, delay);
-    };
+    if (
+      speechTimerRef.current
+    ) {
+      window.clearTimeout(
+        speechTimerRef.current
+      );
 
-    scheduleNextChatter();
+      speechTimerRef.current =
+        null;
+    }
+
+
+    if (
+      restoreSpeechTimerRef.current
+    ) {
+      window.clearTimeout(
+        restoreSpeechTimerRef.current
+      );
+
+      restoreSpeechTimerRef.current =
+        null;
+    }
+
+
+    const currentMessage =
+      currentMessageRef.current;
+
+
+    /*
+     * speak(..., true) bisa menahan queue.
+     *
+     * Jadi:
+     *
+     * stop speech
+     * → keep visible
+     * → move
+     * → restore balloon
+     */
+
+    clippy.stop?.();
+
+
+    clippy.show(true);
+
+
+    isClippyVisibleRef.current =
+      true;
+
+
+    /*
+     * AI Chat true
+     * → LEFT
+     *
+     * AI Chat false
+     * → RIGHT
+     */
+
+    moveClippy(
+      MOVE_DURATION,
+      aiChatOpen
+    );
+
+
+    if (!currentMessage) {
+      return undefined;
+    }
+
+
+    restoreSpeechTimerRef.current =
+      window.setTimeout(
+        () => {
+          restoreSpeechTimerRef.current =
+            null;
+
+
+          if (
+            !clippy ||
+            !desktopReady ||
+            blockingWindowOpen ||
+            !isClippyVisibleRef.current
+          ) {
+            return;
+          }
+
+
+          clippy.speak(
+            currentMessage,
+            true
+          );
+        },
+
+        MOVE_DURATION +
+          SPEECH_AFTER_MOVE_DELAY
+      );
+
 
     return () => {
-      clearChatterTimers();
+      if (
+        restoreSpeechTimerRef.current
+      ) {
+        window.clearTimeout(
+          restoreSpeechTimerRef.current
+        );
+
+        restoreSpeechTimerRef.current =
+          null;
+      }
     };
   }, [
+    aiChatOpen,
     clippy,
     desktopReady,
-    contextualWindowOpen,
-    isMobile,
+    blockingWindowOpen,
     moveClippy,
-    speakRandomMessage,
-    clearChatterTimers,
   ]);
 
-  /* ====================================
-     RESPONSIVE POSITION
-  ==================================== */
+
+  /* ======================================
+     WINDOW RESIZE
+  ====================================== */
 
   React.useEffect(() => {
-    if (!clippy) return undefined;
+    if (!clippy) {
+      return undefined;
+    }
 
-    const handleResize = () => {
-      if (!desktopReady) return;
 
-      if (windows?.aiAssistant) {
-        moveClippy('aiAssistant');
-        return;
-      }
+    const handleResize =
+      () => {
+        if (
+          !desktopReady ||
+          blockingWindowOpen ||
+          !isClippyVisibleRef.current
+        ) {
+          return;
+        }
 
-      if (windows?.contact) {
-        moveClippy('contact');
-        return;
-      }
 
-      if (windows?.projects) {
-        moveClippy('projects');
-        return;
-      }
+        /*
+         * Resize cukup snap.
+         *
+         * Tidak perlu movement animation.
+         */
 
-      if (windows?.about) {
-        moveClippy('about');
-        return;
-      }
+        setClippyPosition(
+          aiChatOpenRef.current
+        );
+      };
 
-      moveClippy();
-    };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener(
+      'resize',
+      handleResize
+    );
+
 
     return () => {
       window.removeEventListener(
@@ -656,29 +1290,36 @@ const speak = React.useCallback(
   }, [
     clippy,
     desktopReady,
-    windows?.about,
-    windows?.projects,
-    windows?.aiAssistant,
-    windows?.contact,
-    moveClippy,
+    blockingWindowOpen,
+    setClippyPosition,
   ]);
 
-  /* ====================================
-     CLEANUP
-  ==================================== */
+
+  /* ======================================
+     FINAL CLEANUP
+  ====================================== */
 
   React.useEffect(() => {
     return () => {
-      clearChatterTimers();
-      clearContextualTimer();
+      lifecycleIdRef.current += 1;
+
+
+      clearTimers();
+
+
+      currentMessageRef.current =
+        null;
+
+
       clippy?.stop?.();
+
       clippy?.hide?.();
     };
   }, [
     clippy,
-    clearChatterTimers,
-    clearContextualTimer,
+    clearTimers,
   ]);
+
 
   return null;
 }

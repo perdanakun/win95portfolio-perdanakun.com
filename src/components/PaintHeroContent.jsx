@@ -17,14 +17,14 @@ import toolsSprite from '../assets/paint/tools.svg';
  * - Uses React95 <Button /> and <Frame /> for native-looking controls.
  */
 
-const CANVAS_WIDTH = 1200;
+const CANVAS_WIDTH = 1000;
 const CANVAS_HEIGHT = 530;
 
 const LAYOUT = {
   offsetX: -30,
 
   paddingX: 90,
-  paddingTop: 25,
+  paddingTop: 15,
   paddingBottom: 10,
 
   heroMaxHeight: 400,
@@ -420,9 +420,12 @@ function ToolButton({ item, active, onClick }) {
         backgroundColor: '#c0c0c0',
 
 
+        // Border lebih tipis
+        borderWidth: '1px',
+
         borderColor: active
-          ? '#808080 #ffffff #ffffff #808080'
-          : '#ffffff #808080 #808080 #ffffff',
+          ? '#808080 #e7e7e7 #e7e7e7 #808080'
+          : '#e7e7e7 #808080 #808080 #e7e7e7',
 
         cursor: 'pointer',
       }}

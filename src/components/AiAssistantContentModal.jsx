@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Modal, Frame, Button } from '@react95/core';
-import { Intl101 } from '@react95/icons';
 import { createPortal } from 'react-dom';
 import { getAIResponse } from '../services/aiService'; // Sesuaikan path import
  import aiMessageSent from '../assets/sounds/ai_assistant_message_sent.wav';
@@ -26,9 +25,21 @@ useEffect(() => {
   const [showInfo, setShowInfo] = useState(false);
   const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
+  const [currentHour, setCurrentHour] = useState(() => new Date().getHours());
  
 
-  const infoButtonRef = useRef(null);
+  
+  useEffect(() => {
+    const updateLocalHour = () => {
+      setCurrentHour(new Date().getHours());
+    };
+
+    const interval = setInterval(updateLocalHour, 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+const infoButtonRef = useRef(null);
 
   const [infoPosition, setInfoPosition] = useState({
     top: 0,
@@ -55,75 +66,245 @@ useEffect(() => {
 }, [chatHistory, loading]);
 
   // Animasi rotasi placeholder input
-const placeholders = [
-  "Ask me anything about my life...",
-  "What do you want to know about me?",
-  "Search my memories or ask a question...",
-  "What's on your mind? Drop a message...",
-  "Curious about my background or routine?",
-  "Think out loud—type your thoughts here...",
-  "Test my memory—ask me a personal fact.",
-  "Need a reminder or just want to chat?",
-  "What should we check or talk about?",
-  "Type a question or a detail about me..."
+  const placeholders = [
+    "Ask me anything about my life...",
+    "What do you want to know about me?",
+    "Search my memories or ask a question...",
+    "What's on your mind? Drop a message...",
+    "Curious about my background or routine?",
+    "Think out loud—type your thoughts here...",
+    "Test my memory—ask me a personal fact.",
+    "Need a reminder or just want to chat?",
+    "What should we check or talk about?",
+    "Type a question or a detail about me..."
   ];
+
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setPlaceholderIndex((prevIndex) => (prevIndex + 1) % placeholders.length);
+      setPlaceholderIndex((prevIndex) =>
+        (prevIndex + 1) % placeholders.length
+      );
     }, 3500);
+
     return () => clearInterval(interval);
   }, []);
 
-// Handle submit pesan chat
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!prompt.trim()) return;
+  // Suggested questions are handled locally so they appear instantly
+  // and do not require another AI/API call.
+  const suggestionSets = {
+    initial: [
+      'What is Perdana working on now?',
+      'Why is he moving into Product Design?',
+      'Can he code?',
+    ],
 
-    const userMessage = prompt; 
+    travelxxx: [
+      'Why is Compare the main feature?',
+      'How did he design TravelXXX?',
+      'What will he test next?',
+    ],
+
+    portfolio: [
+      'Why Windows 95?',
+      'How was this portfolio built?',
+      'What did he learn from testing it?',
+    ],
+
+    code: [
+      'How does he use AI?',
+      'What can he build himself?',
+      'What does Design in Code mean?',
+    ],
+
+    career: [
+      'Is he starting his career over?',
+      'What does he bring from Visual Design?',
+      'Where does he want to go next?',
+    ],
+
+    experience: [
+      'What did he do at Conania?',
+      'What kind of clients has he worked with?',
+      'What did freelance work teach him?',
+    ],
+
+    hiring: [
+      'What role is he looking for?',
+      'Why consider him for Product Design?',
+      'Is he currently available?',
+    ],
+  };
+
+  const getSuggestedQuestions = (history) => {
+    if (!history.length) {
+      return suggestionSets.initial;
+    }
+
+    const recentUserMessages = history
+      .filter((item) => item.sender === 'user')
+      .slice(-2)
+      .map((item) => item.text.toLowerCase())
+      .join(' ');
+
+    const latestAIMessage =
+      [...history]
+        .reverse()
+        .find((item) => item.sender === 'ai')
+        ?.text.toLowerCase() || '';
+
+    // Use both what the visitor asked and what the AI just talked about.
+    // This makes follow-up prompts feel connected to the actual conversation.
+    const recentContext = `${recentUserMessages} ${latestAIMessage}`;
+
+    let suggestions = suggestionSets.initial;
+
+    if (
+      recentContext.includes('travelxxx') ||
+      recentContext.includes('travel xxx') ||
+      recentContext.includes('hotel') ||
+      recentContext.includes('compare')
+    ) {
+      suggestions = suggestionSets.travelxxx;
+    } else if (
+      recentContext.includes("perdana's computer") ||
+      recentContext.includes('perdana computer') ||
+      recentContext.includes('windows 95') ||
+      recentContext.includes('portfolio website')
+    ) {
+      suggestions = suggestionSets.portfolio;
+    } else if (
+      recentContext.includes('hire') ||
+      recentContext.includes('hiring') ||
+      recentContext.includes('recruiter') ||
+      recentContext.includes('available') ||
+      recentContext.includes('candidate') ||
+      recentContext.includes('role is he looking')
+    ) {
+      suggestions = suggestionSets.hiring;
+    } else if (
+      recentContext.includes('code') ||
+      recentContext.includes('coding') ||
+      recentContext.includes('react') ||
+      recentContext.includes('design engineering') ||
+      recentContext.includes('design in code') ||
+      recentContext.includes('front-end')
+    ) {
+      suggestions = suggestionSets.code;
+    } else if (
+      recentContext.includes('career') ||
+      recentContext.includes('pivot') ||
+      recentContext.includes('product design') ||
+      recentContext.includes('transition') ||
+      recentContext.includes('starting over')
+    ) {
+      suggestions = suggestionSets.career;
+    } else if (
+      recentContext.includes('experience') ||
+      recentContext.includes('conania') ||
+      recentContext.includes('fiverr') ||
+      recentContext.includes('visual design') ||
+      recentContext.includes('client')
+    ) {
+      suggestions = suggestionSets.experience;
+    }
+
+    const askedQuestions = new Set(
+      history
+        .filter((item) => item.sender === 'user')
+        .map((item) => item.text.trim().toLowerCase())
+    );
+
+    const freshSuggestions = suggestions.filter(
+      (question) => !askedQuestions.has(question.toLowerCase())
+    );
+
+    // If every question in a contextual set has already been used, fall back
+    // to unused initial questions instead of leaving the suggestion area empty.
+    if (!freshSuggestions.length) {
+      return suggestionSets.initial
+        .filter((question) => !askedQuestions.has(question.toLowerCase()))
+        .slice(0, 3);
+    }
+
+    return freshSuggestions.slice(0, 3);
+  };
+
+  const suggestedQuestions = getSuggestedQuestions(chatHistory);
+
+const getGreetingByTime = (hour) => {
+  if (hour < 5) return "still up this late? hope you're doing okay — welcome to Perdana's corner.";
+  if (hour < 8) return "up early! hope your day's off to a good start. this is Perdana's little corner of the web.";
+  if (hour < 12) return "morning! hope you slept well — grab a coffee, this is Perdana's playground.";
+  if (hour < 15) return "hey, hope your day's going smooth — glad you swung by. this is Perdana's space.";
+  if (hour < 18) return "afternoon! hope things are going well so far — this is Perdana's work you're looking at.";
+  if (hour < 21) return "evening! hope you had a good day — you're in the right place, this is Perdana's world.";
+  return "still up? take it easy — this is Perdana's world, welcome.";
+};
+
+  const greetingText = getGreetingByTime(currentHour);
+  const emptyStateSuggestions = suggestionSets.initial.slice(0, 3);
+
+  // One send function is used by both the text input and follow-up prompts.
+  const sendMessage = (message) => {
+    const userMessage = message.trim();
+
+    if (!userMessage || loading) return;
+
+    const currentHistory = chatHistory;
+
     setPrompt('');
 
-    // --- PUTAR SOUND EFFECT DI SINI ---
     const audio = new Audio(aiMessageSent);
     audio.volume = 0.5;
     audio.play().catch(() => {
-      // Menghindari error jika diblokir autoplay oleh browser
+      // Browser may block audio playback in some situations.
     });
 
-    // Masukkan pesan user dan aktifkan loading secara bersamaan
-    setChatHistory(prev => [
-      ...prev, 
-      { sender: 'user', text: userMessage }
+    setChatHistory((prev) => [
+      ...prev,
+      { sender: 'user', text: userMessage },
     ]);
+
     setLoading(true);
 
-    // Panggil AI
-   getAIResponse(userMessage, chatHistory)
+    getAIResponse(userMessage, currentHistory)
       .then((response) => {
         setTimeout(() => {
-          setChatHistory(prev => [
-            ...prev, 
-            { sender: 'ai', text: response || 'Maaf, sepertinya tidak ada respons dari AI.' }
+          setChatHistory((prev) => [
+            ...prev,
+            {
+              sender: 'ai',
+              text: response || "Sorry, I couldn't get a response.",
+            },
           ]);
           setLoading(false);
-        }, 800); // Jeda simulasi waktu baca/ketik AI selesai
+        }, 800);
       })
       .catch((error) => {
-        console.error("Gagal memanggil AI:", error);
-        setChatHistory(prev => [
-          ...prev, 
-          { sender: 'ai', text: 'Terjadi kesalahan sistem pada AI.' }
+        console.error('Gagal memanggil AI:', error);
+
+        setChatHistory((prev) => [
+          ...prev,
+          {
+            sender: 'ai',
+            text: 'Something went wrong with the AI.',
+          },
         ]);
+
         setLoading(false);
       })
       .finally(() => {
         setTimeout(() => {
-          if (inputRef.current) {
-            inputRef.current.focus();
-          }
+          inputRef.current?.focus();
         }, 850);
       });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    sendMessage(prompt);
   };
 
   // Handle Show Info
@@ -137,6 +318,19 @@ useEffect(() => {
 
   return () => clearTimeout(timer);
 }, [showInfo]);
+
+  const MiniAiAvatar = () => (
+    <div
+      className="ai-chat-avatar"
+      aria-hidden="true"
+    >
+      <div className="ai-chat-avatar-body">
+        <div className="ai-chat-avatar-eye ai-chat-avatar-eye-left" />
+        <div className="ai-chat-avatar-eye ai-chat-avatar-eye-right" />
+      </div>
+    </div>
+  );
+
   return (
     <Modal.Content
   ref={containerRef}
@@ -152,12 +346,12 @@ useEffect(() => {
     minHeight: 0,
     maxWidth: '100%',
 
-    padding: '4px',
-
     boxSizing: 'border-box',
     overflow: 'hidden',
   }}
 >
+
+
 
       {/* CSS TERPADU UNTUK ANIMASI GAYA AI */}
       <style>{`
@@ -183,7 +377,7 @@ useEffect(() => {
   animation: chatMessageUp 0.25s ease-out;
 }
 /* =========================================
-   MINIMAL CRT AI FACE
+   MOBILE AI HERO / BLINKING CHARACTER
    ========================================= */
 
 @keyframes aiBlinkLeft {
@@ -206,243 +400,253 @@ useEffect(() => {
   }
 }
 
-.ai-eye-left {
-  animation: aiBlinkLeft 3.2s infinite ease-in-out;
-  transform-origin: center;
+.ai-empty-state {
+  width: 100%;
+  min-height: 100%;
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 28px 18px 22px;
+  box-sizing: border-box;
+
+  background: #ffffff;
+  text-align: center;
 }
 
-.ai-eye-right {
-  animation: aiBlinkRight 3.2s infinite ease-in-out;
-  transform-origin: center;
-}
-
-/* =========================================
-   CRT AI FACE GLOW
-   ========================================= */
-
-.ai-eye-left,
-.ai-eye-right {
-  box-shadow:
-    0 0 4px rgba(255, 255, 255, 0.8),
-    0 0 10px rgba(255, 255, 255, 0.45),
-    0 0 18px rgba(255, 255, 255, 0.2);
-
-  filter: brightness(1.05);
-}
-
-.ai-face-line,
-.ai-face-mouth {
-  box-shadow:
-    0 0 4px rgba(255, 255, 255, 0.8),
-    0 0 10px rgba(255, 255, 255, 0.45),
-    0 0 16px rgba(255, 255, 255, 0.2);
-
-  filter: brightness(1.05);
-}
-
-/* =========================================
-   RETRO CRT SCREEN
-   ========================================= */
-
-.ai-container-glow {
+.ai-hero-character {
   position: relative;
-  overflow: hidden;
+
+  width: 68px;
+  height: 68px;
+
+  flex-shrink: 0;
+}
+
+.ai-hero-body {
+  position: absolute;
+
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 46px;
+  height: 40px;
 
   background: #141414;
 
-  box-shadow:
-    inset 0 0 25px rgba(0, 0, 0, 0.9),
-    inset 0 0 8px rgba(255, 255, 255, 0.08),
-    0 0 12px rgba(255, 255, 255, 0.08);
-
-  /* subtle CRT flicker */
-  animation: crtFlicker 0.12s infinite;
+  border-radius: 2px;
 }
 
-
-/* =========================================
-   SCREEN FLICKER
-   ========================================= */
-
-@keyframes crtFlicker {
-  0%, 100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.98;
-  }
-}
-
-
-/* =========================================
-   SCANLINES
-   ========================================= */
-
-.ai-container-glow::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.035) 0px,
-      rgba(255, 255, 255, 0.035) 1px,
-      rgba(0, 0, 0, 0.12) 2px,
-      rgba(0, 0, 0, 0.12) 4px
-    );
-
-  pointer-events: none;
-  z-index: 20;
-}
-
-
-/* =========================================
-   CRT GLITCH / SCREEN TEARING
-   ========================================= */
-
-.ai-container-glow::after {
-  content: "";
+.ai-hero-eye {
   position: absolute;
 
-  left: -10%;
-  width: 120%;
+  top: 13px;
 
-  height: 20px;
+  width: 6px;
+  height: 10px;
 
-  top: 0;
+  background: #f8f5f4;
 
-  background:
-    linear-gradient(
-      to right,
-      transparent 0%,
-      rgba(255,255,255,0.05) 20%,
-      rgba(255,255,255,0.15) 50%,
-      rgba(255,255,255,0.04) 80%,
-      transparent 100%
-    );
 
-  opacity: 0;
+  transform-origin: center;
+}
 
-  pointer-events: none;
-  z-index: 30;
+.ai-hero-eye-left {
+  left: 12px;
+  animation: aiBlinkLeft 3.2s infinite ease-in-out;
+}
 
-  animation: crtTear 4s infinite;
+.ai-hero-eye-right {
+  right: 12px;
+  animation: aiBlinkRight 3.2s infinite ease-in-out;
+}
+
+.ai-hero-mouth {
+  position: absolute;
+
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+
+  width: 8px;
+  height: 3px;
+
+  background: #f8f5f4;
+  border-radius: 2px;
+}
+
+.ai-hero-leg {
+  position: absolute;
+
+  top: 52px;
+
+  width: 6px;
+  height: 12px;
+
+  background: #273bd3;
+  border: 1px solid #273bd3;
+  box-sizing: border-box;
+}
+
+.ai-hero-leg-one {
+  left: 20px;
+}
+
+.ai-hero-leg-two {
+  left: 32px;
+}
+
+.ai-hero-leg-three {
+  right: 32px;
+}
+
+.ai-hero-leg-four {
+  right: 20px;
+}
+
+.ai-greeting-text {
+  max-width: 340px;
+
+  margin: 0 0 15px;
+
+  color: #343434;
+
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: 0.15px;
+}
+
+.ai-empty-suggestions {
+  width: 100%;
+  max-width: 360px;
+
+  margin-top: 2px;
+
+  font-family: sans-serif;
+  font-size: 11px;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.ai-empty-divider {
+  width: calc(100% - 24px);
+  height: 1px;
+
+  margin: 0 12px 5px;
+
+  background: #dedede;
+}
+
+.ai-empty-suggestion {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 6px;
+
+  width: 100%;
+
+  padding: 7px 8px;
+
+  box-sizing: border-box;
+  user-select: none;
 }
 
 
-@keyframes crtTear {
+/* =========================================
+   MINI AI CHAT AVATAR
+   ========================================= */
 
-  /* normal */
-  0%,
-  82% {
-    top: -20px;
-    opacity: 0;
-    transform: translateX(0);
-  }
+.ai-chat-avatar {
+  position: relative;
 
-  /* glitch starts */
-  83% {
-    top: 25%;
-    opacity: 0.8;
-    transform: translateX(-8px);
-  }
+  width: 22px;
+  height: 22px;
 
-  84% {
-    top: 26%;
-    opacity: 0.5;
-    transform: translateX(10px);
-  }
+  flex-shrink: 0;
+}
 
-  85% {
-    top: 27%;
-    opacity: 0.9;
-    transform: translateX(-5px);
-  }
+.ai-chat-avatar-body {
+  position: absolute;
 
-  86% {
-    top: 28%;
-    opacity: 0;
-    transform: translateX(4px);
-  }
+  left: 50%;
+  top: 1px;
+  transform: translateX(-50%);
 
-  /* second tear */
-  87% {
-    top: 55%;
-    opacity: 0.7;
-    transform: translateX(8px);
-  }
+  width: 15px;
+  height: 15px;
 
-  88% {
-    top: 56%;
-    opacity: 0;
-    transform: translateX(-8px);
-  }
+  background: #141414;
+  border-radius: 1px;
+}
 
-  /* back to normal */
-  100% {
-    top: -20px;
-    opacity: 0;
-    transform: translateX(0);
-  }
+.ai-chat-avatar-eye {
+  position: absolute;
+
+  top: 5px;
+
+  width: 2px;
+  height: 4px;
+
+  background: #f8f5f4;
+
+  transform-origin: center;
+}
+
+.ai-chat-avatar-eye-left {
+  left: 4px;
+  animation: aiBlinkLeft 3.2s infinite ease-in-out;
+}
+
+.ai-chat-avatar-eye-right {
+  right: 4px;
+  animation: aiBlinkRight 3.2s infinite ease-in-out;
+}
+
+.ai-chat-avatar-leg {
+  position: absolute;
+
+  top: 16px;
+
+  width: 2px;
+  height: 5px;
+
+  background: #141414;
+}
+
+.ai-chat-avatar-leg-one {
+  left: 4px;
+}
+
+.ai-chat-avatar-leg-two {
+  left: 8px;
+}
+
+.ai-chat-avatar-leg-three {
+  right: 8px;
+}
+
+.ai-chat-avatar-leg-four {
+  right: 4px;
 }
 
 /* =========================================
-   CRT RGB GLITCH
+   CONTEXTUAL FOLLOW-UP QUESTIONS
    ========================================= */
-.crt-rgb-glitch {
-  position: absolute;
-
-  left: -10%;
-  top: 42%;
-
-  width: 120%;
-  height: 35px;
-
-  pointer-events: none;
-  z-index: 25;
-
-  opacity: 0;
-
-  mix-blend-mode: screen;
-
-  background:
-    linear-gradient(
-      90deg,
-      rgba(255, 0, 0, 0.25),
-      transparent 30%,
-      transparent 70%,
-      rgba(0, 100, 255, 0.25)
-    );
-
-  animation: rgbShift 6s infinite steps(1);
+.ai-suggested-question {
+  color: #7b8798;
+  cursor: pointer;
+  transition: color 0.12s ease, background-color 0.12s ease;
 }
 
-@keyframes rgbShift {
-  0%, 85% {
-    opacity: 0;
-    transform: translateX(0);
-  }
-
-  86% {
-    opacity: 0.7;
-    transform: translateX(-8px);
-  }
-
-  87% {
-    opacity: 0.4;
-    transform: translateX(8px);
-  }
-
-  88% {
-    opacity: 0;
-    transform: translateX(0);
-  }
-
-  100% {
-    opacity: 0;
-  }
+.ai-suggested-question:hover,
+.ai-suggested-question:focus {
+  color: #273bd3;
+  background-color: #f5f5f5;
+  outline: none;
 }
       `}</style>
 
@@ -478,6 +682,8 @@ useEffect(() => {
     minWidth: 0,
   }}
 >
+
+
                <span style={{ 
             width: '8px', height: '8px', 
             backgroundColor: '#008000',
@@ -554,7 +760,7 @@ style={{
   boxSizing: 'border-box',
 }}
     >
-      <strong>perdana.ai is a LLM chatbot</strong>
+      <strong>perdana.ai is an LLM chatbot</strong>
 
       <div
         style={{
@@ -586,98 +792,67 @@ style={{
     display: 'flex',
     flexDirection: 'column',
     gap: '20px',
-    marginBottom: '6px',
+    marginBottom: 0,
   }}
 >
 
 
-{/* AREA ANIMASI MATA AI */}
+{/* EMPTY STATE / MOBILE AI HERO */}
 
 {chatHistory.length === 0 && (
-  <div
-    className="ai-container-glow"
-    style={{
-      backgroundColor: '#141414',
-      width: '100%',
-      flex: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      margin: 'auto',
-      textAlign: 'center',
-      padding: '20px',
-      color: '#666666',
-      fontFamily: 'sans-serif',
-
-    }}
-  >
-
-{/* CRT RGB GLITCH */}
-<div
-  className="crt-rgb-glitch"
-  aria-hidden="true"
-/>
-
-{/* AI FACE */}
-<div
-  style={{
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '14px',
-  }}
->
-
-  {/* EYES */}
-  <div
-    style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: '24px',
-    }}
-  >
-
-    {/* LEFT EYE */}
+  <div className="ai-empty-state">
+    {/* BLINKING CHARACTER */}
     <div
-      className="ai-eye-left"
-      style={{
-        width: '20px',
-        height: '38px',
-        backgroundColor: '#f8f5f4',
-        borderRadius: '7px',
-      }}
-    />
+      className="ai-hero-character"
+      aria-hidden="true"
+    >
+      <div className="ai-hero-body">
+        <div className="ai-hero-eye ai-hero-eye-left" />
+        <div className="ai-hero-eye ai-hero-eye-right" />
+  
+      </div>
 
-    {/* RIGHT EYE */}
-    <div
-      className="ai-eye-right"
-      style={{
-        width: '20px',
-        height: '38px',
-        backgroundColor: '#f8f5f4',
-        borderRadius: '7px',
-      }}
-    />
+      
+    </div>
 
-  </div>
+    {/* TIME-AWARE GREETING */}
+    <div className="ai-greeting-text">
+      {greetingText}
+    </div>
 
-  {/* MOUTH */}
-  <div
-    className="ai-face-mouth"
-    style={{
-      width: '24px',
-      height: '7px',
-      backgroundColor: '#f8f5f4',
-      borderRadius: '5px',
-    }}
-  />
+    {/* STARTER QUESTIONS */}
+    <div className="ai-empty-suggestions">
+      <div className="ai-empty-divider" />
 
-</div>
+      {emptyStateSuggestions.map((question) => (
+        <div
+          key={question}
+          className="ai-empty-suggestion ai-suggested-question"
+          role="button"
+          tabIndex={0}
+          onClick={() => sendMessage(question)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              sendMessage(question);
+            }
+          }}
+        >
+          <span
+            aria-hidden="true"
+            style={{
+              flexShrink: 0,
+              color: '#8a96a6',
+              transform: 'translateY(1px)',
+            }}
+          >
+            ↳
+          </span>
 
-
+          <span>{question}</span>
+        </div>
+      ))}
+    </div>
   </div>
 )}
 
@@ -685,64 +860,61 @@ style={{
 {/* AREA CHATBOX AI */}
 
 
-{chatHistory.map((chat, index) => (
-  <div
-    key={index}
-    style={{
-      
-      position: 'relative',
-      alignSelf: chat.sender === 'user' ? 'flex-end' : 'flex-start',
-      marginLeft: chat.sender === 'ai' ? '36px' : '0px',
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'flex-end',
-      gap: '12px',
-      maxWidth: '85%',
-      backgroundColor:
-        chat.sender === 'user' ? '#273bd3' : '#f2f2f2',
-      color:
-        chat.sender === 'user' ? '#ffffff' : '#000000',
-      padding: '8px 15px',
-      borderRadius: '10px',
-      fontSize: '12px',
-      lineHeight: '1.4',
-      fontFamily: 'sans-serif',
-      textAlign: 'left',
-      wordBreak: 'break-word',
-      whiteSpace: 'pre-wrap',
-    }}
-  >
-
-
-    {chat.sender === 'ai' && (
-      <Frame
-        variant="well"
+{chatHistory.map((chat, index) => {
+  return (
+    <React.Fragment key={index}>
+      <div
         style={{
-          position: 'absolute',
-          left: '-34px',
-          top: '4px',
-
-          width: '24px',
-          height: '24px',
-
+          position: 'relative',
+          alignSelf: chat.sender === 'user' ? 'flex-end' : 'flex-start',
+          marginLeft: chat.sender === 'ai' ? '36px' : '0px',
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-
-          backgroundColor: '#f2f2f2',
-          flexShrink: 0,
-          margin: 0,
-          padding: 0,
-          boxSizing: 'border-box',
+          flexDirection: 'row',
+          alignItems: 'flex-end',
+          gap: '12px',
+          maxWidth: '85%',
+          backgroundColor:
+            chat.sender === 'user' ? '#273bd3' : '#f2f2f2',
+          color:
+            chat.sender === 'user' ? '#ffffff' : '#000000',
+          padding: '8px 15px',
+          borderRadius: '10px',
+          fontSize: '12px',
+          lineHeight: '1.4',
+          fontFamily: 'sans-serif',
+          textAlign: 'left',
+          wordBreak: 'break-word',
+          whiteSpace: 'pre-wrap',
         }}
       >
-        <Intl101 variant="32x32_4" />
-      </Frame>
-    )}
+        {chat.sender === 'ai' && (
+          <Frame
+            variant="well"
+            style={{
+              position: 'absolute',
+              left: '-34px',
+              top: '4px',
+              width: '26px',
+              height: '26px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: '#ffffff',
+              flexShrink: 0,
+              margin: 0,
+              padding: 0,
+              boxSizing: 'border-box',
+            }}
+          >
+            <MiniAiAvatar />
+          </Frame>
+        )}
 
-    {chat.text}
-  </div>
-))}
+        {chat.text}
+      </div>
+    </React.Fragment>
+  );
+})}
 
         
 {loading && (
@@ -765,25 +937,25 @@ style={{
     }}
   >
     <Frame
-      variant="well"
-      style={{
-        position: 'absolute',
-        left: '-34px',
-        top: '4px',
-        width: '24px',
-        height: '24px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#f2f2f2',
-        flexShrink: 0,
-        margin: 0,
-        padding: 0,
-        boxSizing: 'border-box',
-      }}
-    >
-      <Intl101 variant="32x32_4" />
-    </Frame>
+            variant="well"
+            style={{
+              position: 'absolute',
+              left: '-34px',
+              top: '4px',
+              width: '26px',
+              height: '26px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: '#ffffff',
+              flexShrink: 0,
+              margin: 0,
+              padding: 0,
+              boxSizing: 'border-box',
+            }}
+          >
+            <MiniAiAvatar />
+          </Frame>
 
     is typing...
   </div>
@@ -793,6 +965,83 @@ style={{
         
       </div>
 
+{/* CONTEXTUAL SUGGESTED QUESTIONS */}
+{chatHistory.length > 0 &&
+  !loading &&
+  chatHistory[chatHistory.length - 1]?.sender === 'ai' &&
+  suggestedQuestions.length > 0 && (
+    <div
+      style={{
+        width: '100%',
+        flexShrink: 0,
+        backgroundColor: '#ffffff',
+        padding: '0 8px 6px',
+        fontFamily: 'sans-serif',
+        fontSize: '11px',
+        lineHeight: '1.4',
+        boxSizing: 'border-box',
+      }}
+    >
+      {/* SHORT DIVIDER */}
+      <div
+        style={{
+          width: '88%',
+          height: '1px',
+          backgroundColor: '#dedede',
+          margin: '0 auto 5px',
+        }}
+      />
+
+      {suggestedQuestions.map((question) => (
+        <div
+          key={question}
+          className="ai-suggested-question"
+          role="button"
+          tabIndex={0}
+          onClick={() => sendMessage(question)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              sendMessage(question);
+            }
+          }}
+          style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: '6px',
+            width: '100%',
+            padding: '6px 4px',
+            boxSizing: 'border-box',
+            userSelect: 'none',
+          }}
+        >
+          <span
+            aria-hidden="true"
+            style={{
+              flexShrink: 0,
+              color: '#8a96a6',
+              transform: 'translateY(1px)',
+            }}
+          >
+            ↳
+          </span>
+
+          <span>{question}</span>
+        </div>
+      ))}
+    </div>
+  )}
+
+      {/* GREY GAP BEFORE INPUT */}
+      <div
+        style={{
+          width: '100%',
+          height: '6px',
+          flexShrink: 0,
+          backgroundColor: '#c0c0c0',
+        }}
+      />
+  
       {/* INPUT & FORM */}
       <form
   onSubmit={handleSubmit}
