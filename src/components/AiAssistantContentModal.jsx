@@ -573,12 +573,7 @@ const toggleInfo = () => {
         }
 
 .ai-log-line {
-  display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr);
-  column-gap: 6px;
-
-  /* bikin time, username, dan message sejajar */
-  align-items: baseline;
+  display: block;
 
   width: 100%;
   padding: 1px 0;
@@ -588,17 +583,25 @@ const toggleInfo = () => {
   font-size: 12px;
   line-height: 1.4;
   text-align: left;
+
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
         .ai-log-time {
+          display: inline;
           color: #808080;
           white-space: nowrap;
           user-select: none;
+          margin-right: 6px;
         }
 
         .ai-log-name {
+          display: inline;
           white-space: nowrap;
           font-weight: bold;
+          margin-right: 6px;
         }
 
         .ai-log-name-user {
@@ -610,9 +613,10 @@ const toggleInfo = () => {
         }
 
         .ai-log-text {
-          min-width: 0;
+          display: inline;
           color: #000000;
           white-space: pre-wrap;
+          overflow-wrap: anywhere;
           word-break: break-word;
         }
 
@@ -651,7 +655,6 @@ const toggleInfo = () => {
 
         @media (max-width: 600px) {
           .ai-log-line {
-            column-gap: 4px;
             font-size: 11px;
           }
 
