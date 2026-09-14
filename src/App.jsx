@@ -1462,14 +1462,16 @@ const hasBlockingDesktopWindow = Boolean(
           CLIPPY — LIGHTWEIGHT ASSISTANT
           No first tour. Random + contextual only.
       ========================================== */}
-<ClippyAssistant
-  pcScreen={pcScreen}
-  isMobile={isMobile}
-  isTablet={isTablet}
-  windows={windows}
-  desktopInstallerVisible={desktopInstallerVisible}
-  hasBlockingDesktopWindow={hasBlockingDesktopWindow}
-/>
+{!isMobile && (
+  <ClippyAssistant
+    pcScreen={pcScreen}
+    isMobile={isMobile}
+    isTablet={isTablet}
+    windows={windows}
+    desktopInstallerVisible={desktopInstallerVisible}
+    hasBlockingDesktopWindow={hasBlockingDesktopWindow}
+  />
+)}
 
       {/* CSS Reset untuk layar full screen dan background Windows XP */}
       <style>

@@ -99,13 +99,12 @@ export default function ClippyAssistant({
      DESKTOP READY
   ====================================== */
 
-  const desktopReady =
-    Boolean(
-      clippy &&
-      pcScreen === 'desktop' &&
-      !desktopInstallerVisible &&
-      !isMobile
-    );
+const desktopReady =
+  Boolean(
+    clippy &&
+    pcScreen === 'desktop' &&
+    !desktopInstallerVisible
+  );
 
 
   /* ======================================
