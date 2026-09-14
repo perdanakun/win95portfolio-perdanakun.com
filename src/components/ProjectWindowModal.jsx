@@ -30,6 +30,7 @@ import {
   Ie,
 
 } from '@react95/icons';
+
 export default function ProjectWindowModal({
   title = 'Project.exe',
   icon = null,
@@ -51,7 +52,6 @@ export default function ProjectWindowModal({
   transform = 'translate(-50%, -50%)',
 
   // CASE STUDY / BROWSER NAVIGATION
-
   onBack,
   onForward,
 
@@ -61,8 +61,20 @@ export default function ProjectWindowModal({
   lockContent = false,
 
   // OPTIONAL GENERIC SLIDER NAVIGATION
-  // Used by case studies or any paged project content.
   slideNavigation = null,
+
+  // =========================================================
+  // WINDOW BEHAVIOR
+  // =========================================================
+
+  // Membuka window dalam kondisi maximize
+  startMaximized = false,
+
+  // Saat maximized, posisi window dikunci. Restore tetap tersedia.
+  lockMaximized = false,
+
+  // Animasi kecil -> fullscreen ketika mount
+  animateOpen = false,
 
   children,
 }) {
@@ -76,7 +88,9 @@ export default function ProjectWindowModal({
   // MAXIMIZE STATE
   // =========================================================
 
-  const [isMaximized, setIsMaximized] = useState(false);
+const [isMaximized, setIsMaximized] = useState(
+  () => startMaximized
+);
 
   // =========================================================
   // SAVE NORMAL WINDOW RECT
@@ -274,18 +288,29 @@ export default function ProjectWindowModal({
   // FINAL WINDOW STYLE
   // =========================================================
 
-  const windowStyle = isMaximized
-    ? getMaximizedWindowStyle()
-    : getNormalWindowStyle();
+const baseWindowStyle = isMaximized
+  ? getMaximizedWindowStyle()
+  : getNormalWindowStyle();
 
+const windowStyle = {
+  ...baseWindowStyle,
+
+  ...(animateOpen
+    ? {
+        animation:
+          'project-window-open-fullscreen 260ms cubic-bezier(0.2, 0.8, 0.2, 1)',
+        transformOrigin: '50% 50%',
+        willChange: 'transform, opacity',
+      }
+    : {}),
+};
   // =========================================================
   // MAXIMIZE / RESTORE
   // =========================================================
-
-  const toggleMaximize = () => {
-    if (isMobile) {
-      return;
-    }
+const toggleMaximize = () => {
+  if (isMobile) {
+    return;
+  }
 
     const element = modalRef.current;
 
@@ -316,6 +341,39 @@ export default function ProjectWindowModal({
 
     setIsMaximized(false);
   };
+
+
+  // =========================================================
+// LOCK DRAG WHEN WINDOW IS FORCED MAXIMIZED
+// =========================================================
+
+const preventLockedWindowDrag = (event) => {
+  // Window normal tetap boleh digeser.
+  // Posisi hanya dikunci saat mode maximize aktif.
+  if (!lockMaximized || !isMaximized) {
+    return;
+  }
+
+  const target = event.target;
+
+  if (!(target instanceof Element)) {
+    return;
+  }
+
+  const titleBar = target.closest('.draggable');
+
+  if (!titleBar) {
+    return;
+  }
+
+  // Tombol titlebar tetap boleh dipakai
+  if (target.closest('button')) {
+    return;
+  }
+
+  event.preventDefault();
+  event.stopPropagation();
+};
 
   // =========================================================
   // ADDRESS SUBMIT
@@ -539,33 +597,66 @@ const ToolbarButton = ({
   );
 };
 
-  // =========================================================
-  // RENDER
-  // =========================================================
+// =========================================================
+// RENDER
+// =========================================================
 
-  return (
+return (
+  <>
+    {animateOpen && (
+      <style>
+        {`
+          @keyframes project-window-open-fullscreen {
+            0% {
+              transform: scale(0.55);
+              opacity: 0.5;
+            }
+
+            70% {
+              transform: scale(1.01);
+              opacity: 1;
+            }
+
+            100% {
+              transform: scale(1);
+              opacity: 1;
+            }
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            @keyframes project-window-open-fullscreen {
+              from {
+                transform: none;
+                opacity: 1;
+              }
+
+              to {
+                transform: none;
+                opacity: 1;
+              }
+            }
+          }
+        `}
+      </style>
+    )}
+
     <Modal
       ref={modalRef}
       icon={icon}
       title={title}
 
-      /*
-       * INI YANG MENGONTROL POSISI WINDOW
-       */
       style={windowStyle}
+
+      onPointerDownCapture={
+        preventLockedWindowDrag
+      }
 
       titleBarOptions={
         <>
-          {/* =================================================
-              MINIMIZE
-          ================================================= */}
-
+          {/* MINIMIZE */}
           <Modal.Minimize />
 
-          {/* =================================================
-              MAXIMIZE / RESTORE
-          ================================================= */}
-
+          {/* MAXIMIZE / RESTORE */}
           {!isMobile &&
             (isMaximized ? (
               <TitleBar.Restore
@@ -577,10 +668,7 @@ const ToolbarButton = ({
               />
             ))}
 
-          {/* =================================================
-              CLOSE
-          ================================================= */}
-
+          {/* CLOSE */}
           <TitleBar.Close
             onClick={onClose}
           />
@@ -1371,5 +1459,6 @@ style={{
         </div>
       </div>
     </Modal>
-  );
+  </>
+);
 }

@@ -865,7 +865,7 @@ const toggleInfo = () => {
             }}
           >
             <div className="ai-system-line">
-              *** <strong> Online · AI assistant {'<ready>'} </strong>
+              *** <strong>Online · AI assistant {'<ready>'} </strong>
             </div>
 
 

@@ -18,6 +18,8 @@ import WinampPlayer from './components/WinampPlayer';
 
 import ClippyAssistant from './components/ClippyAssistant';
 
+import ExploreContent  from './components/ExploreContent.jsx';
+
 
 import AiAssistantContentModal from './components/AiAssistantContentModal';
 import ProjectFolderContent from './components/ProjectFolderContent';
@@ -109,6 +111,8 @@ import {
   Mplayer110,
   Freecell1,
   Mspaint,
+  MicrosoftNetwork,
+  Mshtml32548,
 } from '@react95/icons';
 import { useState, useEffect, useRef } from 'react';
 import { Rnd } from 'react-rnd';
@@ -598,7 +602,7 @@ const getDesktopIconPosition = (index) => {
 const startX = 24;
 const startY = 24;
 
-const desktopIconCount = 9;
+const desktopIconCount = 10;
 const columns = 2;
 
 const TASKBAR_HEIGHT = 28;
@@ -779,6 +783,7 @@ const [windows, setWindows] = useState({
   projects: false,
   contact: false,
   winamp: false,
+  explore: false,
 
   // DEFAULT LANDING WINDOW
   // Desktop + Tablet = open
@@ -950,6 +955,7 @@ const handleRestart = () => {
     blog: false,
     browser: false,
     whatsNew: false,
+    explore: false,
 
     desktopVideo: false,
 
@@ -1704,7 +1710,6 @@ const hasBlockingDesktopWindow = Boolean(
   </DesktopIcon>
 </Rnd>
 
-
 {/* Installer */}
 <Rnd
   default={getDesktopIconPosition(1)}
@@ -1736,10 +1741,41 @@ const hasBlockingDesktopWindow = Boolean(
   </DesktopIcon>
 </Rnd>
 
+{/* Inbox */}
+<Rnd
+  default={getDesktopIconPosition(2)}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={isMobile || isTablet}
+>
+  <DesktopIcon
+    selected={selectedDesktopIcon === 'inbox'}
+    onSelect={() => setSelectedDesktopIcon('inbox')}
+    onOpen={() => openWindow('contact')}
+  >
+    <div style={desktopIconStyle}>
+      <div style={{ fontSize: '32px', marginBottom: '0' }}>
+        <Mapi32801 variant="32x32_4" />
+      </div>
+
+      <span
+        style={{
+          ...desktopIconLabelStyle,
+          ...(selectedDesktopIcon === 'inbox'
+            ? desktopIconLabelSelectedStyle
+            : {}),
+        }}
+      >
+        Inbox
+      </span>
+    </div>
+  </DesktopIcon>
+</Rnd>
+
 
 {/* Media Player */}
 <Rnd
-  default={getDesktopIconPosition(2)}
+  default={getDesktopIconPosition(3)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1771,7 +1807,7 @@ const hasBlockingDesktopWindow = Boolean(
 
 {/* Winamp */}
 <Rnd
-  default={getDesktopIconPosition(3)}
+  default={getDesktopIconPosition(4)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1819,7 +1855,7 @@ const hasBlockingDesktopWindow = Boolean(
 
 {/* Recycle Bin */}
 <Rnd
-  default={getDesktopIconPosition(4)}
+  default={getDesktopIconPosition(5)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1849,9 +1885,126 @@ const hasBlockingDesktopWindow = Boolean(
 </Rnd>
 
 
+
+{/* =====================================================
+    COLUMN 2
+===================================================== */}
+
+{/* Explore */}
+<Rnd
+  default={getDesktopIconPosition(6)}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={isMobile || isTablet}
+>
+  <DesktopIcon
+    selected={selectedDesktopIcon === 'explore'}
+    onSelect={() =>
+      setSelectedDesktopIcon('explore')
+    }
+    onOpen={() =>
+      openWindow('explore')
+    }
+  >
+    <div style={desktopIconStyle}>
+      <div
+        style={{
+          fontSize: '32px',
+          marginBottom: '0',
+        }}
+      >
+        <Mshtml32548 variant="32x32_4" />
+      </div>
+
+      <span
+        style={{
+          ...desktopIconLabelStyle,
+
+          ...(selectedDesktopIcon ===
+          'explore'
+            ? desktopIconLabelSelectedStyle
+            : {}),
+        }}
+      >
+        Explore
+      </span>
+    </div>
+  </DesktopIcon>
+</Rnd>
+
+
+
+{/* My Projects */}
+<Rnd
+  default={getDesktopIconPosition(7)}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={isMobile || isTablet}
+>
+  <DesktopIcon
+    selected={selectedDesktopIcon === 'projects'}
+    onSelect={() => setSelectedDesktopIcon('projects')}
+    onOpen={() => openWindow('projects')}
+  >
+    <div style={desktopIconStyle}>
+      <div style={{ fontSize: '32px', marginBottom: '0' }}>
+        <Folder variant="32x32_4" />
+      </div>
+
+      <span
+        style={{
+          ...desktopIconLabelStyle,
+          ...(selectedDesktopIcon === 'projects'
+            ? desktopIconLabelSelectedStyle
+            : {}),
+        }}
+      >
+        Projects
+      </span>
+    </div>
+  </DesktopIcon>
+</Rnd>
+
+
+{/* AI Chat */}
+<Rnd
+  default={getDesktopIconPosition(8)}
+  bounds="window"
+  enableResizing={false}
+  disableDragging={isMobile || isTablet}
+>
+  <DesktopIcon
+    selected={selectedDesktopIcon === 'aiAssistant'}
+    onSelect={() => setSelectedDesktopIcon('aiAssistant')}
+    onOpen={() => openWindow('aiAssistant')}
+  >
+    <div style={desktopIconStyle}>
+      <div style={{ fontSize: '32px', marginBottom: '0' }}>
+        <MicrosoftNetwork variant="32x32_4" />
+      </div>
+
+      <span
+        style={{
+          ...desktopIconLabelStyle,
+          ...(selectedDesktopIcon === 'aiAssistant'
+            ? desktopIconLabelSelectedStyle
+            : {}),
+        }}
+      >
+        AI Chat
+      </span>
+    </div>
+  </DesktopIcon>
+</Rnd>
+
+
+
+
+
+
 {/* MS Paint */}
 <Rnd
-  default={getDesktopIconPosition(5)}
+  default={getDesktopIconPosition(9)}
   bounds="window"
   enableResizing={false}
   disableDragging={isMobile || isTablet}
@@ -1880,105 +2033,6 @@ const hasBlockingDesktopWindow = Boolean(
   </DesktopIcon>
 </Rnd>
 
-
-{/* =====================================================
-    COLUMN 2
-===================================================== */}
-
-{/* AI Chat */}
-<Rnd
-  default={getDesktopIconPosition(6)}
-  bounds="window"
-  enableResizing={false}
-  disableDragging={isMobile || isTablet}
->
-  <DesktopIcon
-    selected={selectedDesktopIcon === 'aiAssistant'}
-    onSelect={() => setSelectedDesktopIcon('aiAssistant')}
-    onOpen={() => openWindow('aiAssistant')}
-  >
-    <div style={desktopIconStyle}>
-      <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <Intl101 variant="32x32_4" />
-      </div>
-
-      <span
-        style={{
-          ...desktopIconLabelStyle,
-          ...(selectedDesktopIcon === 'aiAssistant'
-            ? desktopIconLabelSelectedStyle
-            : {}),
-        }}
-      >
-        AI Chat
-      </span>
-    </div>
-  </DesktopIcon>
-</Rnd>
-
-
-{/* Inbox */}
-<Rnd
-  default={getDesktopIconPosition(7)}
-  bounds="window"
-  enableResizing={false}
-  disableDragging={isMobile || isTablet}
->
-  <DesktopIcon
-    selected={selectedDesktopIcon === 'inbox'}
-    onSelect={() => setSelectedDesktopIcon('inbox')}
-    onOpen={() => openWindow('contact')}
-  >
-    <div style={desktopIconStyle}>
-      <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <Mapi32801 variant="32x32_4" />
-      </div>
-
-      <span
-        style={{
-          ...desktopIconLabelStyle,
-          ...(selectedDesktopIcon === 'inbox'
-            ? desktopIconLabelSelectedStyle
-            : {}),
-        }}
-      >
-        Inbox
-      </span>
-    </div>
-  </DesktopIcon>
-</Rnd>
-
-
-{/* My Projects */}
-<Rnd
-  default={getDesktopIconPosition(8)}
-  bounds="window"
-  enableResizing={false}
-  disableDragging={isMobile || isTablet}
->
-  <DesktopIcon
-    selected={selectedDesktopIcon === 'projects'}
-    onSelect={() => setSelectedDesktopIcon('projects')}
-    onOpen={() => openWindow('projects')}
-  >
-    <div style={desktopIconStyle}>
-      <div style={{ fontSize: '32px', marginBottom: '0' }}>
-        <Folder variant="32x32_4" />
-      </div>
-
-      <span
-        style={{
-          ...desktopIconLabelStyle,
-          ...(selectedDesktopIcon === 'projects'
-            ? desktopIconLabelSelectedStyle
-            : {}),
-        }}
-      >
-        My Projects
-      </span>
-    </div>
-  </DesktopIcon>
-</Rnd>
 
  {/* --- JENDELA ALERT--- */}
 {/* Render Alert Modal untuk fitur locked */}
@@ -2292,10 +2346,10 @@ INI ENDING KODE INACTIVE*/}
     desktopBottom="28px"
 
     icon={
-      <Intl101 variant="16x16_4" />
+      <MicrosoftNetwork variant="16x16_4" />
     }
 
-    title="AI Assistant.exe"
+    title="AI Chat.exe"
 
     titleBarOptions={
       <>
@@ -2438,6 +2492,40 @@ INI ENDING KODE INACTIVE*/}
 {/* =========================
     Jendela Project
 ========================= */}
+
+{/* =========================================================
+    EXPLORE
+========================================================= */}
+
+{windows.explore && (
+  <ProjectWindowModal
+    title="Explore - Microsoft Internet Explorer"
+
+    icon={
+      <Mshtml32548 variant="16x16_4" />
+    }
+
+    isMobile={isMobile}
+    isTablet={isTablet}
+
+    url="https://www.perdanakun.com/explore"
+
+    startMaximized={true}
+    lockMaximized={true}
+    animateOpen={true}
+
+    lockContent={false}
+
+    onClose={() =>
+      toggleWindow(
+        'explore',
+        false
+      )
+    }
+  >
+    <ExploreContent />
+  </ProjectWindowModal>
+)}
 
 {/* =========================================================
     JENDELA PROJECT INSIDE
@@ -3259,7 +3347,7 @@ desktopTransform="translateY(-50%)"
     title="TravelXXX - Mobile Preview"
 
     icon={
-      <Globe variant="16x16_4" />
+      <Mshtml32548 variant="16x16_4" />
     }
 
     titleBarOptions={
@@ -3325,7 +3413,7 @@ desktopTransform="translateY(-50%)"
       </List.Item>
 
             <List.Item
-        icon={<Intl101 variant="16x16_4" />}
+        icon={<MicrosoftNetwork variant="16x16_4" />}
         onClick={() => toggleWindow('aiAssistant', true)}
       >
         AI Chat
@@ -3336,7 +3424,7 @@ desktopTransform="translateY(-50%)"
         icon={<Folder variant="16x16_4" />}
         onClick={() => toggleWindow('projects', true)}
       >
-        My Projects
+        Projects
       </List.Item>
 
       {/* CONTACT */}
@@ -3349,15 +3437,10 @@ desktopTransform="translateY(-50%)"
 
       {/* GAMES */}
       <List.Item
-        icon={<MsDos variant="16x16_32" />}
-        onClick={() =>
-          openAlertDesktop(
-            "I'm sorry...",
-            "This game module is still under construction. While I'm polishing the design & code for your entertainment, please check back in the next system update."
-          )
-        }
+        icon={<Mshtml32548 variant="16x16_4" />}
+      onClick={() => toggleWindow('explore', true)}
       >
-        Games
+        Explore
       </List.Item>
 
       {/* WRITING */}
@@ -3470,6 +3553,69 @@ const inputStyle = {
 
 
 function AppWithClippy() {
+  const pathname =
+    typeof window !== 'undefined'
+      ? window.location.pathname
+          .replace(/\/+$/, '') || '/'
+      : '/';
+
+  // =========================================================
+  // STANDALONE EXPLORE PAGE
+  // =========================================================
+if (pathname === '/explore') {
+  return (
+    <>
+      <style>
+        {`
+          html,
+          body,
+          #root {
+            width: 100%;
+            min-width: 100%;
+            min-height: 100%;
+
+            margin: 0;
+            padding: 0;
+
+            background: #ffffff;
+          }
+
+          body {
+            overflow-x: hidden;
+          }
+        `}
+      </style>
+
+      <main
+        style={{
+          position: 'fixed',
+
+          inset: 0,
+
+          width: '100vw',
+          height: '100vh',
+
+          margin: 0,
+          padding: 0,
+
+          background: '#ffffff',
+
+          overflowX: 'hidden',
+          overflowY: 'auto',
+
+          boxSizing: 'border-box',
+        }}
+      >
+        <ExploreContent />
+      </main>
+    </>
+  );
+}
+
+  // =========================================================
+  // PERDANA'S COMPUTER
+  // =========================================================
+
   return (
     <ClippyProvider>
       <App />

@@ -15,7 +15,7 @@ import {
   Wordpad,
   Url1102,
   Shell321,
-  Wangimg128,
+  Wangimg129,
   Mplayer110,
   Shell3212,
   Shdocvw260,
@@ -951,7 +951,7 @@ const projects = [
 
         case 'image':
         return (
-          <Wangimg128
+          <Wangimg129
             variant={size}
           />
         );

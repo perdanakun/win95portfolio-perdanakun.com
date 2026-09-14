@@ -10,7 +10,7 @@ import {
   Wordpad,
   Url1102,
   Shell321,
-  Wangimg128,
+  Wangimg129,
   Mplayer110,
   Shell3212,
   Shdocvw260,
@@ -140,7 +140,7 @@ case 'website':
 
     case 'image':
       return (
-        <Wangimg128
+        <Wangimg129
           variant="16x16_4"
         />
       );

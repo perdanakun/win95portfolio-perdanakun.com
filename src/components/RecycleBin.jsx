@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Wangimg128 } from '@react95/icons';
+import { Wangimg129 } from '@react95/icons';
 
 import imgNimu from '../assets/images/img_nimu_new.jpeg';
 import imgMiyu from '../assets/images/img_miyu_new.jpg';
@@ -247,7 +247,7 @@ export default function RecycleBin({
                     pointerEvents: 'none',
                   }}
                 >
-                  <Wangimg128
+                  <Wangimg129
                     variant="32x32_4"
                   />
                 </div>
