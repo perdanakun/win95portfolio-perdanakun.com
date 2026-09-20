@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    {
+      "source": "/new",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/computer",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/computer/:path*",
+      "destination": "/index.html"
+    }
+  ]
+}
