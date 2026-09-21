@@ -103,11 +103,16 @@ const veterinaryTerms = [
 
 
 
-export default function HoloHealthCaseStudyRetro() {
+export default function HoloHealthCaseStudyRetro({ embedded = false }) {
   return (
     
-    <div className="casestudy-window">
+    <div
+      className={`casestudy-window ${
+        embedded ? 'casestudy-window-embedded' : ''
+      }`}
+    >
 
+      {!embedded && (
       <CaseStudyNavbar
         current="HoloHealth"
         sections={[
@@ -119,6 +124,7 @@ export default function HoloHealthCaseStudyRetro() {
           { id: 'reflection', label: 'Reflection' },
         ]}
       />
+      )}
 
       <main className="casestudy">
         <div className="casestudy-container">
