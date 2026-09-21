@@ -6,12 +6,12 @@ import {
   Home,
   Menu,
   Moon,
-  Plus,
   SendHorizontal,
   Sun,
   Trash2,
   UserRound,
   X,
+  Astroid,
 } from 'lucide-react'
 
 import { getAIResponse } from '../services/aiService.js'
@@ -98,9 +98,7 @@ const viewConfig = {
     label: 'Home',
     placeholder: 'Ask about Perdana',
     suggestions: [
-      'Summarize about Perdana.',
-      'What should I see first?',
-      'Why is he moving into product design?',
+      'Summarize Perdana for me.',
     ],
   },
 
@@ -148,13 +146,16 @@ function createThreadId() {
 }
 
 function createThreadTitle(question) {
-  const clean = question.replace(/\s+/g, ' ').trim()
+  const clean = question
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/[?.!]+$/, '')
 
-  if (clean.length <= 42) {
+  if (clean.length <= 32) {
     return clean
   }
 
-  return `${clean.slice(0, 42).trim()}…`
+  return `${clean.slice(0, 32).trim()}…`
 }
 
 function loadStoredThreads() {
@@ -411,36 +412,36 @@ export default function PortfolioHome() {
       ================================================= */}
 
       <div className="portfolio-top-controls">
-        {!sidebarOpen && (
-          <div className="top-left-controls">
-            <button
-              className="sidebar-open-button"
-              type="button"
-              onClick={() => setSidebarOpen(true)}
-              aria-label="Open sidebar"
-            >
-              <Menu size={19} />
-            </button>
+      <button
+        type="button"
+        className="top-identity"
+        onClick={newChat}
+      >
+        <Astroid size={10} />
+        <span>{' '}Perdana Kurniawan Arta</span>
+      </button>
 
-            <button
-              type="button"
-              className="top-identity"
-              onClick={newChat}
-            >
-              Perdana Kurniawan Arta
-            </button>
-          </div>
-        )}
+        <div className="top-right-controls">
+          <button
+            type="button"
+            className="top-theme-toggle"
+            onClick={() => setDark((current) => !current)}
+            aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={dark ? 'Light mode' : 'Dark mode'}
+          >
+            {dark ? <Sun size={17} /> : <Moon size={17} />}
+          </button>
 
-        <button
-          type="button"
-          className="top-theme-toggle"
-          onClick={() => setDark((current) => !current)}
-          aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
-          title={dark ? 'Light mode' : 'Dark mode'}
-        >
-          {dark ? <Sun size={17} /> : <Moon size={17} />}
-        </button>
+          <button
+            className="sidebar-open-button"
+            type="button"
+            onClick={() => setSidebarOpen((current) => !current)}
+            aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}
+            title={sidebarOpen ? 'Close menu' : 'Menu'}
+          >
+            {sidebarOpen ? <X size={18} /> : <Menu size={19} />}
+          </button>
+        </div>
       </div>
 
       {/* =================================================
@@ -465,25 +466,6 @@ export default function PortfolioHome() {
           sidebarOpen ? 'is-open' : ''
         }`}
       >
-        <div className="sidebar-header">
-          <button
-            type="button"
-            className="sidebar-brand"
-            onClick={newChat}
-          >
-            Perdana's
-          </button>
-
-          <button
-            type="button"
-            className="sidebar-close-button"
-            onClick={() => setSidebarOpen(false)}
-            aria-label="Hide sidebar"
-          >
-            <X size={18} />
-          </button>
-        </div>
-
         <nav className="sidebar-navigation">
           <SidebarButton
             active={activeView === 'home'}
@@ -577,21 +559,39 @@ export default function PortfolioHome() {
         </div>
 
         <div className="sidebar-secondary">
-    
-
           <a href="/computer" className="sidebar-link">
-            Perdana's Computer
-            <ArrowUpRight size={13} />
+            Perdana&apos;s Computer
+            <ArrowUpRight size={12} />
           </a>
 
           <a
-            href="/resume.pdf"
+            href="https://linkedin.com/in/perdanakun/"
             className="sidebar-link"
             target="_blank"
             rel="noreferrer"
           >
-            Resume
-            <ArrowUpRight size={13} />
+            LinkedIn
+            <ArrowUpRight size={12} />
+          </a>
+
+          <a
+            href="https://github.com/perdanakun"
+            className="sidebar-link"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub
+            <ArrowUpRight size={12} />
+          </a>
+
+          <a
+            href="https://www.instagram.com/perdanakun/"
+            className="sidebar-link"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Instagram
+            <ArrowUpRight size={12} />
           </a>
         </div>
 
@@ -609,12 +609,19 @@ export default function PortfolioHome() {
           className="workspace-scroll"
           ref={activeView === 'chat' ? conversationRef : null}
         >
-          {activeView === 'home' && <HomeView />}
+          {activeView === 'home' && (
+            <HomeView
+              input={input}
+              setInput={setInput}
+              onSubmit={submit}
+              onKeyDown={handleKeyDown}
+              isThinking={isThinking}
+              onAsk={ask}
+            />
+          )}
 
           {activeView === 'work' && <WorkView onAsk={ask} />}
-
           {activeView === 'writing' && <WritingView onAsk={ask} />}
-
           {activeView === 'about' && <AboutView onAsk={ask} />}
 
           {isChatView && (
@@ -625,66 +632,34 @@ export default function PortfolioHome() {
           )}
         </div>
 
-        {/* =================================================
-            COMPOSER
-            Always belongs to the workspace.
-            It is not a separate floating AI layer anymore.
-        ================================================= */}
+        {activeView !== 'home' && (
+          <ChatComposer
+            input={input}
+            setInput={setInput}
+            onSubmit={submit}
+            onKeyDown={handleKeyDown}
+            isThinking={isThinking}
+            placeholder={currentConfig.placeholder}
+            suggestions={
+              activeView === 'chat'
+                ? []
+                : currentConfig.suggestions
+            }
+            onAsk={ask}
+          />
+        )}
 
-        <div className="composer-area">
-          {activeView !== 'chat' &&
-            currentConfig.suggestions.length > 0 && (
-              <div
-                className={`composer-suggestions ${
-                  activeView === 'home' ? 'is-home' : ''
-                }`}
-              >
-                {currentConfig.suggestions.map((question) => (
-                  <button
-                    type="button"
-                    key={question}
-                    onClick={() => ask(question)}
-                  >
-                    {question}
-                  </button>
-                ))}
-              </div>
-            )}
-
-          <div className="composer-shell">
-            <button
-              type="button"
-              className="composer-plus"
-              onClick={() => setSidebarOpen(true)}
-              aria-label="Open sidebar"
-            >
-              <Plus size={19} />
-            </button>
-
-            <textarea
-              rows={1}
-              value={input}
-              placeholder={currentConfig.placeholder}
-              onChange={(event) => setInput(event.target.value)}
-              onKeyDown={handleKeyDown}
-              disabled={isThinking}
-            />
-
-            <button
-              type="button"
-              className="composer-send"
-              onClick={submit}
-              disabled={!input.trim() || isThinking}
-              aria-label="Send message"
-            >
-              <SendHorizontal size={17} />
-            </button>
-          </div>
-
-          <p className="composer-caption">
-            AI can make mistakes. Explore the portfolio for the full context.
-          </p>
-        </div>
+        <p className="portfolio-footer">
+          AI can make mistakes. Explore the portfolio for the full context.
+          <span> Want to connect? </span>
+          <a
+            href="https://linkedin.com/in/perdanakun/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Find me on LinkedIn.
+          </a>
+        </p>
       </main>
     </div>
   )
@@ -718,43 +693,202 @@ function SidebarButton({
    HOME / NEW CHAT STATE
 ===================================================== */
 
-function HomeView() {
+function HomeView({
+  input,
+  setInput,
+  onSubmit,
+  onKeyDown,
+  isThinking,
+  onAsk,
+}) {
   return (
     <section className="home-view">
       <div className="home-content">
         <h1>
-          Designer who <u>understand business,</u>{' '}
-          <i>design in code</i> and <b>ships it.</b>
+          Designer who <u>understand business</u>{' '}
+          <i><ScrambleText text="design in code" /></i>{' '}& <b>ships it.</b>
         </h1>
 
+        <a
+          href="/computer"
+          className="home-explore-link"
+        >
+          <span>Explore more on</span>
+          <strong>Perdana&apos;s Computer</strong>
+          <ArrowUpRight size={13} />
+        </a>
 
-        <div className="home-links">
-          <a href="/computer">
-            Perdana's Computer
-            <ArrowUpRight size={13} />
-          </a>
-
-          <a
-            href="https://linkedin.com/in/perdanakun/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            LinkedIn
-            <ArrowUpRight size={13} />
-          </a>
-
-          <a
-            href="https://github.com/perdanakun"
-            target="_blank"
-            rel="noreferrer"
-          >
-            GitHub
-            <ArrowUpRight size={13} />
-          </a>
-        </div>
-
+        <ChatComposer
+          variant="home"
+          input={input}
+          setInput={setInput}
+          onSubmit={onSubmit}
+          onKeyDown={onKeyDown}
+          isThinking={isThinking}
+          placeholder="Ask about Perdana"
+          suggestions={viewConfig.home.suggestions}
+          onAsk={onAsk}
+        />
       </div>
     </section>
+  )
+}
+
+/* =====================================================
+   SCRAMBLE TEXT
+===================================================== */
+
+function ScrambleText({ text }) {
+  const [displayText, setDisplayText] = useState(text)
+  const timerRef = useRef(null)
+
+  const runScramble = () => {
+    const reduceMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches
+
+    if (reduceMotion) {
+      setDisplayText(text)
+      return
+    }
+
+    if (timerRef.current) {
+      window.clearInterval(timerRef.current)
+    }
+
+    const characters = '01{}[]<>/\\*+-=_$#@'
+    let frame = 0
+    const revealEvery = 2
+
+    timerRef.current = window.setInterval(() => {
+      frame += 1
+
+      const revealedCharacters = Math.floor(
+        frame / revealEvery,
+      )
+
+      const nextText = text
+        .split('')
+        .map((character, index) => {
+          if (character === ' ') return ' '
+
+          if (index < revealedCharacters) {
+            return character
+          }
+
+          return characters[
+            Math.floor(Math.random() * characters.length)
+          ]
+        })
+        .join('')
+
+      setDisplayText(nextText)
+
+      if (revealedCharacters >= text.length) {
+        window.clearInterval(timerRef.current)
+        timerRef.current = null
+        setDisplayText(text)
+      }
+    }, 42)
+  }
+
+  useEffect(() => {
+    runScramble()
+
+    return () => {
+      if (timerRef.current) {
+        window.clearInterval(timerRef.current)
+      }
+    }
+  }, [text])
+
+  return (
+    <span
+      className="scramble-text"
+      aria-label={text}
+      onMouseEnter={runScramble}
+      onFocus={runScramble}
+      tabIndex={0}
+    >
+      <span aria-hidden="true">
+        {displayText}
+      </span>
+    </span>
+  )
+}
+
+/* =====================================================
+   CHAT COMPOSER
+===================================================== */
+
+function ChatComposer({
+  variant = 'default',
+  input,
+  setInput,
+  onSubmit,
+  onKeyDown,
+  isThinking,
+  placeholder,
+  suggestions = [],
+  onAsk,
+}) {
+  const isHome = variant === 'home'
+
+  return (
+    <div
+      className={`composer-area ${
+        isHome ? 'home-composer-area' : ''
+      }`}
+    >
+      {!isHome && suggestions.length > 0 && (
+        <div className="composer-suggestions">
+          {suggestions.map((question) => (
+            <button
+              type="button"
+              key={question}
+              onClick={() => onAsk(question)}
+            >
+              {question}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="composer-shell">
+        <textarea
+          rows={1}
+          value={input}
+          placeholder={placeholder}
+          onChange={(event) => setInput(event.target.value)}
+          onKeyDown={onKeyDown}
+          disabled={isThinking}
+        />
+
+        <button
+          type="button"
+          className="composer-send"
+          onClick={onSubmit}
+          disabled={!input.trim() || isThinking}
+          aria-label="Send message"
+        >
+          <SendHorizontal size={17} />
+        </button>
+      </div>
+
+      {isHome && suggestions.length > 0 && (
+        <div className="composer-suggestions home-question-suggestion">
+          {suggestions.map((question) => (
+            <button
+              type="button"
+              key={question}
+              onClick={() => onAsk(question)}
+            >
+              {question}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -769,11 +903,6 @@ function ChatView({
 }) {
   return (
     <section className="chat-view">
-      <header className="conversation-heading">
-        <span>PERDANA AI</span>
-        <h1>{thread.title}</h1>
-      </header>
-
       <div className="conversation-messages">
         {thread.messages.map((message, index) => (
           <div
