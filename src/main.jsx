@@ -1,27 +1,64 @@
-import { StrictMode, lazy, Suspense } from 'react'
+import {
+  StrictMode,
+  lazy,
+  Suspense,
+  useEffect,
+  useState,
+} from 'react'
 import { createRoot } from 'react-dom/client'
+import './site-loader.css'
 
 const ComputerApp = lazy(() => import('./ComputerEntry.jsx'))
 const PortfolioHome = lazy(() => import('./portfolio/PortfolioHome.jsx'))
 
+function SiteLoader({ visible }) {
+  return (
+    <div
+      id="site-loader"
+      className={visible ? 'is-visible' : ''}
+    >
+      <div className="site-loader-spinner" />
+    </div>
+  )
+}
+
 function Root() {
-  const pathname = window.location.pathname.replace(/\/+$/, '') || '/'
+  const [loading, setLoading] = useState(() => {
+    return sessionStorage.getItem('site-transition') === 'true'
+  })
 
-  // Temporary route untuk homepage baru
-  if (pathname === '/new') {
-    return <PortfolioHome />
-  }
+  const pathname =
+    window.location.pathname.replace(/\/+$/, '') || '/'
 
-  // Alias untuk Perdana's Computer
-  if (
-    pathname === '/computer' ||
-    pathname.startsWith('/computer/')
-  ) {
-    return <ComputerApp />
-  }
+  useEffect(() => {
+    const wasTransitioning =
+      sessionStorage.getItem('site-transition') === 'true'
 
-  // Untuk sekarang homepage utama tetap Perdana's Computer
-  return <ComputerApp />
+    if (!wasTransitioning) return
+
+    sessionStorage.removeItem('site-transition')
+
+    const timer = setTimeout(() => {
+      setLoading(false)
+    }, 400)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  return (
+    <>
+      <SiteLoader visible={loading} />
+
+      {pathname === '/' || pathname === '/new' ? (
+        <PortfolioHome />
+      ) : pathname === '/computer' ||
+        pathname.startsWith('/computer/') ? (
+        <ComputerApp />
+      ) : (
+        <PortfolioHome />
+      )}
+    </>
+  )
 }
 
 createRoot(document.getElementById('root')).render(

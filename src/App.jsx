@@ -2,6 +2,8 @@ import '@react95/core/GlobalStyle';
 import '@react95/core/themes/win95.css';
 import '@react95/icons/icons.css';
 import './styles/fonts.css';
+
+import ModeSwitch from './ModeSwitch.jsx';
 import installerBackground from './assets/images/win95_install.jpg';
 import winBackground from './assets/images/windows_cloud.jpeg';
 import winDawn from './assets/images/1dawn.png';
@@ -73,6 +75,7 @@ import MobileWebPreview from './components/MobileWebPreview';
 
 
 import { getAIResponse } from "./services/aiService";
+import { requestSiteMode } from './siteMode.js';
 import { Frame, TitleBar, Button, TaskBar, List, Modal, useModal } from '@react95/core';
 
 import {
@@ -3493,6 +3496,13 @@ desktopTransform="translateY(-50%)"
       </List.Item>
 
       <List.Divider />
+      {/* CHAT */}
+      <List.Item
+        icon={<Textchat variant="16x16_4" />}
+        onClick={() => requestSiteMode('chat')}
+      >
+        Portfolio
+      </List.Item>
 
       {/* RESET */}
       <List.Item
@@ -3618,11 +3628,10 @@ if (pathname === '/explore') {
   // PERDANA'S COMPUTER
   // =========================================================
 
-  return (
-    <ClippyProvider>
-      <App />
-    </ClippyProvider>
-  );
+return (
+  <App />
+);
+
 }
 
 export default AppWithClippy;

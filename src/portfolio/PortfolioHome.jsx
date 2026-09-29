@@ -21,6 +21,38 @@ import HoloHealthContent from '../project/HoloHealthContent.jsx'
 import resumePdf from '../assets/files/perdana_kurniawan_arta_resume.pdf'
 import './PortfolioHome.css'
 
+
+function ModeSwitch({ active = 'chat' }) {
+  return (
+    <nav
+      className="mode-switch"
+      aria-label="Portfolio mode"
+    >
+      <a
+        href="/"
+        className={`mode-switch-item ${
+          active === 'chat' ? 'active' : ''
+        }`}
+        aria-current={active === 'chat' ? 'page' : undefined}
+      >
+        Chat
+      </a>
+
+      <a
+        href="/computer"
+        className={`mode-switch-item ${
+          active === 'computer' ? 'active' : ''
+        }`}
+        aria-current={
+          active === 'computer' ? 'page' : undefined
+        }
+      >
+        Computer
+      </a>
+    </nav>
+  )
+}
+
 /* =====================================================
    PROJECT MEDIA
    Assets live in /public, so they do not need JS imports.
@@ -868,8 +900,10 @@ export default function PortfolioHome() {
         <span className="top-identity-avatar" aria-hidden="true">
           <img src="/profile/perdanakun.png" alt="" />
         </span>
-        <span>Perdanakun</span>
+        <span>PerdanaKun</span>
       </button>
+
+      <ModeSwitch active="chat" />
 
         <div className="top-right-controls">
           <button
@@ -1942,154 +1976,157 @@ function AboutView({ onAsk, insight }) {
 
       <PageAIInsight insight={insight} />
 
-      {/* =================================================
-          ABOUT COPY
-      ================================================= */}
+ {/* =================================================
+    ABOUT COPY
+================================================= */}
 
-      <div className="about-copy">
-        <p>
-          I’ve spent more than 10 years working as a visual designer
-          and design lead, directly with clients, founders, and small
-          businesses across{' '}
-          <a
-            href="YOUR_FIVERR_OR_CONANIA_URL"
-            target="_blank"
-            rel="noreferrer"
-            className="about-inline-link"
-          >
-            3,000+ projects
-            <ArrowUpRight
-              size={12}
-              strokeWidth={1.8}
-              aria-hidden="true"
-            />
-          </a>
-          .
-        </p>
+<div className="about-copy">
+  <p>
+    Perdana has spent more than 10 years working as a visual designer
+    and design lead, working directly with clients, founders, and
+    small businesses across{' '}
+    <a
+      href="YOUR_FIVERR_OR_CONANIA_URL"
+      target="_blank"
+      rel="noreferrer"
+      className="about-inline-link"
+    >
+      3,000+ projects
+      <ArrowUpRight
+        size={12}
+        strokeWidth={1.8}
+        aria-hidden="true"
+      />
+    </a>
+    .
+  </p>
 
-        <p>
-          That experience shaped more than visual craft. It taught me
-          how to understand business goals, navigate constraints and
-          trade-offs, communicate with stakeholders, and turn
-          ambiguous ideas into clear, scalable design systems.
-        </p>
+  <p>
+    That experience shaped more than his visual craft. It taught him
+    how to understand business goals, navigate constraints and
+    trade-offs, communicate with stakeholders, and turn ambiguous
+    ideas into clear, scalable design systems.
+  </p>
 
-        <p>
-          Now I’m bringing that foundation into{' '}
-          <a href="/work" className="about-inline-link">
-            product design
-            <ArrowUpRight
-              size={12}
-              strokeWidth={1.8}
-              aria-hidden="true"
-            />
-          </a>
-          , working across UX, interaction, prototyping, and
-          implementation. I use{' '}
-          <a href="/computer" className="about-inline-link">
-            React and front-end development
-            <ArrowUpRight
-              size={12}
-              strokeWidth={1.8}
-              aria-hidden="true"
-            />
-          </a>{' '}
-          to take ideas beyond static screens and understand how
-          design decisions behave in real products.
-        </p>
+  <p>
+    Now, he’s bringing that foundation into{' '}
+    <a href="/work" className="about-inline-link">
+      product design
+      <ArrowUpRight
+        size={12}
+        strokeWidth={1.8}
+        aria-hidden="true"
+      />
+    </a>
+    , working across UX, interaction, prototyping, and
+    implementation. He uses{' '}
+    <a href="/computer" className="about-inline-link">
+      React and front-end development
+      <ArrowUpRight
+        size={12}
+        strokeWidth={1.8}
+        aria-hidden="true"
+      />
+    </a>{' '}
+    to take ideas beyond static screens and understand how
+    design decisions behave in real products.
+  </p>
 
-        <p>
-          I’m not starting over. I’m moving closer to the product,
-          combining design craft, business context, and code to
-          design, build, and ship.
-        </p>
-      </div>
-      {/* =================================================
-          EXPERIENCE TIMELINE
-      ================================================= */}
+  <p>
+    He’s not starting over. He’s moving closer to the product,
+    combining design craft, business context, and code to
+    design, build, and ship.
+  </p>
+</div>
 
-      <section className="experience-section">
-        <div className="experience-heading">
-          <p>EXPERIENCE</p>
+{/* =================================================
+    EXPERIENCE TIMELINE
+================================================= */}
+
+<section className="experience-section">
+  <div className="experience-heading">
+    <p>EXPERIENCE</p>
+  </div>
+
+  <div className="experience-timeline">
+    {experienceTimeline.map((item, index) => (
+      <article
+        className="experience-item"
+        key={`${item.title}-${index}`}
+      >
+        <div className="experience-marker">
+          <span
+            className={
+              item.current
+                ? 'experience-dot is-current'
+                : 'experience-dot'
+            }
+          />
+
+          {index < experienceTimeline.length - 1 && (
+            <span className="experience-line" />
+          )}
         </div>
 
-        <div className="experience-timeline">
-          {experienceTimeline.map((item, index) => (
-            <article
-              className="experience-item"
-              key={`${item.title}-${index}`}
-            >
-              <div className="experience-marker">
-                <span
-                  className={
-                    item.current
-                      ? 'experience-dot is-current'
-                      : 'experience-dot'
-                  }
+        <div className="experience-content">
+          <div className="experience-topline">
+            <p className="experience-period">
+              {item.period}
+            </p>
+
+            {item.current && (
+              <span className="experience-current">
+                NOW
+              </span>
+            )}
+          </div>
+
+          <div className="experience-title-row">
+            {item.href ? (
+              <a
+                href={item.href}
+                target={
+                  item.href.startsWith('http')
+                    ? '_blank'
+                    : undefined
+                }
+                rel={
+                  item.href.startsWith('http')
+                    ? 'noreferrer'
+                    : undefined
+                }
+                className="experience-title-link"
+              >
+                <h3>{item.title}</h3>
+
+                <ArrowUpRight
+                  size={14}
+                  strokeWidth={1.8}
+                  aria-hidden="true"
                 />
+              </a>
+            ) : (
+              <h3>{item.title}</h3>
+            )}
 
-                {index < experienceTimeline.length - 1 && (
-                  <span className="experience-line" />
-                )}
-              </div>
+            <p className="experience-role">
+              {item.role}
+            </p>
+          </div>
 
-              <div className="experience-content">
-                <div className="experience-topline">
-                  <p className="experience-period">
-                    {item.period}
-                  </p>
+          <p className="experience-description">
+            {item.description}
+          </p>
 
-                  {item.current && (
-                    <span className="experience-current">
-                      NOW
-                    </span>
-                  )}
-                </div>
-
-                <div className="experience-title-row">
-                  {item.href ? (
-                    <a
-                      href={item.href}
-                      target={
-                        item.href.startsWith('http')
-                          ? '_blank'
-                          : undefined
-                      }
-                      rel={
-                        item.href.startsWith('http')
-                          ? 'noreferrer'
-                          : undefined
-                      }
-                      className="experience-title-link"
-                    >
-                      <h3>{item.title}</h3>
-
-                      <ArrowUpRight
-                        size={14}
-                        strokeWidth={1.8}
-                      />
-                    </a>
-                  ) : (
-                    <h3>{item.title}</h3>
-                  )}
-
-                  <p className="experience-role">
-                    {item.role}
-                  </p>
-                </div>
-
-                <p className="experience-description">
-                  {item.description}
-                </p>
-
-                <p className="experience-meta">
-                  {item.meta}
-                </p>
-              </div>
-            </article>
-          ))}
+          <p className="experience-meta">
+            {item.meta}
+          </p>
         </div>
-      </section>
+      </article>
+    ))}
+  </div>
+</section>
+
 
       {/* =================================================
           ASK AI

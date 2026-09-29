@@ -1,0 +1,87 @@
+/* =====================================================
+   SITE MODE TRANSITION
+   Chat <-> Computer
+===================================================== */
+
+.site-mode-root {
+  width: 100%;
+  min-height: 100%;
+}
+
+@keyframes site-slide-out-left {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(-7%);
+    opacity: 0.82;
+  }
+}
+
+@keyframes site-slide-in-right {
+  from {
+    transform: translateX(7%);
+    opacity: 0.82;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes site-slide-out-right {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(7%);
+    opacity: 0.82;
+  }
+}
+
+@keyframes site-slide-in-left {
+  from {
+    transform: translateX(-7%);
+    opacity: 0.82;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+html[data-site-transition='forward']::view-transition-old(root) {
+  animation: site-slide-out-left 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+html[data-site-transition='forward']::view-transition-new(root) {
+  animation: site-slide-in-right 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+html[data-site-transition='backward']::view-transition-old(root) {
+  animation: site-slide-out-right 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+html[data-site-transition='backward']::view-transition-new(root) {
+  animation: site-slide-in-left 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+html[data-site-transition='forward']::view-transition-group(root),
+html[data-site-transition='backward']::view-transition-group(root) {
+  animation-duration: 520ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-site-transition]::view-transition-old(root),
+  html[data-site-transition]::view-transition-new(root),
+  html[data-site-transition]::view-transition-group(root) {
+    animation: none !important;
+  }
+}
