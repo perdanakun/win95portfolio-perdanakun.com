@@ -505,17 +505,21 @@ const [pcState, setPcState] = useState(getPCState);
 // CURRENT ENTRY FLOW:
 // Every visit starts with the Boot screen, then goes straight to Desktop.
 // The Installer remains optional and can only be launched from the Desktop icon.
-const BOOT_STORAGE_KEY = 'perdana-boot-seen';
-const [pcScreen, setPcScreen] = useState(() => {
-  try {
-    const hasSeenBoot =
-      localStorage.getItem(BOOT_STORAGE_KEY) === 'true';
 
-    return hasSeenBoot ? 'desktop' : 'boot';
-  } catch {
-    return 'boot';
-  }
-});
+// const BOOT_STORAGE_KEY = 'perdana-boot-seen';
+// const [pcScreen, setPcScreen] = useState(() => {
+//   try {
+//     const hasSeenBoot =
+//       localStorage.getItem(BOOT_STORAGE_KEY) === 'true';
+
+//     return hasSeenBoot ? 'desktop' : 'boot';
+//   } catch {
+//     return 'boot';
+//   }
+// });
+
+const [pcScreen, setPcScreen] = useState('boot');
+
 
 
 
@@ -791,7 +795,7 @@ const [windows, setWindows] = useState({
   // DEFAULT LANDING WINDOW
   // Desktop + Tablet = open
   // Smartphone = closed
-  aiAssistant: !isMobile,
+  aiAssistant: false,
 
   recycleBin: false,
   imageViewer: false,
@@ -1544,31 +1548,35 @@ const hasBlockingDesktopWindow = Boolean(
 
 {/* --- BOOT PERDANA PC --- */}
 {pcScreen === 'boot' && (
-  <PerdanaBootScreen
-    onBootComplete={() => {
-      try {
-        localStorage.setItem(
-          BOOT_STORAGE_KEY,
-          'true'
-        );
-      } catch {
-        // ignore storage error
-      }
+<PerdanaBootScreen
+  onBootComplete={() => {
+    // try {
+    //   localStorage.setItem(
+    //     BOOT_STORAGE_KEY,
+    //     'true'
+    //   );
+    // } catch {
+    //   // ignore storage error
+    // }
 
-      setPcScreen('desktop');
+    setPcScreen('desktop');
 
-      // Kalau Boot berasal dari Reset Desktop,
-      // tampilkan Welcome setelah Boot selesai.
-      if (showWelcomeAfterReset) {
-        setWindows(prev => ({
-          ...prev,
-          welcome: true,
-        }));
+    if (showWelcomeAfterReset) {
+      setWindows(prev => ({
+        ...prev,
+        welcome: true,
+      }));
 
-        setShowWelcomeAfterReset(false);
-      }
-    }}
-  />
+      setShowWelcomeAfterReset(false);
+    } else {
+      // First boot → buka Welcome
+      setWindows(prev => ({
+        ...prev,
+        welcome: true,
+      }));
+    }
+  }}
+/>
 )}
 
       {/* --- CONTAINER DESKTOP UTAMA --- */}
@@ -1673,7 +1681,17 @@ const hasBlockingDesktopWindow = Boolean(
   </p>
 </header>
 
-  
+   {/* MODE SWITCH */}
+  <div
+    style={{
+      position: 'fixed',
+      top: '12px',
+      right: '12px',
+      zIndex: 9999,
+    }}
+  >
+    <ModeSwitch active="chat" />
+  </div> 
   {/* <DynamicXPBackground /> */}
 
   {/* THUMBNAIL DESKTOP */}
@@ -3498,18 +3516,10 @@ desktopTransform="translateY(-50%)"
       <List.Divider />
       {/* CHAT */}
       <List.Item
-        icon={<Textchat variant="16x16_4" />}
+        icon={<Computer4 variant="16x16_4" />}
         onClick={() => requestSiteMode('chat')}
       >
-        Portfolio
-      </List.Item>
-
-      {/* RESET */}
-      <List.Item
-        icon={<Computer4 variant="16x16_4" />}
-        onClick={handleRestart}
-      >
-        Reset Desktop
+        Shut Down
       </List.Item>
 
     </List>

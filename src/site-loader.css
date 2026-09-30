@@ -1,6 +1,11 @@
+/* =========================================================
+   SIMPLE LOADER
+========================================================= */
+
 #site-loader {
   position: fixed;
   inset: 0;
+
   z-index: 999999;
 
   display: flex;
@@ -10,30 +15,124 @@
   background: #000;
 
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
 
-  transition: opacity 300ms ease;
+  transition:
+    opacity 300ms ease,
+    visibility 300ms ease;
 }
+
+
+/* =========================================================
+   LOADER VISIBLE
+========================================================= */
 
 #site-loader.is-visible {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
 }
+
+
+/* =========================================================
+   LOADER CLOSING
+========================================================= */
+
+#site-loader.is-closing {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity 300ms ease,
+    visibility 300ms ease;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.site-loader-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  transform: translateY(5px);
+
+  transition:
+    opacity 400ms ease,
+    transform 400ms ease;
+}
+
+
+#site-loader.is-visible .site-loader-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   LOGO / TEXT
+========================================================= */
+
+.site-loader-logo {
+  color: #fff;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  letter-spacing: 0.18em;
+}
+
+
+/* =========================================================
+   SPINNER
+========================================================= */
 
 .site-loader-spinner {
   width: 20px;
   height: 20px;
 
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255,255,255,0.15);
   border-top-color: #fff;
 
   border-radius: 50%;
 
-  animation: site-loader-spin 0.7s linear infinite;
+  animation:
+    site-loader-spin
+    800ms
+    linear
+    infinite;
 }
+
 
 @keyframes site-loader-spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  #site-loader,
+  #site-loader.is-visible,
+  #site-loader.is-closing {
+    transition: none;
+  }
+
+  .site-loader-content {
+    transition: none;
+  }
+
+  .site-loader-spinner {
+    animation: none;
   }
 }

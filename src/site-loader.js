@@ -1,32 +1,9 @@
-let isLoading = false
+let loader = null
 
-export function requestSiteMode(mode) {
-  if (isLoading) return
+export function showSiteLoader() {
+  if (loader) return
 
-  isLoading = true
-
-  const target =
-    mode === 'chat'
-      ? '/'
-      : '/computer'
-
-  showSiteLoader()
-
-  setTimeout(() => {
-    window.location.href = target
-  }, 500)
-}
-
-export function preloadSiteMode(mode) {
-  window.dispatchEvent(
-    new CustomEvent('site-mode-intent', {
-      detail: { mode },
-    }),
-  )
-}
-
-function showSiteLoader() {
-  const loader = document.createElement('div')
+  loader = document.createElement('div')
 
   loader.id = 'site-loader'
 
@@ -39,6 +16,29 @@ function showSiteLoader() {
   document.body.appendChild(loader)
 
   requestAnimationFrame(() => {
-    loader.classList.add('is-visible')
+    requestAnimationFrame(() => {
+      if (!loader) return
+
+      loader.classList.add('is-visible')
+    })
   })
+}
+
+
+export function hideSiteLoader() {
+  if (!loader) return
+
+  loader.classList.remove('is-visible')
+  loader.classList.add('is-closing')
+
+  const currentLoader = loader
+
+
+  setTimeout(() => {
+    currentLoader.remove()
+
+    if (loader === currentLoader) {
+      loader = null
+    }
+  }, 550)
 }
