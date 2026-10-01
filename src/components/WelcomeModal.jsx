@@ -13,10 +13,6 @@ import {
 import didYouKnowIcon
   from '../assets/images/win95_did_you_know.png';
 
-import win95Pc
-  from '../assets/images/win95_pc.png';
-
-
 /* ======================================
    SHORTCUT LABEL
 ====================================== */

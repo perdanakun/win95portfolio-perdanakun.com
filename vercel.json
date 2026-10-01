@@ -1,7 +1,47 @@
 {
-  "rewrites": [
+  "redirects": [
     {
       "source": "/new",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
+
+  "rewrites": [
+    {
+      "source": "/projects",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/projects/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/project/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/gallery",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/gallery/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/writing",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/writing/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/about/:path*",
       "destination": "/index.html"
     },
     {

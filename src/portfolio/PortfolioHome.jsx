@@ -7,6 +7,7 @@ import {
 import { flushSync } from 'react-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import remarkBreaks from 'remark-breaks'
 import {
   ArrowUpRight,
   BriefcaseBusiness,
@@ -14,6 +15,7 @@ import {
   Code2,
   Eye,
   FileText,
+  Images,
   Menu,
   Monitor,
   Moon,
@@ -30,8 +32,23 @@ import {
 import ModeSwitch from '../ModeSwitch.jsx'
 import { getAIResponse } from '../services/aiService.js'
 import HoloHealthContent from '../project/HoloHealthContent.jsx'
+import GalleryView from './GalleryView.jsx'
 import resumePdf from '../assets/files/perdana_kurniawan_arta_resume.pdf'
 import './PortfolioHome.css'
+
+
+import shipfasterHero from '../project/shipfaster/shipfsater-hero.jpg'
+import shipfaster02 from '../project/shipfaster/shipfsater (4).png'
+import shipfaster03 from '../project/shipfaster/shipfsater (1).png'
+
+import holohealthHero from '../assets/images/case-study/holohealth.gif'
+import holohealth02 from '../assets/images/case-study/holohealth-test1.jpg'
+import holohealth03 from '../assets/images/case-study/holohealth-test2.jpg'
+
+import mayora01 from '../project/mayora/mayora1.webp'
+import mayora02 from '../project/mayora/mayora2.webp'
+import mayora03 from '../project/mayora/mayora3.webp'
+
 /* =====================================================
    PROJECT MEDIA
    Assets live in /public, so they do not need JS imports.
@@ -93,10 +110,11 @@ const aboutGallery = Array.from(
 /* =====================================================
    DATA
 ===================================================== */
+
 const projects = [
   {
-    title: 'TravelXXX',
-    editorialTitle: 'Reducing Uncertainty in Hotel Booking',
+    title: 'Reducing Uncertainty in Hotel Booking',
+    editorialTitle: 'TravelXXX',
     type: 'Product Design',
     year: '2026',
     description:
@@ -112,8 +130,8 @@ const projects = [
     }),
   },
   {
-    title: "Perdana's Computer",
-    editorialTitle: 'The first and ugliest portfolio ever',
+    title: 'The first and ugliest portfolio ever',
+    editorialTitle: "Perdana's Computer",
     type: 'Design Engineering',
     year: '2026',
     description:
@@ -139,10 +157,15 @@ const projects = [
       'Tell me about the HoloHealth project and what Perdana explored in it.',
     slug: 'holohealth',
     cover: null,
+    archivePreview: [
+      holohealthHero,
+      holohealth02,
+      holohealth03,
+    ],
   },
   {
     title: 'ShipFaster',
-    editorialTitle: 'Designing Icons for UI kit and Design System',
+    editorialTitle: 'Designing Icons for UI Kit and Design System',
     type: 'Iconography Design System',
     year: '2026',
     description:
@@ -151,6 +174,11 @@ const projects = [
       'Tell me about the ShipFaster project and how Perdana designed its icon system for digital products.',
     slug: 'shipfaster',
     cover: null,
+    archivePreview: [
+      shipfasterHero,
+      shipfaster02,
+      shipfaster03,
+    ],
   },
   {
     title: 'Mayora',
@@ -163,6 +191,11 @@ const projects = [
       'Tell me about Perdana’s visual design work for Mayora.',
     slug: 'mayora',
     cover: null,
+    archivePreview: [
+      mayora01,
+      mayora02,
+      mayora03,
+    ],
     externalCaseStudy:
       'https://honorable-slicer-cf7.notion.site/Mayora-Unwrapped-Strategic-Social-Media-in-Action-2d13e6c89623802aaf4fe1ed7c23ae28',
   },
@@ -231,11 +264,19 @@ const viewConfig = {
     ],
   },
   work: {
-    label: 'Work',
+    label: 'Projects',
     placeholder: 'Ask about my work',
     suggestions: [
       'Which project best shows product thinking?',
       'Show me his visual design background.',
+    ],
+  },
+  gallery: {
+    label: 'Gallery',
+    placeholder: 'Ask about my visual work',
+    suggestions: [
+      'What kind of visual work has Perdana done?',
+      'How does his visual background connect to Product Design?',
     ],
   },
   writing: {
@@ -737,10 +778,94 @@ function useDynamicHomePlaceholder(active) {
   return `${greeting}... ${typedPrompt}`
 }
 /* =====================================================
+   PORTFOLIO ROUTING
+===================================================== */
+const portfolioPaths = {
+  home: '/',
+  work: '/projects',
+  gallery: '/gallery',
+  writing: '/writing',
+  about: '/about',
+}
+
+function normalizePortfolioPath(pathname) {
+  return pathname.replace(/\/+$/, '') || '/'
+}
+
+function getPortfolioRoute(pathname = window.location.pathname) {
+  const path = normalizePortfolioPath(pathname)
+
+  if (path === '/' || path === '/new') {
+    return {
+      view: 'home',
+      projectSlug: null,
+    }
+  }
+
+  if (path === '/projects') {
+    return {
+      view: 'work',
+      projectSlug: null,
+    }
+  }
+
+  if (path === '/gallery') {
+    return {
+      view: 'gallery',
+      projectSlug: null,
+    }
+  }
+
+  if (path === '/writing') {
+    return {
+      view: 'writing',
+      projectSlug: null,
+    }
+  }
+
+  if (path === '/about') {
+    return {
+      view: 'about',
+      projectSlug: null,
+    }
+  }
+
+  if (path.startsWith('/project/')) {
+    const projectSlug =
+      path.replace('/project/', '').split('/')[0]
+
+    const projectExists = projects.some(
+      (project) => project.slug === projectSlug,
+    )
+
+    if (projectExists) {
+      return {
+        view: 'project',
+        projectSlug,
+      }
+    }
+  }
+
+  return {
+    view: 'home',
+    projectSlug: null,
+  }
+}
+
+function getPortfolioPath(view) {
+  return portfolioPaths[view] || '/'
+}
+
+/* =====================================================
    APP
 ===================================================== */
 export default function PortfolioHome() {
-  const [activeView, setActiveView] = useState('home')
+  const [activeView, setActiveView] = useState(
+    () => getPortfolioRoute().view,
+  )
+  const [activeProjectSlug, setActiveProjectSlug] = useState(
+    () => getPortfolioRoute().projectSlug,
+  )
   const [activeThreadId, setActiveThreadId] = useState(null)
   // Hidden by default, like ChatGPT's collapsed sidebar state.
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -758,6 +883,10 @@ export default function PortfolioHome() {
   const conversationRef = useRef(null)
   const themeAnimatingRef = useRef(false)
   const pageInsightRequestRef = useRef(0)
+  const activeProject =
+    projects.find(
+      (project) => project.slug === activeProjectSlug,
+    ) || null
   const activeThread =
     threads.find((thread) => thread.id === activeThreadId) || null
   const isChatView = activeView === 'chat' && activeThread
@@ -769,7 +898,18 @@ export default function PortfolioHome() {
           placeholder: 'Ask a follow-up',
           suggestions: chatSuggestions,
         }
-      : viewConfig[activeView]
+      : activeView === 'project'
+        ? {
+            label: activeProject?.title || 'Project',
+            placeholder: 'Ask about this project',
+            suggestions: activeProject
+              ? [
+                  `What problem was ${activeProject.title} trying to solve?`,
+                  `What design decisions shaped ${activeProject.title}?`,
+                ]
+              : [],
+          }
+        : viewConfig[activeView] || viewConfig.home
   /* =====================================================
      PERSISTENCE
   ===================================================== */
@@ -785,6 +925,30 @@ export default function PortfolioHome() {
       JSON.stringify(threads),
     )
   }, [threads])
+  useEffect(() => {
+    const handlePopState = () => {
+      const route = getPortfolioRoute()
+
+      setActiveView(route.view)
+      setActiveProjectSlug(route.projectSlug)
+      setActiveThreadId(null)
+      setPageInsight(null)
+      setInput('')
+
+      window.requestAnimationFrame(() => {
+        conversationRef.current?.scrollTo({
+          top: 0,
+          behavior: 'auto',
+        })
+      })
+    }
+
+    window.addEventListener('popstate', handlePopState)
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+    }
+  }, [])
   useEffect(() => {
   if (!conversationRef.current || activeView !== 'chat') return
 
@@ -876,64 +1040,144 @@ const closeSidebarOnMobile = () => {
     setSidebarOpen(false)
   }
 }
+
+const scrollWorkspaceTop = () => {
+  window.requestAnimationFrame(() => {
+    conversationRef.current?.scrollTo({
+      top: 0,
+      behavior: 'auto',
+    })
+  })
+}
+
+const pushPortfolioPath = (path, { replace = false } = {}) => {
+  const nextPath = normalizePortfolioPath(path)
+  const currentPath = normalizePortfolioPath(
+    window.location.pathname,
+  )
+
+  if (currentPath === nextPath) return
+
+  if (replace) {
+    window.history.replaceState({}, '', nextPath)
+    return
+  }
+
+  window.history.pushState({}, '', nextPath)
+}
+
 const navigateTo = (view) => {
+  pushPortfolioPath(getPortfolioPath(view))
+
   setActiveView(view)
+  setActiveProjectSlug(null)
   setActiveThreadId(null)
   setPageInsight(null)
+
   closeSidebarOnMobile()
+  scrollWorkspaceTop()
 }
+
+const openProject = (project) => {
+  pushPortfolioPath(`/project/${project.slug}`)
+
+  setActiveView('project')
+  setActiveProjectSlug(project.slug)
+  setActiveThreadId(null)
+  setPageInsight(null)
+
+  closeSidebarOnMobile()
+  scrollWorkspaceTop()
+}
+
 const newChat = () => {
+  pushPortfolioPath('/')
+
   setActiveView('home')
+  setActiveProjectSlug(null)
   setActiveThreadId(null)
   setPageInsight(null)
   setInput('')
+
   closeSidebarOnMobile()
+  scrollWorkspaceTop()
 }
+
 const openThread = (threadId) => {
+  pushPortfolioPath('/')
+
+  setActiveProjectSlug(null)
   setActiveThreadId(threadId)
   setActiveView('chat')
+
   closeSidebarOnMobile()
+  scrollWorkspaceTop()
 }
+
 const deleteThread = (threadId) => {
   setThreads((current) =>
     current.filter((thread) => thread.id !== threadId),
   )
+
   if (activeThreadId === threadId) {
+    pushPortfolioPath('/')
+
+    setActiveProjectSlug(null)
     setActiveThreadId(null)
     setActiveView('home')
     setInput('')
+
+    scrollWorkspaceTop()
   }
 }
+
 const clearAllChats = () => {
+  pushPortfolioPath('/')
+
   setThreads([])
+  setActiveProjectSlug(null)
   setActiveThreadId(null)
   setActiveView('home')
   setInput('')
   setIsThinking(false)
+
+  scrollWorkspaceTop()
 }
+
 const openPageWithAI = async (view, prompt) => {
   const requestId =
     pageInsightRequestRef.current + 1
+
   pageInsightRequestRef.current = requestId
+
+  pushPortfolioPath(getPortfolioPath(view))
+
+  setActiveProjectSlug(null)
   setActiveThreadId(null)
   setActiveView(view)
+
   closeSidebarOnMobile()
+  scrollWorkspaceTop()
+
   setPageInsight({
     view,
     text: '',
     isLoading: true,
   })
+
   try {
     const answer = await getAIResponse(
       prompt,
       [],
     )
+
     if (
       pageInsightRequestRef.current !==
       requestId
     ) {
       return
     }
+
     setPageInsight({
       view,
       text: answer,
@@ -941,12 +1185,14 @@ const openPageWithAI = async (view, prompt) => {
     })
   } catch (error) {
     console.error(error)
+
     if (
       pageInsightRequestRef.current !==
       requestId
     ) {
       return
     }
+
     setPageInsight({
       view,
       text: "I couldn't load the summary just now.",
@@ -954,6 +1200,7 @@ const openPageWithAI = async (view, prompt) => {
     })
   }
 }
+
 const handleHomeSuggestion = (suggestion) => {
   if (suggestion.type === 'page') {
     openPageWithAI(
@@ -962,6 +1209,7 @@ const handleHomeSuggestion = (suggestion) => {
     )
     return
   }
+
   ask(suggestion.prompt)
 }
  /* =====================================================
@@ -979,6 +1227,7 @@ const ask = async (question, options = {}) => {
   const projectSlug =
     options.projectSlug ||
     activeThread?.projectSlug ||
+    activeProjectSlug ||
     null
   /*
    * Asking from Home / Work / Writing / About
@@ -988,6 +1237,10 @@ const ask = async (question, options = {}) => {
    * projectSlug becomes part of the thread itself.
    */
   if (activeView !== 'chat' || !activeThread) {
+    if (activeView !== 'home') {
+      pushPortfolioPath('/')
+    }
+
     threadId = createThreadId()
     const newThread = {
       id: threadId,
@@ -1192,10 +1445,16 @@ const handleKeyDown = (event) => {
         </div>
         <nav className="sidebar-navigation">
           <SidebarButton
-            active={activeView === 'work'}
+            active={activeView === 'work' || activeView === 'project'}
             icon={<Folder size={18} />}
-            label="Work"
+            label="Projects"
             onClick={() => navigateTo('work')}
+          />
+          <SidebarButton
+            active={activeView === 'gallery'}
+            icon={<Images size={18} />}
+            label="Gallery"
+            onClick={() => navigateTo('gallery')}
           />
           <SidebarButton
             active={activeView === 'writing'}
@@ -1324,7 +1583,7 @@ const handleKeyDown = (event) => {
       <main className="portfolio-workspace">
         <div
           className="workspace-scroll"
-          ref={activeView === 'chat' ? conversationRef : null}
+          ref={conversationRef}
         >
           {activeView === 'home' && (
             <HomeView
@@ -1339,14 +1598,21 @@ const handleKeyDown = (event) => {
           )}
           {activeView === 'work' && (
             <WorkView
-              onAsk={(project) =>
-                ask(project.prompt, { projectSlug: project.slug })
-              }
+              onOpenProject={openProject}
               insight={
                 pageInsight?.view === 'work'
                   ? pageInsight
                   : null
               }
+            />
+          )}
+          {activeView === 'gallery' && (
+            <GalleryView />
+          )}
+          {activeView === 'project' && activeProject && (
+            <ProjectView
+              project={activeProject}
+              onBack={() => navigateTo('work')}
             />
           )}
           {activeView === 'writing' && (
@@ -1709,80 +1975,186 @@ function ChatComposer({
    Renders AI responses as safe Markdown. Raw HTML is
    intentionally skipped, so AI output cannot inject HTML.
 ===================================================== */
+function normalizeAIResponseMarkdown(text = '') {
+  return text
+    .replace(/\r\n/g, '\n')
+
+    // Convert visual bullets from the AI into real Markdown lists.
+    .replace(
+      /(?:^|\s)•\s*/g,
+      '\n- ',
+    )
+
+    // Prevent excessive empty space.
+    .replace(/\n{3,}/g, '\n\n')
+
+    .trim()
+}
 function MarkdownMessage({ text }) {
+  const normalizedText =
+    normalizeAIResponseMarkdown(text)
+
   return (
-    <div
-      className="markdown-message"
-      style={{ whiteSpace: 'normal' }}
-    >
+    <div className="markdown-message">
       <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
+        remarkPlugins={[
+          remarkGfm,
+          remarkBreaks,
+        ]}
         skipHtml
         components={{
-          a: ({ href = '', children, ...props }) => {
-            const isExternal = /^https?:\/\//i.test(href)
+          a: ({
+            href = '',
+            children,
+            ...props
+          }) => {
+            const isExternal =
+              /^https?:\/\//i.test(href)
+
             return (
               <a
                 {...props}
                 href={href}
                 className="chat-link"
-                target={isExternal ? '_blank' : undefined}
-                rel={isExternal ? 'noreferrer noopener' : undefined}
+                target={
+                  isExternal
+                    ? '_blank'
+                    : undefined
+                }
+                rel={
+                  isExternal
+                    ? 'noreferrer noopener'
+                    : undefined
+                }
               >
                 {children}
               </a>
             )
           },
-          p: ({ children, ...props }) => (
-            <p {...props} className="markdown-paragraph">
+
+          p: ({
+            children,
+            ...props
+          }) => (
+            <p
+              {...props}
+              className="markdown-paragraph"
+            >
               {children}
             </p>
           ),
-          h1: ({ children, ...props }) => (
-            <h1 {...props} className="markdown-heading markdown-h1">
+
+          h1: ({
+            children,
+            ...props
+          }) => (
+            <h1
+              {...props}
+              className="markdown-heading markdown-h1"
+            >
               {children}
             </h1>
           ),
-          h2: ({ children, ...props }) => (
-            <h2 {...props} className="markdown-heading markdown-h2">
+
+          h2: ({
+            children,
+            ...props
+          }) => (
+            <h2
+              {...props}
+              className="markdown-heading markdown-h2"
+            >
               {children}
             </h2>
           ),
-          h3: ({ children, ...props }) => (
-            <h3 {...props} className="markdown-heading markdown-h3">
+
+          h3: ({
+            children,
+            ...props
+          }) => (
+            <h3
+              {...props}
+              className="markdown-heading markdown-h3"
+            >
               {children}
             </h3>
           ),
-          h4: ({ children, ...props }) => (
-            <h4 {...props} className="markdown-heading markdown-h4">
+
+          h4: ({
+            children,
+            ...props
+          }) => (
+            <h4
+              {...props}
+              className="markdown-heading markdown-h4"
+            >
               {children}
             </h4>
           ),
-          ul: ({ children, ...props }) => (
-            <ul {...props} className="markdown-list markdown-list-unordered">
+
+          ul: ({
+            children,
+            ...props
+          }) => (
+            <ul
+              {...props}
+              className="markdown-list markdown-list-unordered"
+            >
               {children}
             </ul>
           ),
-          ol: ({ children, ...props }) => (
-            <ol {...props} className="markdown-list markdown-list-ordered">
+
+          ol: ({
+            children,
+            ...props
+          }) => (
+            <ol
+              {...props}
+              className="markdown-list markdown-list-ordered"
+            >
               {children}
             </ol>
           ),
-          li: ({ children, ...props }) => (
-            <li {...props} className="markdown-list-item">
+
+          li: ({
+            children,
+            ...props
+          }) => (
+            <li
+              {...props}
+              className="markdown-list-item"
+            >
               {children}
             </li>
           ),
-          blockquote: ({ children, ...props }) => (
-            <blockquote {...props} className="markdown-blockquote">
+
+          blockquote: ({
+            children,
+            ...props
+          }) => (
+            <blockquote
+              {...props}
+              className="markdown-blockquote"
+            >
               {children}
             </blockquote>
           ),
+
           hr: (props) => (
-            <hr {...props} className="markdown-divider" />
+            <hr
+              {...props}
+              className="markdown-divider"
+            />
           ),
-          code: ({ className = '', children, ...props }) => {
-            const isCodeBlock = /language-/.test(className)
+
+          code: ({
+            className = '',
+            children,
+            ...props
+          }) => {
+            const isCodeBlock =
+              /language-/.test(className)
+
             if (isCodeBlock) {
               return (
                 <code
@@ -1793,50 +2165,107 @@ function MarkdownMessage({ text }) {
                 </code>
               )
             }
+
             return (
-              <code {...props} className="markdown-inline-code">
+              <code
+                {...props}
+                className="markdown-inline-code"
+              >
                 {children}
               </code>
             )
           },
-          pre: ({ children, ...props }) => (
-            <pre {...props} className="markdown-pre">
+
+          pre: ({
+            children,
+            ...props
+          }) => (
+            <pre
+              {...props}
+              className="markdown-pre"
+            >
               {children}
             </pre>
           ),
-          table: ({ children, ...props }) => (
+
+          table: ({
+            children,
+            ...props
+          }) => (
             <div className="markdown-table-scroll">
-              <table {...props} className="markdown-table">
+              <table
+                {...props}
+                className="markdown-table"
+              >
                 {children}
               </table>
             </div>
           ),
-          thead: ({ children, ...props }) => (
-            <thead {...props} className="markdown-table-head">
+
+          thead: ({
+            children,
+            ...props
+          }) => (
+            <thead
+              {...props}
+              className="markdown-table-head"
+            >
               {children}
             </thead>
           ),
-          tbody: ({ children, ...props }) => (
-            <tbody {...props} className="markdown-table-body">
+
+          tbody: ({
+            children,
+            ...props
+          }) => (
+            <tbody
+              {...props}
+              className="markdown-table-body"
+            >
               {children}
             </tbody>
           ),
-          tr: ({ children, ...props }) => (
-            <tr {...props} className="markdown-table-row">
+
+          tr: ({
+            children,
+            ...props
+          }) => (
+            <tr
+              {...props}
+              className="markdown-table-row"
+            >
               {children}
             </tr>
           ),
-          th: ({ children, ...props }) => (
-            <th {...props} className="markdown-table-header">
+
+          th: ({
+            children,
+            ...props
+          }) => (
+            <th
+              {...props}
+              className="markdown-table-header"
+            >
               {children}
             </th>
           ),
-          td: ({ children, ...props }) => (
-            <td {...props} className="markdown-table-cell">
+
+          td: ({
+            children,
+            ...props
+          }) => (
+            <td
+              {...props}
+              className="markdown-table-cell"
+            >
               {children}
             </td>
           ),
-          input: ({ type, ...props }) => (
+
+          input: ({
+            type,
+            ...props
+          }) => (
             <input
               {...props}
               type={type}
@@ -1848,7 +2277,7 @@ function MarkdownMessage({ text }) {
           ),
         }}
       >
-        {text}
+        {normalizedText}
       </ReactMarkdown>
     </div>
   )
@@ -2087,98 +2516,217 @@ function PortfolioMedia({
     </div>
   )
 }
+
+/* =====================================================
+   ACTIVE FOLDER PREVIEW
+===================================================== */
+function ArchiveFolderPreview({ project }) {
+  const previews = Array.isArray(project.archivePreview)
+    ? project.archivePreview.filter(Boolean)
+    : project.archivePreview
+      ? [project.archivePreview]
+      : project.cover
+        ? [project.cover]
+        : []
+
+  if (!previews.length) {
+    return (
+      <div
+        className="archive-generated-preview"
+        aria-hidden="true"
+      >
+        <div className="archive-preview-caption">
+          <strong>{project.title}</strong>
+          <span>{project.type}</span>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="archive-preview-stack">
+      {previews.slice(0, 3).map((src, index) => (
+        <div
+          className={`archive-preview-image archive-preview-image-${index + 1}`}
+          key={`${project.slug}-${index}`}
+        >
+          <PortfolioMedia
+            src={src}
+            label={`${project.title} archived project preview ${index + 1}`}
+          />
+        </div>
+      ))}
+    </div>
+  )
+}
 /* =====================================================
    WORK VIEW
 ===================================================== */
-function WorkView({ onAsk, insight }) {
-  const featuredProjects = projects.slice(0, 2)
-  const secondaryProjects = projects.slice(2)
+function WorkView({ onOpenProject, insight }) {
+  const currentProjects = projects.slice(0, 2)
+  const archivedProjects = projects.slice(2)
+
   const handleProjectPointerMove = (event) => {
     const rect =
       event.currentTarget.getBoundingClientRect()
+
     event.currentTarget.style.setProperty(
       '--project-cursor-x',
       `${event.clientX - rect.left}px`,
     )
+
     event.currentTarget.style.setProperty(
       '--project-cursor-y',
       `${event.clientY - rect.top}px`,
     )
   }
+
   return (
-    <section className="content-view">
-      <header className="view-header">
-        <p>PORTFOLIO</p>
-        <h1>Where visual craft meets product thinking.</h1>
+    <section className="content-view projects-view">
+      <header className="view-header projects-view-header">
+        <p>PROJECTS</p>
+
+        <h1>
+          Where visual craft meets product thinking.
+        </h1>
+
         <span>
-        Selected projects across product design, design engineering, and visual systems.
+          Current product work, with selected archives from a decade
+          of visual design and systems work.
         </span>
       </header>
+
       <PageAIInsight insight={insight} />
-      <div className="project-grid">
-        {featuredProjects.map((project) => (
-          <button
-            type="button"
-            className="project-card"
-            key={project.title}
-            onClick={() => onAsk(project)}
-          >
-            <div
-              className="project-media-interaction"
-              onPointerMove={handleProjectPointerMove}
-            >
-              <PortfolioMedia
-                src={project.cover}
-                label={`${project.title} project preview`}
-              />
-              <span
-                className="project-hover-indicator"
-                aria-hidden="true"
-              >
-                <Eye size={14} />
-                <span>Explore more detail</span>
-              </span>
-            </div>
-            <div className="project-card-content">
-              <h2>{project.editorialTitle}</h2>
-              <div className="project-card-meta">
-                <span>{project.title}</span>
-                <span>{project.year}</span>
-              </div>
-            </div>
-          </button>
-        ))}
-      </div>
-      <div className="work-secondary-section">
-        <p className="work-secondary-label">
-          More work
-        </p>
-        <div className="work-secondary-list">
-          {secondaryProjects.map((project) => (
+
+      <section className="projects-current-section">
+        <div className="projects-section-heading">
+          <p>CURRENT WORK</p>
+        </div>
+
+        <div className="project-grid">
+          {currentProjects.map((project) => (
             <button
               type="button"
-              className="work-secondary-row"
+              className="project-card"
               key={project.title}
-              onClick={() => onAsk(project)}
+              onClick={() => onOpenProject(project)}
             >
-              <div className="work-secondary-copy">
+              <div
+                className="project-media-interaction"
+                onPointerMove={handleProjectPointerMove}
+              >
+                <PortfolioMedia
+                  src={project.cover}
+                  label={`${project.title} project preview`}
+                />
+
+                <span
+                  className="project-hover-indicator"
+                  aria-hidden="true"
+                >
+                  <Eye size={14} />
+                  <span>View project</span>
+                </span>
+              </div>
+
+              <div className="project-card-content">
                 <h2>{project.editorialTitle}</h2>
-                <div className="work-secondary-meta">
+
+                <div className="project-card-meta">
                   <span>{project.title}</span>
-                  <span>{project.year}</span>
+                  <span>
+                    {project.type} · {project.year}
+                  </span>
                 </div>
               </div>
-              <ArrowUpRight
-                className="work-secondary-arrow"
-                size={16}
-              />
             </button>
           ))}
         </div>
-      </div>
+      </section>
+
+      <section className="projects-archive-section">
+        <div className="projects-section-heading">
+          <p>ARCHIVED WORK</p>
+        </div>
+
+        <div className="archive-grid">
+          {archivedProjects.map((project, index) => (
+            <button
+              type="button"
+              className="archive-card"
+              key={project.title}
+              onClick={() => onOpenProject(project)}
+            >
+              <div className="archive-folder">
+                <div className="archive-folder-back">
+                  <span className="archive-folder-tab">
+                    ARCHIVE {String(index + 1).padStart(2, '0')}
+                  </span>
+                </div>
+
+                <div className="archive-folder-sheet">
+                  <ArchiveFolderPreview project={project} />
+                </div>
+
+                <div
+                  className="archive-folder-front"
+                  aria-hidden="true"
+                >
+                  <span className="archive-folder-front-label">
+                    {project.title}
+                  </span>
+
+                  <span className="archive-folder-front-meta">
+                    {project.year}
+                  </span>
+                </div>
+              </div>
+
+              <div className="archive-card-content">
+                <h2>{project.title}</h2>
+
+                <span>
+                  {project.type} · {project.year}
+                </span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </section>
     </section>
   )
 }
+
+/* =====================================================
+   PROJECT VIEW
+===================================================== */
+function ProjectView({ project, onBack }) {
+  return (
+    <section className="content-view project-detail-view">
+      <button
+        type="button"
+        className="project-back-button"
+        onClick={onBack}
+      >
+        <span aria-hidden="true">←</span>
+        <span>Projects</span>
+      </button>
+
+      <header className="view-header project-detail-header">
+        <p>
+          {project.type} · {project.year}
+        </p>
+
+        <h1>{project.editorialTitle}</h1>
+
+        <span>{project.description}</span>
+      </header>
+
+      <ProjectCaseStudy project={project} />
+    </section>
+  )
+}
+
 /* =====================================================
    WRITING VIEW
 ===================================================== */
@@ -2426,7 +2974,7 @@ function AboutView({ onAsk, insight }) {
         </p>
         <p>
           Now, he’s bringing that foundation into{' '}
-          <a href="/work" className="text-link">
+          <a href="/projects" className="text-link">
             product design
             <ArrowUpRight
               size={12}

@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sitemapindex
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
->
-  <sitemap>
-    <loc>https://perdanakun.com/sitemap-main.xml</loc>
-  </sitemap>
 
-  <sitemap>
-    <loc>https://perdanakun.com/blog/sitemap-blog.xml</loc>
-  </sitemap>
-</sitemapindex>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://perdanakun.com/</loc>
+    <lastmod>2026-10-01</lastmod>
+  </url>
+
+  <url>
+    <loc>https://perdanakun.com/gallery</loc>
+    <lastmod>2026-10-01</lastmod>
+  </url>
+
+  <url>
+    <loc>https://perdanakun.com/computer</loc>
+    <lastmod>2026-10-01</lastmod>
+  </url>
+
+</urlset>

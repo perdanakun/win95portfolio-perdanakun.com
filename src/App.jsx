@@ -6,13 +6,6 @@ import './styles/fonts.css';
 import ModeSwitch from './ModeSwitch.jsx';
 import installerBackground from './assets/images/win95_install.jpg';
 import winBackground from './assets/images/windows_cloud.jpeg';
-import winDawn from './assets/images/1dawn.png';
-import winMorning from './assets/images/2morning.png';
-import winMidday from './assets/images/3midday.png';
-import winAfternoon from './assets/images/4afternoon.png';
-import winSunset from './assets/images/5sunset.png';
-import winBlueHour from './assets/images/6bluehour.png';
-import winampIcon16 from './assets/icons/winamp2-16x16.png';
 import winampIcon32  from './assets/icons/winamp2-32x32.png';
 
 import didiKempotVideo from './assets/video/didikempot_bakso_sarjana.mp4';

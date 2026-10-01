@@ -22,13 +22,20 @@ function SiteLoader({ visible }) {
   )
 }
 
+function normalizePath(pathname) {
+  return pathname.replace(/\/+$/, '') || '/'
+}
+
 function Root() {
   const [loading, setLoading] = useState(() => {
     return sessionStorage.getItem('site-transition') === 'true'
   })
 
-  const pathname =
-    window.location.pathname.replace(/\/+$/, '') || '/'
+  const pathname = normalizePath(window.location.pathname)
+
+  const isComputerRoute =
+    pathname === '/computer' ||
+    pathname.startsWith('/computer/')
 
   useEffect(() => {
     const wasTransitioning =
@@ -38,21 +45,18 @@ function Root() {
 
     sessionStorage.removeItem('site-transition')
 
-    const timer = setTimeout(() => {
+    const timer = window.setTimeout(() => {
       setLoading(false)
     }, 400)
 
-    return () => clearTimeout(timer)
+    return () => window.clearTimeout(timer)
   }, [])
 
   return (
     <>
       <SiteLoader visible={loading} />
 
-      {pathname === '/' || pathname === '/new' ? (
-        <PortfolioHome />
-      ) : pathname === '/computer' ||
-        pathname.startsWith('/computer/') ? (
+      {isComputerRoute ? (
         <ComputerApp />
       ) : (
         <PortfolioHome />
