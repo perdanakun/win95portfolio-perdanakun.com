@@ -977,6 +977,83 @@ export default function PortfolioHome() {
   activeThread?.messages?.length,
 ])
 
+  useEffect(() => {
+    if (activeView !== 'project' || !activeProjectSlug) {
+      return undefined
+    }
+
+    const project = projects.find(
+      (item) => item.slug === activeProjectSlug,
+    )
+
+    if (!project) {
+      return undefined
+    }
+
+    const requestId =
+      pageInsightRequestRef.current + 1
+
+    pageInsightRequestRef.current = requestId
+
+    let cancelled = false
+
+    setPageInsight({
+      view: 'project',
+      projectSlug: project.slug,
+      text: '',
+      isLoading: true,
+    })
+
+    const loadProjectSummary = async () => {
+      try {
+        const answer = await getAIResponse(
+          project.prompt,
+          [],
+        )
+
+        if (
+          cancelled ||
+          pageInsightRequestRef.current !== requestId
+        ) {
+          return
+        }
+
+        setPageInsight({
+          view: 'project',
+          projectSlug: project.slug,
+          text: answer,
+          isLoading: false,
+        })
+      } catch (error) {
+        console.error(error)
+
+        if (
+          cancelled ||
+          pageInsightRequestRef.current !== requestId
+        ) {
+          return
+        }
+
+        setPageInsight({
+          view: 'project',
+          projectSlug: project.slug,
+          text:
+            "I couldn't load the project summary just now.",
+          isLoading: false,
+        })
+      }
+    }
+
+    loadProjectSummary()
+
+    return () => {
+      cancelled = true
+    }
+  }, [
+    activeView,
+    activeProjectSlug,
+  ])
+
   const handleThemeToggle = async (event) => {
     const nextDark = !dark
     const reduceMotion = window.matchMedia(
@@ -1612,6 +1689,12 @@ const handleKeyDown = (event) => {
           {activeView === 'project' && activeProject && (
             <ProjectView
               project={activeProject}
+              insight={
+                pageInsight?.view === 'project' &&
+                pageInsight?.projectSlug === activeProject.slug
+                  ? pageInsight
+                  : null
+              }
               onBack={() => navigateTo('work')}
             />
           )}
@@ -2700,7 +2783,41 @@ function WorkView({ onOpenProject, insight }) {
 /* =====================================================
    PROJECT VIEW
 ===================================================== */
-function ProjectView({ project, onBack }) {
+function ProjectAIAnswer({ insight }) {
+  const isLoading =
+    !insight || insight.isLoading
+
+  return (
+    <div
+      className="project-ai-answer"
+      aria-live="polite"
+    >
+      <div className="message assistant-message">
+        <div className="message-body has-markdown">
+          {isLoading ? (
+            <div className="thinking-dots">
+              <span />
+              <span />
+              <span />
+              <span />
+            </div>
+          ) : (
+            <MarkdownMessage text={insight.text} />
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ProjectView({
+  project,
+  insight,
+  onBack,
+}) {
+  const summaryReady =
+    insight && !insight.isLoading
+
   return (
     <section className="content-view project-detail-view">
       <button
@@ -2722,7 +2839,11 @@ function ProjectView({ project, onBack }) {
         <span>{project.description}</span>
       </header>
 
-      <ProjectCaseStudy project={project} />
+      <ProjectAIAnswer insight={insight} />
+
+      {summaryReady && (
+        <ProjectCaseStudy project={project} />
+      )}
     </section>
   )
 }
