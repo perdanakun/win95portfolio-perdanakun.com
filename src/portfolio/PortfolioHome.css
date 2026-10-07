@@ -3692,3 +3692,63 @@
     transform: none !important;
   }
 }
+/* =====================================================
+   ASCII WATER RIPPLE BACKGROUND
+   Home-only ambient layer adapted from the v0 community
+   ASCII Water Ripple template.
+===================================================== */
+.portfolio-workspace {
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.ascii-ripple-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+.ascii-ripple-background canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.portfolio-v2.dark .ascii-ripple-background canvas {
+  opacity: 0.16;
+}
+
+/* Keep every interactive/content surface above the canvas. */
+.workspace-scroll {
+  position: relative;
+  z-index: 1;
+}
+
+.composer-area,
+.portfolio-footer {
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 760px) {
+  .ascii-ripple-background canvas {
+    opacity: 0.15;
+  }
+
+  .portfolio-v2.dark .ascii-ripple-background canvas {
+    opacity: 0.12;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ascii-ripple-background canvas {
+    opacity: 0.12;
+  }
+}

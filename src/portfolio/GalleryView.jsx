@@ -844,13 +844,8 @@ export default function GalleryView() {
     </h1>
 
     <span className="gallery-description">
-      Some client work, iconography, illustration,
-      motion, graphic design, and experiments collected
+      Some collection of work from the last
       years of making things.
-    </span>
-
-    <span className="gallery-count">
-      {items.length} selected visual design so it's not heavy
     </span>
   </div>
 </header>

@@ -32,7 +32,9 @@ import {
 import ModeSwitch from '../ModeSwitch.jsx'
 import { getAIResponse } from '../services/aiService.js'
 import HoloHealthContent from '../project/HoloHealthContent.jsx'
+import ShipfasterContent from '../project/ShipfasterContent.jsx'
 import GalleryView from './GalleryView.jsx'
+import AsciiRippleBackground from './AsciiRippleBackground.jsx'
 import resumePdf from '../assets/files/perdana_kurniawan_arta_resume.pdf'
 import './PortfolioHome.css'
 
@@ -130,14 +132,14 @@ const projects = [
     }),
   },
   {
-    title: 'The first and ugliest portfolio ever',
-    editorialTitle: "Perdana's Computer",
+    title: 'The first and ugliest interactive portfolio ever',
+    editorialTitle: "Retro Computer",
     type: 'Design Engineering',
     year: '2026',
     description:
       'An experimental personal portfolio designed and built as a Windows 95-inspired desktop environment using React.',
     prompt:
-      "Tell me about Perdana's Computer, why it was designed like Windows 95, and how it was built.",
+      "Tell me about Perdana's Retro Computer, why it was designed like Windows 95, and how it was built.",
     slug: 'perdana-computer',
     cover: '/projects/perdanakun.webm',
     gallery: createProjectMedia({
@@ -1658,6 +1660,9 @@ const handleKeyDown = (event) => {
           occupy this same central scroll area.
       ================================================= */}
       <main className="portfolio-workspace">
+        {activeView === 'home' && (
+          <AsciiRippleBackground dark={dark} />
+        )}
         <div
           className="workspace-scroll"
           ref={conversationRef}
@@ -2441,6 +2446,14 @@ function ProjectCaseStudy({ project }) {
       </section>
     )
   }
+  if (project.slug === 'shipfaster') {
+    return (
+      <section className="chat-shipfaster-case-study">
+        <ShipfasterContent embedded />
+      </section>
+    )
+  }
+
   if (project.slug === 'mayora') {
     return (
       <section className="chat-project-case-study chat-external-case-study">
