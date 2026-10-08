@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap');
+
 /* =====================================================
    ROOT
 ===================================================== */
@@ -35,7 +37,8 @@
   background: var(--bg);
   color: var(--text);
   font-family:
-    Inter,
+    "Geist",
+    "Geist Sans",
     ui-sans-serif,
     system-ui,
     -apple-system,
@@ -740,40 +743,31 @@
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
 }
-
 /* =====================================================
    HOME / NEW CHAT
 ===================================================== */
+
 .home-view {
   min-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 76px 32px 52px;
+  padding: 76px 24px 52px;
 }
 
 .home-content {
-  width: min(100%, 760px);
+  width: min(100%, 980px);
 }
 
 .home-content h1 {
-  max-width: 760px;
+  width: 100%;
+  max-width: none;
   margin: 0;
-  font-size: var(--font-hero);
+  font-size: clamp(24px, 3.1vw, 46px);
   line-height: 1.06;
   letter-spacing: -0.045em;
   text-align: center;
-  font-weight: 500;
-}
-
-.home-content h1 u {
-  text-decoration-thickness: 0.06em;
-  text-underline-offset: 0.08em;
-}
-
-.home-content h1 i {
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 .hero-heading {
@@ -782,6 +776,7 @@
 
 .hero-row {
   display: block;
+  white-space: nowrap;
 }
 
 .hero-chunk {
@@ -790,7 +785,7 @@
 
 .scramble-text {
   display: inline-block;
-  font-size: var(--font-hero);
+  font-size: inherit;
   white-space: nowrap;
   cursor: default;
   outline: none;
@@ -800,24 +795,31 @@
   opacity: 0.78;
 }
 
-.home-explore-link {
-  width: fit-content;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  margin-top: 24px;
-  color: var(--secondary);
-  font-size: var(--font-link);
-  font-weight: 400;
-}
 
-.home-explore-link strong {
-  color: var(--text);
-  font-weight: 500;
-}
+/* =====================================================
+   MOBILE HERO
+===================================================== */
 
-.home-explore-link:hover {
-  opacity: 0.65;
+@media (max-width: 760px) {
+  .home-view {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .home-content {
+    width: 100%;
+  }
+
+  .home-content h1 {
+    font-size: clamp(20px, 6.2vw, 30px);
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+  }
+
+  .hero-row {
+    display: block;
+    white-space: nowrap;
+  }
 }
 
 /* =====================================================
@@ -3690,65 +3692,5 @@
   .gallery-item:hover .gallery-image,
   .gallery-item:hover .gallery-video {
     transform: none !important;
-  }
-}
-/* =====================================================
-   ASCII WATER RIPPLE BACKGROUND
-   Home-only ambient layer adapted from the v0 community
-   ASCII Water Ripple template.
-===================================================== */
-.portfolio-workspace {
-  isolation: isolate;
-  overflow: hidden;
-}
-
-.ascii-ripple-background {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-  user-select: none;
-}
-
-.ascii-ripple-background canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  opacity: 0.2;
-  pointer-events: none;
-}
-
-.portfolio-v2.dark .ascii-ripple-background canvas {
-  opacity: 0.16;
-}
-
-/* Keep every interactive/content surface above the canvas. */
-.workspace-scroll {
-  position: relative;
-  z-index: 1;
-}
-
-.composer-area,
-.portfolio-footer {
-  position: relative;
-  z-index: 2;
-}
-
-@media (max-width: 760px) {
-  .ascii-ripple-background canvas {
-    opacity: 0.15;
-  }
-
-  .portfolio-v2.dark .ascii-ripple-background canvas {
-    opacity: 0.12;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ascii-ripple-background canvas {
-    opacity: 0.12;
   }
 }

@@ -833,22 +833,7 @@ export default function GalleryView() {
       ref={containerRef}
       className="gallery-view"
     >
- <header className="gallery-header">
-  <div className="gallery-heading">
-    <p className="gallery-eyebrow">
-      GALLERY · 2016—2026
-    </p>
 
-    <h1>
-      Visual Archive
-    </h1>
-
-    <span className="gallery-description">
-      Some collection of work from the last
-      years of making things.
-    </span>
-  </div>
-</header>
 
       <div className="gallery-masonry">
         {masonryColumns.map(

@@ -34,7 +34,6 @@ import { getAIResponse } from '../services/aiService.js'
 import HoloHealthContent from '../project/HoloHealthContent.jsx'
 import ShipfasterContent from '../project/ShipfasterContent.jsx'
 import GalleryView from './GalleryView.jsx'
-import AsciiRippleBackground from './AsciiRippleBackground.jsx'
 import resumePdf from '../assets/files/perdana_kurniawan_arta_resume.pdf'
 import './PortfolioHome.css'
 
@@ -1660,9 +1659,6 @@ const handleKeyDown = (event) => {
           occupy this same central scroll area.
       ================================================= */}
       <main className="portfolio-workspace">
-        {activeView === 'home' && (
-          <AsciiRippleBackground dark={dark} />
-        )}
         <div
           className="workspace-scroll"
           ref={conversationRef}
