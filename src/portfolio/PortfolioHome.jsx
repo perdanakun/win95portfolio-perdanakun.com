@@ -26,6 +26,8 @@ import {
   Folder,
   Sun,
   Trash2,
+  Pencil,
+  Eraser,
   UserRound,
   X,
 } from 'lucide-react'
@@ -36,6 +38,7 @@ import ShipfasterContent from '../project/ShipfasterContent.jsx'
 import GalleryView from './GalleryView.jsx'
 import resumePdf from '../assets/files/perdana_kurniawan_arta_resume.pdf'
 import './PortfolioHome.css'
+import { HandDrawIntro, InteractiveHandDrawArt } from './HandDrawArt.jsx'
 
 
 import shipfasterHero from '../project/shipfaster/shipfsater-hero.jpg'
@@ -867,9 +870,29 @@ export default function PortfolioHome() {
   const [activeProjectSlug, setActiveProjectSlug] = useState(
     () => getPortfolioRoute().projectSlug,
   )
+  // Show once per browser tab/session, only on a direct Home entry.
+  const [introVisible, setIntroVisible] = useState(() => {
+    if (getPortfolioRoute().view !== 'home') return false
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false
+    try {
+      return window.sessionStorage.getItem('perdana-handdraw-intro-seen') !== '1'
+    } catch {
+      return true
+    }
+  })
+  const finishHandDrawIntro = () => {
+    setIntroVisible(false)
+    try {
+      window.sessionStorage.setItem('perdana-handdraw-intro-seen', '1')
+    } catch {
+      // Storage may be disabled, the intro still dismisses normally.
+    }
+  }
   const [activeThreadId, setActiveThreadId] = useState(null)
   // Hidden by default, like ChatGPT's collapsed sidebar state.
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [paintTool, setPaintTool] = useState('pencil')
+  const [paintClearVersion, setPaintClearVersion] = useState(0)
   const [dark, setDark] = useState(() => {
     const saved = window.localStorage.getItem('perdana-theme')
     if (saved) {
@@ -1434,6 +1457,9 @@ const handleKeyDown = (event) => {
           sidebarOpen ? 'sidebar-visible' : ''
         }`}
       >
+      {introVisible && activeView === 'home' && (
+        <HandDrawIntro dark={dark} onFinish={finishHandDrawIntro} />
+      )}
       {/* =================================================
           SIDEBAR OPEN BUTTON
           Only visible while sidebar is hidden.
@@ -1547,6 +1573,29 @@ const handleKeyDown = (event) => {
             onClick={() => navigateTo('about')}
           />
         </nav>
+        {activeView === 'home' && (
+          <div className="sidebar-paint-tools" aria-label="Drawing tools">
+            <span className="sidebar-label sidebar-paint-heading">DRAW ON HOME</span>
+            <SidebarButton
+              icon={<Pencil size={18} />}
+              label="Pencil"
+              active={paintTool === 'pencil'}
+              onClick={() => setPaintTool('pencil')}
+            />
+            <SidebarButton
+              icon={<Eraser size={18} />}
+              label="Eraser"
+              active={paintTool === 'eraser'}
+              onClick={() => setPaintTool('eraser')}
+            />
+            <SidebarButton
+              icon={<Trash2 size={18} />}
+              label="Clear drawing"
+              active={false}
+              onClick={() => setPaintClearVersion((version) => version + 1)}
+            />
+          </div>
+        )}
         {/* =================================================
             CHAT HISTORY
             Appears automatically after the first prompt.
@@ -1665,6 +1714,9 @@ const handleKeyDown = (event) => {
         >
           {activeView === 'home' && (
             <HomeView
+              dark={dark}
+              paintTool={paintTool}
+              paintClearVersion={paintClearVersion}
               input={input}
               setInput={setInput}
               onSubmit={submit}
@@ -1672,6 +1724,7 @@ const handleKeyDown = (event) => {
               isThinking={isThinking}
               onAsk={ask}
               onHomeSuggestion={handleHomeSuggestion}
+              onNavigate={(path) => navigateTo(path === "/about" ? "about" : "work")}
             />
           )}
           {activeView === 'work' && (
@@ -1743,6 +1796,7 @@ const handleKeyDown = (event) => {
             onAsk={ask}
           />
         )}
+        {/*
         {activeView === 'home' && (
           <p className="portfolio-footer">
             <span className="portfolio-footer-desktop">
@@ -1789,6 +1843,7 @@ const handleKeyDown = (event) => {
             </span>
           </p>
         )}
+        */}
       </main>
     </div>
   )
@@ -1821,6 +1876,9 @@ function SidebarButton({
    HOME / NEW CHAT STATE
 ===================================================== */
 function HomeView({
+  dark,
+  paintTool,
+  paintClearVersion,
   input,
   setInput,
   onSubmit,
@@ -1828,30 +1886,15 @@ function HomeView({
   isThinking,
   onAsk,
   onHomeSuggestion,
+  onNavigate,
 }) {
   const dynamicPlaceholder =
     useDynamicHomePlaceholder(!input)
   return (
-    <section className="home-view">
-      <div className="home-content">
-        <h1 className="hero-heading">
-          <span className="hero-row">
-            <span className="hero-chunk">
-              Designer who
-            </span>{' '}
-            <u className="hero-chunk">
-              understand business
-            </u>
-          </span>
-          <span className="hero-row">
-            <i className="hero-chunk">
-              <ScrambleText text="design in code" />
-            </i>{' '}
-            <span className="hero-chunk">
-              & <b>ships it.</b>
-            </span>
-          </span>
-        </h1>
+    <section className="home-view home-view--illustrated">
+      <HomePaintCanvas tool={paintTool} clearVersion={paintClearVersion} dark={dark} />
+      <div className="home-content home-content--illustrated">
+        <InteractiveHandDrawArt dark={dark} onAsk={onAsk} onNavigate={onNavigate} />
         <ChatComposer
           variant="home"
           input={input}
@@ -1868,6 +1911,96 @@ function HomeView({
     </section>
   )
 }
+/* Pointer-based canvas, with strokes stored in CSS-space coordinates.
+   Redrawing after resize preserves sketches on rotation and theme changes. */
+function HomePaintCanvas({ tool, clearVersion, dark }) {
+  const canvasRef = useRef(null)
+  const strokesRef = useRef([])
+  const activeRef = useRef(null)
+  const drawRef = useRef(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return undefined
+    const redraw = () => {
+      const rect = canvas.getBoundingClientRect()
+      if (!rect.width || !rect.height) return
+      const ratio = Math.min(window.devicePixelRatio || 1, 3)
+      canvas.width = Math.round(rect.width * ratio)
+      canvas.height = Math.round(rect.height * ratio)
+      const ctx = canvas.getContext('2d')
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0)
+      ctx.clearRect(0, 0, rect.width, rect.height)
+      const ink = dark ? '#f1f1f1' : '#222222'
+      for (const stroke of strokesRef.current) {
+        const points = stroke.points
+        if (!points.length) continue
+        ctx.save()
+        ctx.globalCompositeOperation = stroke.tool === 'eraser' ? 'destination-out' : 'source-over'
+        ctx.strokeStyle = stroke.tool === 'eraser' ? '#000' : ink
+        ctx.fillStyle = ctx.strokeStyle
+        ctx.lineWidth = stroke.tool === 'eraser' ? 30 : 3
+        ctx.lineCap = 'round'
+        ctx.lineJoin = 'round'
+        if (points.length === 1) {
+          ctx.beginPath()
+          ctx.arc(points[0].x, points[0].y, ctx.lineWidth / 2, 0, Math.PI * 2)
+          ctx.fill()
+        } else {
+          ctx.beginPath()
+          ctx.moveTo(points[0].x, points[0].y)
+          for (let i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y)
+          ctx.stroke()
+        }
+        ctx.restore()
+      }
+    }
+    drawRef.current = redraw
+    const observer = new ResizeObserver(redraw)
+    observer.observe(canvas)
+    redraw()
+    return () => { observer.disconnect(); drawRef.current = null }
+  }, [dark])
+
+  useEffect(() => {
+    strokesRef.current = []
+    activeRef.current = null
+    drawRef.current?.()
+  }, [clearVersion])
+
+  const pointFromEvent = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    return { x: event.clientX - rect.left, y: event.clientY - rect.top }
+  }
+  const onPointerDown = (event) => {
+    if (event.button !== 0 && event.pointerType === 'mouse') return
+    event.currentTarget.setPointerCapture(event.pointerId)
+    const stroke = { tool, points: [pointFromEvent(event)] }
+    strokesRef.current.push(stroke)
+    activeRef.current = stroke
+    drawRef.current?.()
+  }
+  const onPointerMove = (event) => {
+    if (!activeRef.current) return
+    activeRef.current.points.push(pointFromEvent(event))
+    drawRef.current?.()
+  }
+  const onPointerEnd = () => { activeRef.current = null }
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className={`home-paint-canvas ${tool === 'eraser' ? 'is-eraser' : ''}`}
+      aria-label="Drawing area: select Pencil, Eraser or Clear from sidebar"
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerEnd}
+      onPointerCancel={onPointerEnd}
+      onLostPointerCapture={onPointerEnd}
+    />
+  )
+}
+
 /* =====================================================
    SCRAMBLE TEXT
 ===================================================== */

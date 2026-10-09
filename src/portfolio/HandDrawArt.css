@@ -1,0 +1,185 @@
+/* Exact centerline tracing against the original PNG, not a rectangular wipe. */
+.handdraw-art {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.handdraw-art__stroke {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.handdraw-art--playing .handdraw-art__stroke {
+  stroke-dashoffset: 1;
+  animation: handdraw-stroke var(--stroke-duration) linear var(--stroke-delay) forwards;
+}
+
+.handdraw-art__finish { opacity: 1; }
+
+.handdraw-art--playing .handdraw-art__finish {
+  opacity: 0;
+  animation: handdraw-finishing 440ms ease-out 3.75s forwards;
+}
+
+@keyframes handdraw-stroke {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes handdraw-finishing {
+  to { opacity: 1; }
+}
+
+.handdraw-intro {
+  position: absolute;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #fff; /* same contrast in both site themes */
+  isolation: isolate;
+  opacity: 1;
+}
+
+.handdraw-intro--leaving {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 500ms ease;
+}
+
+.handdraw-intro__illustration {
+  width: min(94vw, 1260px);
+  aspect-ratio: 1774 / 887;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.handdraw-intro--ready .handdraw-intro__illustration {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 200ms ease, transform 400ms ease;
+}
+
+.handdraw-intro__skip {
+  position: absolute;
+  right: 28px;
+  bottom: 24px;
+  z-index: 2;
+  padding: 9px 13px;
+  border: 1px solid #e6e6e6;
+  border-radius: 999px;
+  background: #fff;
+  color: #666;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.handdraw-intro__skip:hover,
+.handdraw-intro__skip:focus-visible {
+  color: #111;
+  background: #f4f4f4;
+}
+
+/* Ambient sketch follows Home's existing workspace and never blocks clicks. */
+.home-view { position: relative; isolation: isolate; }
+.home-content { position: relative; z-index: 1; }
+
+.home-sketch-backdrop {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  width: min(92%, 1140px);
+  pointer-events: none;
+  opacity: 0.075;
+  transform: translate(-50%, -50%);
+  animation: handdraw-ambient 19s ease-in-out infinite alternate;
+}
+
+.home-sketch-backdrop img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.portfolio-v2.dark .home-sketch-backdrop { opacity: 0.115; }
+
+@keyframes handdraw-ambient {
+  0%   { transform: translate(-50%, -50%) rotate(-0.5deg) scale(1); }
+  100% { transform: translate(-50%, -51%) rotate(0.5deg) scale(1.035); }
+}
+
+@media (max-width: 760px) {
+  .handdraw-intro__illustration {
+    width: 145vw;
+    max-width: none;
+  }
+  .handdraw-intro__skip { right: 18px; bottom: 22px; }
+  .home-sketch-backdrop { width: 145%; opacity: 0.055; }
+  .portfolio-v2.dark .home-sketch-backdrop { opacity: 0.085; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .handdraw-art--playing .handdraw-art__stroke,
+  .handdraw-art--playing .handdraw-art__finish,
+  .home-sketch-backdrop {
+    animation: none !important;
+  }
+  .handdraw-art--playing .handdraw-art__stroke { stroke-dashoffset: 0; }
+  .handdraw-art--playing .handdraw-art__finish { opacity: 1; }
+  .handdraw-intro { display: none; }
+}
+
+
+
+/* Intro matches PortfolioHome's theme from the first frame. */
+.handdraw-intro { background: var(--bg, #fff); color: var(--text, #171717); }
+.handdraw-intro--dark { background: #000; color: #ededed; }
+.handdraw-intro__skip { background: var(--bg, #fff); color: var(--secondary, #666); border-color: var(--border, #e6e6e6); }
+.handdraw-intro--dark .handdraw-intro__skip { background: #0b0b0b; color: #a3a3a3; border-color: #292929; }
+.handdraw-intro--dark .handdraw-intro__skip:hover { background: #262626; color: #fff; }
+
+.home-handdraw { position: relative; width: 100%; aspect-ratio: 1774 / 887; animation: sketch-home-entrance 820ms cubic-bezier(.2,.8,.2,1) both; }
+.home-handdraw__canvas { width: 100%; height: 100%; display: block; overflow: visible; }
+.home-handdraw__base { pointer-events: none; }
+.home-handdraw__segment { cursor: pointer; outline: none; }
+.home-handdraw__target { fill: transparent; stroke: transparent; pointer-events: all; }
+.home-handdraw__ink { opacity: 0; transform-box: fill-box; transform-origin: center; pointer-events: none; }
+.home-handdraw__segment.is-active .home-handdraw__ink { opacity: 1; animation: home-ink-bounce 680ms cubic-bezier(.2,.75,.28,1) both; }
+.home-handdraw__tracing { opacity: 0; pointer-events: none; }
+.home-handdraw__segment.is-active .home-handdraw__tracing { opacity: 1; animation: home-trace-fade 950ms ease both; }
+.home-handdraw__trace-path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.home-handdraw__segment.is-active .home-handdraw__trace-path { animation: home-crayon-trace 670ms ease-out var(--trace-delay) forwards; }
+.home-handdraw__hint { position: absolute; bottom: -1%; left: 50%; transform: translateX(-50%); font-size: 11px; color: var(--tertiary, #999); white-space: nowrap; pointer-events: none; }
+.home-handdraw:has(.is-active) .home-handdraw__hint { color: var(--accent, #6366f1); }
+@keyframes home-ink-bounce { 0% { transform: translateY(0) scale(1); } 28% { transform: translateY(-6px) rotate(-.4deg) scale(1.018); } 64% { transform: translateY(2px) scale(.997); } 100% { transform: translateY(0) scale(1); } }
+@keyframes home-crayon-trace { to { stroke-dashoffset: 0; } }
+@keyframes home-trace-fade { 0%, 60% { opacity: 0.9; } 100% { opacity: 0; } }
+@keyframes sketch-home-entrance { from { opacity: 0; transform: translateY(18px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@media (max-width: 760px) { .home-handdraw { width: 112%; max-width: none; } .home-handdraw__hint { bottom: -6%; font-size: 10px; } }
+@media (prefers-reduced-motion: reduce) { .home-handdraw, .home-handdraw__segment.is-active .home-handdraw__ink, .home-handdraw__segment.is-active .home-handdraw__tracing, .home-handdraw__segment.is-active .home-handdraw__trace-path { animation: none !important; } .home-handdraw__segment.is-active .home-handdraw__ink { opacity: 1; } .home-handdraw__tracing { display: none; } }
+
+/* V2: never crop the original 2:1 artwork, especially on narrow devices. */
+@media (max-width: 760px) {
+  .handdraw-intro__illustration {
+    width: min(94vw, calc(88dvh * 2));
+    max-width: 100%;
+    flex: 0 0 auto;
+  }
+  .home-handdraw {
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 1774 / 887;
+  }
+  .home-handdraw__canvas { overflow: visible; }
+  .home-handdraw__hint { bottom: -12px; }
+}
+/* The moving introduction element is animated to Home's real bounds via WAAPI. */
+.handdraw-intro__illustration { will-change: transform; }
+@media (prefers-reduced-motion: reduce) {
+  .handdraw-intro__illustration { will-change: auto; }
+}

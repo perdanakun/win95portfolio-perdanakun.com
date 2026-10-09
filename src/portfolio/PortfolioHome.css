@@ -1,36 +1,45 @@
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap');
-
 /* =====================================================
-   ROOT
+   ROOT — REFINED MONOCHROME
 ===================================================== */
+
 .portfolio-v2 {
+  /* Base */
   --bg: #ffffff;
-  --sidebar: #f9f9f9;
-  --surface: #f4f4f4;
-  --surface-hover: #ececec;
+  --sidebar: #fafafa;
+
+  /* Surfaces */
+  --surface: #f0f0f0;
+  --surface-hover: #e5e5e5;
+  --composer: #f0f0f0;
+
+  /* Typography */
   --text: #171717;
   --secondary: #666666;
-  --tertiary: #999999;
-  --border: #e8e8e8;
-  --composer: #f4f4f4;
-  --accent: #6366f1;
-  --accent-soft: rgba(99, 102, 241, 0.12);
-  --sidebar-collapsed-width: 60px;
-  --sidebar-expanded-width: 260px;
-  /* Typography scale — Home is the source of truth */
+  --tertiary: #858585;
   --font-hero: clamp(28px, 3.5vw, 48px);
   --font-page-title: clamp(22px, 2.2vw, 32px);
   --font-body: 14px;
   --font-link: 13px;
-  /* UI should never compete with Home links */
   --font-nav: 11px;
   --font-card-title: 14px;
   --font-small: 11px;
   --font-meta: 10px;
-  /* Sidebar chat history */
   --font-history: 11px;
   --font-history-meta: 10px;
   --font-info: 12px;
+
+  /* Borders */
+  --border: #dcdcdc;
+
+  /* Accent */
+  --accent: #6366f1;
+  --accent-soft: rgba(99, 102, 241, 0.12);
+
+  /* Sidebar */
+  --sidebar-collapsed-width: 60px;
+  --sidebar-expanded-width: 260px;
+
   position: fixed;
   inset: 0;
   overflow: hidden;
@@ -48,18 +57,32 @@
   color-scheme: light;
 }
 
+/* =====================================================
+   DARK MODE — PURE BLACK
+===================================================== */
+
 .portfolio-v2.dark {
-  --bg: #030303;
-  --sidebar: #0b0b0b;
-  --surface: #1c1c1c;
+  /* Base */
+  --bg: #000000;
+  --sidebar: #0a0a0a;
+
+  /* Surfaces */
+  --surface: #181818;
   --surface-hover: #262626;
-  --text: #ededed;
+  --composer: #202020;
+
+  /* Typography */
+  --text: #f5f5f5;
   --secondary: #a3a3a3;
-  --tertiary: #6f6f6f;
-  --border: #292929;
-  --composer: #2f2f2f;
+  --tertiary: #858585;
+
+  /* Borders */
+  --border: #303030;
+
+  /* Accent */
   --accent: #818cf8;
-  --accent-soft: rgba(129, 140, 248, 0.16);
+  --accent-soft: rgba(129, 140, 248, 0.18);
+
   color-scheme: dark;
 }
 
@@ -3694,3 +3717,56 @@
     transform: none !important;
   }
 }
+
+
+/* Home: hand-drawn artwork first, then the chat composer. */
+.home-view.home-view--illustrated {
+  min-height: 100%;
+  padding: 64px 24px 42px;
+  align-items: center;
+  justify-content: center;
+}
+.home-content.home-content--illustrated {
+  width: min(100%, 1000px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.home-content--illustrated .home-composer-area {
+  width: min(100%, 760px);
+  margin-top: 12px;
+  flex: 0 0 auto;
+}
+@media (max-width: 760px) {
+  .home-view.home-view--illustrated { padding: 70px 12px 28px; }
+  .home-content--illustrated .home-composer-area { margin-top: 14px; }
+}
+
+/* ===== Interactive MS Paint-inspired Home drawing layer ===== */
+.home-view.home-view--illustrated { isolation: isolate; position: relative; }
+.home-paint-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  cursor: crosshair;
+  touch-action: none;
+}
+.home-paint-canvas.is-eraser { cursor: cell; }
+.home-content.home-content--illustrated {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+.home-content--illustrated .home-handdraw,
+.home-content--illustrated .home-composer-area { pointer-events: auto; }
+.sidebar-paint-tools {
+  display: grid;
+  gap: 3px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.sidebar-paint-heading { white-space: nowrap; opacity: 0; height: 0; overflow: hidden; padding: 0; }
+.portfolio-sidebar.is-open .sidebar-paint-heading { opacity: 1; height: auto; padding: 0 10px 6px; }
