@@ -22,12 +22,15 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   SendHorizontal,
+  Mic,
+  MicOff,
+  Plus,
+  ChevronDown,
+  ArrowUp,
   Sparkles,
   Folder,
   Sun,
   Trash2,
-  Pencil,
-  Eraser,
   UserRound,
   X,
 } from 'lucide-react'
@@ -891,8 +894,6 @@ export default function PortfolioHome() {
   const [activeThreadId, setActiveThreadId] = useState(null)
   // Hidden by default, like ChatGPT's collapsed sidebar state.
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [paintTool, setPaintTool] = useState('pencil')
-  const [paintClearVersion, setPaintClearVersion] = useState(0)
   const [dark, setDark] = useState(() => {
     const saved = window.localStorage.getItem('perdana-theme')
     if (saved) {
@@ -1573,29 +1574,6 @@ const handleKeyDown = (event) => {
             onClick={() => navigateTo('about')}
           />
         </nav>
-        {activeView === 'home' && (
-          <div className="sidebar-paint-tools" aria-label="Drawing tools">
-            <span className="sidebar-label sidebar-paint-heading">DRAW ON HOME</span>
-            <SidebarButton
-              icon={<Pencil size={18} />}
-              label="Pencil"
-              active={paintTool === 'pencil'}
-              onClick={() => setPaintTool('pencil')}
-            />
-            <SidebarButton
-              icon={<Eraser size={18} />}
-              label="Eraser"
-              active={paintTool === 'eraser'}
-              onClick={() => setPaintTool('eraser')}
-            />
-            <SidebarButton
-              icon={<Trash2 size={18} />}
-              label="Clear drawing"
-              active={false}
-              onClick={() => setPaintClearVersion((version) => version + 1)}
-            />
-          </div>
-        )}
         {/* =================================================
             CHAT HISTORY
             Appears automatically after the first prompt.
@@ -1709,14 +1687,14 @@ const handleKeyDown = (event) => {
       ================================================= */}
       <main className="portfolio-workspace">
         <div
-          className="workspace-scroll"
+          className="workspace-scroll workspace-scroll--navigated"
+          key={`${activeView}:${activeProjectSlug || ''}:${isChatView ? activeThreadId || '' : ''}`}
           ref={conversationRef}
         >
           {activeView === 'home' && (
             <HomeView
               dark={dark}
-              paintTool={paintTool}
-              paintClearVersion={paintClearVersion}
+              introComplete={!introVisible}
               input={input}
               setInput={setInput}
               onSubmit={submit}
@@ -1872,13 +1850,49 @@ function SidebarButton({
     </button>
   )
 }
+/* Small cursor-reactive character for the AI home greeting. */
+function CursorEyes() {
+  const faceRef = useRef(null)
+  const [gaze, setGaze] = useState({ x: 0, y: 0 })
+  useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
+    if (reduced.matches) return undefined
+    let frame = null
+    const onPointerMove = (event) => {
+      if (frame !== null) window.cancelAnimationFrame(frame)
+      frame = window.requestAnimationFrame(() => {
+        const rect = faceRef.current?.getBoundingClientRect()
+        if (!rect) return
+        const dx = event.clientX - (rect.left + rect.width / 2)
+        const dy = event.clientY - (rect.top + rect.height / 2)
+        const length = Math.hypot(dx, dy) || 1
+        const amount = Math.min(4, length / 45)
+        setGaze({ x: dx / length * amount, y: dy / length * amount })
+        frame = null
+      })
+    }
+    window.addEventListener('pointermove', onPointerMove, { passive: true })
+    return () => {
+      window.removeEventListener('pointermove', onPointerMove)
+      if (frame !== null) window.cancelAnimationFrame(frame)
+    }
+  }, [])
+  return (
+    <span ref={faceRef} className="home-cursor-face" role="img" aria-label="Curious eyes following the pointer">
+      <span className="home-cursor-face__eyes" style={{ '--eye-x': `${gaze.x}px`, '--eye-y': `${gaze.y}px` }}>
+        <span className="home-cursor-face__eye" />
+        <span className="home-cursor-face__eye" />
+      </span>
+    </span>
+  )
+}
+
 /* =====================================================
    HOME / NEW CHAT STATE
 ===================================================== */
 function HomeView({
   dark,
-  paintTool,
-  paintClearVersion,
+  introComplete,
   input,
   setInput,
   onSubmit,
@@ -1888,13 +1902,46 @@ function HomeView({
   onHomeSuggestion,
   onNavigate,
 }) {
-  const dynamicPlaceholder =
-    useDynamicHomePlaceholder(!input)
+  const [phase, setPhase] = useState(() => introComplete ? 'art' : 'waiting')
+  const [interacting, setInteracting] = useState(false)
+  const [greeting, setGreeting] = useState(() => getGreetingByTime(new Date().getHours()))
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setGreeting(getGreetingByTime(new Date().getHours()))
+    }, 60000)
+    return () => window.clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    if (!introComplete) return undefined
+    if (phase === 'waiting') {
+      // Wait for the intro's artwork-placement transition to finish.
+      const frame = window.requestAnimationFrame(() => setPhase('art'))
+      return () => window.cancelAnimationFrame(frame)
+    }
+    if (phase !== 'art' || interacting || input.trim()) return undefined
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const timer = window.setTimeout(() => setPhase('chat'), reduceMotion ? 150 : 800)
+    return () => window.clearTimeout(timer)
+  }, [introComplete, phase, interacting, input])
+
   return (
-    <section className="home-view home-view--illustrated">
-      <HomePaintCanvas tool={paintTool} clearVersion={paintClearVersion} dark={dark} />
-      <div className="home-content home-content--illustrated">
-        <InteractiveHandDrawArt dark={dark} onAsk={onAsk} onNavigate={onNavigate} />
+    <section className={`home-view home-view--ai ${phase === 'chat' ? 'home-view--chat-ready' : ''}`}>
+      <div className="home-content home-content--ai">
+        <div
+          className="home-art-stage"
+          aria-hidden={phase === 'chat'}
+          onPointerEnter={() => setInteracting(true)}
+          onPointerLeave={() => setInteracting(false)}
+          onFocusCapture={() => setInteracting(true)}
+          onBlurCapture={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) setInteracting(false)
+          }}
+        >
+          <InteractiveHandDrawArt dark={dark} onAsk={onAsk} onNavigate={onNavigate} />
+        </div>
+        <h1 className="home-ai-greeting"><CursorEyes /><span>{greeting.replace(/[!.]+$/, '')}, curious human.</span></h1>
         <ChatComposer
           variant="home"
           input={input}
@@ -1902,102 +1949,13 @@ function HomeView({
           onSubmit={onSubmit}
           onKeyDown={onKeyDown}
           isThinking={isThinking}
-          placeholder={dynamicPlaceholder}
+          placeholder="Ask me anything about Perdana..."
           suggestions={viewConfig.home.suggestions}
           onAsk={onAsk}
           onSuggestion={onHomeSuggestion}
         />
       </div>
     </section>
-  )
-}
-/* Pointer-based canvas, with strokes stored in CSS-space coordinates.
-   Redrawing after resize preserves sketches on rotation and theme changes. */
-function HomePaintCanvas({ tool, clearVersion, dark }) {
-  const canvasRef = useRef(null)
-  const strokesRef = useRef([])
-  const activeRef = useRef(null)
-  const drawRef = useRef(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return undefined
-    const redraw = () => {
-      const rect = canvas.getBoundingClientRect()
-      if (!rect.width || !rect.height) return
-      const ratio = Math.min(window.devicePixelRatio || 1, 3)
-      canvas.width = Math.round(rect.width * ratio)
-      canvas.height = Math.round(rect.height * ratio)
-      const ctx = canvas.getContext('2d')
-      ctx.setTransform(ratio, 0, 0, ratio, 0, 0)
-      ctx.clearRect(0, 0, rect.width, rect.height)
-      const ink = dark ? '#f1f1f1' : '#222222'
-      for (const stroke of strokesRef.current) {
-        const points = stroke.points
-        if (!points.length) continue
-        ctx.save()
-        ctx.globalCompositeOperation = stroke.tool === 'eraser' ? 'destination-out' : 'source-over'
-        ctx.strokeStyle = stroke.tool === 'eraser' ? '#000' : ink
-        ctx.fillStyle = ctx.strokeStyle
-        ctx.lineWidth = stroke.tool === 'eraser' ? 30 : 3
-        ctx.lineCap = 'round'
-        ctx.lineJoin = 'round'
-        if (points.length === 1) {
-          ctx.beginPath()
-          ctx.arc(points[0].x, points[0].y, ctx.lineWidth / 2, 0, Math.PI * 2)
-          ctx.fill()
-        } else {
-          ctx.beginPath()
-          ctx.moveTo(points[0].x, points[0].y)
-          for (let i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y)
-          ctx.stroke()
-        }
-        ctx.restore()
-      }
-    }
-    drawRef.current = redraw
-    const observer = new ResizeObserver(redraw)
-    observer.observe(canvas)
-    redraw()
-    return () => { observer.disconnect(); drawRef.current = null }
-  }, [dark])
-
-  useEffect(() => {
-    strokesRef.current = []
-    activeRef.current = null
-    drawRef.current?.()
-  }, [clearVersion])
-
-  const pointFromEvent = (event) => {
-    const rect = event.currentTarget.getBoundingClientRect()
-    return { x: event.clientX - rect.left, y: event.clientY - rect.top }
-  }
-  const onPointerDown = (event) => {
-    if (event.button !== 0 && event.pointerType === 'mouse') return
-    event.currentTarget.setPointerCapture(event.pointerId)
-    const stroke = { tool, points: [pointFromEvent(event)] }
-    strokesRef.current.push(stroke)
-    activeRef.current = stroke
-    drawRef.current?.()
-  }
-  const onPointerMove = (event) => {
-    if (!activeRef.current) return
-    activeRef.current.points.push(pointFromEvent(event))
-    drawRef.current?.()
-  }
-  const onPointerEnd = () => { activeRef.current = null }
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className={`home-paint-canvas ${tool === 'eraser' ? 'is-eraser' : ''}`}
-      aria-label="Drawing area: select Pencil, Eraser or Clear from sidebar"
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerEnd}
-      onPointerCancel={onPointerEnd}
-      onLostPointerCapture={onPointerEnd}
-    />
   )
 }
 
@@ -2068,6 +2026,80 @@ function ScrambleText({ text }) {
     </span>
   )
 }
+/* Live voice level visualizer. Uses actual microphone audio, not a looping animation. */
+function VoiceWaveform() {
+  const barsRef = useRef(null)
+
+  useEffect(() => {
+    let disposed = false
+    let animationId = 0
+    let stream = null
+    let context = null
+    const bars = Array.from(barsRef.current?.children || [])
+
+    const start = async () => {
+      if (!navigator.mediaDevices?.getUserMedia) return
+      try {
+        const captured = await navigator.mediaDevices.getUserMedia({ audio: true })
+        if (disposed) {
+          captured.getTracks().forEach((track) => track.stop())
+          return
+        }
+        stream = captured
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext
+        if (!AudioContextClass) return
+        context = new AudioContextClass()
+        const analyser = context.createAnalyser()
+        analyser.fftSize = 1024
+        analyser.smoothingTimeConstant = 0.72
+        context.createMediaStreamSource(stream).connect(analyser)
+        const samples = new Uint8Array(analyser.frequencyBinCount)
+        let smooth = 0
+
+        const draw = () => {
+          if (disposed) return
+          analyser.getByteTimeDomainData(samples)
+          let power = 0
+          for (let i = 0; i < samples.length; i++) {
+            const normalized = (samples[i] - 128) / 128
+            power += normalized * normalized
+          }
+          const rms = Math.sqrt(power / samples.length)
+          const target = Math.min(1, Math.max(0, (rms - 0.008) * 10))
+          smooth += (target - smooth) * (target > smooth ? 0.38 : 0.14)
+          bars.forEach((bar, index) => {
+            const center = (bars.length - 1) / 2
+            const envelope = 1 - Math.abs(index - center) / (center + 1) * 0.5
+            const fluctuation = 0.74 + 0.26 * Math.sin(performance.now() * 0.009 + index * 1.7)
+            const height = 3 + smooth * 24 * envelope * fluctuation
+            bar.style.height = `${height.toFixed(1)}px`
+          })
+          animationId = requestAnimationFrame(draw)
+        }
+        draw()
+      } catch {
+        // Speech recognition can still work when direct audio capture is unavailable.
+      }
+    }
+    start()
+    return () => {
+      disposed = true
+      cancelAnimationFrame(animationId)
+      stream?.getTracks().forEach((track) => track.stop())
+      if (context) void context.close().catch(() => {})
+    }
+  }, [])
+
+  return (
+    <div className="composer-live-wave" role="status" aria-label="Microphone is listening">
+      <span className="composer-live-wave__dot" aria-hidden="true" />
+      <span className="composer-live-wave__bars" ref={barsRef} aria-hidden="true">
+        {Array.from({ length: 17 }, (_, i) => <span key={i} />)}
+      </span>
+    </div>
+  )
+}
+
 /* =====================================================
    CHAT COMPOSER
 ===================================================== */
@@ -2084,6 +2116,97 @@ function ChatComposer({
   onSuggestion,
 }) {
   const isHome = variant === 'home'
+  const speechRef = useRef(null)
+  const speechBaseRef = useRef('')
+  const [listening, setListening] = useState(false)
+  const [speechError, setSpeechError] = useState('')
+  const [speechSupported, setSpeechSupported] = useState(false)
+  const [micOptionsOpen, setMicOptionsOpen] = useState(false)
+  const [plusNotice, setPlusNotice] = useState(false)
+  const plusNoticeTimer = useRef(null)
+  const [promptIndex, setPromptIndex] = useState(0)
+  const [composerFocused, setComposerFocused] = useState(false)
+const rotatingPrompts = [
+  'Ask me anything about Perdana...',
+  'What has Perdana designed and shipped?',
+  'Why is Perdana learning to code?',
+  'How does Perdana bring design into code?',
+  'Which of Perdana’s projects should you explore first?',
+  'What has a decade of design taught Perdana?',
+]
+  const showRotatingPrompt = isHome && !input && !composerFocused && !listening && !isThinking
+
+  useEffect(() => {
+    if (!showRotatingPrompt) return undefined
+    const timer = window.setInterval(() => {
+      setPromptIndex((index) => (index + 1) % rotatingPrompts.length)
+    }, 4200)
+    return () => window.clearInterval(timer)
+  }, [showRotatingPrompt])
+
+  useEffect(() => {
+    setSpeechSupported(Boolean(window.SpeechRecognition || window.webkitSpeechRecognition))
+    return () => {
+      if (plusNoticeTimer.current) window.clearTimeout(plusNoticeTimer.current)
+      if (speechRef.current) {
+        speechRef.current.onresult = null
+        speechRef.current.onend = null
+        speechRef.current.onerror = null
+        speechRef.current.abort()
+        speechRef.current = null
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isThinking && speechRef.current) speechRef.current.stop()
+  }, [isThinking])
+
+  const toggleVoiceInput = () => {
+    if (listening) {
+      speechRef.current?.stop()
+      return
+    }
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    if (!SpeechRecognition || isThinking) return
+
+    setSpeechError('')
+    const recognition = new SpeechRecognition()
+    speechRef.current = recognition
+    // Follow the visitor's browser language automatically. Native SpeechRecognition
+    // does not provide reliable spoken-language auto detection.
+    recognition.lang = navigator.languages?.[0] || navigator.language || 'en-US'
+    recognition.continuous = true
+    recognition.interimResults = true
+    speechBaseRef.current = input.trimEnd()
+
+    recognition.onresult = (event) => {
+      let transcript = ''
+      for (let i = 0; i < event.results.length; i++) {
+        transcript += event.results[i][0].transcript
+      }
+      const base = speechBaseRef.current
+      setInput(base ? `${base} ${transcript}` : transcript)
+    }
+    recognition.onerror = (event) => {
+      if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+        setSpeechError('Microphone permission was denied.')
+      } else if (event.error !== 'no-speech' && event.error !== 'aborted') {
+        setSpeechError('Voice recognition failed. Please type your message.')
+      }
+    }
+    recognition.onend = () => {
+      setListening(false)
+      if (speechRef.current === recognition) speechRef.current = null
+    }
+    try {
+      recognition.start()
+      setListening(true)
+    } catch {
+      setListening(false)
+      setSpeechError('Could not start voice recognition.')
+    }
+  }
   const getSuggestionLabel = (suggestion) =>
     typeof suggestion === 'string'
       ? suggestion
@@ -2137,25 +2260,63 @@ function ChatComposer({
           })}
         </div>
       )}
-      <div className="composer-shell">
+      <div className="composer-shell composer-shell--claude">
         <textarea
-          rows={1}
+          rows={2}
           value={input}
-          placeholder={placeholder}
+          placeholder={isHome ? (composerFocused ? placeholder : '') : placeholder}
           onChange={(event) => setInput(event.target.value)}
           onKeyDown={onKeyDown}
+          onFocus={() => setComposerFocused(true)}
+          onBlur={() => setComposerFocused(false)}
           disabled={isThinking}
+          aria-label="Chat message"
         />
-        <button
-          type="button"
-          className="composer-send"
-          onClick={onSubmit}
-          disabled={!input.trim() || isThinking}
-          aria-label="Send message"
-        >
-          <SendHorizontal size={17} />
-        </button>
+        {showRotatingPrompt && (
+          <span key={promptIndex} className="composer-prompt-overlay" aria-hidden="true">
+            {rotatingPrompts[promptIndex]}
+          </span>
+        )}
+        <div className="composer-toolbar">
+          <div className="composer-toolbar__left">
+            {listening && <VoiceWaveform />}
+            {plusNotice && <span className="composer-inline-notice" role="status">Attachments coming soon</span>}
+          </div>
+          <div className="composer-toolbar__right">
+            {speechSupported && (
+              <div className="composer-voice-group">
+                <button
+                  type="button"
+                  className={`composer-mic ${listening ? 'is-listening' : ''}`}
+                  onClick={toggleVoiceInput}
+                  disabled={isThinking}
+                  aria-label={listening ? 'Stop voice input' : 'Start voice input'}
+                  aria-pressed={listening}
+                  title={listening ? 'Stop dictation' : 'Speak to type'}
+                >
+                  {listening ? <MicOff size={18} /> : <Mic size={18} />}
+                </button>
+                <button
+                  type="button"
+                  className="composer-mic-options"
+                  aria-label="Voice input options"
+                  aria-expanded={micOptionsOpen}
+                  onClick={() => setMicOptionsOpen((open) => !open)}
+                  title="Voice options"
+                ><ChevronDown size={13} /></button>
+                {micOptionsOpen && (
+                  <div className="composer-voice-popover" role="status">
+                    <strong>Voice typing</strong>
+                    <span>Uses your browser language ({navigator.language || 'auto'}).</span>
+                    <span>Click the microphone to start or stop.</span>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
+      {speechError && <div className="composer-speech-error" role="status">{speechError}</div>}
       {isHome && suggestions.length > 0 && (
         <div className="composer-suggestions home-question-suggestion">
           {suggestions.map((suggestion) => {

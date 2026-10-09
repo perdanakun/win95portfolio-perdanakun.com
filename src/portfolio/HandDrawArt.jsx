@@ -289,7 +289,6 @@ export function InteractiveHandDrawArt({ dark = false, onAsk, onNavigate }) {
           )
         })}
       </svg>
-
     </div>
   )
 }
