@@ -41,7 +41,6 @@
 @font-face { font-family: "Neue Montreal"; src: url("/fonts/NeueMontreal-Medium.ttf") format("truetype"); font-weight: 500 600; font-style: normal; font-display: swap; }
 @font-face { font-family: "Neue Montreal"; src: url("/fonts/NeueMontreal-Bold.ttf") format("truetype"); font-weight: 700 900; font-style: normal; font-display: swap; }
 @font-face { font-family: "Neue Montreal"; src: url("/fonts/NeueMontreal-Italic.ttf") format("truetype"); font-weight: 400; font-style: italic; font-display: swap; }
-
 .portfolio-v2 {
   --bg: #ffffff;
   --sidebar: #ffffff;
@@ -90,6 +89,8 @@
   --accent-soft: rgba(255, 255, 255, 0.10);
   color-scheme: dark;
 }
+
+aku mau ubah color paltet dark and lightnya seperti di gambar ini.. gunakan penyeruaian untuntuk warna turutyananya ya...
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
@@ -4139,3 +4140,818 @@
   .work-secondary-copy h2, .markdown-heading
 ) { font-family: var(--font-display); }
 .portfolio-v2 :is(button, input, textarea, select) { font-family: var(--font-ui); }
+
+/* =====================================================
+   FLOATING BOTTOM DOCK — isolated overrides
+   Existing composer, page transitions, and content untouched.
+===================================================== */
+.portfolio-v2 .portfolio-workspace,
+.portfolio-v2.sidebar-visible .portfolio-workspace {
+  inset: 0;
+  left: 0;
+  width: 100%;
+  transform: none;
+}
+.portfolio-v2 .portfolio-top-controls,
+.portfolio-v2.sidebar-visible .portfolio-top-controls {
+  left: 0;
+  right: 0;
+}
+.portfolio-v2 .portfolio-bottom-dock,
+.portfolio-v2 .portfolio-bottom-dock.is-open {
+  position: absolute;
+  inset: auto auto 18px 50%;
+  z-index: 60;
+  width: max-content;
+  max-width: calc(100vw - 24px);
+  height: auto;
+  padding: 6px;
+  overflow: visible;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--sidebar);
+  box-shadow: 0 12px 38px rgba(0,0,0,.12);
+  transform: translateX(-50%);
+  animation: dock-enter 650ms cubic-bezier(.16,1,.3,1) both;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+  will-change: auto;
+}
+@keyframes dock-enter {
+  from { opacity: 0; transform: translate(-50%, 30px) scale(.92); filter: blur(5px); }
+  to { opacity: 1; transform: translate(-50%, 0) scale(1); filter: blur(0); }
+}
+.portfolio-bottom-dock .dock-bar {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.portfolio-bottom-dock .sidebar-navigation {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin: 0;
+}
+.portfolio-bottom-dock .sidebar-nav-button,
+.portfolio-bottom-dock .dock-home,
+.portfolio-bottom-dock .dock-more {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 44px;
+  min-height: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--secondary);
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease, transform 220ms cubic-bezier(.2,1.5,.4,1);
+}
+.portfolio-bottom-dock .sidebar-nav-button > span {
+  display: none;
+}
+.portfolio-bottom-dock .sidebar-nav-button:hover,
+.portfolio-bottom-dock .dock-home:hover,
+.portfolio-bottom-dock .dock-more:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+  transform: translateY(-3px);
+}
+.portfolio-bottom-dock .sidebar-nav-button.active,
+.portfolio-bottom-dock .dock-home.active,
+.portfolio-bottom-dock .dock-more.active {
+  background: var(--surface);
+  color: var(--text);
+}
+.portfolio-bottom-dock .dock-home img {
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 9px;
+}
+.portfolio-bottom-dock .dock-divider {
+  height: 24px;
+  width: 1px;
+  margin: 0 5px;
+  background: var(--border);
+}
+.portfolio-bottom-dock .dock-tray {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: min(300px, calc(100vw - 24px));
+  max-height: min(65vh, 490px);
+  padding: 16px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--sidebar);
+  box-shadow: 0 18px 45px rgba(0,0,0,.13);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(12px) scale(.97);
+  transform-origin: bottom right;
+  transition: opacity 200ms ease, transform 260ms cubic-bezier(.16,1,.3,1), visibility 200ms;
+}
+.portfolio-bottom-dock.is-open .dock-tray {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+.portfolio-bottom-dock .dock-tray-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.portfolio-bottom-dock .dock-tray-heading button {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--secondary);
+  cursor: pointer;
+}
+.portfolio-bottom-dock .sidebar-history,
+.portfolio-bottom-dock.is-open .sidebar-history {
+  display: flex;
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: 240px;
+  margin-top: 0;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: none;
+}
+.portfolio-bottom-dock .sidebar-secondary {
+  display: grid;
+  gap: 3px;
+}
+.portfolio-bottom-dock .sidebar-link-main,
+.portfolio-bottom-dock .sidebar-link-label,
+.portfolio-bottom-dock .sidebar-link-arrow {
+  opacity: 1;
+  visibility: visible;
+}
+.portfolio-bottom-dock .sidebar-link-label { display: inline; }
+.portfolio-v2 .dock-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 55;
+  display: block;
+  background: transparent;
+}
+@media (max-width: 760px) {
+  .portfolio-v2 .portfolio-bottom-dock,
+  .portfolio-v2 .portfolio-bottom-dock.is-open {
+    inset: auto auto max(12px, env(safe-area-inset-bottom)) 50%;
+    width: max-content;
+    max-width: calc(100vw - 20px);
+    padding: 5px;
+    border-right: 1px solid var(--border);
+  }
+  .portfolio-bottom-dock .sidebar-nav-button,
+  .portfolio-bottom-dock .dock-home,
+  .portfolio-bottom-dock .dock-more {
+    width: clamp(38px, 10vw, 44px);
+    height: 42px;
+    min-height: 42px;
+  }
+  .portfolio-bottom-dock .dock-divider { margin: 0 2px; }
+  .portfolio-bottom-dock .dock-tray { right: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-v2 .portfolio-bottom-dock { animation: none; }
+  .portfolio-bottom-dock .dock-tray,
+  .portfolio-bottom-dock .sidebar-nav-button,
+  .portfolio-bottom-dock .dock-home,
+  .portfolio-bottom-dock .dock-more { transition: none; }
+}
+
+
+/* =====================================================
+   CONTEXT-AWARE DOCK: Home bottom -> Pages left center
+   This block overrides only the floating dock.
+===================================================== */
+.portfolio-v2 .portfolio-bottom-dock,
+.portfolio-v2 .portfolio-bottom-dock.is-open {
+  /* Animate the same element rather than remounting it. */
+  inset: auto;
+  left: 50%;
+  top: calc(100% - 18px);
+  right: auto;
+  bottom: auto;
+  width: max-content;
+  height: 56px;
+  max-width: calc(100vw - 20px);
+  padding: 5px;
+  transform: translate(-50%, -100%);
+  animation: none;
+  transition:
+    left 700ms cubic-bezier(.22,1,.36,1),
+    top 700ms cubic-bezier(.22,1,.36,1),
+    transform 700ms cubic-bezier(.22,1,.36,1),
+    width 580ms cubic-bezier(.22,1,.36,1),
+    height 580ms cubic-bezier(.22,1,.36,1),
+    border-radius 450ms ease,
+    box-shadow 200ms ease;
+}
+.portfolio-v2 .portfolio-bottom-dock.dock-vertical,
+.portfolio-v2 .portfolio-bottom-dock.dock-vertical.is-open {
+  left: 18px;
+  top: 50%;
+  width: 56px;
+  height: max-content;
+  max-height: calc(100dvh - 40px);
+  transform: translate(0, -50%);
+  border-radius: 18px;
+}
+.portfolio-bottom-dock.dock-vertical .dock-bar,
+.portfolio-bottom-dock.dock-vertical .sidebar-navigation {
+  flex-direction: column;
+}
+.portfolio-bottom-dock.dock-vertical .dock-divider {
+  height: 1px;
+  width: 24px;
+  margin: 5px 0;
+}
+.portfolio-bottom-dock.dock-vertical .dock-tray {
+  bottom: auto;
+  top: 50%;
+  right: auto;
+  left: calc(100% + 12px);
+  transform: translate(-10px, -50%) scale(.97);
+  transform-origin: center left;
+}
+.portfolio-bottom-dock.dock-vertical.is-open .dock-tray {
+  transform: translate(0, -50%) scale(1);
+}
+/* The existing workspace remains full width; the dock overlays its left edge. */
+@media (max-width: 760px) {
+  .portfolio-v2 .portfolio-bottom-dock.dock-horizontal,
+  .portfolio-v2 .portfolio-bottom-dock.dock-horizontal.is-open {
+    inset: auto;
+    left: 50%;
+    top: calc(100% - max(12px, env(safe-area-inset-bottom)));
+    transform: translate(-50%, -100%);
+    width: max-content;
+    height: 52px;
+  }
+  .portfolio-v2 .portfolio-bottom-dock.dock-vertical,
+  .portfolio-v2 .portfolio-bottom-dock.dock-vertical.is-open {
+    inset: auto;
+    left: 8px;
+    top: 50%;
+    transform: translate(0, -50%);
+    width: 48px;
+    height: max-content;
+    max-width: 48px;
+    padding: 4px;
+  }
+  .portfolio-bottom-dock.dock-vertical .sidebar-nav-button,
+  .portfolio-bottom-dock.dock-vertical .dock-home,
+  .portfolio-bottom-dock.dock-vertical .dock-more {
+    width: 38px;
+    height: 38px;
+    min-height: 38px;
+  }
+  .portfolio-bottom-dock.dock-vertical .dock-tray {
+    left: calc(100% + 8px);
+    right: auto;
+    width: min(280px, calc(100vw - 70px));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-v2 .portfolio-bottom-dock,
+  .portfolio-v2 .portfolio-bottom-dock.is-open { transition: none; }
+}
+
+/* Mobile: top-left collapsed menu, full-screen expanded navigation */
+.mobile-menu-toggle, .mobile-dock-header { display: none; }
+@media (max-width: 760px) {
+  .portfolio-v2 .mobile-menu-toggle {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--secondary);
+    cursor: pointer;
+  }
+  .portfolio-v2 .mobile-menu-toggle:hover { background: var(--surface-hover); color: var(--text); }
+  .portfolio-v2 .portfolio-bottom-dock,
+  .portfolio-v2 .portfolio-bottom-dock.dock-horizontal,
+  .portfolio-v2 .portfolio-bottom-dock.dock-vertical,
+  .portfolio-v2 .portfolio-bottom-dock.is-open,
+  .portfolio-v2 .portfolio-bottom-dock.dock-horizontal.is-open,
+  .portfolio-v2 .portfolio-bottom-dock.dock-vertical.is-open {
+    position: absolute;
+    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    padding: max(18px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+    border: 0;
+    border-radius: 0;
+    background: var(--bg);
+    box-shadow: none;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(-22px);
+    animation: none;
+    transition: opacity 260ms ease, transform 360ms cubic-bezier(.22,1,.36,1), visibility 260ms;
+    z-index: 90;
+  }
+  .portfolio-v2 .portfolio-bottom-dock.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(0);
+  }
+  .portfolio-bottom-dock .mobile-dock-header {
+    display: flex;
+    order: -2;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .portfolio-bottom-dock .mobile-dock-header button {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .portfolio-bottom-dock .dock-bar,
+  .portfolio-bottom-dock.dock-vertical .dock-bar {
+    display: flex;
+    order: -1;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    width: 100%;
+  }
+  .portfolio-bottom-dock .sidebar-navigation,
+  .portfolio-bottom-dock.dock-vertical .sidebar-navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    width: 100%;
+  }
+  .portfolio-bottom-dock .dock-home,
+  .portfolio-bottom-dock .sidebar-nav-button,
+  .portfolio-bottom-dock.dock-vertical .sidebar-nav-button {
+    display: flex;
+    justify-content: flex-start;
+    gap: 14px;
+    width: 100%;
+    height: 50px;
+    min-height: 50px;
+    padding: 0 14px;
+    border-radius: 12px;
+    text-align: left;
+  }
+  .portfolio-bottom-dock .sidebar-nav-button > span { display: inline; }
+  .portfolio-bottom-dock .dock-home::after { content: 'Home / New chat'; font-size: 14px; }
+  .portfolio-bottom-dock .dock-divider { display: none; }
+  .portfolio-bottom-dock .dock-more { display: none; }
+  .portfolio-bottom-dock .dock-tray,
+  .portfolio-bottom-dock.dock-vertical .dock-tray,
+  .portfolio-bottom-dock.is-open .dock-tray,
+  .portfolio-bottom-dock.dock-vertical.is-open .dock-tray {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+    order: 0;
+    width: 100%;
+    max-width: none;
+    max-height: none;
+    margin-top: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: none;
+    transition: none;
+  }
+  .portfolio-bottom-dock .dock-tray-heading { display: none; }
+  .portfolio-bottom-dock .sidebar-history,
+  .portfolio-bottom-dock.is-open .sidebar-history {
+    display: flex;
+    flex: 1 0 auto;
+    max-height: none;
+  }
+  .portfolio-bottom-dock .sidebar-secondary { margin-top: 18px; }
+  .portfolio-v2 .dock-backdrop { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-v2 .portfolio-bottom-dock { transition: none; }
+}
+/* =====================================================
+   MOBILE INTERACTION + HOME COMPOSITION (FINAL OVERRIDES)
+   Keep this block last to win over legacy dock rules.
+===================================================== */
+@media (max-width: 760px) {
+  /* Navigation must sit above the workspace, not inside its hit area. */
+  .portfolio-v2 .portfolio-top-controls {
+    z-index: 110;
+    pointer-events: none;
+  }
+  .portfolio-v2 .top-left-controls,
+  .portfolio-v2 .top-right-controls,
+  .portfolio-v2 .mobile-menu-toggle,
+  .portfolio-v2 .mode-switch {
+    pointer-events: auto;
+  }
+  .portfolio-v2 .mobile-menu-toggle {
+    position: relative;
+    z-index: 111;
+    touch-action: manipulation;
+  }
+  .portfolio-v2.sidebar-visible .portfolio-top-controls {
+    z-index: 40;
+  }
+  .portfolio-v2 .portfolio-bottom-dock.is-open {
+    z-index: 120;
+    pointer-events: auto;
+  }
+  .portfolio-v2 .portfolio-bottom-dock.is-open button,
+  .portfolio-v2 .portfolio-bottom-dock.is-open a {
+    pointer-events: auto;
+    touch-action: manipulation;
+  }
+  .portfolio-v2 .workspace-scroll {
+    scrollbar-gutter: auto;
+  }
+
+  /* Home: headline near the top, suggestions then composer at bottom. */
+  .portfolio-v2 .home-view.home-view--ai {
+    min-height: 100%;
+    height: 100%;
+    padding: 88px 18px max(24px, env(safe-area-inset-bottom));
+    align-items: stretch;
+    justify-content: stretch;
+  }
+  .portfolio-v2 .home-content.home-content--ai {
+    width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .portfolio-v2 .home-view--chat-ready .home-ai-greeting {
+    order: 0;
+    max-height: none;
+    margin: 0 !important;
+    text-align: left;
+    font-size: clamp(23px, 6vw, 30px) !important;
+  }
+  .portfolio-v2 .home-art-stage {
+    order: 1;
+    flex: 0 1 auto;
+  }
+  .portfolio-v2 .home-view--chat-ready .home-art-stage {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+  .portfolio-v2 .home-content--ai .home-composer-area,
+  .portfolio-v2 .home-view--chat-ready .home-composer-area {
+    order: 2;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
+    margin: auto 0 0;
+  }
+  .portfolio-v2 .home-composer-area .home-question-suggestion {
+    order: -1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 7px;
+    width: 100%;
+    margin: 0;
+    overflow: visible;
+  }
+  .portfolio-v2 .home-question-suggestion button {
+    max-width: 100%;
+    white-space: normal;
+    text-align: left;
+    font-size: 12px;
+  }
+  .portfolio-v2 .home-composer-area .composer-shell--claude,
+  .portfolio-v2 .home-view--chat-ready .home-composer-area .composer-shell--claude {
+    min-height: 105px;
+  }
+}
+
+/* =======================================================
+   MOBILE NAVIGATION — independently mounted from desktop dock
+   Avoids legacy .portfolio-bottom-dock hit testing / transforms.
+======================================================= */
+.mobile-navigation-panel { display: none; }
+@media (min-width: 761px) {
+  .portfolio-v2 .mobile-menu-toggle { display: none !important; }
+}
+@media (max-width: 760px) {
+  .portfolio-v2 .portfolio-bottom-dock,
+  .portfolio-v2 .portfolio-bottom-dock.is-open,
+  .portfolio-v2 .portfolio-bottom-dock.dock-horizontal,
+  .portfolio-v2 .portfolio-bottom-dock.dock-horizontal.is-open,
+  .portfolio-v2 .portfolio-bottom-dock.dock-vertical,
+  .portfolio-v2 .portfolio-bottom-dock.dock-vertical.is-open {
+    display: none !important;
+  }
+  .portfolio-v2 .portfolio-top-controls,
+  .portfolio-v2.sidebar-visible .portfolio-top-controls {
+    position: absolute;
+    inset: 0 0 auto 0;
+    z-index: 400;
+    height: 62px;
+    min-height: 62px;
+    padding: 10px 12px;
+    pointer-events: none;
+    background: transparent;
+  }
+  .portfolio-v2 .mobile-menu-toggle,
+  .portfolio-v2 .top-theme-toggle,
+  .portfolio-v2 .mode-switch {
+    pointer-events: auto !important;
+    touch-action: manipulation;
+  }
+  .portfolio-v2 .mobile-menu-toggle {
+    position: relative;
+    z-index: 405;
+    display: grid !important;
+    place-items: center;
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 0;
+    border-radius: 9px;
+    background: var(--bg);
+    color: var(--text);
+    cursor: pointer;
+  }
+  .portfolio-v2 .mobile-navigation-panel {
+    position: absolute;
+    inset: 0;
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: max(16px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom));
+    background: var(--bg);
+    color: var(--text);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(-12px);
+    transition: opacity 200ms ease, transform 280ms cubic-bezier(.22,1,.36,1), visibility 200ms;
+  }
+  .portfolio-v2 .mobile-navigation-panel.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(0);
+  }
+  .mobile-navigation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 40px;
+    margin-bottom: 24px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .mobile-navigation-header button,
+  .mobile-navigation-section-title button {
+    border: 0;
+    background: transparent;
+    color: var(--secondary);
+    cursor: pointer;
+    padding: 8px;
+    touch-action: manipulation;
+  }
+  .mobile-navigation-links { display: grid; gap: 4px; }
+  .mobile-navigation-links button {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    min-height: 49px;
+    border: 0;
+    border-radius: 10px;
+    padding: 0 13px;
+    background: transparent;
+    color: var(--secondary);
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  .mobile-navigation-links button.active,
+  .mobile-navigation-links button:active { background: var(--surface); color: var(--text); }
+  .mobile-navigation-history { margin-top: 28px; min-height: 90px; flex: 1 0 auto; }
+  .mobile-navigation-section-title { display: flex; justify-content: space-between; align-items: center; color: var(--tertiary); font-size: 12px; padding: 0 10px 10px; }
+  .mobile-navigation-history-list { display: grid; gap: 3px; }
+  .mobile-navigation-empty { padding: 10px; color: var(--tertiary); font-size: 12px; }
+  .mobile-navigation-history-row { display: flex; align-items: center; min-width: 0; border-radius: 9px; }
+  .mobile-navigation-history-row button { border: 0; background: transparent; color: var(--secondary); cursor: pointer; padding: 10px; touch-action: manipulation; }
+  .mobile-navigation-history-row button:first-child { flex: 1; min-width: 0; text-align: left; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 13px; }
+  .mobile-navigation-history-row button:last-child { flex: 0 0 42px; display: grid; place-items: center; }
+  .mobile-navigation-external { display: grid; gap: 2px; margin-top: 20px; border-top: 1px solid var(--border); padding-top: 14px; }
+  .mobile-navigation-external a { display: flex; align-items: center; gap: 13px; min-height: 43px; padding: 0 12px; font-size: 13px; color: var(--secondary); }
+  .mobile-navigation-external a svg:last-child { margin-left: auto; }
+  .portfolio-v2 .dock-backdrop { display: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mobile-navigation-panel { transition: none !important; }
+}
+
+
+/* Mobile navigation refinement: sliding drawer, avatar brand and two prompts */
+@media (max-width: 760px) {
+  .portfolio-v2 .mobile-navigation-panel {
+    opacity: 1;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate3d(-100%, 0, 0);
+    transition: transform 420ms cubic-bezier(.22,1,.36,1), visibility 0s linear 420ms;
+    will-change: transform;
+  }
+  .portfolio-v2 .mobile-navigation-panel.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate3d(0, 0, 0);
+    transition: transform 420ms cubic-bezier(.22,1,.36,1), visibility 0s;
+  }
+  .portfolio-v2 .mobile-navigation-header .mobile-navigation-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    padding: 0;
+    color: var(--text);
+    font: inherit;
+    font-weight: 600;
+    min-height: 42px;
+  }
+  .portfolio-v2 .mobile-navigation-brand img {
+    width: 34px;
+    height: 34px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  .portfolio-v2 .home-question-suggestion > :nth-child(n+3) {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-v2 .mobile-navigation-panel,
+  .portfolio-v2 .mobile-navigation-panel.is-open { transition: none !important; }
+}
+
+
+/* =====================================================
+   REFINEMENT: protected mobile header + desktop snake-path dock
+   Separate mobile overlay remains the only mobile navigation.
+===================================================== */
+@media (max-width: 760px) {
+  /* Fade from transparent into a solid surface so scrolled text
+     never shows through behind the top control row. */
+  .portfolio-v2 .portfolio-top-controls,
+  .portfolio-v2.sidebar-visible .portfolio-top-controls {
+    background: var(--bg);
+    height: 62px;
+    min-height: 62px;
+    padding-top: max(10px, env(safe-area-inset-top));
+    z-index: 400;
+  }
+  .portfolio-v2 .mobile-navigation-panel .mobile-navigation-header {
+    flex: 0 0 auto;
+    margin-bottom: 24px;
+  }
+  .portfolio-v2 .mobile-navigation-panel .mobile-navigation-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    min-height: 44px;
+    padding: 0;
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    text-align: left;
+    border: 0;
+    background: transparent;
+    touch-action: manipulation;
+  }
+  .portfolio-v2 .mobile-navigation-panel .mobile-navigation-brand img {
+    display: block;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+}
+@media (min-width: 761px) {
+  /* Each leg animates independently. The dock travels horizontally
+     to the lower-left corner before climbing to vertical center. */
+  .portfolio-v2 .portfolio-bottom-dock,
+  .portfolio-v2 .portfolio-bottom-dock.is-open {
+    transition:
+      left 450ms cubic-bezier(.65,0,.35,1),
+      top 450ms cubic-bezier(.65,0,.35,1),
+      transform 450ms cubic-bezier(.65,0,.35,1),
+      border-radius 360ms ease,
+      box-shadow 200ms ease;
+  }
+  .portfolio-v2 .portfolio-bottom-dock.dock-corner,
+  .portfolio-v2 .portfolio-bottom-dock.dock-corner.is-open {
+    left: 18px;
+    top: calc(100% - 18px);
+    width: max-content;
+    height: 56px;
+    transform: translate(0, -100%);
+    border-radius: 18px;
+  }
+  .portfolio-v2 .portfolio-bottom-dock.dock-bottom,
+  .portfolio-v2 .portfolio-bottom-dock.dock-bottom.is-open {
+    left: 50%;
+    top: calc(100% - 18px);
+    width: max-content;
+    height: 56px;
+    transform: translate(-50%, -100%);
+  }
+  .portfolio-v2 .portfolio-bottom-dock.dock-side,
+  .portfolio-v2 .portfolio-bottom-dock.dock-side.is-open {
+    left: 18px;
+    top: 50%;
+    width: 56px;
+    height: max-content;
+    transform: translate(0, -50%);
+    border-radius: 18px;
+  }
+  /* Reflow the buttons after reaching the left rail. */
+  .portfolio-v2 .portfolio-bottom-dock .dock-bar,
+  .portfolio-v2 .portfolio-bottom-dock .sidebar-navigation {
+    transition: gap 350ms cubic-bezier(.22,1,.36,1);
+  }
+  .portfolio-v2 .portfolio-bottom-dock .sidebar-nav-button,
+  .portfolio-v2 .portfolio-bottom-dock .dock-home,
+  .portfolio-v2 .portfolio-bottom-dock .dock-more {
+    transition: transform 330ms cubic-bezier(.22,1,.36,1),
+      background 180ms ease, color 180ms ease;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-v2 .portfolio-bottom-dock { transition: none !important; }
+}

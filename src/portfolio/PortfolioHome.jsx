@@ -894,6 +894,22 @@ export default function PortfolioHome() {
   const [activeThreadId, setActiveThreadId] = useState(null)
   // Hidden by default, like ChatGPT's collapsed sidebar state.
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  // Desktop dock takes a two-leg route: bottom -> bottom-left -> left-center.
+  const [dockStage, setDockStage] = useState(() =>
+    getPortfolioRoute().view === 'home' ? 'bottom' : 'side'
+  )
+  const previousDockHome = useRef(activeView === 'home')
+  useEffect(() => {
+    const nextHome = activeView === 'home'
+    if (previousDockHome.current === nextHome) return undefined
+    previousDockHome.current = nextHome
+    setSidebarOpen(false)
+    setDockStage('corner')
+    const timer = window.setTimeout(() => {
+      setDockStage(nextHome ? 'bottom' : 'side')
+    }, 450)
+    return () => window.clearTimeout(timer)
+  }, [activeView === 'home'])
   const [dark, setDark] = useState(() => {
     const saved = window.localStorage.getItem('perdana-theme')
     if (saved) {
@@ -1461,22 +1477,9 @@ const handleKeyDown = (event) => {
       {introVisible && activeView === 'home' && (
         <HandDrawIntro dark={dark} onFinish={finishHandDrawIntro} />
       )}
-      {/* =================================================
-          SIDEBAR OPEN BUTTON
-          Only visible while sidebar is hidden.
-      ================================================= */}
       <div className="portfolio-top-controls">
         <div className="top-left-controls">
-          <button
-            className="sidebar-open-button"
-            type="button"
-            onClick={() => setSidebarOpen((current) => !current)}
-            aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={sidebarOpen}
-            title={sidebarOpen ? 'Close menu' : 'Menu'}
-          >
-            {sidebarOpen ? <X size={18} /> : <Menu size={19} />}
-          </button>
+          <button type="button" className="mobile-menu-toggle" onClick={() => setSidebarOpen((open) => !open)} aria-label="Open navigation menu" aria-expanded={sidebarOpen} aria-controls="mobile-navigation-panel"><Menu size={19} /></button>
         </div>
         <ModeSwitch active="chat" />
         <div className="top-right-controls">
@@ -1491,93 +1494,28 @@ const handleKeyDown = (event) => {
           </button>
         </div>
       </div>
-      {/* =================================================
-          MOBILE / OVERLAY BACKDROP
-      ================================================= */}
+
       {sidebarOpen && (
         <button
-          className="sidebar-backdrop"
+          className="sidebar-backdrop dock-backdrop"
           type="button"
           onClick={() => setSidebarOpen(false)}
-          aria-label="Close sidebar"
+          aria-label="Close dock menu"
         />
       )}
-      {/* =================================================
-          SIDEBAR
-      ================================================= */}
+
       <aside
-        className={`portfolio-sidebar ${
-          sidebarOpen ? 'is-open' : ''
-        }`}
+        id="mobile-portfolio-navigation"
+        className={`portfolio-sidebar portfolio-bottom-dock dock-${dockStage} ${dockStage === 'side' ? 'dock-vertical' : 'dock-horizontal'} ${sidebarOpen ? 'is-open' : ''}`}
         aria-label="Portfolio navigation"
       >
-        <div className="sidebar-header">
-          <button
-            type="button"
-            className={`sidebar-identity ${activeView === 'home' ? 'active' : ''}`}
-            onClick={() => {
-              if (sidebarOpen) {
-                newChat()
-              } else {
-                setSidebarOpen(true)
-              }
-            }}
-            aria-label={sidebarOpen ? 'Go to home' : 'Open sidebar'}
-            aria-expanded={sidebarOpen}
-            title={sidebarOpen ? 'Perdana' : 'Open sidebar'}
-          >
-            <span className="sidebar-avatar-wrap" aria-hidden="true">
-              <span className="sidebar-avatar">
-                <img src="/profile/perdanakun.png" alt="" />
-              </span>
-              <span className="sidebar-open-icon">
-                <PanelLeftOpen size={18} />
-              </span>
-            </span>
-            <span className="sidebar-name">Perdana</span>
-          </button>
-          {sidebarOpen && (
-            <button
-              type="button"
-              className="sidebar-collapse-button"
-              onClick={() => setSidebarOpen(false)}
-              aria-label="Collapse sidebar"
-              title="Collapse sidebar"
-            >
-              <PanelLeftClose size={18} />
+        <div className="dock-tray" >
+          <div className="dock-tray-heading">
+            <span>More</span>
+            <button type="button" onClick={() => setSidebarOpen(false)} aria-label="Close menu">
+              <X size={17} />
             </button>
-          )}
-        </div>
-        <nav className="sidebar-navigation">
-          <SidebarButton
-            active={activeView === 'work' || activeView === 'project'}
-            icon={<Folder size={18} />}
-            label="Projects"
-            onClick={() => navigateTo('work')}
-          />
-          <SidebarButton
-            active={activeView === 'gallery'}
-            icon={<Images size={18} />}
-            label="Gallery"
-            onClick={() => navigateTo('gallery')}
-          />
-          <SidebarButton
-            active={activeView === 'writing'}
-            icon={<FileText size={18} />}
-            label="Writing"
-            onClick={() => navigateTo('writing')}
-          />
-          <SidebarButton
-            active={activeView === 'about'}
-            icon={<UserRound size={18} />}
-            label="About"
-            onClick={() => navigateTo('about')}
-          />
-        </nav>
-        {/* =================================================
-            CHAT HISTORY
-            Appears automatically after the first prompt.
-        ================================================= */}
+          </div>
         <div className="sidebar-history">
           <div className="sidebar-history-heading">
             <span className="sidebar-label">Chats</span>
@@ -1609,7 +1547,7 @@ const handleKeyDown = (event) => {
                   <button
                     type="button"
                     className="history-item"
-                    onClick={() => openThread(thread.id)}
+                    onClick={() => { openThread(thread.id); setSidebarOpen(false) }}
                     title={thread.title}
                   >
                     {thread.title}
@@ -1678,6 +1616,101 @@ const handleKeyDown = (event) => {
             </span>
             <ArrowUpRight size={12} className="sidebar-link-arrow" />
           </a>
+        </div>
+        </div>
+        <div className="dock-bar">
+          <button
+            type="button"
+            className={`dock-home ${activeView === 'home' ? 'active' : ''}`}
+            onClick={() => { newChat(); setSidebarOpen(false) }}
+            aria-label="Home / New chat"
+            title="Home / New chat"
+          >
+            <img src="/profile/perdanakun.png" alt="" />
+          </button>
+          <span className="dock-divider" aria-hidden="true" />
+        <nav className="sidebar-navigation">
+          <SidebarButton
+            active={activeView === 'work' || activeView === 'project'}
+            icon={<Folder size={18} />}
+            label="Projects"
+            onClick={() => { navigateTo('work'); setSidebarOpen(false) }}
+          />
+          <SidebarButton
+            active={activeView === 'gallery'}
+            icon={<Images size={18} />}
+            label="Gallery"
+            onClick={() => { navigateTo('gallery'); setSidebarOpen(false) }}
+          />
+          <SidebarButton
+            active={activeView === 'writing'}
+            icon={<FileText size={18} />}
+            label="Writing"
+            onClick={() => { navigateTo('writing'); setSidebarOpen(false) }}
+          />
+          <SidebarButton
+            active={activeView === 'about'}
+            icon={<UserRound size={18} />}
+            label="About"
+            onClick={() => { navigateTo('about'); setSidebarOpen(false) }}
+          />
+        </nav>
+          <span className="dock-divider" aria-hidden="true" />
+          <button
+            type="button"
+            className={`dock-more ${sidebarOpen ? 'active' : ''}`}
+            onClick={() => setSidebarOpen(current => !current)}
+            aria-label={sidebarOpen ? 'Close menu' : 'More and chat history'}
+            aria-expanded={sidebarOpen}
+            title="More and chat history"
+          >
+            {sidebarOpen ? <X size={19} /> : <Menu size={19} />}
+          </button>
+        </div>
+      </aside>
+      {/* Mobile navigation is deliberately separate from the desktop dock. */}
+      <aside
+        id="mobile-navigation-panel"
+        className={`mobile-navigation-panel ${sidebarOpen ? 'is-open' : ''}`}
+        aria-label="Mobile portfolio navigation"
+        aria-hidden={!sidebarOpen}
+        inert={!sidebarOpen}
+      >
+        <div className="mobile-navigation-header">
+          <button type="button" className="mobile-navigation-brand" onClick={() => { newChat(); setSidebarOpen(false) }} aria-label="Perdana — go to home">
+            <img src="/profile/perdanakun.png" alt="" />
+            <span>Perdana</span>
+          </button>
+          <button type="button" onClick={() => setSidebarOpen(false)} aria-label="Close navigation">
+            <X size={21} />
+          </button>
+        </div>
+        <nav className="mobile-navigation-links" aria-label="Pages">
+          <button type="button" className={activeView === 'home' ? 'active' : ''} onClick={newChat}><Plus size={19} /><span>New chat</span></button>
+          <button type="button" className={activeView === 'work' || activeView === 'project' ? 'active' : ''} onClick={() => navigateTo('work')}><Folder size={19} /><span>Projects</span></button>
+          <button type="button" className={activeView === 'gallery' ? 'active' : ''} onClick={() => navigateTo('gallery')}><Images size={19} /><span>Gallery</span></button>
+          <button type="button" className={activeView === 'writing' ? 'active' : ''} onClick={() => navigateTo('writing')}><FileText size={19} /><span>Writing</span></button>
+          <button type="button" className={activeView === 'about' ? 'active' : ''} onClick={() => navigateTo('about')}><UserRound size={19} /><span>About</span></button>
+        </nav>
+        <section className="mobile-navigation-history" aria-label="Chat history">
+          <div className="mobile-navigation-section-title">
+            <span>Chats</span>
+            {threads.length > 0 && <button type="button" onClick={() => { clearAllChats(); setSidebarOpen(false) }}>Clear all</button>}
+          </div>
+          <div className="mobile-navigation-history-list">
+            {threads.length === 0 ? <span className="mobile-navigation-empty">No chats yet</span> : threads.map((thread) => (
+              <div className="mobile-navigation-history-row" key={thread.id}>
+                <button type="button" onClick={() => openThread(thread.id)}>{thread.title}</button>
+                <button type="button" onClick={() => deleteThread(thread.id)} aria-label={`Delete chat: ${thread.title}`}><Trash2 size={15} /></button>
+              </div>
+            ))}
+          </div>
+        </section>
+        <div className="mobile-navigation-external" aria-label="Other links">
+          <a href="/computer"><Monitor size={18} />Perdana&apos;s Computer <ArrowUpRight size={14} /></a>
+          <a href="https://linkedin.com/in/perdanakun/" target="_blank" rel="noreferrer"><BriefcaseBusiness size={18} />LinkedIn <ArrowUpRight size={14} /></a>
+          <a href="https://github.com/perdanakun" target="_blank" rel="noreferrer"><Code2 size={18} />GitHub <ArrowUpRight size={14} /></a>
+          <a href="https://www.instagram.com/perdanakun/" target="_blank" rel="noreferrer"><Camera size={18} />Instagram <ArrowUpRight size={14} /></a>
         </div>
       </aside>
       {/* =================================================
@@ -1941,7 +1974,7 @@ function HomeView({
         >
           <InteractiveHandDrawArt dark={dark} onAsk={onAsk} onNavigate={onNavigate} />
         </div>
-        <h1 className="home-ai-greeting"><CursorEyes /><span>{greeting.replace(/[!.]+$/, '')}, curious human.</span></h1>
+        <h1 className="home-ai-greeting"><CursorEyes /><span>{greeting.replace(/[!.]+$/, '')}, It's Perdana</span></h1>
         <ChatComposer
           variant="home"
           input={input}
@@ -2986,7 +3019,7 @@ function WorkView({ onOpenProject, insight }) {
 
       <section className="projects-current-section">
         <div className="projects-section-heading">
-          <p>CURRENT WORK</p>
+          <p>CURRENT EXPLORATIONS</p>
         </div>
 
         <div className="project-grid">

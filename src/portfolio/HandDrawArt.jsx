@@ -144,9 +144,6 @@ export function HandDrawIntro({ onFinish, dark = false }) {
       <div ref={illustrationRef} className="handdraw-intro__illustration" aria-hidden="true">
         {ready && <HandDrawArt dark={dark} playing />}
       </div>
-      <button type="button" className="handdraw-intro__skip" onClick={onFinish}>
-        Skip intro <span aria-hidden="true">↗</span>
-      </button>
     </div>
   )
 }
