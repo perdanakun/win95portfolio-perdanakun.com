@@ -1,0 +1,302 @@
+.gallery-museum {
+  position: relative;
+  height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: var(--bg, #ffffff);
+  color: var(--text, #171717);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: var(--font-body, 14px);
+  isolation: isolate;
+}
+.gallery-museum button { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; cursor: pointer; }
+.gallery-museum button:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+
+/* Entrance is deliberately cinematic regardless of portfolio theme. */
+.museum-entrance { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; color: #ece6da; background: #15120f; }
+.museum-entrance-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: museum-settle 2s cubic-bezier(.22,1,.36,1) both; }
+.museum-entrance::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,12,10,.55), rgba(14,12,10,.15) 40%, rgba(14,12,10,.72)); }
+.museum-entrance-copy { position: relative; z-index: 1; display: grid; justify-items: center; gap: 14px; padding: 24px; }
+.museum-entrance-copy p { margin: 0; font-size: 10px; letter-spacing: .3em; color: #e2cfa9; }
+.museum-entrance-copy h1 { margin: 0; font-family: "Michelangelus", Georgia, serif; font-weight: 400; font-size: clamp(40px,6vw,84px); line-height: 1.02; }
+.museum-enter { margin-top: 22px; padding: 14px 26px; border: 1px solid rgba(255,255,255,.55); border-radius: 999px; color: #ece6da; background: rgba(20,18,15,.35); backdrop-filter: blur(8px); transition: background 200ms, color 200ms; }
+.museum-enter:hover:not(:disabled) { background: #ece6da; color: #161513; }
+.gallery-museum.is-leaving .museum-entrance { animation: museum-push 900ms cubic-bezier(.6,0,.4,1) forwards; }
+
+/* Infinite 2D canvas: no scrollbar and no clamping. */
+.museum-stage { position: absolute; inset: 0; overflow: hidden; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; }
+.museum-stage.is-dragging { cursor: grabbing; }
+.archive-world { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform: translate3d(-50%,-50%,0); }
+.archive-tile { position: absolute; pointer-events: none; }
+/* Frameless artwork: the media itself is the canvas object. */
+.archive-artwork { position: absolute; display: block; padding: 0; border: 0; background: transparent; color: inherit; text-align: left; pointer-events: auto; transition: transform 260ms cubic-bezier(.22,1,.36,1); }
+.archive-artwork:hover, .archive-artwork:focus-visible { transform: scale(1.035); z-index: 2; }
+.archive-artwork-media { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; padding: 0; margin: 0; border: 0; background: transparent; box-shadow: none; overflow: visible; }
+.archive-artwork img, .archive-artwork video { display: block; width: 100%; height: 100%; object-fit: contain; pointer-events: none; -webkit-user-drag: none; }
+.archive-artwork-meta { position: absolute; left: 0; bottom: -30px; max-width: 100%; display: flex; gap: 8px; align-items: baseline; opacity: 0; transform: translateY(-4px); transition: opacity 200ms ease, transform 200ms ease; color: var(--secondary, #666666); font-size: var(--font-meta, 10px); line-height: 1.3; white-space: nowrap; pointer-events: none; }
+.archive-artwork-meta strong { color: var(--text, #171717); font-size: var(--font-small, 11px); font-weight: 500; overflow: hidden; text-overflow: ellipsis; }
+.archive-artwork:hover .archive-artwork-meta, .archive-artwork:focus-visible .archive-artwork-meta { opacity: 1; transform: translateY(0); }
+
+.museum-hud { position: absolute; z-index: 5; top: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 72px 24px 0 96px; pointer-events: none; }
+.museum-link { border: 0; background: none; color: var(--text, #171717); font-size: var(--font-nav, 11px); letter-spacing: .1em; pointer-events: auto; }
+.museum-hint { color: var(--secondary, #666666); font-size: var(--font-meta, 10px); letter-spacing: .14em; text-align: right; }
+.archive-empty { position: absolute; inset: 0; display: grid; place-items: center; padding: 20px; text-align: center; pointer-events: none; }
+
+.archive-inspector-backdrop { position: absolute; inset: 0; z-index: 10; display: grid; place-items: center; padding: 36px; background: rgba(0,0,0,.82); backdrop-filter: blur(12px); }
+.archive-inspector { position: relative; display: flex; flex-direction: column; gap: 16px; max-width: min(920px,100%); max-height: 100%; color: #f3f0eb; }
+.archive-inspector > img, .archive-inspector > video { display: block; max-width: 100%; max-height: 70dvh; object-fit: contain; }
+.archive-inspector-close { align-self: flex-end; border: 0; background: none; color: inherit; font-size: 12px; }
+.archive-inspector-caption { display: grid; gap: 6px; }
+.archive-inspector-caption span { font-size: 10px; color: #bcb5a9; text-transform: uppercase; letter-spacing: .12em; }
+.archive-inspector-caption h2 { margin: 0; font: 400 var(--font-page-title, clamp(22px,2.2vw,32px)) var(--font-display, "Michelangelus", Georgia, serif); text-transform: capitalize; }
+
+@keyframes museum-settle { from { transform: scale(1.12); } to { transform: scale(1.04); } }
+@keyframes museum-push { to { transform: scale(1.35); opacity: 0; } }
+@media (max-width: 760px) {
+  .museum-hud { padding: 84px 14px 0; }
+  .museum-hint { max-width: 160px; line-height: 1.6; }
+  .archive-inspector-backdrop { padding: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery-museum *, .gallery-museum *::before, .gallery-museum *::after { animation: none !important; transition: none !important; }
+}
+
+/* Editorial breathing room: no frames, no cropping, no artificial cards. */
+.archive-artwork { overflow: visible; }
+.archive-artwork-media { overflow: visible; }
+.archive-artwork img, .archive-artwork video { object-fit: contain; }
+.archive-artwork-meta { bottom: -34px; }
+
+
+/* Artwork time machine: light, cinematic depth tunnel made from the real gallery assets. */
+.gallery-museum.is-warp .museum-stage,
+.gallery-museum.is-reveal .museum-stage { pointer-events: none; }
+.gallery-museum.is-warp .museum-hud,
+.gallery-museum.is-reveal .museum-hud { opacity: 0; }
+.gallery-timewarp {
+  position: absolute; inset: 0; z-index: 20; overflow: hidden;
+  background: var(--bg, #ffffff); color: var(--text, #171717);
+  pointer-events: all; isolation: isolate;
+}
+.timewarp-perspective { position: absolute; inset: 0; perspective: 720px; perspective-origin: 50% 50%; }
+.timewarp-art {
+  position: absolute; top: 50%; left: 50%; width: var(--wsize);
+  aspect-ratio: 3 / 4; transform-style: preserve-3d;
+  animation: timewarp-fly 4.2s linear var(--wdelay) infinite both;
+  will-change: transform, opacity; opacity: 0;
+}
+.timewarp-art:nth-child(3n) { aspect-ratio: 4 / 3; }
+.timewarp-art:nth-child(5n) { aspect-ratio: 1 / 1; }
+.timewarp-art img, .timewarp-art video { display: block; width: 100%; height: 100%; object-fit: contain; }
+.timewarp-title {
+  position: absolute; z-index: 3; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  text-align: center; width: min(90vw, 650px); pointer-events: none;
+  animation: timewarp-title-out 5.2s ease-in-out both;
+}
+.timewarp-title span { font-size: 10px; letter-spacing: .25em; opacity: .62; }
+.timewarp-title h1 { margin: 16px 0 8px; font-family: var(--font-display, "Michelangelus", Georgia, serif); font-size: clamp(31px,5.1vw,66px); font-weight: 500; line-height: 1.05; letter-spacing: -.055em; }
+.timewarp-title p { margin: 0; font-size: 12px; letter-spacing: .06em; opacity: .56; }
+.timewarp-counter { position: absolute; z-index: 3; left: 30px; bottom: 28px; display: flex; gap: 14px; align-items: center; font-size: 10px; letter-spacing: .15em; opacity: .6; }
+.timewarp-counter span { font-size: 18px; }
+.gallery-timewarp.is-reveal { animation: timewarp-reveal .85s cubic-bezier(.2,.65,.2,1) both; }
+.gallery-timewarp.is-reveal .timewarp-title { opacity: 0; }
+@keyframes timewarp-fly {
+  0% { opacity: 0; transform: translate3d(var(--wx),var(--wy),-1000px) rotate(var(--wrotate)) scale(.22); }
+  12% { opacity: .5; }
+  60% { opacity: .8; }
+  88% { opacity: .85; }
+  100% { opacity: 0; transform: translate3d(var(--wx),var(--wy),320px) rotate(var(--wrotate)) scale(1.4); }
+}
+@keyframes timewarp-title-out { 0%,75% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%,-50%) scale(1.12); } }
+@keyframes timewarp-reveal { from { opacity: 1; transform: scale(1); filter: blur(0); } to { opacity: 0; transform: scale(1.3); filter: blur(22px); } }
+@media (max-width: 760px) {
+  .timewarp-art { width: calc(var(--wsize) * .7); }
+  .timewarp-counter { left: 18px; bottom: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery-timewarp, .gallery-timewarp * { animation: none !important; }
+  .gallery-timewarp.is-reveal { opacity: 0; }
+}
+
+/* Anchored transition: same physical size and center as the featured gallery slot. */
+.gallery-museum.is-lock .museum-stage,
+.gallery-museum.is-reveal .museum-stage { pointer-events: none; }
+.gallery-museum.is-lock .museum-hud { opacity: 0; }
+.gallery-timewarp.is-lock .timewarp-perspective,
+.gallery-timewarp.is-reveal .timewarp-perspective { animation: warp-art-dissolve 850ms ease-out both; }
+.timewarp-focus {
+  position: absolute; z-index: 4; top: 50%; left: 50%;
+  width: var(--focus-w); height: var(--focus-h);
+  transform: translate3d(-50%,-50%,0) scale(.58);
+  opacity: 0; pointer-events: none;
+  will-change: transform, opacity;
+}
+.timewarp-focus img, .timewarp-focus video {
+  display: block; width: 100%; height: 100%; object-fit: contain;
+}
+.gallery-timewarp.is-lock.is-locked .timewarp-focus,
+.gallery-timewarp.is-reveal .timewarp-focus {
+  animation: warp-focus-arrive 1150ms cubic-bezier(.2,.72,.12,1) both;
+}
+.gallery-timewarp.is-lock .timewarp-title,
+.gallery-timewarp.is-reveal .timewarp-title,
+.gallery-timewarp.is-lock .timewarp-counter,
+.gallery-timewarp.is-reveal .timewarp-counter { opacity: 0; transition: opacity 350ms ease; }
+.gallery-timewarp.is-lock .timewarp-art,
+.gallery-timewarp.is-reveal .timewarp-art { animation-play-state: paused; }
+/* Reveal the actual gallery around the stationary featured artwork. */
+.gallery-timewarp.is-reveal {
+  background: transparent;
+  animation: none;
+  pointer-events: none;
+}
+.gallery-timewarp.is-reveal .timewarp-perspective,
+.gallery-timewarp.is-reveal .timewarp-title,
+.gallery-timewarp.is-reveal .timewarp-counter { opacity: 0; }
+.gallery-timewarp.is-reveal .timewarp-focus {
+  animation: warp-focus-handoff 950ms linear both;
+}
+.gallery-timewarp.is-reveal::before {
+  content: ''; position: absolute; inset: 0; z-index: 1;
+  background: var(--bg, #ffffff);
+  animation: warp-background-handoff 950ms ease-in-out both;
+}
+.gallery-timewarp.is-reveal .timewarp-focus { z-index: 3; }
+@keyframes warp-art-dissolve { to { opacity: 0; filter: blur(10px); } }
+@keyframes warp-focus-arrive {
+  0% { opacity: 0; transform: translate3d(-50%,-50%,0) scale(.58); filter: blur(6px); }
+  35% { opacity: 1; filter: blur(0); }
+  100% { opacity: 1; transform: translate3d(-50%,-50%,0) scale(1); filter: blur(0); }
+}
+@keyframes warp-focus-handoff {
+  0%,45% { opacity: 1; transform: translate3d(-50%,-50%,0) scale(1); }
+  100% { opacity: 0; transform: translate3d(-50%,-50%,0) scale(1); }
+}
+@keyframes warp-background-handoff {
+  0% { opacity: 1; } 100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery-timewarp.is-reveal .timewarp-focus,
+  .gallery-timewarp.is-reveal::before { animation: none; opacity: 0; }
+}
+
+/* Main artwork is the anchor of the entire transition. It approaches from
+   the far depth, settles at the precise live-gallery size, then holds still. */
+.gallery-timewarp.is-warp .timewarp-focus {
+  animation: anchor-emerge 5200ms cubic-bezier(.22,.7,.18,1) both;
+}
+.gallery-timewarp.is-warp .timewarp-perspective {
+  animation: warp-surroundings-clear 5200ms ease-in-out both;
+}
+.gallery-timewarp.is-lock .timewarp-focus,
+.gallery-timewarp.is-lock.is-locked .timewarp-focus {
+  animation: none !important;
+  opacity: 1;
+  filter: none;
+  transform: translate3d(-50%,-50%,0) scale(1);
+}
+.gallery-timewarp.is-lock .timewarp-perspective,
+.gallery-timewarp.is-reveal .timewarp-perspective { opacity: 0; animation: none; }
+@keyframes anchor-emerge {
+  0%, 13% { opacity: 0; transform: translate3d(-50%,-50%,0) scale(.055); filter: blur(10px); }
+  22% { opacity: .38; transform: translate3d(-50%,-50%,0) scale(.12); filter: blur(6px); }
+  42% { opacity: .85; transform: translate3d(-50%,-50%,0) scale(.32); filter: blur(2px); }
+  70% { opacity: 1; transform: translate3d(-50%,-50%,0) scale(.76); filter: blur(0); }
+  88% { opacity: 1; transform: translate3d(-50%,-50%,0) scale(.975); filter: blur(0); }
+  100% { opacity: 1; transform: translate3d(-50%,-50%,0) scale(1); filter: blur(0); }
+}
+@keyframes warp-surroundings-clear {
+  0%, 69% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Choreographed reveal: surrounding works fly from scattered positions
+   to the SAME coordinates as the live archive, while the hero stays steady. */
+.gallery-timewarp.is-reveal { background: transparent; }
+.gallery-timewarp.is-reveal::before {
+  animation: assembled-background-fade 2200ms ease both !important;
+}
+.gallery-timewarp.is-reveal .timewarp-focus {
+  animation: steady-hero-handoff 2200ms ease both !important;
+}
+.gallery-timewarp.is-lock .timewarp-focus,
+.gallery-timewarp.is-lock.is-locked .timewarp-focus {
+  animation: none !important;
+  transform: translate3d(-50%, -50%, 0) scale(1);
+  opacity: 1;
+  filter: none;
+}
+.timewarp-assemble {
+  position: absolute; inset: 0; z-index: 2;
+  pointer-events: none; overflow: hidden;
+  opacity: 0;
+}
+.gallery-timewarp.is-lock .timewarp-assemble { opacity: 0; }
+.gallery-timewarp.is-reveal .timewarp-assemble {
+  opacity: 1;
+  animation: assemble-layer-handoff 2200ms linear both;
+}
+.timewarp-assemble-piece {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate3d(calc(-50% + var(--target-x)), calc(-50% + var(--target-y)), 0);
+  transform-origin: center center;
+  opacity: 0;
+  will-change: transform, opacity, filter;
+}
+.timewarp-assemble-piece img,
+.timewarp-assemble-piece video {
+  display: block; width: 100%; height: 100%; object-fit: contain;
+}
+.gallery-timewarp.is-reveal .timewarp-assemble-piece {
+  animation: assemble-artwork 1760ms cubic-bezier(.2,.8,.2,1) var(--piece-delay) both;
+}
+@keyframes assemble-artwork {
+  0% {
+    opacity: 0;
+    transform: translate3d(calc(-50% + var(--target-x) + var(--scatter-x)), calc(-50% + var(--target-y) + var(--scatter-y)), 0) scale(.68) rotate(var(--scatter-rotate));
+    filter: blur(8px);
+  }
+  24% { opacity: 1; filter: blur(1px); }
+  100% {
+    opacity: 1;
+    transform: translate3d(calc(-50% + var(--target-x)), calc(-50% + var(--target-y)), 0) scale(1) rotate(0deg);
+    filter: blur(0);
+  }
+}
+@keyframes assemble-layer-handoff {
+  0%, 92% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes assembled-background-fade {
+  0%, 85% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes steady-hero-handoff {
+  0%, 93% { opacity: 1; transform: translate3d(-50%,-50%,0) scale(1); }
+  100% { opacity: 0; transform: translate3d(-50%,-50%,0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery-timewarp.is-reveal .timewarp-assemble { display: none; }
+}
+/* Shared PortfolioHome typography + theme tokens. Motion/layout remain untouched. */
+.gallery-museum .timewarp-title span,
+.gallery-museum .timewarp-title p,
+.gallery-museum .timewarp-counter,
+.gallery-museum .museum-hint,
+.gallery-museum .archive-artwork-meta,
+.gallery-museum .archive-inspector-caption span {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.gallery-museum .timewarp-title span,
+.gallery-museum .timewarp-counter,
+.gallery-museum .archive-inspector-caption span { font-size: var(--font-meta, 10px); }
+.gallery-museum .timewarp-title p { font-size: var(--font-info, 12px); }
+.gallery-museum .museum-link { font-size: var(--font-link, 13px); }
+.gallery-museum .archive-inspector-close { font-size: var(--font-info, 12px); }
+.gallery-museum .archive-empty { color: var(--secondary, #666666); }
+.gallery-museum .archive-artwork-meta strong { font-weight: 500; }
+/* The anchor remains stable while the other art pieces assemble. */
+@media (prefers-reduced-motion: reduce) {
+  .gallery-timewarp.is-warp .timewarp-focus { animation: none; opacity: 1; transform: translate3d(-50%,-50%,0) scale(1); filter: none; }
+  .gallery-timewarp.is-warp .timewarp-perspective { animation: none; opacity: 0; }
+}

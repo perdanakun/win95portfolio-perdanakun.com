@@ -33,12 +33,18 @@ import {
   Trash2,
   UserRound,
   X,
+  Landmark,
+  LibraryBig,
+  FaceSlightlySmiling,
+  FolderOpen,
 } from 'lucide-react'
 import ModeSwitch from '../ModeSwitch.jsx'
 import { getAIResponse } from '../services/aiService.js'
 import HoloHealthContent from '../project/HoloHealthContent.jsx'
 import ShipfasterContent from '../project/ShipfasterContent.jsx'
 import GalleryView from './GalleryView.jsx'
+import LibraryView from './LibraryView.jsx'
+import AboutView from './AboutView.jsx'
 import resumePdf from '../assets/files/perdana_kurniawan_arta_resume.pdf'
 import './PortfolioHome.css'
 import { HandDrawIntro, InteractiveHandDrawArt } from './HandDrawArt.jsx'
@@ -895,21 +901,34 @@ export default function PortfolioHome() {
   // Hidden by default, like ChatGPT's collapsed sidebar state.
   const [sidebarOpen, setSidebarOpen] = useState(false)
   // Desktop dock takes a two-leg route: bottom -> bottom-left -> left-center.
-  const [dockStage, setDockStage] = useState(() =>
-    getPortfolioRoute().view === 'home' ? 'bottom' : 'side'
-  )
-  const previousDockHome = useRef(activeView === 'home')
-  useEffect(() => {
-    const nextHome = activeView === 'home'
-    if (previousDockHome.current === nextHome) return undefined
-    previousDockHome.current = nextHome
-    setSidebarOpen(false)
-    setDockStage('corner')
-    const timer = window.setTimeout(() => {
-      setDockStage(nextHome ? 'bottom' : 'side')
-    }, 450)
-    return () => window.clearTimeout(timer)
-  }, [activeView === 'home'])
+  
+const isBottomDockView =
+  activeView === 'home' || activeView === 'gallery'
+
+const [dockStage, setDockStage] = useState(() =>
+  ['home', 'gallery'].includes(getPortfolioRoute().view)
+    ? 'bottom'
+    : 'side'
+)
+
+const previousDockHome = useRef(isBottomDockView)
+
+useEffect(() => {
+  if (previousDockHome.current === isBottomDockView) {
+    return undefined
+  }
+
+  previousDockHome.current = isBottomDockView
+  setSidebarOpen(false)
+  setDockStage('corner')
+
+  const timer = window.setTimeout(() => {
+    setDockStage(isBottomDockView ? 'bottom' : 'side')
+  }, 450)
+
+  return () => window.clearTimeout(timer)
+}, [isBottomDockView])
+
   const [dark, setDark] = useState(() => {
     const saved = window.localStorage.getItem('perdana-theme')
     if (saved) {
@@ -1470,14 +1489,14 @@ const handleKeyDown = (event) => {
   ===================================================== */
     return (
       <div
-        className={`portfolio-v2 page-content ${dark ? 'dark' : ''} ${
+        className={`portfolio-v2 page-content ${activeView === 'about' ? 'about-fullscreen-mode' : ''} ${dark ? 'dark' : ''} ${
           sidebarOpen ? 'sidebar-visible' : ''
         }`}
       >
       {introVisible && activeView === 'home' && (
         <HandDrawIntro dark={dark} onFinish={finishHandDrawIntro} />
       )}
-      <div className="portfolio-top-controls">
+      {activeView !== 'about' && <div className="portfolio-top-controls">
         <div className="top-left-controls">
           <button type="button" className="mobile-menu-toggle" onClick={() => setSidebarOpen((open) => !open)} aria-label="Open navigation menu" aria-expanded={sidebarOpen} aria-controls="mobile-navigation-panel"><Menu size={19} /></button>
         </div>
@@ -1493,8 +1512,16 @@ const handleKeyDown = (event) => {
             {dark ? <Sun size={17} /> : <Moon size={17} />}
           </button>
         </div>
-      </div>
+      </div>}
 
+      {activeView === 'about' && (
+        <button className="about-mobile-menu-trigger" type="button"
+          onClick={() => setSidebarOpen(open => !open)}
+          aria-label={sidebarOpen ? 'Close navigation' : 'Open navigation'}
+          aria-controls="mobile-navigation-panel" aria-expanded={sidebarOpen}>
+          {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
+      )}
       {sidebarOpen && (
         <button
           className="sidebar-backdrop dock-backdrop"
@@ -1631,26 +1658,26 @@ const handleKeyDown = (event) => {
           <span className="dock-divider" aria-hidden="true" />
         <nav className="sidebar-navigation">
           <SidebarButton
-            active={activeView === 'work' || activeView === 'project'}
-            icon={<Folder size={18} />}
-            label="Projects"
-            onClick={() => { navigateTo('work'); setSidebarOpen(false) }}
-          />
-          <SidebarButton
             active={activeView === 'gallery'}
-            icon={<Images size={18} />}
+            icon={<Landmark  size={18} />}
             label="Gallery"
             onClick={() => { navigateTo('gallery'); setSidebarOpen(false) }}
           />
           <SidebarButton
+            active={activeView === 'work' || activeView === 'project'}
+            icon={<FolderOpen size={18} />}
+            label="Projects"
+            onClick={() => { navigateTo('work'); setSidebarOpen(false) }}
+          />
+          <SidebarButton
             active={activeView === 'writing'}
-            icon={<FileText size={18} />}
+            icon={<LibraryBig size={18} />}
             label="Writing"
             onClick={() => { navigateTo('writing'); setSidebarOpen(false) }}
           />
           <SidebarButton
             active={activeView === 'about'}
-            icon={<UserRound size={18} />}
+            icon={<FaceSlightlySmiling size={18} />}
             label="About"
             onClick={() => { navigateTo('about'); setSidebarOpen(false) }}
           />
@@ -1687,10 +1714,10 @@ const handleKeyDown = (event) => {
         </div>
         <nav className="mobile-navigation-links" aria-label="Pages">
           <button type="button" className={activeView === 'home' ? 'active' : ''} onClick={newChat}><Plus size={19} /><span>New chat</span></button>
-          <button type="button" className={activeView === 'work' || activeView === 'project' ? 'active' : ''} onClick={() => navigateTo('work')}><Folder size={19} /><span>Projects</span></button>
-          <button type="button" className={activeView === 'gallery' ? 'active' : ''} onClick={() => navigateTo('gallery')}><Images size={19} /><span>Gallery</span></button>
-          <button type="button" className={activeView === 'writing' ? 'active' : ''} onClick={() => navigateTo('writing')}><FileText size={19} /><span>Writing</span></button>
-          <button type="button" className={activeView === 'about' ? 'active' : ''} onClick={() => navigateTo('about')}><UserRound size={19} /><span>About</span></button>
+          <button type="button" className={activeView === 'work' || activeView === 'project' ? 'active' : ''} onClick={() => navigateTo('work')}><FolderOpen size={19} /><span>Projects</span></button>
+          <button type="button" className={activeView === 'gallery' ? 'active' : ''} onClick={() => navigateTo('gallery')}><Landmark size={19} /><span>Gallery</span></button>
+          <button type="button" className={activeView === 'writing' ? 'active' : ''} onClick={() => navigateTo('writing')}><LibraryBig size={19} /><span>Writing</span></button>
+          <button type="button" className={activeView === 'about' ? 'active' : ''} onClick={() => navigateTo('about')}><FaceSlightlySmiling size={19} /><span>About</span></button>
         </nav>
         <section className="mobile-navigation-history" aria-label="Chat history">
           <div className="mobile-navigation-section-title">
@@ -1764,7 +1791,8 @@ const handleKeyDown = (event) => {
             />
           )}
           {activeView === 'writing' && (
-            <WritingView
+            <LibraryView
+              writings={writings}
               insight={
                 pageInsight?.view === 'writing'
                   ? pageInsight
@@ -1772,16 +1800,7 @@ const handleKeyDown = (event) => {
               }
             />
           )}
-          {activeView === 'about' && (
-            <AboutView
-              onAsk={ask}
-              insight={
-                pageInsight?.view === 'about'
-                  ? pageInsight
-                  : null
-              }
-            />
-          )}
+          {activeView === 'about' && <AboutView />}
           {isChatView && (
             <ChatView
               thread={activeThread}
@@ -1795,18 +1814,18 @@ const handleKeyDown = (event) => {
             />
           )}
         </div>
-        {activeView !== 'home' && (
-          <ChatComposer
-            input={input}
-            setInput={setInput}
-            onSubmit={submit}
-            onKeyDown={handleKeyDown}
-            isThinking={isThinking}
-            placeholder={currentConfig.placeholder}
-            suggestions={currentConfig.suggestions}
-            onAsk={ask}
-          />
-        )}
+          {activeView !== 'home' && activeView !== 'gallery' && activeView !== 'about' && (
+            <ChatComposer
+              input={input}
+              setInput={setInput}
+              onSubmit={submit}
+              onKeyDown={handleKeyDown}
+              isThinking={isThinking}
+              placeholder={currentConfig.placeholder}
+              suggestions={currentConfig.suggestions}
+              onAsk={ask}
+            />
+          )}
         {/*
         {activeView === 'home' && (
           <p className="portfolio-footer">
@@ -3184,441 +3203,3 @@ function ProjectView({
   )
 }
 
-/* =====================================================
-   WRITING VIEW
-===================================================== */
-function WritingView({ insight }) {
-  return (
-    <section className="content-view">
-      <header className="view-header">
-        <p>WRITING</p>
-        <h1>
-          Notes on design, work and technology.
-        </h1>
-        <span>
-          Essays about design practice, AI, career
-          transitions, and building things.
-        </span>
-      </header>
-      <PageAIInsight insight={insight} />
-      <div className="article-list">
-        {writings.map((article, index) => (
-          <a
-            className="article-row"
-            key={article.title}
-            href={article.url}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <PortfolioMedia
-              src={article.thumbnail}
-              label={`${article.title} article cover`}
-              compact
-            />
-            <div className="article-content">
-              <div className="article-heading">
-                <ArrowUpRight
-                  className="article-arrow"
-                  size={16}
-                />
-              </div>
-              <h2>{article.title}</h2>
-              <span>{article.meta}</span>
-            </div>
-          </a>
-        ))}
-      </div>
-    </section>
-  )
-}
-/* =====================================================
-   EXPERIENCE DATA
-===================================================== */
-const experienceTimeline = [
-  {
-    period: '2026 — Present',
-    title: 'TravelXXX',
-    role: 'Product Design Project',
-    href: 'https://travelxxx.perdanakun.com',
-    current: true,
-    description:
-      'Exploring hotel discovery and booking around contextual search, clearer comparison, and more confident decision-making.',
-    meta: 'Research → Hypothesis → Prototype → Test → Iterate',
-  },
-  {
-    period: '2026 — Present',
-    title: 'Perdana’s Computer',
-    role: 'Product Design Portfolio',
-    href: '/computer',
-    current: true,
-    description:
-      'Designed and built my portfolio as a live product experiment, combining product decisions, interaction design, AI, and front-end development.',
-    meta: 'Design → Build → Test → Ship',
-  },
-  {
-    period: '2026 — Present',
-    title: 'Professional Development',
-    role: 'Product Design & Design Engineering',
-    current: true,
-    description:
-      'Taking a strategic break from client work to move deeper into product design while developing hands-on design engineering skills.',
-    meta: 'UX · Prototyping · React · Design Systems · AI',
-  },
-  {
-    period: '2016 — 2026',
-    title: 'Conania',
-    role: 'Visual Designer & Design Lead',
-    href: 'YOUR_CONANIA_OR_FIVERR_URL',
-    description:
-      'Worked directly with founders, startups, and small businesses across 3,000+ projects, building visual systems and turning ambiguous requirements into implementation-ready design.',
-    meta: '3,000+ projects · 2,000+ five-star ratings · 10+ years',
-  },
-  {
-    period: '2019 — 2022',
-    title: 'Sinidikara',
-    role: 'Social Media Designer',
-    description:
-      'Built scalable visual systems and data-informed content for brands including Kopiko, Beng-Beng, and Le Minerale, contributing to community growth from 40K to 100K followers.',
-    meta: 'Visual Systems · Content Strategy · Performance Data',
-  },
-  {
-    period: '2015 — 2019',
-    title: 'Earlier Experience',
-    role: 'Design & Technical Foundations',
-    description:
-      'Worked across environmental graphics, design curation, illustration production, and technical network operations before moving fully into independent visual design.',
-    meta: 'Bank Mandiri · Kementerian Sekretariat Negara · Mehibi · Telkom',
-  },
-];
-/* =====================================================
-   INSTAGRAM EMBED
-===================================================== */
-function InstagramEmbed({ url }) {
-  useEffect(() => {
-    const processEmbeds = () => {
-      if (window.instgrm?.Embeds) {
-        window.instgrm.Embeds.process()
-      }
-    }
-    const existingScript = document.querySelector(
-      'script[src="https://www.instagram.com/embed.js"]',
-    )
-    if (existingScript) {
-      processEmbeds()
-      existingScript.addEventListener('load', processEmbeds)
-      return () => {
-        existingScript.removeEventListener('load', processEmbeds)
-      }
-    }
-    const script = document.createElement('script')
-    script.src = 'https://www.instagram.com/embed.js'
-    script.async = true
-    script.onload = processEmbeds
-    document.body.appendChild(script)
-    return () => {
-      script.onload = null
-    }
-  }, [url])
-  return (
-    <div className="instagram-embed">
-      <blockquote
-        className="instagram-media"
-        data-instgrm-permalink={url}
-        data-instgrm-version="14"
-      >
-        <a
-          href={url}
-          target="_blank"
-          rel="noreferrer"
-        >
-          View this post on Instagram
-        </a>
-      </blockquote>
-    </div>
-  )
-}
-/* =====================================================
-   STRAVA EMBED
-===================================================== */
-function StravaEmbed({ activityId, token }) {
-  useEffect(() => {
-    const oldScript = document.querySelector(
-      'script[src="https://strava-embeds.com/embed.js"]',
-    )
-    if (oldScript) {
-      oldScript.remove()
-    }
-    const script = document.createElement('script')
-    script.src = 'https://strava-embeds.com/embed.js'
-    script.async = true
-    document.body.appendChild(script)
-    return () => {
-      if (script.parentNode) {
-        script.parentNode.removeChild(script)
-      }
-    }
-  }, [activityId, token])
-  return (
-    <div className="strava-embed-wrapper">
-      <div
-        className="strava-embed-placeholder"
-        data-embed-type="activity"
-        data-embed-id={activityId}
-        data-style="standard"
-        data-from-embed="false"
-        data-token={token}
-      />
-    </div>
-  )
-}
-/* =====================================================
-   ABOUT VIEW
-===================================================== */
-function AboutView({ onAsk, insight }) {
-  const instagramPosts = [
-    'https://www.instagram.com/p/DQyHv2ok5MJ/',
-    'https://www.instagram.com/p/DQbl-Lak0zN/',
-    'https://www.instagram.com/p/DJmHYOszgyK/',
-  ]
-  const cyclingActivity = {
-    profileUrl: 'https://www.strava.com/athletes/83449444',
-    activityUrl: 'https://www.strava.com/activities/14290242641',
-    activityId: '14290242641',
-    embedToken:
-      'Q9i_hDVK3ITZTE5E7G_u5FTj6-ZYpv9IwzGTBUiDa6E',
-  }
-  return (
-    <section className="content-view about-view">
-      {/* =================================================
-          INTRO
-      ================================================= */}
-      <header className="view-header">
-        <p>ABOUT</p>
-        <h1>
-          A designer who understands business, designs in code,
-          and ships.
-        </h1>
-      </header>
-      <PageAIInsight insight={insight} />
-      {/* =================================================
-          ABOUT COPY
-      ================================================= */}
-      <div className="about-copy">
-        <p>
-          Perdana has spent more than 10 years working as a visual
-          designer and design lead, working directly with clients,
-          founders, and small businesses across{' '}
-          <a
-            href="YOUR_FIVERR_OR_CONANIA_URL"
-            target="_blank"
-            rel="noreferrer"
-            className="text-link"
-          >
-            3,000+ projects
-            <ArrowUpRight
-              size={12}
-              strokeWidth={1.8}
-              aria-hidden="true"
-            />
-          </a>
-          .
-        </p>
-        <p>
-          That experience shaped more than his visual craft. It taught
-          him how to understand business goals, navigate constraints
-          and trade-offs, communicate with stakeholders, and turn
-          ambiguous ideas into clear, scalable design systems.
-        </p>
-        <p>
-          Now, he’s bringing that foundation into{' '}
-          <a href="/projects" className="text-link">
-            product design
-            <ArrowUpRight
-              size={12}
-              strokeWidth={1.8}
-              aria-hidden="true"
-            />
-          </a>
-          , working across UX, interaction, prototyping, and
-          implementation. He uses{' '}
-          <a href="/computer" className="text-link">
-            React and front-end development
-            <ArrowUpRight
-              size={12}
-              strokeWidth={1.8}
-              aria-hidden="true"
-            />
-          </a>{' '}
-          to take ideas beyond static screens and understand how
-          design decisions behave in real products.
-        </p>
-        <p>
-          He’s not starting over. He’s moving closer to the product,
-          combining design craft, business context, and code to
-          design, build, and ship.
-        </p>
-      </div>
-      {/* =================================================
-          EXPERIENCE
-      ================================================= */}
-      <section className="experience-section">
-        <div className="experience-heading">
-          <p>EXPERIENCE</p>
-        </div>
-        <div className="experience-timeline">
-          {experienceTimeline.map((item, index) => (
-            <article
-              className="experience-item"
-              key={`${item.title}-${index}`}
-            >
-              <div className="experience-marker">
-                <span
-                  className={
-                    item.current
-                      ? 'experience-dot is-current'
-                      : 'experience-dot'
-                  }
-                />
-                {index < experienceTimeline.length - 1 && (
-                  <span className="experience-line" />
-                )}
-              </div>
-              <div className="experience-content">
-                <div className="experience-topline">
-                  <p className="experience-period">
-                    {item.period}
-                  </p>
-                  {item.current && (
-                    <span className="experience-current">
-                      NOW
-                    </span>
-                  )}
-                </div>
-                <div className="experience-title-row">
-                  {item.href ? (
-                    <a
-                      href={item.href}
-                      target={
-                        item.href.startsWith('http')
-                          ? '_blank'
-                          : undefined
-                      }
-                      rel={
-                        item.href.startsWith('http')
-                          ? 'noreferrer'
-                          : undefined
-                      }
-                      className="experience-title-link text-link"
-                    >
-                      <h3>{item.title}</h3>
-                      <ArrowUpRight
-                        size={14}
-                        strokeWidth={1.8}
-                        aria-hidden="true"
-                      />
-                    </a>
-                  ) : (
-                    <h3>{item.title}</h3>
-                  )}
-                  <p className="experience-role">
-                    {item.role}
-                  </p>
-                </div>
-                <p className="experience-description">
-                  {item.description}
-                </p>
-                <p className="experience-meta">
-                  {item.meta}
-                </p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-      {/* =================================================
-          ASK AI
-      ================================================= */}
-      <div className="about-actions">
-        <button
-          type="button"
-          className="ask-about-button"
-          onClick={() =>
-            onAsk(
-              'Tell me more about Perdana’s background, business experience, and transition from visual design into product design and code.',
-            )
-          }
-        >
-          Ask about my background
-          <ArrowUpRight
-            size={14}
-            strokeWidth={1.8}
-          />
-        </button>
-      </div>
-      {/* =================================================
-          INSTAGRAM
-      ================================================= */}
-      <section className="about-social-section">
-        <div className="about-section-heading">
-          <div>
-            <p>RECENTLY</p>
-            <h2>
-              On my Social Media
-            </h2>
-          </div>
-          <a
-            href="https://www.instagram.com/perdanakun/"
-            target="_blank"
-            rel="noreferrer"
-            className="text-link"
-          >
-            Instagram
-            <ArrowUpRight
-              size={12}
-              strokeWidth={1.8}
-            />
-          </a>
-        </div>
-        <div className="instagram-grid">
-          {instagramPosts.map((url) => (
-            <InstagramEmbed
-              key={url}
-              url={url}
-            />
-          ))}
-        </div>
-      </section>
-      {/* =================================================
-          OFF THE SCREEN
-      ================================================= */}
-      <section className="activity-section">
-        <div className="about-section-heading">
-          <div>
-            <p>OFF THE SCREEN</p>
-            <h2>Moving my Body</h2>
-          </div>
-          <a
-            href={cyclingActivity.profileUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="text-link"
-          >
-            Strava
-            <ArrowUpRight
-              size={12}
-              strokeWidth={1.8}
-            />
-          </a>
-        </div>
-        <div className="activity-card">
-          <div className="activity-map">
-            <StravaEmbed
-              activityId={cyclingActivity.activityId}
-              token={cyclingActivity.embedToken}
-            />
-          </div>
-        </div>
-      </section>
-    </section>
-  )
-}
